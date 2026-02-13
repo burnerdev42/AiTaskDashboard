@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { challengeDetails } from '../data/challengeData';
+import { ChallengeService } from '../services/challengeService';
 import type { ChallengeDetailData } from '../types';
 
 export const ChallengeDetail: React.FC = () => {
@@ -16,18 +16,26 @@ export const ChallengeDetail: React.FC = () => {
     const [editOutcome, setEditOutcome] = useState('');
     const [comment, setComment] = useState('');
 
+    // Initial load
     useEffect(() => {
-        // Find by id or default to first
-        const found = challengeDetails.find(c => c.id === id) || challengeDetails[0];
-        setChallenge(found);
-        setEditTitle(found.title);
-        setEditSubtitle(found.description);
-        setEditProblem(found.problemStatement);
-        setEditOutcome(found.expectedOutcome);
-        // Auto-enable edit mode if ?edit=true
-        if (searchParams.get('edit') === 'true') {
-            setEditMode(true);
-        }
+        const fetchChallenge = async () => {
+            if (!id) return;
+            try {
+                const found = await ChallengeService.getById(id) as unknown as ChallengeDetailData;
+                setChallenge(found);
+                setEditTitle(found.title);
+                setEditSubtitle(found.description);
+                setEditProblem(found.problemStatement);
+                setEditOutcome(found.expectedOutcome);
+                // Auto-enable edit mode if ?edit=true
+                if (searchParams.get('edit') === 'true') {
+                    setEditMode(true);
+                }
+            } catch (err) {
+                console.error('Failed to load challenge details', err);
+            }
+        };
+        fetchChallenge();
     }, [id, searchParams]);
 
     if (!challenge) return <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>;

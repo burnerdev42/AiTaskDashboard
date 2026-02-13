@@ -8,7 +8,7 @@ export const Notifications: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status'>('all');
 
     // Force update state
-    const [_, setTick] = useState(0);
+    const [, setTick] = useState(0);
     const forceUpdate = () => setTick(t => t + 1);
 
     // Get notifications from storage

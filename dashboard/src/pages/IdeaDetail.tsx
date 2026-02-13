@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { ideaDetails, challengeDetails } from '../data/challengeData';
-import type { Idea } from '../types';
+import { IdeaService } from '../services/ideaService';
+import { ChallengeService } from '../services/challengeService';
+import type { Idea, Challenge } from '../types';
 
 export const IdeaDetail: React.FC = () => {
     const { challengeId, ideaId } = useParams<{ challengeId: string; ideaId: string }>();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [idea, setIdea] = useState<Idea | null>(null);
+    const [parentChallenge, setParentChallenge] = useState<Challenge | null>(null);
     const [comment, setComment] = useState('');
     const [editMode, setEditMode] = useState(false);
     const [editTitle, setEditTitle] = useState('');
@@ -17,22 +19,37 @@ export const IdeaDetail: React.FC = () => {
     const [editImpact, setEditImpact] = useState('');
     const [editPlan, setEditPlan] = useState('');
 
-    // Get the parent challenge title for breadcrumb
-    const parentChallenge = challengeDetails.find(c => c.id === challengeId);
-
     useEffect(() => {
-        const found = ideaDetails.find(i => i.id === ideaId) || ideaDetails[0];
-        setIdea(found);
-        setEditTitle(found.title);
-        setEditDescription(found.description);
-        setEditProblem(found.problemStatement || '');
-        setEditSolution(found.proposedSolution || '');
-        setEditImpact(found.expectedImpact || '');
-        setEditPlan(found.implementationPlan || '');
-        if (searchParams.get('edit') === 'true') {
-            setEditMode(true);
-        }
-    }, [ideaId, searchParams]);
+        const loadData = async () => {
+            if (challengeId) {
+                try {
+                    const c = await ChallengeService.getById(challengeId);
+                    setParentChallenge(c);
+                } catch (e) {
+                    console.error("Failed to load parent challenge", e);
+                }
+            }
+
+            if (ideaId) {
+                try {
+                    const found = await IdeaService.getById(ideaId);
+                    setIdea(found);
+                    setEditTitle(found.title);
+                    setEditDescription(found.description);
+                    setEditProblem(found.problemStatement || '');
+                    setEditSolution(found.proposedSolution || '');
+                    setEditImpact(found.expectedImpact || '');
+                    setEditPlan(found.implementationPlan || '');
+                    if (searchParams.get('edit') === 'true') {
+                        setEditMode(true);
+                    }
+                } catch (e) {
+                    console.error("Failed to load idea", e);
+                }
+            }
+        };
+        loadData();
+    }, [challengeId, ideaId, searchParams]);
 
     if (!idea) return <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>;
 

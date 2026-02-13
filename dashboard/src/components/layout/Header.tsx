@@ -5,7 +5,7 @@ import { type Notification } from '../../types';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 export const Header: React.FC = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
     const notifications: Notification[] = storage.getNotifications();
@@ -93,7 +93,7 @@ export const Header: React.FC = () => {
                 </div>
 
                 {user ? (
-                    <div className="avatar" title={user.name} onClick={logout} style={{ cursor: 'pointer' }}>
+                    <div className="avatar" title={user.name} onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }}>
                         {user.avatar}
                     </div>
                 ) : (
