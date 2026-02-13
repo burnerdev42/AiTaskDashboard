@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline - From Ideas to Impact</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header Band (0.3 m) ───────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px;
+      background: transparent;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; text-transform: none; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+    .header-right .client-badge {
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 8px 20px; border-radius: 20px;
+      font-size: 13px; color: var(--accent-teal); font-weight: 600;
+    }
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ──────────────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Main Layout ───────────────────────────── */
+    .main-wrapper {
+      min-height: calc(100vh - 90px);
+    }
+
+    /* ── Section Spacing ──────────────────────── */
+    .main-wrapper > section,
+    .main-wrapper > .metrics-dashboard {
+      margin-bottom: 0;
+    }
+
+    /* ── Highlighted Challenges Carousel ──────── */
+    .carousel-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 40px 36px;
+      overflow: hidden;
+      border-top: 3px solid var(--accent-teal);
+      border-left: none;
+      border-right: none;
+    }
+    .carousel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .carousel-header h2 {
+      font-size: 18px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .carousel-header h2 .icon { font-size: 20px; }
+    .carousel-controls {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .carousel-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .2s;
+    }
+    .carousel-btn:hover {
+      background: var(--accent-teal); color: #0d0f1a;
+      border-color: var(--accent-teal);
+    }
+    .carousel-btn:active { transform: scale(.92); }
+    .carousel-indicator {
+      font-size: 12px; color: var(--text-muted); font-weight: 600;
+      min-width: 36px; text-align: center;
+    }
+
+    .carousel-viewport {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform .5s cubic-bezier(.4, 0, .2, 1);
+      will-change: transform;
+    }
+    .carousel-slide {
+      min-width: 100%; padding: 0 4px;
+      box-sizing: border-box;
+    }
+
+    /* ── Challenge Card (carousel item) ──────── */
+    .challenge-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s;
+      cursor: pointer;
+    }
+    .challenge-card:hover {
+      border-color: var(--accent-teal);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232,167,88,.15);
+    }
+    .challenge-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+    .challenge-card[data-accent="teal"]::before   { background: var(--accent-teal); }
+    .challenge-card[data-accent="blue"]::before   { background: var(--accent-blue); }
+    .challenge-card[data-accent="green"]::before  { background: var(--accent-green); }
+    .challenge-card[data-accent="orange"]::before { background: var(--accent-orange); }
+    .challenge-card[data-accent="purple"]::before { background: var(--accent-purple); }
+    .challenge-card[data-accent="pink"]::before   { background: var(--accent-pink); }
+
+    .challenge-top {
+      display: flex; align-items: flex-start; gap: 20px;
+    }
+    .challenge-top .challenge-icon {
+      font-size: 36px; line-height: 1;
+      flex-shrink: 0;
+    }
+    .challenge-top-info { flex: 1; }
+    .challenge-top-info .challenge-badge-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+
+    .challenge-left { display: flex; flex-direction: column; justify-content: center; }
+    .challenge-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.2px; width: fit-content;
+    }
+    .challenge-badge.highlighted {
+      background: rgba(232,167,88,.12); color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.25);
+    }
+    .challenge-badge.appreciated {
+      background: rgba(255,167,38,.12); color: var(--accent-orange);
+      border: 1px solid rgba(255,167,38,.25);
+    }
+    .challenge-badge.top-voted {
+      background: rgba(102,187,106,.12); color: var(--accent-green);
+      border: 1px solid rgba(102,187,106,.25);
+    }
+    .challenge-stage-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 14px;
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px;
+      background: rgba(255,255,255,.05); color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .challenge-card h3 {
+      font-size: 20px; font-weight: 700; line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .challenge-card .challenge-desc {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.65;
+    }
+    .challenge-card .challenge-owner {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .challenge-card .owner-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 11px; color: #0d0f1a;
+    }
+
+    .challenge-right {
+      display: flex; flex-direction: row; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .challenge-stat {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 14px;
+      flex: 1; min-width: 180px;
+    }
+    .challenge-stat .stat-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .challenge-stat .stat-info .stat-value {
+      font-size: 24px; font-weight: 700;
+    }
+    .challenge-stat .stat-info .stat-label {
+      font-size: 12px; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .8px; margin-top: 2px;
+    }
+
+    /* Carousel dots */
+    .carousel-dots {
+      display: flex; justify-content: center; gap: 8px;
+      margin-top: 20px;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border-light);
+      border: none; cursor: pointer;
+      transition: all .3s;
+    }
+    .carousel-dot.active {
+      background: var(--accent-teal);
+      width: 24px; border-radius: 4px;
+    }
+
+    /* ── Metrics Dashboard ─────────────────────── */
+    .metrics-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+    .metric-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 32px 36px;
+      min-width: 0;
+      border-top: none;
+      border-left: none;
+    }
+    .metric-panel:last-child {
+      border-right: none;
+    }
+    .metric-panel h3 {
+      font-size: 14px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .metric-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-label { font-size: 14px; color: var(--text-secondary); }
+    .metric-value { font-size: 24px; font-weight: 700; }
+    .metric-value.teal   { color: var(--accent-teal);   }
+    .metric-value.blue   { color: var(--accent-blue);   }
+    .metric-value.green  { color: var(--accent-green);  }
+    .metric-value.orange { color: var(--accent-orange); }
+    .metric-value.red    { color: var(--accent-red);    }
+
+    /* mini progress bar */
+    .progress-bar { width: 100%; height: 6px; background: var(--bg-card); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; }
+
+    /* donut placeholder */
+    .donut-chart {
+      width: 100px; height: 100px; margin: 10px auto;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--accent-green) 0% 30%,
+        var(--accent-blue) 30% 55%,
+        var(--accent-orange) 55% 75%,
+        var(--accent-purple) 75% 90%,
+        var(--text-muted) 90% 100%
+      );
+      display: flex; align-items: center; justify-content: center;
+    }
+    .donut-hole {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--bg-secondary);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 18px; color: var(--text-primary);
+    }
+    .legend { margin-top: 14px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* sparkline bars */
+    .spark-bars { display: flex; align-items: flex-end; gap: 5px; height: 60px; margin-top: 10px; }
+    .spark-bar {
+      flex: 1; border-radius: 3px 3px 0 0;
+      min-width: 14px;
+    }
+
+    /* ── Success Stories Strip (0.4 m) ─────────── */
+    .success-strip {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 32px 36px;
+      border-top: 3px solid var(--accent-green);
+      border-left: none;
+      border-right: none;
+    }
+    .strip-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .strip-header h2 {
+      font-size: 18px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .strip-header h2 .icon { font-size: 18px; }
+    .strip-header .qr-box {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 16px;
+      font-size: 12px; color: var(--text-secondary);
+    }
+    .qr-placeholder {
+      width: 44px; height: 44px;
+      background: #fff; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qr-placeholder svg { width: 36px; height: 36px; }
+
+    .stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .story-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      transition: all .2s ease;
+    }
+    .story-card:hover {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 20px rgba(102,187,106,.08);
+    }
+    .story-card .story-num {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--accent-green); margin-bottom: 10px;
+    }
+    .story-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+    .story-section { margin-bottom: 8px; }
+    .story-section .label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 3px;
+    }
+    .story-section .label.problem { color: var(--accent-red); }
+    .story-section .label.solution { color: var(--accent-blue); }
+    .story-section .label.impact  { color: var(--accent-green); }
+    .story-section p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── Team Section ──────────────────────────── */
+    .team-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 40px 36px;
+      border-top: 3px solid var(--accent-blue);
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+    }
+    .team-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .team-header h2 {
+      font-size: 18px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .team-header h2 .icon { font-size: 20px; }
+    .join-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 28px; border-radius: 24px;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a; font-weight: 700; font-size: 14px;
+      text-decoration: none; border: none; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 1px;
+      transition: all .25s; box-shadow: 0 4px 20px rgba(232,167,88,.25);
+    }
+    .join-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(232,167,88,.4);
+    }
+    .join-btn:active { transform: translateY(0); }
+
+    .team-grid {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .team-grid::-webkit-scrollbar { height: 6px; }
+    .team-grid::-webkit-scrollbar-track { background: var(--bg-card); border-radius: 3px; }
+    .team-grid::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+    .team-grid::-webkit-scrollbar-thumb:hover { background: var(--accent-teal); }
+    .team-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      transition: all .25s;
+      min-width: 230px;
+      max-width: 230px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+    .team-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(240,184,112,.1);
+    }
+    .team-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      margin: 0 auto 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 22px; color: #0d0f1a;
+      position: relative;
+    }
+    .team-avatar::after {
+      content: '';
+      position: absolute; bottom: 2px; right: 2px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent-green);
+      border: 2px solid var(--bg-card);
+    }
+    .team-card h4 {
+      font-size: 15px; font-weight: 700; margin-bottom: 4px;
+    }
+    .team-card .team-role {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--accent-teal); margin-bottom: 10px;
+    }
+    .team-card .team-bio {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .team-card .team-stats {
+      display: flex; justify-content: center; gap: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .team-card .team-stat-item {
+      text-align: center;
+    }
+    .team-card .team-stat-item .ts-value {
+      font-size: 17px; font-weight: 700;
+    }
+    .team-card .team-stat-item .ts-label {
+      font-size: 9px; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .8px; margin-top: 2px;
+    }
+
+    .team-join-banner {
+      margin-top: 24px;
+      background: linear-gradient(135deg, rgba(232,167,88,.08), rgba(240,184,112,.08));
+      border: 1px dashed var(--accent-teal);
+      border-radius: var(--radius);
+      padding: 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px;
+    }
+    .team-join-banner .join-text h3 {
+      font-size: 18px; font-weight: 700; margin-bottom: 6px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .team-join-banner .join-text p {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.5;
+    }
+
+    /* ── Newsletter Section ────────────────────── */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 56px 36px;
+      border-left: none;
+      border-right: none;
+      border-top: 3px solid var(--accent-teal);
+      border-bottom: none;
+      text-align: center;
+    }
+    .newsletter-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 4px 12px rgba(232,167,88,0.3));
+    }
+    .newsletter-section h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff, #f0b870);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .newsletter-section p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto 16px;
+    }
+    .newsletter-input {
+      flex: 1;
+      padding: 14px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: all .2s;
+    }
+    .newsletter-input:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+      background: var(--bg-card-hover);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .newsletter-input::placeholder {
+      color: var(--text-muted);
+    }
+    .newsletter-btn {
+      padding: 14px 32px;
+      background: var(--accent-teal);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #0d0f1a;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .newsletter-btn:hover {
+      background: var(--accent-gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(232,167,88,.3);
+    }
+    .newsletter-btn:active {
+      transform: translateY(0);
+    }
+    .newsletter-success {
+      display: none;
+      padding: 16px 24px;
+      background: rgba(102,187,106,.15);
+      border: 1px solid var(--accent-green);
+      border-radius: var(--radius-sm);
+      color: var(--accent-green);
+      font-size: 14px;
+      font-weight: 600;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .newsletter-success.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .newsletter-privacy {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+
+    /* ── Footer ────────────────────────────────── */
+    .footer {
+      text-align: center; padding: 18px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Responsive ────────────────────────────── */
+    @media (max-width: 1024px) {
+      .carousel-section,
+      .team-section,
+      .success-strip {
+        padding: 32px 28px;
+      }
+      .metric-panel {
+        padding: 28px 28px;
+      }
+      .metrics-dashboard {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .metrics-dashboard {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      .challenge-right { flex-direction: column; }
+      .challenge-stat { min-width: unset; }
+      .challenge-top { flex-direction: column; }
+      .team-join-banner { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .main-wrapper {
+        padding: 20px 16px 32px;
+      }
+      .carousel-section,
+      .team-section {
+        padding: 24px 20px;
+      }
+      .metrics-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER BAND ═══════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta Lab</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link active">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    
+    <!-- Notification Bell -->
+    <div class="notification-wrapper">
+      <div class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notificationBadge">5</span>
+      </div>
+      
+      <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+          <h3>🔔 Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        
+        <div class="notification-list" id="notificationList">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick('challenge-detail.html?id=CHG-005')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">Ravi Patel submitted "Optimize Cloud Infrastructure Costs"</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick('idea-detail.html?id=IDX-012')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Submitted</div>
+              <div class="notification-text">Meera Singh proposed "Blockchain-based Contract Management" on CHG-002</div>
+              <div class="notification-time">22 minutes ago</div>
+            </div>
+          </div>
+          
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick('idea-detail.html?id=IDX-003')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment on Your Idea</div>
+              <div class="notification-text">Siddharth Banerjee commented on "AI-powered document verification"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick('challenge-detail.html?id=CHG-001')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Status Updated</div>
+              <div class="notification-text">"Reduce Customer Churn by 15%" moved to Evaluation stage</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick('idea-detail.html?id=IDX-007')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Submitted</div>
+              <div class="notification-text">Ananya Basu proposed "Predictive Maintenance Dashboard" on CHG-004</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick('challenge-detail.html?id=CHG-003')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">Debarati Ghosh submitted "Real-time Fraud Detection System"</div>
+              <div class="notification-time">Yesterday</div>
+            </div>
+          </div>
+          
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick('idea-detail.html?id=IDX-005')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">Rohan Patel commented on "Customer Health Dashboard"</div>
+              <div class="notification-time">2 days ago</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ MAIN CONTENT ══════════════════════════ -->
+<main class="main-wrapper">
+
+  <!-- ─── HIGHLIGHTED CHALLENGES CAROUSEL ──── -->
+  <section class="carousel-section">
+    <div class="carousel-header">
+      <h2><span class="icon">🌟</span> Top Rated Challenges</h2>
+      <div class="carousel-controls">
+        <button class="carousel-btn" id="carouselPrev" aria-label="Previous">&#8249;</button>
+        <span class="carousel-indicator" id="carouselIndicator">1 / 5</span>
+        <button class="carousel-btn" id="carouselNext" aria-label="Next">&#8250;</button>
+      </div>
+    </div>
+
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="carouselTrack">
+
+        <!-- Slide 1 -->
+        <div class="carousel-slide">
+          <div class="challenge-card" data-accent="green" onclick="window.location.href='challenge-detail.html'">
+            <div class="challenge-top">
+              <div class="challenge-icon">✅</div>
+              <div class="challenge-top-info">
+                <div class="challenge-badge-row">
+                  <span class="challenge-badge highlighted">⭐ Highlighted</span>
+                  <span class="challenge-stage-badge">📈 Scale</span>
+                </div>
+                <h3>Unified Customer 360 Platform</h3>
+                <p class="challenge-desc">Consolidated customer view across CRM, billing, and support — deployed globally in 12 markets. Recognized for transforming customer experience at scale.</p>
+                <div class="challenge-owner">
+                  <span class="owner-avatar" style="background:var(--accent-green)">SB</span>
+                  <span>S. Banerjee &middot; SCALE-1</span>
+                </div>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">👍</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">142</div>
+                  <div class="stat-label">Appreciations</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(240,184,112,.15); color:var(--accent-blue)">💬</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-blue)">38</div>
+                  <div class="stat-label">Comments</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(232,167,88,.15); color:var(--accent-teal)">📈</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-teal)">3.2x</div>
+                  <div class="stat-label">ROI Achieved</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">🌍</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">12</div>
+                  <div class="stat-label">Markets Deployed</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(255,167,38,.15); color:var(--accent-orange)">💰</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-orange)">$4.2M</div>
+                  <div class="stat-label">Annual Savings</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-slide">
+          <div class="challenge-card" data-accent="blue" onclick="window.location.href='challenge-detail.html'">
+            <div class="challenge-top">
+              <div class="challenge-icon">🤖</div>
+              <div class="challenge-top-info">
+                <div class="challenge-badge-row">
+                  <span class="challenge-badge appreciated">🏅 Most Appreciated</span>
+                  <span class="challenge-stage-badge">🚀 Pilot</span>
+                </div>
+                <h3>Conversational Commerce Bot</h3>
+                <p class="challenge-desc">GenAI assistant handling product queries, order tracking, and returns for e-commerce. Praised for driving self-service adoption up by 65%.</p>
+                <div class="challenge-owner">
+                  <span class="owner-avatar" style="background:var(--accent-blue)">AB</span>
+                  <span>A. Basu &middot; PILOT-1</span>
+                </div>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">👍</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">189</div>
+                  <div class="stat-label">Appreciations</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(240,184,112,.15); color:var(--accent-blue)">🚀</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-blue)">65%</div>
+                  <div class="stat-label">Self-Service Uplift</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(255,167,38,.15); color:var(--accent-orange)">⏱️</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-orange)">28d</div>
+                  <div class="stat-label">Idea to Pilot</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(232,167,88,.15); color:var(--accent-teal)">💬</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-teal)">54</div>
+                  <div class="stat-label">Comments</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(171,71,188,.15); color:var(--accent-purple)">👥</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-purple)">12</div>
+                  <div class="stat-label">Team Members</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide">
+          <div class="challenge-card" data-accent="orange" onclick="window.location.href='challenge-detail.html'">
+            <div class="challenge-top">
+              <div class="challenge-icon">📦</div>
+              <div class="challenge-top-info">
+                <div class="challenge-badge-row">
+                  <span class="challenge-badge top-voted">🏆 Top Voted</span>
+                  <span class="challenge-stage-badge">🔧 Prototype</span>
+                </div>
+                <h3>Smart Warehouse Routing</h3>
+                <p class="challenge-desc">IoT-driven warehouse navigation for autonomous forklifts, reducing pick-time by 40%. Voted best innovation challenge of Q4 2025.</p>
+                <div class="challenge-owner">
+                  <span class="owner-avatar" style="background:var(--accent-orange)">AB</span>
+                  <span>A. Basu &middot; PROTO-1</span>
+                </div>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">👍</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">97</div>
+                  <div class="stat-label">Appreciations</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(239,83,80,.15); color:var(--accent-red)">⚡</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-red)">40%</div>
+                  <div class="stat-label">Pick-Time Reduction</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(232,167,88,.15); color:var(--accent-teal)">🗳️</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-teal)">214</div>
+                  <div class="stat-label">Community Votes</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(240,184,112,.15); color:var(--accent-blue)">📡</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-blue)">2.4K</div>
+                  <div class="stat-label">IoT Sensors</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">📊</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">28%</div>
+                  <div class="stat-label">Throughput Uplift</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="carousel-slide">
+          <div class="challenge-card" data-accent="purple" onclick="window.location.href='challenge-detail.html'">
+            <div class="challenge-top">
+              <div class="challenge-icon">🧠</div>
+              <div class="challenge-top-info">
+                <div class="challenge-badge-row">
+                  <span class="challenge-badge highlighted">⭐ Highlighted</span>
+                  <span class="challenge-stage-badge">💡 Ideation</span>
+                </div>
+                <h3>AI-Powered Demand Forecasting</h3>
+                <p class="challenge-desc">Use machine learning to predict regional demand patterns and optimize inventory allocation. Highlighted for its potential to save $12M annually.</p>
+                <div class="challenge-owner">
+                  <span class="owner-avatar" style="background:var(--accent-purple)">SB</span>
+                  <span>S. Banerjee &middot; IDEA-1</span>
+                </div>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">👍</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">76</div>
+                  <div class="stat-label">Appreciations</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(171,71,188,.15); color:var(--accent-purple)">💡</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-purple)">$12M</div>
+                  <div class="stat-label">Expected Savings</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(240,184,112,.15); color:var(--accent-blue)">👥</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-blue)">8</div>
+                  <div class="stat-label">Team Members</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(232,167,88,.15); color:var(--accent-teal)">🗳️</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-teal)">156</div>
+                  <div class="stat-label">Community Votes</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(255,167,38,.15); color:var(--accent-orange)">🎯</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-orange)">94%</div>
+                  <div class="stat-label">Forecast Accuracy</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="carousel-slide">
+          <div class="challenge-card" data-accent="teal" onclick="window.location.href='challenge-detail.html'">
+            <div class="challenge-top">
+              <div class="challenge-icon">📱</div>
+              <div class="challenge-top-info">
+                <div class="challenge-badge-row">
+                  <span class="challenge-badge appreciated">🏅 Most Appreciated</span>
+                  <span class="challenge-stage-badge">🚀 Pilot</span>
+                </div>
+                <h3>Digital Twin – Factory Floor</h3>
+                <p class="challenge-desc">Real-time 3D simulation of production lines for throughput optimization. Appreciated by leadership for cutting simulation costs by 70%.</p>
+                <div class="challenge-owner">
+                  <span class="owner-avatar" style="background:var(--accent-teal)">RP</span>
+                  <span>R. Patel &middot; PILOT-2</span>
+                </div>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(102,187,106,.15); color:var(--accent-green)">👍</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-green)">118</div>
+                  <div class="stat-label">Appreciations</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(232,167,88,.15); color:var(--accent-teal)">💰</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-teal)">70%</div>
+                  <div class="stat-label">Cost Reduction</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(236,64,122,.15); color:var(--accent-pink)">❤️</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-pink)">52</div>
+                  <div class="stat-label">Leadership Endorsements</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(240,184,112,.15); color:var(--accent-blue)">🏭</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-blue)">6</div>
+                  <div class="stat-label">Production Lines</div>
+                </div>
+              </div>
+              <div class="challenge-stat">
+                <div class="stat-icon" style="background:rgba(255,167,38,.15); color:var(--accent-orange)">⏱️</div>
+                <div class="stat-info">
+                  <div class="stat-value" style="color:var(--accent-orange)">35d</div>
+                  <div class="stat-label">Idea to Pilot</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- ─── METRICS DASHBOARD ───────────────── -->
+  <aside class="metrics-dashboard">
+
+    <!-- Panel 1: Pipeline Summary -->
+    <div class="metric-panel">
+      <h3>📊 Pipeline Summary</h3>
+      <div class="donut-chart">
+        <div class="donut-hole">11</div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-green)"></span> Scale (1)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-blue)"></span> Pilot (3)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-orange)"></span> Prototype (2)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-purple)"></span> Ideation (4)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--text-muted)"></span> Parked (1)</div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Key Metrics -->
+    <div class="metric-panel">
+      <h3>⚡ Key Metrics</h3>
+      <div class="metric-row">
+        <span class="metric-label">Avg. Idea → Pilot</span>
+        <span class="metric-value teal">42d</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Pilot Success Rate</span>
+        <span class="metric-value green">78%</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">ROI (Scaled)</span>
+        <span class="metric-value blue">3.2×</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">At-Risk Items</span>
+        <span class="metric-value red">2</span>
+      </div>
+    </div>
+
+    <!-- Panel 3: Monthly Throughput -->
+    <div class="metric-panel">
+      <h3>📈 Monthly Throughput</h3>
+      <div class="spark-bars">
+        <div class="spark-bar" style="height:35%; background:var(--accent-teal);"></div>
+        <div class="spark-bar" style="height:50%; background:var(--accent-teal);"></div>
+        <div class="spark-bar" style="height:40%; background:var(--accent-teal);"></div>
+        <div class="spark-bar" style="height:65%; background:var(--accent-teal);"></div>
+        <div class="spark-bar" style="height:55%; background:var(--accent-teal);"></div>
+        <div class="spark-bar" style="height:80%; background:var(--accent-blue);"></div>
+        <div class="spark-bar" style="height:70%; background:var(--accent-blue);"></div>
+        <div class="spark-bar" style="height:90%; background:var(--accent-green);"></div>
+        <div class="spark-bar" style="height:75%; background:var(--accent-green);"></div>
+        <div class="spark-bar" style="height:60%; background:var(--accent-blue);"></div>
+        <div class="spark-bar" style="height:85%; background:var(--accent-green);"></div>
+        <div class="spark-bar" style="height:95%; background:var(--accent-green);"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted); margin-top:6px;">
+        <span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="metric-row">
+          <span class="metric-label">Ideas Submitted</span>
+          <span class="metric-value teal" style="font-size:18px;">27</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Moved to Scale</span>
+          <span class="metric-value green" style="font-size:18px;">4</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ─── SUCCESS STORIES STRIP ───────────── -->
+  <section class="success-strip">
+    <div class="strip-header">
+      <h2><span class="icon">🏆</span> Success Stories Showcase</h2>
+    </div>
+
+    <div class="stories-grid">
+      <!-- Story 1 -->
+      <div class="story-card">
+        <div class="story-num">Story 1</div>
+        <h4>Unified Customer 360 Platform</h4>
+        <div class="story-section">
+          <div class="label problem">⚠ Problem</div>
+          <p>Fragmented customer data across 5 systems; agents spent 8 min/call looking up history.</p>
+        </div>
+        <div class="story-section">
+          <div class="label solution">💡 Solution</div>
+          <p>Built a real-time data fabric unifying CRM, billing, support, and IoT telemetry into a single view.</p>
+        </div>
+        <div class="story-section">
+          <div class="label impact">📈 Impact</div>
+          <p><strong>60% ↓</strong> avg. handle time · <strong>+22 NPS</strong> · <strong>$4.2M</strong> annual savings</p>
+        </div>
+      </div>
+
+      <!-- Story 2 -->
+      <div class="story-card">
+        <div class="story-num">Story 2</div>
+        <h4>Smart Warehouse Routing</h4>
+        <div class="story-section">
+          <div class="label problem">⚠ Problem</div>
+          <p>Manual forklift routing led to 35% idle travel time and frequent aisle congestion.</p>
+        </div>
+        <div class="story-section">
+          <div class="label solution">💡 Solution</div>
+          <p>IoT sensors + reinforcement learning for dynamic path optimization in real-time.</p>
+        </div>
+        <div class="story-section">
+          <div class="label impact">📈 Impact</div>
+          <p><strong>40% ↓</strong> pick-time · <strong>28% ↑</strong> throughput · <strong>Zero</strong> aisle collisions</p>
+        </div>
+      </div>
+
+      <!-- Story 3 -->
+      <div class="story-card">
+        <div class="story-num">Story 3</div>
+        <h4>Predictive Maintenance Engine</h4>
+        <div class="story-section">
+          <div class="label problem">⚠ Problem</div>
+          <p>Unexpected equipment failures causing 120+ hrs/year of unplanned downtime per plant.</p>
+        </div>
+        <div class="story-section">
+          <div class="label solution">💡 Solution</div>
+          <p>Streaming anomaly detection on 10K+ sensor signals, predicting failures 72 hrs ahead.</p>
+        </div>
+        <div class="story-section">
+          <div class="label impact">📈 Impact</div>
+          <p><strong>85% ↓</strong> unplanned downtime · <strong>$7.1M</strong> saved · <strong>3.8×</strong> ROI in Year 1</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TEAM SECTION ────────────────────── -->
+  <section class="team-section">
+    <div class="team-header">
+      <h2><span class="icon">👥</span> Meet the Innovation Team</h2>
+    </div>
+
+    <div class="team-grid">
+      <!-- Member 1 -->
+      <div class="team-card">
+        <div class="team-avatar" style="background:var(--accent-green)">SB</div>
+        <h4>Siddharth Banerjee</h4>
+        <div class="team-role">Innovation Lead</div>
+        <p class="team-bio">Driving enterprise-scale digital transformation with 15+ years in AI &amp; cloud architecture.</p>
+        <div class="team-stats">
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-green)">6</div>
+            <div class="ts-label">Ideas</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-blue)">3</div>
+            <div class="ts-label">Scaled</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-orange)">3.2×</div>
+            <div class="ts-label">Avg ROI</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 2 -->
+      <div class="team-card">
+        <div class="team-avatar" style="background:var(--accent-blue)">AB</div>
+        <h4>Ananya Basu</h4>
+        <div class="team-role">AI / ML Engineer</div>
+        <p class="team-bio">GenAI specialist building conversational AI and intelligent automation solutions.</p>
+        <div class="team-stats">
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-green)">5</div>
+            <div class="ts-label">Ideas</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-blue)">2</div>
+            <div class="ts-label">Piloting</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-teal)">189</div>
+            <div class="ts-label">Kudos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 3 -->
+      <div class="team-card">
+        <div class="team-avatar" style="background:var(--accent-teal)">RP</div>
+        <h4>Rohan Patel</h4>
+        <div class="team-role">IoT & Digital Twin Lead</div>
+        <p class="team-bio">Building real-time simulation platforms for manufacturing and logistics optimization.</p>
+        <div class="team-stats">
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-green)">4</div>
+            <div class="ts-label">Ideas</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-blue)">2</div>
+            <div class="ts-label">Piloting</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-orange)">70%</div>
+            <div class="ts-label">Cost Cut</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 4 -->
+      <div class="team-card">
+        <div class="team-avatar" style="background:var(--accent-purple)">MS</div>
+        <h4>Meera Singh</h4>
+        <div class="team-role">Data Science Lead</div>
+        <p class="team-bio">Expert in NLP, document intelligence, and building data-driven decision systems.</p>
+        <div class="team-stats">
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-green)">3</div>
+            <div class="ts-label">Ideas</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-blue)">1</div>
+            <div class="ts-label">Piloting</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-teal)">95%</div>
+            <div class="ts-label">Accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 5 -->
+      <div class="team-card">
+        <div class="team-avatar" style="background:var(--accent-orange)">DG</div>
+        <h4>Debarati Ghosh</h4>
+        <div class="team-role">Full-Stack Developer</div>
+        <p class="team-bio">Cloud-native architect crafting scalable microservices and real-time data pipelines.</p>
+        <div class="team-stats">
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-green)">4</div>
+            <div class="ts-label">Ideas</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-blue)">2</div>
+            <div class="ts-label">Prototyped</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-pink)">42</div>
+            <div class="ts-label">PRs Merged</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 6 -->
+      <div class="team-card">
+        <div class="team-avatar" style="background:var(--accent-pink)">AK</div>
+        <h4>Arjun Kumar</h4>
+        <div class="team-role">UX / Design Lead</div>
+        <p class="team-bio">Human-centered design advocate creating intuitive experiences for enterprise tools.</p>
+        <div class="team-stats">
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-green)">3</div>
+            <div class="ts-label">Ideas</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-blue)">1</div>
+            <div class="ts-label">Scaled</div>
+          </div>
+          <div class="team-stat-item">
+            <div class="ts-value" style="color:var(--accent-teal)">+22</div>
+            <div class="ts-label">NPS Lift</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-join-banner">
+      <div class="join-text">
+        <h3>🌟 Got an innovative idea? We'd love to have you on the team!</h3>
+        <p>Whether you're a developer, designer, data scientist, or domain expert — the Innovation Pipeline is open for everyone. Register today and start turning your ideas into impact.</p>
+      </div>
+      <a href="register.html" class="join-btn">✨ Register & Join</a>
+    </div>
+  </section>
+
+  <!-- ═══ NEWSLETTER SECTION ═══════════════════ -->
+  <section class="newsletter-section">
+    <div class="newsletter-icon">📧</div>
+    <h2>Stay Updated with Innovation Insights</h2>
+    <p>Subscribe to our newsletter and get the latest challenges, success stories, and innovation tips delivered straight to your inbox every week.</p>
+    
+    <form class="newsletter-form" id="newsletterForm" onsubmit="return handleNewsletterSubscribe(event)">
+      <input 
+        type="email" 
+        class="newsletter-input" 
+        id="newsletterEmail" 
+        placeholder="Enter your email address" 
+        required
+      />
+      <button type="submit" class="newsletter-btn">Subscribe</button>
+    </form>
+    
+    <div class="newsletter-success" id="newsletterSuccess">
+      ✅ Success! You're now subscribed to our newsletter.
+    </div>
+    
+    <div class="newsletter-privacy">
+      🔒 We respect your privacy. Unsubscribe anytime.
+    </div>
+  </section>
+
+</main>
+</div>
+
+<!-- ═══ FOOTER ═════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.ananta.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The Innovation engineering LAB</strong>, Kolkata ODC.
+</footer>
+
+<script>
+(function() {
+  const track = document.getElementById('carouselTrack');
+  const slides = track.querySelectorAll('.carousel-slide');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  const indicator = document.getElementById('carouselIndicator');
+  const dotsContainer = document.getElementById('carouselDots');
+  const total = slides.length;
+  let current = 0;
+  let autoPlayTimer;
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function goTo(index) {
+    current = ((index % total) + total) % total;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    indicator.textContent = (current + 1) + ' / ' + total;
+    dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    resetAutoPlay();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  }, { passive: true });
+
+  // Auto-play (6 seconds)
+  function resetAutoPlay() {
+    clearInterval(autoPlayTimer);
+    autoPlayTimer = setInterval(() => goTo(current + 1), 6000);
+  }
+
+  // Pause on hover
+  const section = document.querySelector('.carousel-section');
+  section.addEventListener('mouseenter', () => clearInterval(autoPlayTimer));
+  section.addEventListener('mouseleave', resetAutoPlay);
+
+  resetAutoPlay();
+})();
+
+// Newsletter Subscription
+function handleNewsletterSubscribe(event) {
+  event.preventDefault();
+  
+  const emailInput = document.getElementById('newsletterEmail');
+  const successMsg = document.getElementById('newsletterSuccess');
+  const email = emailInput.value;
+  
+  // Basic email validation
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address');
+    return false;
+  }
+  
+  // Store subscription in localStorage (in real app, this would be an API call)
+  const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+  
+  if (subscribers.includes(email)) {
+    alert('You are already subscribed to our newsletter!');
+    return false;
+  }
+  
+  subscribers.push(email);
+  localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+  
+  // Show success message
+  successMsg.classList.add('show');
+  
+  // Clear input
+  emailInput.value = '';
+  
+  // Hide success message after 5 seconds
+  setTimeout(() => {
+    successMsg.classList.remove('show');
+  }, 5000);
+  
+  return false;
+}
+
+// Notification System
+function toggleNotifications() {
+  const panel = document.getElementById('notificationPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const unreadItems = document.querySelectorAll('.notification-item.unread');
+  unreadItems.forEach(item => item.classList.remove('unread'));
+  
+  const badge = document.getElementById('notificationBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(url) {
+  // Mark this notification as read
+  event.currentTarget.classList.remove('unread');
+  
+  // Update badge count
+  const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+  const badge = document.getElementById('notificationBadge');
+  badge.textContent = unreadCount;
+  if (unreadCount === 0) {
+    badge.style.display = 'none';
+  }
+  
+  // Navigate to the URL
+  window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(event) {
+  const notificationWrapper = document.querySelector('.notification-wrapper');
+  const notificationPanel = document.getElementById('notificationPanel');
+  
+  if (!notificationWrapper.contains(event.target)) {
+    notificationPanel.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>

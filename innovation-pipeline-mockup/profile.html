@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline — Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-gold:   #ffd54f;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+    .avatar-nav {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+      text-decoration: none; border: 2px solid var(--accent-teal);
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Page Layout ──────────────────────── */
+    .profile-container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 24px 80px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 28px;
+    }
+
+    /* ── Left Sidebar (Profile Card) ──── */
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      height: fit-content;
+      position: sticky; top: 100px;
+    }
+    .profile-avatar {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 38px; color: #0d0f1a;
+      margin: 0 auto 18px;
+      border: 3px solid var(--bg-primary);
+      box-shadow: 0 0 0 3px var(--accent-teal);
+    }
+    .profile-name {
+      font-size: 20px; font-weight: 700; margin-bottom: 4px;
+    }
+    .profile-email {
+      font-size: 13px; color: var(--text-muted); margin-bottom: 16px;
+    }
+    .profile-badges {
+      display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .badge {
+      padding: 4px 12px; border-radius: 14px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-opco {
+      background: rgba(232,167,88,.12); color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.25);
+    }
+    .badge-platform {
+      background: rgba(240,184,112,.12); color: var(--accent-blue);
+      border: 1px solid rgba(240,184,112,.25);
+    }
+    .badge-role {
+      background: rgba(171,71,188,.12); color: var(--accent-purple);
+      border: 1px solid rgba(171,71,188,.25);
+    }
+
+    /* ── Meta Info ──────────────────────── */
+    .profile-meta {
+      border-top: 1px solid var(--border);
+      padding-top: 18px; margin-top: 6px;
+      text-align: left;
+    }
+    .meta-item {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 8px 0;
+      font-size: 13px;
+    }
+    .meta-item .label { color: var(--text-muted); }
+    .meta-item .value { color: var(--text-primary); font-weight: 600; }
+
+    /* ── Interests ──────────────────────── */
+    .interest-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 14px;
+    }
+    .interest-tag {
+      padding: 5px 12px; border-radius: 14px;
+      background: rgba(232,167,88,.08); border: 1px solid rgba(232,167,88,.2);
+      color: var(--accent-teal); font-size: 11px; font-weight: 500;
+    }
+
+    /* ── Actions ──────────────────────── */
+    .profile-actions {
+      margin-top: 22px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .btn-sm {
+      padding: 10px 16px; border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s; border: none;
+      text-align: center; text-decoration: none;
+    }
+    .btn-edit {
+      background: rgba(232,167,88,.1); color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.25);
+    }
+    .btn-edit:hover { background: rgba(232,167,88,.2); }
+    .btn-logout {
+      background: rgba(239,83,80,.08); color: var(--accent-red);
+      border: 1px solid rgba(239,83,80,.2);
+    }
+    .btn-logout:hover { background: rgba(239,83,80,.15); }
+
+    /* ── Edit Mode ──────────────────────── */
+    .edit-form { display: none; }
+    .edit-form.active { display: block; }
+    .view-mode.hidden { display: none; }
+    .form-field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .form-field input:focus,
+    .form-field select:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .form-field input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .interest-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .interest-chip {
+      padding: 6px 12px;
+      border-radius: 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .interest-chip.selected {
+      background: rgba(232,167,88,.15);
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+    }
+    .interest-chip:hover {
+      border-color: var(--accent-teal);
+    }
+    .btn-save {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0a1929;
+      border: none;
+    }
+    .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(232,167,88,.4);
+    }
+    .btn-cancel {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-cancel:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    /* ── Right Content ──────────────────── */
+    .profile-content {
+      display: flex; flex-direction: column; gap: 24px;
+    }
+
+    /* ── Stats Row ──────────────────────── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 16px; text-align: center;
+      transition: border-color .2s;
+    }
+    .stat-card:hover { border-color: var(--border-light); }
+    .stat-icon { font-size: 24px; margin-bottom: 8px; }
+    .stat-value {
+      font-size: 28px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label {
+      font-size: 11px; color: var(--text-muted); margin-top: 4px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    /* ── Section Card ──────────────────── */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px; box-shadow: var(--shadow);
+    }
+    .section-title {
+      font-size: 16px; font-weight: 700; margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title .icon { font-size: 18px; }
+
+    /* ── Activity Feed ──────────────────── */
+    .activity-feed { list-style: none; }
+    .activity-item {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      margin-top: 5px; flex-shrink: 0;
+    }
+    .dot-challenge { background: var(--accent-orange); }
+    .dot-idea      { background: var(--accent-teal); }
+    .dot-eval      { background: var(--accent-purple); }
+    .dot-pilot     { background: var(--accent-green); }
+    .dot-comment   { background: var(--accent-blue); }
+    .activity-body { flex: 1; }
+    .activity-text { font-size: 13px; line-height: 1.5; }
+    .activity-text strong { color: var(--accent-teal); font-weight: 600; }
+    .activity-time {
+      font-size: 11px; color: var(--text-muted); margin-top: 4px;
+    }
+
+    /* ── Submissions Table ──────────────── */
+    .submissions-table {
+      width: 100%; border-collapse: collapse;
+    }
+    .submissions-table th {
+      text-align: left; font-size: 11px; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .5px; padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .submissions-table tbody tr {
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .submissions-table td {
+      padding: 12px; font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+    .submissions-table tbody tr:hover td {
+      background: var(--bg-card-hover);
+    }
+    .submissions-table .id-col {
+      color: var(--accent-teal); font-weight: 600; font-family: monospace;
+    }
+    .status-pill {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 12px; font-size: 11px; font-weight: 600;
+    }
+    .status-active {
+      background: rgba(102,187,106,.12); color: var(--accent-green);
+    }
+    .status-eval {
+      background: rgba(171,71,188,.12); color: var(--accent-purple);
+    }
+    .status-pilot {
+      background: rgba(232,167,88,.12); color: var(--accent-teal);
+    }
+    .status-parked {
+      background: rgba(120,144,156,.12); color: #78909c;
+    }
+
+    /* ── Contribution Chart ──────────────── */
+    .contrib-chart {
+      display: flex; align-items: flex-end; gap: 6px;
+      height: 100px; padding-top: 12px;
+    }
+    .contrib-bar {
+      flex: 1; border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, var(--accent-teal), var(--accent-blue));
+      transition: height .4s ease;
+      position: relative;
+    }
+    .contrib-bar:hover::after {
+      content: attr(data-val);
+      position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 4px; font-size: 11px;
+      color: var(--accent-teal); white-space: nowrap;
+    }
+    .contrib-months {
+      display: flex; gap: 6px; margin-top: 8px;
+    }
+    .contrib-months span {
+      flex: 1; text-align: center; font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center; padding: 20px 36px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Not Logged In ──────────────────── */
+    .login-prompt {
+      display: none;
+      text-align: center; padding: 80px 24px;
+    }
+    .login-prompt .icon-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(232,167,88,.1); display: flex;
+      align-items: center; justify-content: center;
+      margin: 0 auto 24px; font-size: 36px;
+    }
+    .login-prompt h2 { font-size: 22px; margin-bottom: 10px; }
+    .login-prompt p { color: var(--text-secondary); margin-bottom: 28px; font-size: 14px; }
+    .login-prompt .btn-group { display: flex; gap: 12px; justify-content: center; }
+    .login-prompt .btn-group a {
+      padding: 12px 28px; border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-go-signin {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+    }
+    .btn-go-register {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 800px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+      .profile-card { position: static; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .header-right .nav-link { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta Lab</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar-nav" title="Profile" id="navAvatar">A</a>
+  </div>
+</header>
+
+<!-- ═══ LOGIN PROMPT (shown when not logged in) ════ -->
+<div class="login-prompt" id="loginPrompt">
+  <div class="icon-circle">🔒</div>
+  <h2>Sign in to view your profile</h2>
+  <p>Access your submissions, track your ideas, and see your impact.</p>
+  <div class="btn-group">
+    <a href="signin.html" class="btn-go-signin">Sign In</a>
+    <a href="register.html" class="btn-go-register">Register</a>
+  </div>
+</div>
+
+<!-- ═══ PROFILE CONTENT ════════════════════════ -->
+<div class="profile-container" id="profileContainer">
+
+  <!-- ── Left: Profile Card ───────────────── -->
+  <aside class="profile-card">
+    <!-- View Mode -->
+    <div class="view-mode" id="viewMode">
+      <div class="profile-avatar" id="profileAvatar">PS</div>
+      <div class="profile-name" id="profileName">Priya Sharma</div>
+      <div class="profile-email" id="profileEmail">priya.sharma@tcs.com</div>
+
+      <div class="profile-badges">
+        <span class="badge badge-opco" id="badgeOpco">TCS — India</span>
+        <span class="badge badge-platform" id="badgePlatform">BFSI</span>
+        <span class="badge badge-role">Innovator</span>
+      </div>
+
+      <div class="profile-meta">
+        <div class="meta-item">
+          <span class="label">Member since</span>
+          <span class="value">Jan 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="label">Innovation Score</span>
+          <span class="value" style="color:var(--accent-gold)">⭐ 847</span>
+        </div>
+        <div class="meta-item">
+          <span class="label">Rank</span>
+          <span class="value">#12 of 64</span>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;text-align:left;">Areas of Interest</div>
+        <div class="interest-tags" id="interestTags">
+          <span class="interest-tag">Customer Experience</span>
+          <span class="interest-tag">Product &amp; Data</span>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn-sm btn-edit" onclick="enterEditMode()">✏️ Edit Profile</button>
+        <button class="btn-sm btn-logout" onclick="handleLogout()">🚪 Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div class="edit-form" id="editMode">
+      <div class="profile-avatar" id="editAvatar">PS</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;text-align:center;">Edit Your Profile</div>
+
+      <form id="editProfileForm" onsubmit="saveProfile(event)">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" id="editName" placeholder="Enter your name" required />
+        </div>
+
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" id="editEmail" placeholder="your.email@tcs.com" disabled />
+        </div>
+
+        <div class="form-field">
+          <label>Operating Company</label>
+          <select id="editOpco" required>
+            <option value="">Select OpCo</option>
+            <option value="TCS — India">TCS — India</option>
+            <option value="TCS — USA">TCS — USA</option>
+            <option value="TCS — UK">TCS — UK</option>
+            <option value="TCS — Europe">TCS — Europe</option>
+            <option value="TCS — APAC">TCS — APAC</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Platform / Domain</label>
+          <select id="editPlatform" required>
+            <option value="">Select Platform</option>
+            <option value="BFSI">BFSI</option>
+            <option value="Technology & Services">Technology & Services</option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Retail & CPG">Retail & CPG</option>
+            <option value="Life Sciences">Life Sciences</option>
+            <option value="Communications">Communications</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Areas of Interest</label>
+          <div class="interest-chips">
+            <div class="interest-chip" data-value="Customer Experience">Customer Experience</div>
+            <div class="interest-chip" data-value="Product & Data">Product & Data</div>
+            <div class="interest-chip" data-value="Supply Chain">Supply Chain</div>
+            <div class="interest-chip" data-value="Finance & Ops">Finance & Ops</div>
+            <div class="interest-chip" data-value="HR & Talent">HR & Talent</div>
+            <div class="interest-chip" data-value="Sustainability">Sustainability</div>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button type="submit" class="btn-sm btn-save">💾 Save Changes</button>
+          <button type="button" class="btn-sm btn-cancel" onclick="cancelEdit()">✖️ Cancel</button>
+        </div>
+      </form>
+    </div>
+  </aside>
+
+  <!-- ── Right: Content ───────────────────── -->
+  <div class="profile-content">
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value">5</div>
+        <div class="stat-label">Challenges</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💡</div>
+        <div class="stat-value">12</div>
+        <div class="stat-label">Ideas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">In Pilot</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">€</div>
+        <div class="stat-value">420K</div>
+        <div class="stat-label">Value Impact</div>
+      </div>
+    </div>
+
+    <!-- Contribution Chart -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">📊</span> Monthly Contributions</div>
+      <div class="contrib-chart">
+        <div class="contrib-bar" style="height:30%" data-val="2"></div>
+        <div class="contrib-bar" style="height:45%" data-val="3"></div>
+        <div class="contrib-bar" style="height:20%" data-val="1"></div>
+        <div class="contrib-bar" style="height:60%" data-val="4"></div>
+        <div class="contrib-bar" style="height:80%" data-val="6"></div>
+        <div class="contrib-bar" style="height:55%" data-val="4"></div>
+        <div class="contrib-bar" style="height:90%" data-val="7"></div>
+        <div class="contrib-bar" style="height:70%" data-val="5"></div>
+        <div class="contrib-bar" style="height:40%" data-val="3"></div>
+        <div class="contrib-bar" style="height:65%" data-val="5"></div>
+        <div class="contrib-bar" style="height:50%" data-val="3"></div>
+        <div class="contrib-bar" style="height:100%" data-val="8"></div>
+      </div>
+      <div class="contrib-months">
+        <span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+        <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
+        <span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+      </div>
+    </div>
+
+    <!-- My Submissions -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">📋</span> My Submissions</div>
+      <table class="submissions-table">
+        <thead>
+          <tr><th>ID</th><th>Title</th><th>Type</th><th>Status</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-col">CHG-001</td>
+            <td>Reduce customer onboarding time by 40%</td>
+            <td>Challenge</td>
+            <td><span class="status-pill status-active">Active</span></td>
+            <td style="color:var(--text-muted)">12 Jan</td>
+          </tr>
+          <tr>
+            <td class="id-col">IDX-003</td>
+            <td>AI-powered document verification</td>
+            <td>Idea</td>
+            <td><span class="status-pill status-pilot">Pilot</span></td>
+            <td style="color:var(--text-muted)">18 Jan</td>
+          </tr>
+          <tr>
+            <td class="id-col">CHG-004</td>
+            <td>Predictive inventory optimisation</td>
+            <td>Challenge</td>
+            <td><span class="status-pill status-eval">Evaluation</span></td>
+            <td style="color:var(--text-muted)">25 Jan</td>
+          </tr>
+          <tr>
+            <td class="id-col">IDX-007</td>
+            <td>Real-time NPS sentiment dashboard</td>
+            <td>Idea</td>
+            <td><span class="status-pill status-active">Active</span></td>
+            <td style="color:var(--text-muted)">01 Feb</td>
+          </tr>
+          <tr>
+            <td class="id-col">IDX-009</td>
+            <td>Automated compliance checker for SOX</td>
+            <td>Idea</td>
+            <td><span class="status-pill status-parked">Parked</span></td>
+            <td style="color:var(--text-muted)">05 Feb</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">⚡</span> Recent Activity</div>
+      <ul class="activity-feed">
+        <li class="activity-item">
+          <div class="activity-dot dot-idea"></div>
+          <div class="activity-body">
+            <div class="activity-text">Submitted idea <strong>IDX-009</strong> — Automated compliance checker for SOX</div>
+            <div class="activity-time">2 days ago</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="activity-dot dot-eval"></div>
+          <div class="activity-body">
+            <div class="activity-text">Challenge <strong>CHG-004</strong> moved to Evaluation stage</div>
+            <div class="activity-time">5 days ago</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="activity-dot dot-comment"></div>
+          <div class="activity-body">
+            <div class="activity-text">Received 3 votes on idea <strong>IDX-007</strong> — Real-time NPS dashboard</div>
+            <div class="activity-time">1 week ago</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="activity-dot dot-pilot"></div>
+          <div class="activity-body">
+            <div class="activity-text">Idea <strong>IDX-003</strong> promoted to Pilot 🎉</div>
+            <div class="activity-time">2 weeks ago</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="activity-dot dot-challenge"></div>
+          <div class="activity-body">
+            <div class="activity-text">Created challenge <strong>CHG-001</strong> — Reduce onboarding time</div>
+            <div class="activity-time">1 month ago</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══════════════════════════════ -->
+<footer class="footer">
+  Innovation Pipeline Mockup — TCS Tensor Workshop &nbsp;|&nbsp;
+  <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Help</a>
+</footer>
+
+<script>
+(function() {
+  const stored = localStorage.getItem('ip_user');
+  const loggedIn = localStorage.getItem('ip_loggedIn') === 'true';
+
+  if (!loggedIn && !stored) {
+    // Show login prompt, hide profile
+    document.getElementById('loginPrompt').style.display = 'block';
+    document.getElementById('profileContainer').style.display = 'none';
+    return;
+  }
+
+  // Populate profile from stored data
+  if (stored) {
+    const user = JSON.parse(stored);
+    const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+
+    document.getElementById('profileAvatar').textContent = initials;
+    document.getElementById('profileName').textContent = user.name;
+    document.getElementById('profileEmail').textContent = user.email;
+    document.getElementById('badgeOpco').textContent = user.opco;
+    document.getElementById('badgePlatform').textContent = user.platform;
+    document.getElementById('navAvatar').textContent = initials;
+
+    // Interests
+    if (user.interests && user.interests.length) {
+      const container = document.getElementById('interestTags');
+      container.innerHTML = user.interests.map(i =>
+        '<span class="interest-tag">' + i.replace('&', '&amp;') + '</span>'
+      ).join('');
+    }
+  }
+})();
+
+function handleLogout() {
+  localStorage.removeItem('ip_loggedIn');
+  window.location.href = 'signin.html';
+}
+
+function enterEditMode() {
+  const stored = localStorage.getItem('ip_user');
+  if (!stored) return;
+  
+  const user = JSON.parse(stored);
+  
+  // Populate edit form
+  document.getElementById('editName').value = user.name || '';
+  document.getElementById('editEmail').value = user.email || '';
+  document.getElementById('editOpco').value = user.opco || '';
+  document.getElementById('editPlatform').value = user.platform || '';
+  
+  // Set avatar in edit mode
+  const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('editAvatar').textContent = initials;
+  
+  // Select interest chips
+  document.querySelectorAll('.interest-chip').forEach(chip => {
+    chip.classList.remove('selected');
+    if (user.interests && user.interests.includes(chip.dataset.value)) {
+      chip.classList.add('selected');
+    }
+  });
+  
+  // Toggle views
+  document.getElementById('viewMode').classList.add('hidden');
+  document.getElementById('editMode').classList.add('active');
+}
+
+function cancelEdit() {
+  document.getElementById('viewMode').classList.remove('hidden');
+  document.getElementById('editMode').classList.remove('active');
+}
+
+function saveProfile(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('editName').value.trim();
+  const email = document.getElementById('editEmail').value.trim();
+  const opco = document.getElementById('editOpco').value;
+  const platform = document.getElementById('editPlatform').value;
+  
+  // Get selected interests
+  const interests = [...document.querySelectorAll('.interest-chip.selected')]
+    .map(chip => chip.dataset.value);
+  
+  if (interests.length === 0) {
+    alert('Please select at least one area of interest');
+    return;
+  }
+  
+  // Save to localStorage
+  const userData = { name, email, opco, platform, interests };
+  localStorage.setItem('ip_user', JSON.stringify(userData));
+  
+  // Update view
+  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('profileAvatar').textContent = initials;
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileEmail').textContent = email;
+  document.getElementById('badgeOpco').textContent = opco;
+  document.getElementById('badgePlatform').textContent = platform;
+  document.getElementById('navAvatar').textContent = initials;
+  
+  const interestContainer = document.getElementById('interestTags');
+  interestContainer.innerHTML = interests.map(i =>
+    '<span class="interest-tag">' + i.replace('&', '&amp;') + '</span>'
+  ).join('');
+  
+  // Exit edit mode
+  cancelEdit();
+  
+  // Show success feedback
+  alert('✅ Profile updated successfully!');
+}
+
+// Toggle interest chip selection
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.interest-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('selected');
+    });
+  });
+  
+  // Handle submission row clicks
+  document.querySelectorAll('.submissions-table tbody tr').forEach(row => {
+    row.addEventListener('click', () => {
+      const type = row.cells[2]?.textContent.trim(); // Type column
+      const id = row.cells[0]?.textContent.trim(); // ID column
+      
+      if (type === 'Challenge') {
+        // Navigate to challenge detail page
+        window.location.href = 'challenge-detail.html?id=' + encodeURIComponent(id);
+      } else if (type === 'Idea') {
+        // Navigate to idea detail page
+        window.location.href = 'idea-detail.html?id=' + encodeURIComponent(id);
+      }
+    });
+  });
+});
+
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>

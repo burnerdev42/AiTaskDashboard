@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Challenge Details – Innovation Pipeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-yellow: #ffee58;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px;
+      transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Main Container ──────────────────── */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 36px;
+    }
+
+    /* ── Breadcrumb ──────────────────────── */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .breadcrumb a:hover { color: var(--accent-teal); }
+    .breadcrumb .sep { color: var(--text-muted); }
+    .breadcrumb .current { color: var(--text-primary); }
+
+    /* ── Page Header ─────────────────────── */
+    .page-header {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      border-top: 3px solid var(--accent-red);
+    }
+    .page-header-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .page-header-left {
+      flex: 1;
+    }
+    .challenge-id {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .challenge-id .priority-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent-red);
+    }
+    .page-title {
+      font-size: 28px; font-weight: 700; margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .page-title.edit-mode {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 24px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: none;
+      min-height: 60px;
+    }
+    .page-title.edit-mode:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+    .page-subtitle {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .page-subtitle.edit-mode {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+    }
+    .page-subtitle.edit-mode:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+    .page-header-right {
+      display: flex; gap: 10px;
+      flex-shrink: 0;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232,167,88,.3);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+    }
+    .btn-danger {
+      background: rgba(239,83,80,.1);
+      color: var(--accent-red);
+      border: 1px solid var(--accent-red);
+    }
+    .btn-danger:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    .meta-row {
+      display: flex; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .meta-item .icon {
+      font-size: 16px;
+      color: var(--accent-teal);
+    }
+    .meta-item strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* ── Main Grid ───────────────────────── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+    }
+
+    /* ── Content Section ─────────────────── */
+    .content-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 16px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title .icon {
+      font-size: 18px;
+    }
+    .section-content {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .section-content.edit-mode {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 120px;
+    }
+    .section-content.edit-mode:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+
+    /* ── Form Fields ─────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .form-input, .form-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+
+    /* ── Sidebar ─────────────────────────── */
+    .sidebar-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .stat-value.red { color: var(--accent-red); }
+    .stat-value.orange { color: var(--accent-orange); }
+    .stat-value.green { color: var(--accent-green); }
+    .stat-value.blue { color: var(--accent-blue); }
+
+    /* ── Status Badge ────────────────────── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-badge.submitted {
+      background: rgba(239,83,80,.12);
+      color: var(--accent-red);
+      border: 1px solid rgba(239,83,80,.3);
+    }
+    .status-badge.ideation {
+      background: rgba(255,238,88,.12);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(255,238,88,.3);
+    }
+    .status-badge.evaluation {
+      background: rgba(255,167,38,.12);
+      color: var(--accent-orange);
+      border: 1px solid rgba(255,167,38,.3);
+    }
+
+    /* ── Activity Feed ───────────────────── */
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0d0f1a;
+      flex-shrink: 0;
+    }
+    .activity-content {
+      flex: 1;
+    }
+    .activity-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .activity-author {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .activity-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .activity-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* ── Comment Box ─────────────────────── */
+    .comment-box {
+      margin-top: 16px;
+    }
+    .comment-input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      margin-bottom: 10px;
+    }
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+
+    /* ── Tags ────────────────────────────── */
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(232,167,88,.1);
+      color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.2);
+    }
+
+    /* ── Ideas Section (Enhanced) ────────── */
+    .ideas-section {
+      background: linear-gradient(135deg, rgba(232,167,88,.08), rgba(240,184,112,.05));
+      border: 2px solid var(--accent-teal);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .ideas-section .sidebar-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: var(--accent-teal);
+    }
+    .ideas-section .sidebar-title .count {
+      background: rgba(232,167,88,.2);
+      color: var(--accent-teal);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .ideas-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .ideas-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .ideas-list::-webkit-scrollbar-track {
+      background: rgba(232,167,88,.05);
+      border-radius: 3px;
+    }
+    .ideas-list::-webkit-scrollbar-thumb {
+      background: var(--accent-teal);
+      border-radius: 3px;
+    }
+    .ideas-list::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-blue);
+    }
+    .idea-item {
+      padding: 14px;
+      background: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all .2s;
+      cursor: pointer;
+    }
+    .idea-item:hover {
+      border-color: var(--accent-teal);
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(232,167,88,.15);
+    }
+    .idea-item .idea-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+    .idea-item .idea-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .idea-item .idea-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .idea-item .idea-stats span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .idea-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .idea-badge.ideation {
+      background: rgba(255,238,88,.15);
+      color: var(--accent-yellow);
+    }
+    .idea-badge.evaluation {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .idea-badge.poc {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .add-idea-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .add-idea-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(232,167,88,.4);
+    }
+    /* Modal Dialog for Add Idea */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-dialog {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(232,167,88,0.05), rgba(240,184,112,0.05));
+    }
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+      background: rgba(239,83,80,.08);
+    }
+    .modal-body {
+      padding: 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .modal-body::-webkit-scrollbar { width: 8px; }
+    .modal-body::-webkit-scrollbar-track { background: var(--bg-card); }
+    .modal-body::-webkit-scrollbar-thumb { background: var(--accent-teal); border-radius: 4px; }
+    .add-idea-form {
+      display: block;
+    }
+    .add-idea-form .form-field {
+      margin-bottom: 18px;
+    }
+    .add-idea-form .form-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .add-idea-form .form-field label .required {
+      color: var(--accent-red);
+      margin-left: 4px;
+    }
+    .add-idea-form .form-field input,
+    .add-idea-form .form-field textarea,
+    .add-idea-form .form-field select {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .add-idea-form .form-field textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+    .add-idea-form .form-field input:focus,
+    .add-idea-form .form-field textarea:focus,
+    .add-idea-form .form-field select:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .add-idea-form .form-field .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .add-idea-form .form-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .form-actions .btn-small {
+      padding: 8px 16px;
+      font-size: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+    }
+    .form-actions .btn-submit {
+      background: var(--accent-teal);
+      color: #0d0f1a;
+    }
+    .form-actions .btn-submit:hover {
+      background: var(--accent-blue);
+    }
+    .form-actions .btn-cancel {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .form-actions .btn-cancel:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta Lab</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link active">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ MAIN CONTAINER ════════════════════════ -->
+<div class="container">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="home.html">Home</a>
+    <span class="sep">/</span>
+    <a href="challenge-cards.html">Challenges</a>
+    <span class="sep">/</span>
+    <span class="current">CH-01</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-top">
+      <div class="page-header-left">
+        <div class="challenge-id">
+          <span class="priority-dot"></span>
+          <span>CH-01</span>
+        </div>
+        <h1 class="page-title" id="pageTitle">Reduce Customer Churn by 15%</h1>
+        <p class="page-subtitle" id="pageSubtitle">High-value segment losing 8% QoQ due to poor onboarding experience. Need to identify root causes and implement retention strategies.</p>
+      </div>
+      <div class="page-header-right">
+        <button class="btn btn-secondary" id="editBtn" onclick="toggleEditMode()">✏️ Edit</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="toggleEditMode()" style="display:none;">💾 Save</button>
+        <button class="btn btn-secondary" id="cancelBtn" onclick="cancelEdit()" style="display:none;">✖️ Cancel</button>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="icon">👤</span>
+        <span>Owner: <strong>Ravi Patel</strong></span>
+      </div>
+      <div class="meta-item">
+        <span class="icon">📅</span>
+        <span>Created: <strong>Jan 15, 2026</strong></span>
+      </div>
+      <div class="meta-item">
+        <span class="icon">🔄</span>
+        <span>Updated: <strong>Feb 10, 2026</strong></span>
+      </div>
+      <div class="meta-item">
+        <span class="icon">🏷️</span>
+        <span class="status-badge submitted">⚫ Challenge Submitted</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+    
+    <!-- Left Column -->
+    <div class="main-content">
+      
+      <!-- Problem Statement -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="icon">❗</span>
+            Problem Statement
+          </h2>
+        </div>
+        <div class="section-content" id="problemContent">
+          Our premium customer segment (lifetime value >$10K) is experiencing an alarming 8% quarter-over-quarter churn rate. 
+          Exit interviews indicate that 63% of departing customers cite frustration with the onboarding process. 
+          Competitors are offering smoother digital experiences, and we're losing market share as a result.
+          <br><br>
+          Key pain points identified:
+          <ul style="margin-top: 8px; padding-left: 20px;">
+            <li>Onboarding takes 14+ days vs industry average of 3-5 days</li>
+            <li>Complex KYC process with multiple document submissions</li>
+            <li>Lack of real-time progress tracking</li>
+            <li>Minimal product education during initial weeks</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Expected Outcome -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="icon">🎯</span>
+            Expected Outcome
+          </h2>
+        </div>
+        <div class="section-content" id="outcomeContent">
+          Reduce customer churn from 8% to below 3% within 6 months by implementing an improved onboarding experience.
+          <br><br>
+          Success metrics:
+          <ul style="margin-top: 8px; padding-left: 20px;">
+            <li>Onboarding completion time reduced to 5 days or less</li>
+            <li>Customer satisfaction score (CSAT) for onboarding >4.5/5</li>
+            <li>First-month product activation rate >80%</li>
+            <li>Reduce churn in first 90 days by 50%</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Additional Details -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="icon">📋</span>
+            Additional Details
+          </h2>
+        </div>
+        <div class="form-grid" id="detailsForm">
+          <div class="form-group">
+            <label class="form-label">Business Unit</label>
+            <input type="text" class="form-input" value="Customer Experience" readonly id="businessUnit">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department</label>
+            <input type="text" class="form-input" value="Customer Success" readonly id="department">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-select" disabled id="priority">
+              <option value="high" selected>High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Impact</label>
+            <input type="text" class="form-input" value="$2M annual revenue retention" readonly id="impact">
+          </div>
+          <div class="form-group full-width">
+            <label class="form-label">Tags</label>
+            <div class="tags-list">
+              <span class="tag">Customer Experience</span>
+              <span class="tag">Retention</span>
+              <span class="tag">Onboarding</span>
+              <span class="tag">Digital Transformation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="icon">💬</span>
+            Activity & Comments
+          </h2>
+        </div>
+        
+        <div class="activity-feed">
+          <div class="activity-item">
+            <div class="activity-avatar" style="background:var(--accent-teal)">RP</div>
+            <div class="activity-content">
+              <div class="activity-header">
+                <span class="activity-author">Ravi Patel</span>
+                <span class="activity-time">2 days ago</span>
+              </div>
+              <div class="activity-text">
+                Created this challenge. Looking for innovative solutions to address our onboarding friction points.
+              </div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-avatar" style="background:var(--accent-blue)">SB</div>
+            <div class="activity-content">
+              <div class="activity-header">
+                <span class="activity-author">Sarita Banerjee</span>
+                <span class="activity-time">1 day ago</span>
+              </div>
+              <div class="activity-text">
+                I've been researching ML-based churn prediction models. We could identify at-risk customers earlier in their journey. Would love to collaborate on this!
+              </div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-avatar" style="background:var(--accent-green)">AB</div>
+            <div class="activity-content">
+              <div class="activity-header">
+                <span class="activity-author">Amit Basu</span>
+                <span class="activity-time">5 hours ago</span>
+              </div>
+              <div class="activity-text">
+                Have we looked at gamification for the onboarding process? Interactive tutorials with milestone rewards could significantly improve engagement.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-box">
+          <textarea class="comment-input" placeholder="Add a comment..."></textarea>
+          <button class="btn btn-primary">💬 Post Comment</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar -->
+    <aside class="sidebar">
+      
+      <!-- Stats -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">📊 Engagement Stats</h3>
+        <div class="stat-row">
+          <span class="stat-label">Views</span>
+          <span class="stat-value blue">247</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Votes</span>
+          <span class="stat-value green">42</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Comments</span>
+          <span class="stat-value orange">8</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Ideas Submitted</span>
+          <span class="stat-value green">8</span>
+        </div>
+      </div>
+
+      <!-- Related Ideas -->
+      <div class="sidebar-section ideas-section">
+        <h3 class="sidebar-title">
+          <span>💡 Related Ideas</span>
+          <button class="add-idea-btn" onclick="openIdeaModal()">✨ Add Idea</button>
+        </h3>
+
+        <div class="ideas-list">
+          <div class="idea-item" data-idea-id="IDX-001" onclick="navigateToIdea('IDX-001')">
+            <div class="idea-title">AI Churn Prediction Model</div>
+            <div class="idea-meta">
+              <span>by S. Banerjee</span>
+              <span class="idea-badge ideation">Ideation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 24</span>
+              <span>💬 7</span>
+              <span>👁️ 156</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-002" onclick="navigateToIdea('IDX-002')">
+            <div class="idea-title">Gamified Onboarding Flow</div>
+            <div class="idea-meta">
+              <span>by M. Singh</span>
+              <span class="idea-badge ideation">Ideation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 18</span>
+              <span>💬 5</span>
+              <span>👁️ 132</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-003" onclick="navigateToIdea('IDX-003')">
+            <div class="idea-title">Personalized Tutorial System</div>
+            <div class="idea-meta">
+              <span>by A. Basu</span>
+              <span class="idea-badge evaluation">Evaluation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 31</span>
+              <span>💬 12</span>
+              <span>👁️ 203</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-004" onclick="navigateToIdea('IDX-004')">
+            <div class="idea-title">Retention Offer Engine</div>
+            <div class="idea-meta">
+              <span>by R. Sharma</span>
+              <span class="idea-badge evaluation">Evaluation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 27</span>
+              <span>💬 9</span>
+              <span>👁️ 178</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-005" onclick="navigateToIdea('IDX-005')">
+            <div class="idea-title">Customer Health Dashboard</div>
+            <div class="idea-meta">
+              <span>by P. Kumar</span>
+              <span class="idea-badge poc">POC</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 22</span>
+              <span>💬 6</span>
+              <span>👁️ 145</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-006" onclick="navigateToIdea('IDX-006')">
+            <div class="idea-title">Smart Segmentation AI</div>
+            <div class="idea-meta">
+              <span>by N. Reddy</span>
+              <span class="idea-badge ideation">Ideation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 15</span>
+              <span>💬 4</span>
+              <span>👁️ 98</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-007" onclick="navigateToIdea('IDX-007')">
+            <div class="idea-title">Automated Account Alerts</div>
+            <div class="idea-meta">
+              <span>by V. Gupta</span>
+              <span class="idea-badge ideation">Ideation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 19</span>
+              <span>💬 3</span>
+              <span>👁️ 112</span>
+            </div>
+          </div>
+          <div class="idea-item" data-idea-id="IDX-008" onclick="navigateToIdea('IDX-008')">
+            <div class="idea-title">Customer Journey Analytics</div>
+            <div class="idea-meta">
+              <span>by D. Mehta</span>
+              <span class="idea-badge evaluation">Evaluation</span>
+            </div>
+            <div class="idea-stats">
+              <span>👍 29</span>
+              <span>💬 11</span>
+              <span>👁️ 187</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">👥 Team Members</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent-teal); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #0d0f1a;">RP</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600;">Ravi Patel</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Owner</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #0d0f1a;">SB</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600;">Sarita Banerjee</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Contributor</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent-green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #0d0f1a;">AB</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600;">Amit Basu</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Contributor</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">⚡ Quick Actions</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="btn btn-secondary" style="width: 100%; justify-content: center;">👍 Vote for This</button>
+          <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="openIdeaModal()">💡 Submit Idea</button>
+          <button class="btn btn-secondary" style="width: 100%; justify-content: center;">🔔 Subscribe</button>
+          <button class="btn btn-danger" style="width: 100%; justify-content: center;">🗑️ Delete</button>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.tcs.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The TCS-Ahold Delhaize engineering LABS</strong>, Kolkata ODC (Gitanjali Park – L14).
+</footer>
+
+<!-- ═══ ADD IDEA MODAL ════════════════════════ -->
+<div class="modal-overlay" id="ideaModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h2 id="ideaModalTitle">💡 Submit New Idea</h2>
+      <button class="modal-close" onclick="closeIdeaModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form class="add-idea-form" id="addIdeaForm">
+        <div class="form-field">
+          <label>Idea Title <span class="required">*</span></label>
+          <input type="text" placeholder="Enter a descriptive title for your idea..." id="ideaTitle" required />
+          <div class="hint">Keep it concise and descriptive (max 100 characters)</div>
+        </div>
+        
+        <div class="form-field">
+          <label>Solution Description <span class="required">*</span></label>
+          <textarea placeholder="Describe your solution in detail. What problem does it solve? How would it work?" id="ideaDesc" required></textarea>
+          <div class="hint">Include technical details, benefits, and expected outcomes</div>
+        </div>
+        
+        <div class="form-field">
+          <label>Category</label>
+          <select id="ideaCategory">
+            <option value="">Select a category</option>
+            <option value="technology">Technology/Automation</option>
+            <option value="process">Process Improvement</option>
+            <option value="customer">Customer Experience</option>
+            <option value="data">Data & Analytics</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-field">
+          <label>Expected Impact</label>
+          <input type="text" placeholder="e.g., 20% efficiency gain, €500K annual savings" id="ideaImpact" />
+          <div class="hint">Quantify the potential business impact if possible</div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-small btn-cancel" onclick="closeIdeaModal()">✖️ Cancel</button>
+          <button type="submit" class="btn-small btn-submit">🚀 Submit Idea</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+let editMode = false;
+let originalData = {};
+
+function toggleEditMode() {
+  editMode = !editMode;
+  
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const pageTitle = document.getElementById('pageTitle');
+  const pageSubtitle = document.getElementById('pageSubtitle');
+  const problemContent = document.getElementById('problemContent');
+  const outcomeContent = document.getElementById('outcomeContent');
+  const businessUnit = document.getElementById('businessUnit');
+  const department = document.getElementById('department');
+  const priority = document.getElementById('priority');
+  const impact = document.getElementById('impact');
+
+  if (editMode) {
+    // Save original data
+    originalData = {
+      title: pageTitle.textContent,
+      subtitle: pageSubtitle.textContent,
+      problem: problemContent.innerHTML,
+      outcome: outcomeContent.innerHTML,
+      businessUnit: businessUnit.value,
+      department: department.value,
+      priority: priority.value,
+      impact: impact.value
+    };
+
+    // Switch to edit mode
+    editBtn.style.display = 'none';
+    saveBtn.style.display = 'inline-flex';
+    cancelBtn.style.display = 'inline-flex';
+
+    // Convert title to textarea
+    const titleValue = pageTitle.textContent;
+    const titleTextarea = document.createElement('textarea');
+    titleTextarea.className = 'page-title edit-mode';
+    titleTextarea.id = 'pageTitle';
+    titleTextarea.value = titleValue;
+    pageTitle.replaceWith(titleTextarea);
+
+    // Convert subtitle to textarea
+    const subtitleValue = pageSubtitle.textContent;
+    const subtitleTextarea = document.createElement('textarea');
+    subtitleTextarea.className = 'page-subtitle edit-mode';
+    subtitleTextarea.id = 'pageSubtitle';
+    subtitleTextarea.value = subtitleValue;
+    pageSubtitle.replaceWith(subtitleTextarea);
+
+    // Convert problem content to textarea
+    const problemTextarea = document.createElement('textarea');
+    problemTextarea.className = 'section-content edit-mode';
+    problemTextarea.id = 'problemContent';
+    problemTextarea.value = problemContent.textContent.trim();
+    problemContent.replaceWith(problemTextarea);
+
+    // Convert outcome content to textarea
+    const outcomeTextarea = document.createElement('textarea');
+    outcomeTextarea.className = 'section-content edit-mode';
+    outcomeTextarea.id = 'outcomeContent';
+    outcomeTextarea.value = outcomeContent.textContent.trim();
+    outcomeContent.replaceWith(outcomeTextarea);
+
+    // Enable form inputs
+    businessUnit.removeAttribute('readonly');
+    department.removeAttribute('readonly');
+    priority.removeAttribute('disabled');
+    impact.removeAttribute('readonly');
+
+  } else {
+    // Save and exit edit mode
+    editBtn.style.display = 'inline-flex';
+    saveBtn.style.display = 'none';
+    cancelBtn.style.display = 'none';
+
+    // Get current textarea for title
+    const titleTextarea = document.getElementById('pageTitle');
+    const titleValue = titleTextarea.value;
+    const titleH1 = document.createElement('h1');
+    titleH1.className = 'page-title';
+    titleH1.id = 'pageTitle';
+    titleH1.textContent = titleValue;
+    titleTextarea.replaceWith(titleH1);
+
+    // Get current textarea for subtitle
+    const subtitleTextarea = document.getElementById('pageSubtitle');
+    const subtitleValue = subtitleTextarea.value;
+    const subtitleP = document.createElement('p');
+    subtitleP.className = 'page-subtitle';
+    subtitleP.id = 'pageSubtitle';
+    subtitleP.textContent = subtitleValue;
+    subtitleTextarea.replaceWith(subtitleP);
+
+    // Convert problem textarea back to div
+    const problemTextarea = document.getElementById('problemContent');
+    const problemDiv = document.createElement('div');
+    problemDiv.className = 'section-content';
+    problemDiv.id = 'problemContent';
+    problemDiv.textContent = problemTextarea.value;
+    problemTextarea.replaceWith(problemDiv);
+
+    // Convert outcome textarea back to div
+    const outcomeTextarea = document.getElementById('outcomeContent');
+    const outcomeDiv = document.createElement('div');
+    outcomeDiv.className = 'section-content';
+    outcomeDiv.id = 'outcomeContent';
+    outcomeDiv.textContent = outcomeTextarea.value;
+    outcomeTextarea.replaceWith(outcomeDiv);
+
+    // Disable form inputs
+    document.getElementById('businessUnit').setAttribute('readonly', 'readonly');
+    document.getElementById('department').setAttribute('readonly', 'readonly');
+    document.getElementById('priority').setAttribute('disabled', 'disabled');
+    document.getElementById('impact').setAttribute('readonly', 'readonly');
+  }
+}
+
+function cancelEdit() {
+  editMode = false;
+  
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  editBtn.style.display = 'inline-flex';
+  saveBtn.style.display = 'none';
+  cancelBtn.style.display = 'none';
+
+  // Restore original title
+  const titleTextarea = document.getElementById('pageTitle');
+  const titleH1 = document.createElement('h1');
+  titleH1.className = 'page-title';
+  titleH1.id = 'pageTitle';
+  titleH1.textContent = originalData.title;
+  titleTextarea.replaceWith(titleH1);
+
+  // Restore original subtitle
+  const subtitleTextarea = document.getElementById('pageSubtitle');
+  const subtitleP = document.createElement('p');
+  subtitleP.className = 'page-subtitle';
+  subtitleP.id = 'pageSubtitle';
+  subtitleP.textContent = originalData.subtitle;
+  subtitleTextarea.replaceWith(subtitleP);
+
+  // Restore problem content
+  const problemTextarea = document.getElementById('problemContent');
+  const problemDiv = document.createElement('div');
+  problemDiv.className = 'section-content';
+  problemDiv.id = 'problemContent';
+  problemDiv.innerHTML = originalData.problem;
+  problemTextarea.replaceWith(problemDiv);
+
+  // Restore outcome content
+  const outcomeTextarea = document.getElementById('outcomeContent');
+  const outcomeDiv = document.createElement('div');
+  outcomeDiv.className = 'section-content';
+  outcomeDiv.id = 'outcomeContent';
+  outcomeDiv.innerHTML = originalData.outcome;
+  outcomeTextarea.replaceWith(outcomeDiv);
+
+  // Restore form values
+  document.getElementById('businessUnit').value = originalData.businessUnit;
+  document.getElementById('department').value = originalData.department;
+  document.getElementById('priority').value = originalData.priority;
+  document.getElementById('impact').value = originalData.impact;
+
+  // Disable form inputs
+  document.getElementById('businessUnit').setAttribute('readonly', 'readonly');
+  document.getElementById('department').setAttribute('readonly', 'readonly');
+  document.getElementById('priority').setAttribute('disabled', 'disabled');
+  document.getElementById('impact').setAttribute('readonly', 'readonly');
+}
+
+// Modal functions
+function openIdeaModal() {
+  // Check authentication
+  if (!localStorage.getItem('isAuthenticated')) {
+    // Redirect to sign in with return URL
+    window.location.href = 'signin.html?return=' + encodeURIComponent(window.location.pathname);
+    return;
+  }
+  document.getElementById('ideaModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeIdeaModal() {
+  document.getElementById('ideaModal').classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('ideaModalTitle').textContent = '💡 Submit New Idea';
+  document.getElementById('addIdeaForm').reset();
+}
+
+// Close on overlay click
+document.getElementById('ideaModal').addEventListener('click', (e) => {
+  if (e.target.id === 'ideaModal') {
+    closeIdeaModal();
+  }
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('ideaModal').classList.contains('active')) {
+    closeIdeaModal();
+  }
+});
+
+// Form submission
+document.getElementById('addIdeaForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  const title = document.getElementById('ideaTitle').value.trim();
+  const desc = document.getElementById('ideaDesc').value.trim();
+  
+  if (!title || !desc) {
+    alert('Please fill in all required fields');
+    return;
+  }
+  
+  const ideaData = {
+    title,
+    description: desc,
+    category: document.getElementById('ideaCategory').value,
+    impact: document.getElementById('ideaImpact').value,
+    challengeId: 'CH-01',
+    submittedAt: new Date().toISOString()
+  };
+  
+  console.log('Idea submitted:', ideaData);
+  
+  // Change title to show success
+  document.getElementById('ideaModalTitle').textContent = '✅ Idea Submitted Successfully!';
+  
+  // Reset and close
+  setTimeout(() => {
+    closeIdeaModal();
+    // Optionally reload to show new idea in list
+    location.reload();
+  }, 2000);
+});
+
+function navigateToIdea(ideaId) {
+  window.location.href = 'idea-detail.html?id=' + encodeURIComponent(ideaId);
+}
+
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>

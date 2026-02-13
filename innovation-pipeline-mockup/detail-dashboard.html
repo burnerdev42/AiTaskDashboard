@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline – Detail Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-yellow: #ffee58;
+      --accent-gold:   #ffd54f;
+      --accent-grey:   #78909c;
+
+      --radius:        14px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; text-transform: none; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Dashboard Grid ──────────────────── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      padding: 28px 36px;
+      min-height: calc(100vh - 90px);
+    }
+
+    /* ── Panel Base ──────────────────────── */
+    .panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-header h2 {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .panel-header .panel-num {
+      font-size: 10px; font-weight: 700;
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 2px 10px; border-radius: 10px;
+      color: var(--text-muted); letter-spacing: 1px;
+    }
+    .panel-body {
+      padding: 24px;
+      flex: 1; display: flex; flex-direction: column;
+    }
+
+    /* ═══════════════════════════════════════
+       PANEL 1 – INNOVATION FUNNEL
+       ═══════════════════════════════════════ */
+    .panel.funnel { border-top: 3px solid var(--accent-teal); }
+
+    /* Funnel Numbers */
+    .funnel-numbers {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .funnel-num {
+      font-size: 26px; font-weight: 800;
+      padding: 4px 14px; border-radius: 8px;
+      line-height: 1;
+    }
+    .funnel-arrow {
+      font-size: 16px; color: var(--text-muted);
+    }
+
+    /* Funnel Visual */
+    .funnel-visual {
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
+      margin-bottom: 28px;
+    }
+    .funnel-bar {
+      height: 36px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: #0d0f1a; position: relative;
+      transition: all .3s;
+    }
+    .funnel-bar:hover { transform: scaleX(1.02); filter: brightness(1.15); }
+    .funnel-bar .bar-label {
+      position: absolute; right: -10px; transform: translateX(100%);
+      font-size: 11px; color: var(--text-secondary); font-weight: 500;
+      white-space: nowrap; letter-spacing: 0;
+    }
+    .funnel-bar .bar-count {
+      position: absolute; left: -10px; transform: translateX(-100%);
+      font-size: 14px; font-weight: 800; letter-spacing: 0;
+    }
+    .funnel-connector {
+      width: 2px; height: 8px; background: var(--border);
+    }
+
+    /* Conversion */
+    .conversion-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      margin-top: auto;
+    }
+    .conversion-block .conv-title {
+      font-size: 12px; font-weight: 600; color: var(--text-secondary);
+      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .conversion-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .conversion-row .conv-label { font-size: 13px; color: var(--text-secondary); }
+    .conversion-row .conv-value { font-size: 22px; font-weight: 800; }
+    .conversion-row .conv-target {
+      font-size: 12px; color: var(--text-muted);
+      background: var(--bg-secondary); padding: 3px 12px;
+      border-radius: 10px; border: 1px solid var(--border);
+    }
+    .conv-progress { margin-top: 6px; }
+    .conv-progress-bar {
+      width: 100%; height: 8px; background: var(--bg-primary);
+      border-radius: 4px; overflow: hidden;
+    }
+    .conv-progress-fill {
+      height: 100%; border-radius: 4px;
+    }
+    .conv-progress-labels {
+      display: flex; justify-content: space-between;
+      font-size: 10px; color: var(--text-muted); margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════
+       PANEL 2 – BUSINESS VALUE IMPACT
+       ═══════════════════════════════════════ */
+    .panel.value { border-top: 3px solid var(--accent-green); }
+
+    .total-value-hero {
+      text-align: center;
+      padding: 20px 0 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .total-value-hero .tv-icon { font-size: 28px; margin-bottom: 6px; }
+    .total-value-hero .tv-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .total-value-hero .tv-amount {
+      font-size: 42px; font-weight: 800; color: var(--accent-green);
+      line-height: 1;
+    }
+    .total-value-hero .tv-period {
+      font-size: 13px; color: var(--text-secondary); margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* Top Solutions */
+    .top-solutions { margin-bottom: 24px; }
+    .top-solutions h3 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px;
+    }
+    .sol-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: all .2s;
+    }
+    .sol-row:hover { border-color: var(--border-light); }
+    .sol-row .sol-rank { font-size: 18px; }
+    .sol-row .sol-name {
+      flex: 1; font-size: 13px; font-weight: 600;
+    }
+    .sol-row .sol-value {
+      font-size: 15px; font-weight: 800;
+    }
+    .sol-row .sol-value.money { color: var(--accent-green); }
+    .sol-row .sol-value.percent { color: var(--accent-blue); }
+
+    /* Pipeline Value */
+    .pipeline-value {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      margin-top: auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pipeline-value .pv-label {
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    }
+    .pipeline-value .pv-amount {
+      font-size: 28px; font-weight: 800; color: var(--accent-gold);
+    }
+
+    /* ═══════════════════════════════════════
+       PANEL 3 – TEAM ENGAGEMENT
+       ═══════════════════════════════════════ */
+    .panel.engagement { border-top: 3px solid var(--accent-orange); }
+
+    /* Active Contributors Hero */
+    .contributors-hero {
+      text-align: center;
+      padding: 20px 0 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .contributors-hero .ch-icon { font-size: 28px; margin-bottom: 6px; }
+    .contributors-hero .ch-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .contributors-hero .ch-count {
+      font-size: 48px; font-weight: 800; color: var(--accent-orange);
+      line-height: 1;
+    }
+    .contributors-hero .ch-sub {
+      font-size: 13px; color: var(--text-secondary); margin-top: 6px;
+      font-weight: 500;
+    }
+    .contributors-hero .ch-sub span {
+      color: var(--accent-orange); font-weight: 700;
+    }
+
+    /* Department Leaderboard */
+    .leaderboard { margin-bottom: 24px; }
+    .leaderboard h3 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px;
+    }
+    .lb-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row .lb-medal { font-size: 18px; width: 24px; text-align: center; }
+    .lb-row .lb-name {
+      font-size: 13px; font-weight: 600; min-width: 90px;
+    }
+    .lb-row .lb-bar-wrap {
+      flex: 1; height: 18px; background: var(--bg-card);
+      border-radius: 4px; overflow: hidden; position: relative;
+    }
+    .lb-row .lb-bar-fill {
+      height: 100%; border-radius: 4px;
+      transition: width .6s ease;
+    }
+    .lb-row .lb-count {
+      font-size: 14px; font-weight: 800; min-width: 32px;
+      text-align: right;
+    }
+
+    /* Heat Map – Ideas by Week */
+    .heatmap-section {
+      margin-top: auto;
+    }
+    .heatmap-section h3 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px;
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 4px;
+    }
+    .hm-cell {
+      aspect-ratio: 1; border-radius: 4px;
+      transition: transform .2s;
+      position: relative;
+    }
+    .hm-cell:hover { transform: scale(1.3); z-index: 2; }
+    .hm-cell.l0 { background: var(--bg-card); border: 1px solid var(--border); }
+    .hm-cell.l1 { background: rgba(255,167,38,.15); }
+    .hm-cell.l2 { background: rgba(255,167,38,.30); }
+    .hm-cell.l3 { background: rgba(255,167,38,.50); }
+    .hm-cell.l4 { background: rgba(255,167,38,.75); }
+    .hm-cell.l5 { background: var(--accent-orange); }
+    .hm-labels {
+      display: flex; justify-content: space-between;
+      font-size: 9px; color: var(--text-muted); margin-top: 6px;
+      letter-spacing: .5px;
+    }
+    .hm-legend {
+      display: flex; align-items: center; gap: 4px;
+      justify-content: flex-end; margin-top: 8px;
+      font-size: 9px; color: var(--text-muted);
+    }
+    .hm-legend-cell {
+      width: 12px; height: 12px; border-radius: 2px;
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center; padding: 18px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+      }
+    }
+    @media (min-width: 1101px) and (max-width: 1400px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .panel.engagement { grid-column: 1 / 3; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta Lab</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link active">Metrics</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ DASHBOARD ═════════════════════════════ -->
+<div class="dashboard-grid">
+
+  <!-- ═══ PANEL 1: INNOVATION FUNNEL ════════ -->
+  <div class="panel funnel">
+    <div class="panel-header">
+      <h2>
+        <span class="panel-num">Panel 1</span>
+        🔬 Innovation Funnel
+      </h2>
+    </div>
+    <div class="panel-body">
+
+      <!-- Funnel Numbers -->
+      <div class="funnel-numbers">
+        <span class="funnel-num" style="color:var(--accent-red)">47</span>
+        <span class="funnel-arrow">→</span>
+        <span class="funnel-num" style="color:var(--accent-orange)">82</span>
+        <span class="funnel-arrow">→</span>
+        <span class="funnel-num" style="color:var(--accent-yellow)">23</span>
+        <span class="funnel-arrow">→</span>
+        <span class="funnel-num" style="color:var(--accent-blue)">12</span>
+        <span class="funnel-arrow">→</span>
+        <span class="funnel-num" style="color:var(--accent-green)">5</span>
+        <span class="funnel-arrow">→</span>
+        <span class="funnel-num" style="color:var(--accent-gold)">3</span>
+      </div>
+
+      <!-- Funnel Visual Bars -->
+      <div class="funnel-visual">
+        <div class="funnel-bar" style="width:100%; background: linear-gradient(90deg, var(--accent-red), #f4605080);">
+          <span class="bar-count" style="color:var(--accent-red)">47</span>
+          CHALLENGES
+          <span class="bar-label">Submitted</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-bar" style="width:88%; background: linear-gradient(90deg, var(--accent-orange), #ffa72680);">
+          <span class="bar-count" style="color:var(--accent-orange)">82</span>
+          IDEAS
+          <span class="bar-label">Generated</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-bar" style="width:58%; background: linear-gradient(90deg, #e0c440, #ffee5880);">
+          <span class="bar-count" style="color:var(--accent-yellow)">23</span>
+          EVALUATED
+          <span class="bar-label">Shortlisted</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-bar" style="width:40%; background: linear-gradient(90deg, var(--accent-blue), #42a5f580);">
+          <span class="bar-count" style="color:var(--accent-blue)">12</span>
+          PROTOTYPES
+          <span class="bar-label">Built</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-bar" style="width:24%; background: linear-gradient(90deg, var(--accent-green), #66bb6a80);">
+          <span class="bar-count" style="color:var(--accent-green)">5</span>
+          PILOTS
+          <span class="bar-label">Running</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-bar" style="width:16%; background: linear-gradient(90deg, var(--accent-gold), #ffd54f80);">
+          <span class="bar-count" style="color:var(--accent-gold)">3</span>
+          PRODUCTION
+          <span class="bar-label">Live</span>
+        </div>
+      </div>
+
+      <!-- Conversion -->
+      <div class="conversion-block">
+        <div class="conv-title">Conversion: Challenge → Production</div>
+        <div class="conversion-row">
+          <span class="conv-label">Current Rate</span>
+          <span class="conv-value" style="color:var(--accent-teal)">6.4%</span>
+          <span class="conv-target">Target: 8%</span>
+        </div>
+        <div class="conv-progress">
+          <div class="conv-progress-bar">
+            <div class="conv-progress-fill" style="width:80%; background: linear-gradient(90deg, var(--accent-teal), var(--accent-green));"></div>
+          </div>
+          <div class="conv-progress-labels">
+            <span>0%</span>
+            <span>6.4% current</span>
+            <span>8% target</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ PANEL 2: BUSINESS VALUE IMPACT ════ -->
+  <div class="panel value">
+    <div class="panel-header">
+      <h2>
+        <span class="panel-num">Panel 2</span>
+        💰 Business Value Impact
+      </h2>
+    </div>
+    <div class="panel-body">
+
+      <!-- Total Value Hero -->
+      <div class="total-value-hero">
+        <div class="tv-icon">💰</div>
+        <div class="tv-label">Total Value Delivered</div>
+        <div class="tv-amount">€1.2M</div>
+        <div class="tv-period">(YTD – Jan 2026)</div>
+      </div>
+
+      <!-- Top Solutions -->
+      <div class="top-solutions">
+        <h3>Top Solutions</h3>
+        <div class="sol-row">
+          <span class="sol-rank">🥇</span>
+          <span class="sol-name">Auto-replenish</span>
+          <span class="sol-value money">€340K</span>
+        </div>
+        <div class="sol-row">
+          <span class="sol-rank">🥈</span>
+          <span class="sol-name">AI Quality Check</span>
+          <span class="sol-value percent">35%↑</span>
+        </div>
+        <div class="sol-row">
+          <span class="sol-rank">🥉</span>
+          <span class="sol-name">Customer Insights</span>
+          <span class="sol-value percent">12%↑</span>
+        </div>
+      </div>
+
+      <!-- Additional Value Metrics -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; text-align:center;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-muted); margin-bottom:6px;">Avg. ROI</div>
+          <div style="font-size:24px; font-weight:800; color:var(--accent-blue);">3.4×</div>
+        </div>
+        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; text-align:center;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-muted); margin-bottom:6px;">Cost Saved</div>
+          <div style="font-size:24px; font-weight:800; color:var(--accent-green);">€860K</div>
+        </div>
+      </div>
+
+      <!-- Pipeline Value -->
+      <div class="pipeline-value">
+        <span class="pv-label">Pipeline Value:</span>
+        <span class="pv-amount">€2.8M</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ PANEL 3: TEAM ENGAGEMENT ══════════ -->
+  <div class="panel engagement">
+    <div class="panel-header">
+      <h2>
+        <span class="panel-num">Panel 3</span>
+        🎯 Team Engagement
+      </h2>
+    </div>
+    <div class="panel-body">
+
+      <!-- Active Contributors Hero -->
+      <div class="contributors-hero">
+        <div class="ch-icon">🎯</div>
+        <div class="ch-label">Active Contributors</div>
+        <div class="ch-count">64</div>
+        <div class="ch-sub">(<span>42%</span> of ODC team)</div>
+      </div>
+
+      <!-- Department Leaderboard -->
+      <div class="leaderboard">
+        <h3>Department Leaderboard</h3>
+
+        <div class="lb-row">
+          <span class="lb-medal">🥇</span>
+          <span class="lb-name">App Dev</span>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar-fill" style="width:100%; background: linear-gradient(90deg, var(--accent-orange), var(--accent-gold));"></div>
+          </div>
+          <span class="lb-count" style="color:var(--accent-orange)">22</span>
+        </div>
+
+        <div class="lb-row">
+          <span class="lb-medal">🥈</span>
+          <span class="lb-name">QE</span>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar-fill" style="width:82%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));"></div>
+          </div>
+          <span class="lb-count" style="color:var(--accent-blue)">18</span>
+        </div>
+
+        <div class="lb-row">
+          <span class="lb-medal">🥉</span>
+          <span class="lb-name">Infra</span>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar-fill" style="width:64%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));"></div>
+          </div>
+          <span class="lb-count" style="color:var(--accent-purple)">14</span>
+        </div>
+
+        <div class="lb-row">
+          <span class="lb-medal" style="font-size:13px; color:var(--text-muted)">4</span>
+          <span class="lb-name">Data & AI</span>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar-fill" style="width:50%; background: linear-gradient(90deg, var(--accent-green), var(--accent-teal));"></div>
+          </div>
+          <span class="lb-count" style="color:var(--accent-green)">11</span>
+        </div>
+
+        <div class="lb-row">
+          <span class="lb-medal" style="font-size:13px; color:var(--text-muted)">5</span>
+          <span class="lb-name">DevOps</span>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar-fill" style="width:36%; background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));"></div>
+          </div>
+          <span class="lb-count" style="color:var(--accent-teal)">8</span>
+        </div>
+      </div>
+
+      <!-- Heat Map: Ideas by Week -->
+      <div class="heatmap-section">
+        <h3>Heat Map: Ideas by Week</h3>
+        <div class="heatmap-grid">
+          <!-- Row 1 (Mon) -->
+          <div class="hm-cell l1"></div><div class="hm-cell l2"></div><div class="hm-cell l0"></div>
+          <div class="hm-cell l3"></div><div class="hm-cell l1"></div><div class="hm-cell l4"></div>
+          <div class="hm-cell l2"></div><div class="hm-cell l0"></div><div class="hm-cell l5"></div>
+          <div class="hm-cell l3"></div><div class="hm-cell l1"></div><div class="hm-cell l4"></div>
+          <!-- Row 2 (Tue) -->
+          <div class="hm-cell l0"></div><div class="hm-cell l3"></div><div class="hm-cell l1"></div>
+          <div class="hm-cell l2"></div><div class="hm-cell l5"></div><div class="hm-cell l0"></div>
+          <div class="hm-cell l4"></div><div class="hm-cell l1"></div><div class="hm-cell l3"></div>
+          <div class="hm-cell l2"></div><div class="hm-cell l5"></div><div class="hm-cell l0"></div>
+          <!-- Row 3 (Wed) -->
+          <div class="hm-cell l2"></div><div class="hm-cell l0"></div><div class="hm-cell l4"></div>
+          <div class="hm-cell l1"></div><div class="hm-cell l3"></div><div class="hm-cell l5"></div>
+          <div class="hm-cell l0"></div><div class="hm-cell l2"></div><div class="hm-cell l1"></div>
+          <div class="hm-cell l4"></div><div class="hm-cell l3"></div><div class="hm-cell l2"></div>
+          <!-- Row 4 (Thu) -->
+          <div class="hm-cell l3"></div><div class="hm-cell l1"></div><div class="hm-cell l2"></div>
+          <div class="hm-cell l5"></div><div class="hm-cell l0"></div><div class="hm-cell l3"></div>
+          <div class="hm-cell l1"></div><div class="hm-cell l4"></div><div class="hm-cell l2"></div>
+          <div class="hm-cell l0"></div><div class="hm-cell l4"></div><div class="hm-cell l5"></div>
+          <!-- Row 5 (Fri) -->
+          <div class="hm-cell l0"></div><div class="hm-cell l2"></div><div class="hm-cell l3"></div>
+          <div class="hm-cell l0"></div><div class="hm-cell l1"></div><div class="hm-cell l2"></div>
+          <div class="hm-cell l5"></div><div class="hm-cell l3"></div><div class="hm-cell l0"></div>
+          <div class="hm-cell l1"></div><div class="hm-cell l2"></div><div class="hm-cell l3"></div>
+        </div>
+        <div class="hm-labels">
+          <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span>
+          <span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span>
+        </div>
+        <div class="hm-legend">
+          <span>Less</span>
+          <div class="hm-legend-cell l0" style="border:1px solid var(--border)"></div>
+          <div class="hm-legend-cell l1"></div>
+          <div class="hm-legend-cell l2"></div>
+          <div class="hm-legend-cell l3"></div>
+          <div class="hm-legend-cell l4"></div>
+          <div class="hm-legend-cell l5"></div>
+          <span>More</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.tcs.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The TCS-Ahold Delhaize engineering LABS</strong>, Kolkata ODC (Gitanjali Park – L14).
+</footer>
+
+<script>
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>

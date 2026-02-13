@@ -1,0 +1,281 @@
+<!-- ============================================
+     NOTIFICATION SYSTEM SNIPPET
+     Copy this CSS into your <style> section
+     ============================================ -->
+
+/* ── Notification Bell ────────────────────── */
+.notification-wrapper {
+  position: relative;
+}
+.notification-bell {
+  position: relative;
+  width: 38px; height: 38px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all .2s;
+  font-size: 18px;
+}
+.notification-bell:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-teal);
+}
+.notification-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 18px; height: 18px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: #fff;
+  border: 2px solid var(--bg-primary);
+}
+.notification-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 380px;
+  max-height: 480px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  z-index: 200;
+}
+.notification-panel.active {
+  display: flex;
+}
+.notification-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.notification-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.mark-all-read {
+  font-size: 11px;
+  color: var(--accent-teal);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all .2s;
+}
+.mark-all-read:hover {
+  background: rgba(232,167,88,.1);
+}
+.notification-list {
+  overflow-y: auto;
+  max-height: 400px;
+}
+.notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+.notification-list::-webkit-scrollbar-track {
+  background: var(--bg-card);
+}
+.notification-list::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 3px;
+}
+.notification-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  gap: 12px;
+}
+.notification-item:hover {
+  background: var(--bg-card-hover);
+}
+.notification-item.unread {
+  background: rgba(232,167,88,.05);
+}
+.notification-item:last-child {
+  border-bottom: none;
+}
+.notification-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.notification-icon.challenge {
+  background: rgba(255,167,38,.15);
+  color: var(--accent-orange);
+}
+.notification-icon.idea {
+  background: rgba(232,167,88,.15);
+  color: var(--accent-teal);
+}
+.notification-icon.comment {
+  background: rgba(240,184,112,.15);
+  color: var(--accent-blue);
+}
+.notification-icon.status {
+  background: rgba(102,187,106,.15);
+  color: var(--accent-green);
+}
+.notification-content {
+  flex: 1;
+}
+.notification-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.notification-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.notification-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.notification-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.view-all-link {
+  font-size: 12px;
+  color: var(--accent-teal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all .2s;
+}
+.view-all-link:hover {
+  color: var(--accent-blue);
+}
+
+<!-- ============================================
+     HTML MARKUP
+     Add this in header-right section before avatar
+     ============================================ -->
+
+<!-- Notification Bell -->
+<div class="notification-wrapper">
+  <div class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+    🔔
+    <span class="notification-badge" id="notificationBadge">5</span>
+  </div>
+  
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>🔔 Notifications</h3>
+      <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+    </div>
+    
+    <div class="notification-list" id="notificationList">
+      <div class="notification-item unread" data-id="1" onclick="handleNotificationClick('challenge-detail.html?id=CHG-005')">
+        <div class="notification-icon challenge">🎯</div>
+        <div class="notification-content">
+          <div class="notification-title">New Challenge Submitted</div>
+          <div class="notification-text">Ravi Patel submitted "Optimize Cloud Infrastructure Costs"</div>
+          <div class="notification-time">5 minutes ago</div>
+        </div>
+      </div>
+      
+      <div class="notification-item unread" data-id="2" onclick="handleNotificationClick('idea-detail.html?id=IDX-012')">
+        <div class="notification-icon idea">💡</div>
+        <div class="notification-content">
+          <div class="notification-title">New Idea Submitted</div>
+          <div class="notification-text">Meera Singh proposed "Blockchain-based Contract Management" on CHG-002</div>
+          <div class="notification-time">22 minutes ago</div>
+        </div>
+      </div>
+      
+      <div class="notification-item unread" data-id="3" onclick="handleNotificationClick('idea-detail.html?id=IDX-003')">
+        <div class="notification-icon comment">💬</div>
+        <div class="notification-content">
+          <div class="notification-title">New Comment on Your Idea</div>
+          <div class="notification-text">Siddharth Banerjee commented on "AI-powered document verification"</div>
+          <div class="notification-time">1 hour ago</div>
+        </div>
+      </div>
+      
+      <div class="notification-item unread" data-id="4" onclick="handleNotificationClick('challenge-detail.html?id=CHG-001')">
+        <div class="notification-icon status">📈</div>
+        <div class="notification-content">
+          <div class="notification-title">Challenge Status Updated</div>
+          <div class="notification-text">"Reduce Customer Churn by 15%" moved to Evaluation stage</div>
+          <div class="notification-time">3 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="notification-item unread" data-id="5" onclick="handleNotificationClick('idea-detail.html?id=IDX-007')">
+        <div class="notification-icon idea">💡</div>
+        <div class="notification-content">
+          <div class="notification-title">New Idea Submitted</div>
+          <div class="notification-text">Ananya Basu proposed "Predictive Maintenance Dashboard" on CHG-004</div>
+          <div class="notification-time">5 hours ago</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="notification-footer">
+      <a href="#" class="view-all-link">View All Notifications</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     JAVASCRIPT FUNCTIONS
+     Add this in <script> section before </body>
+     ============================================ -->
+
+// Notification System
+function toggleNotifications() {
+  const panel = document.getElementById('notificationPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const unreadItems = document.querySelectorAll('.notification-item.unread');
+  unreadItems.forEach(item => item.classList.remove('unread'));
+  
+  const badge = document.getElementById('notificationBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(url) {
+  // Mark this notification as read
+  event.currentTarget.classList.remove('unread');
+  
+  // Update badge count
+  const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+  const badge = document.getElementById('notificationBadge');
+  badge.textContent = unreadCount;
+  if (unreadCount === 0) {
+    badge.style.display = 'none';
+  }
+  
+  // Navigate to the URL
+  window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(event) {
+  const notificationWrapper = document.querySelector('.notification-wrapper');
+  const notificationPanel = document.getElementById('notificationPanel');
+  
+  if (notificationWrapper && !notificationWrapper.contains(event.target)) {
+    notificationPanel.classList.remove('active');
+  }
+});
