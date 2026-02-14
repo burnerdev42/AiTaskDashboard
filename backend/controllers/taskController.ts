@@ -1,13 +1,15 @@
-const Task = require('../models/Task');
+import { Response } from 'express';
+import Task from '../models/Task';
+import { AuthRequest } from '../types';
 
 // @desc    Get all tasks
 // @route   GET /api/tasks
 // @access  Private
-const getTasks = async (req, res) => {
+export const getTasks = async (req: AuthRequest, res: Response) => {
     try {
         const tasks = await Task.find().populate('owner', 'name avatar avatarColor');
         res.status(200).json(tasks);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -15,7 +17,7 @@ const getTasks = async (req, res) => {
 // @desc    Create a task
 // @route   POST /api/tasks
 // @access  Private
-const createTask = async (req, res) => {
+export const createTask = async (req: AuthRequest, res: Response) => {
     if (!req.body.title || !req.body.stage) {
         return res.status(400).json({ message: 'Please add a title and stage' });
     }
@@ -23,10 +25,10 @@ const createTask = async (req, res) => {
     try {
         const task = await Task.create({
             ...req.body,
-            owner: req.user.id
+            owner: req.user?.id
         });
         res.status(201).json(task);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -34,7 +36,7 @@ const createTask = async (req, res) => {
 // @desc    Update a task
 // @route   PUT /api/tasks/:id
 // @access  Private
-const updateTask = async (req, res) => {
+export const updateTask = async (req: AuthRequest, res: Response) => {
     try {
         const task = await Task.findById(req.params.id);
 
@@ -47,7 +49,7 @@ const updateTask = async (req, res) => {
         });
 
         res.status(200).json(updatedTask);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -55,7 +57,7 @@ const updateTask = async (req, res) => {
 // @desc    Delete a task
 // @route   DELETE /api/tasks/:id
 // @access  Private
-const deleteTask = async (req, res) => {
+export const deleteTask = async (req: AuthRequest, res: Response) => {
     try {
         const task = await Task.findById(req.params.id);
 
@@ -66,14 +68,7 @@ const deleteTask = async (req, res) => {
         await task.deleteOne();
 
         res.status(200).json({ id: req.params.id });
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    getTasks,
-    createTask,
-    updateTask,
-    deleteTask
 };

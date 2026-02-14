@@ -1,13 +1,17 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const Challenge = require('./models/Challenge');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import Challenge from './models/Challenge';
 
 dotenv.config();
 
+if (!process.env.MONGO_URI) {
+    console.error('MONGO_URI is not defined');
+    process.exit(1);
+}
+
 console.log('URI:', process.env.MONGO_URI);
 
-mongoose.connect(process.env.MONGO_URI, {
-})
+mongoose.connect(process.env.MONGO_URI)
     .then(async () => {
         console.log('Connected.');
         const count = await Challenge.countDocuments();

@@ -1,10 +1,11 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+import { Request, Response } from 'express';
+import User from '../models/User';
+import jwt from 'jsonwebtoken';
+import { AuthRequest } from '../types';
 
 // Generate JWT
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id: any) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET as string, {
         expiresIn: '30d',
     });
 };
@@ -12,8 +13,8 @@ const generateToken = (id) => {
 // @desc    Register new user
 // @route   POST /api/auth/signup
 // @access  Public
-const registerUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
+export const registerUser = async (req: Request, res: Response) => {
+    const { name, email, password, role, opco, platform, interests, adminSecret } = req.body;
 
     if (!name || !email || !password) {
         return res.status(400).json({ message: 'Please add all fields' });
@@ -26,15 +27,27 @@ const registerUser = async (req, res) => {
         return res.status(400).json({ message: 'User already exists' });
     }
 
+    // Determine role
+    let userRole: 'Admin' | 'User' = 'User';
+    if (adminSecret && adminSecret === process.env.ADMIN_SECRET) {
+        userRole = 'Admin';
+    } else if (role === 'Admin') {
+        // Optionally allow explicit 'Admin' role if no secret is required (for internal scripts)
+        // For now, let's force the secret if someone tries to register as Admin
+        userRole = 'User';
+    }
+
     // Create user
-    // Password hashing is handled in User model pre-save hook
     const user = await User.create({
         name,
         email,
         password,
-        role: role || 'User',
-        avatar: '', // Default or generated
-        avatarColor: '#000000' // Default
+        role: userRole,
+        avatar: '',
+        avatarColor: '#000000',
+        opco,
+        platform,
+        interests
     });
 
     if (user) {
@@ -53,7 +66,7 @@ const registerUser = async (req, res) => {
 // @desc    Authenticate a user
 // @route   POST /api/auth/login
 // @access  Public
-const loginUser = async (req, res) => {
+export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     // Check for user email
@@ -75,12 +88,6 @@ const loginUser = async (req, res) => {
 // @desc    Get user data
 // @route   GET /api/auth/me
 // @access  Private
-const getMe = async (req, res) => {
+export const getMe = async (req: AuthRequest, res: Response) => {
     res.status(200).json(req.user);
-};
-
-module.exports = {
-    registerUser,
-    loginUser,
-    getMe,
 };

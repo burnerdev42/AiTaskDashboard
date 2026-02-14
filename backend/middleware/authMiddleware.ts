@@ -1,8 +1,13 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import User, { IUser } from '../models/User';
 
-const protect = async (req, res, next) => {
-    let token;
+export interface AuthRequest extends Request {
+    user?: IUser | null;
+}
+
+export const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    let token: string | undefined;
 
     if (
         req.headers.authorization &&
@@ -11,7 +16,7 @@ const protect = async (req, res, next) => {
         try {
             token = req.headers.authorization.split(' ')[1];
 
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
 
             req.user = await User.findById(decoded.id).select('-password');
 
@@ -27,12 +32,10 @@ const protect = async (req, res, next) => {
     }
 };
 
-const admin = (req, res, next) => {
+export const admin = (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.user && req.user.role === 'Admin') {
         next();
     } else {
         res.status(401).json({ message: 'Not authorized as an admin' });
     }
 };
-
-module.exports = { protect, admin };

@@ -1,15 +1,19 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const User = require('./models/User');
-const Challenge = require('./models/Challenge');
-const Idea = require('./models/Idea');
-const Task = require('./models/Task');
-const Notification = require('./models/Notification');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import User from './models/User';
+import Challenge from './models/Challenge';
+import Idea from './models/Idea';
+import Task from './models/Task';
+import Notification from './models/Notification';
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URI, {
-})
+if (!process.env.MONGO_URI) {
+    console.error('MONGO_URI is not defined');
+    process.exit(1);
+}
+
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB Connected for Seeding'))
     .catch(err => {
         console.error(err);
@@ -37,15 +41,13 @@ const importData = async () => {
         ];
 
         const createdUsers = await User.create(users);
-        const adminUser = createdUsers[0]._id;
         const usersList = createdUsers.slice(1); // Non-admin users
 
         console.log(`Created ${createdUsers.length} Users`);
 
-        // --- Helper to get random user ---
         const getRandomUser = () => usersList[Math.floor(Math.random() * usersList.length)]._id;
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomFloat = (min, max) => (Math.random() * (max - min) + min).toFixed(1);
+        const getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomFloat = (min: number, max: number) => (Math.random() * (max - min) + min).toFixed(1);
 
         // --- Challenges ---
         const challengeTitles = [
@@ -61,8 +63,8 @@ const importData = async () => {
             'Voice-Driven Order Entry for Warehouses'
         ];
 
-        const stages = ['Scale', 'Pilot', 'Prototype', 'Ideation'];
-        const priorities = ['High', 'Medium', 'Low'];
+        const stages = ['Scale', 'Pilot', 'Prototype', 'Ideation'] as const;
+        const priorities = ['High', 'Medium', 'Low'] as const;
 
         const challenges = [];
         for (let i = 0; i < challengeTitles.length; i++) {
@@ -95,7 +97,7 @@ const importData = async () => {
 
         // --- Ideas ---
         const ideas = [];
-        const ideaStatuses = ['Ideation', 'Evaluation', 'POC', 'Pilot', 'Scale'];
+        const ideaStatuses = ['Ideation', 'Evaluation', 'POC', 'Pilot', 'Scale'] as const;
 
         for (let i = 0; i < 30; i++) {
             const linkedChallenge = createdChallenges[Math.floor(Math.random() * createdChallenges.length)];
@@ -118,7 +120,7 @@ const importData = async () => {
         await Idea.create(ideas);
         console.log(`Created ${ideas.length} Ideas`);
 
-        // --- Tasks (Swimlanes) ---
+        // --- Tasks ---
         const taskTiles = [
             'Vendor API Integration', 'Model Training v1', 'User Acceptance Testing',
             'Security Compliance Audit', 'UI/UX Refresh', 'Performance Optimization',
@@ -133,7 +135,7 @@ const importData = async () => {
                 description: 'Task details...',
                 owner: getRandomUser(),
                 priority: priorities[Math.floor(Math.random() * priorities.length)],
-                stage: stages[Math.floor(Math.random() * stages.length)], // Using ChallengeStages as task stages for now
+                stage: stages[Math.floor(Math.random() * stages.length)],
                 type: ['evaluation', 'pilot', 'validation', 'standard'][Math.floor(Math.random() * 4)],
                 progress: getRandomInt(0, 100),
                 value: `€${getRandomInt(10, 100)}K`
@@ -147,11 +149,10 @@ const importData = async () => {
         const notifications = [];
         for (const user of createdUsers) {
             notifications.push({
-                type: 'info',
+                type: 'status',
                 title: 'Welcome to the Dashboard',
                 text: 'Your account has been set up successfully.',
-                user: user._id,
-                type: 'status'
+                user: user._id
             });
             notifications.push({
                 type: 'challenge',
@@ -162,7 +163,6 @@ const importData = async () => {
         }
         await Notification.create(notifications);
         console.log(`Created ${notifications.length} Notifications`);
-
 
         console.log('Data Imported Successfully!');
         process.exit();

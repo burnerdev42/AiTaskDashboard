@@ -1,6 +1,20 @@
-const mongoose = require('mongoose');
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
-const taskSchema = new mongoose.Schema({
+export interface ITask extends Document {
+    title: string;
+    description?: string;
+    owner: mongoose.Types.ObjectId;
+    priority: 'High' | 'Medium' | 'Low';
+    stage: string;
+    type: 'evaluation' | 'pilot' | 'validation' | 'standard';
+    progress: number;
+    value?: string;
+    kudos: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const taskSchema: Schema<ITask> = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -18,7 +32,6 @@ const taskSchema = new mongoose.Schema({
     },
     stage: {
         type: String,
-        // enum: ['Scale', 'Pilot', 'Prototype', 'Ideation', 'Parking Lot'], // Matching frontend
         required: true
     },
     type: {
@@ -37,4 +50,5 @@ const taskSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Task', taskSchema);
+const Task: Model<ITask> = mongoose.model<ITask>('Task', taskSchema);
+export default Task;

@@ -1,6 +1,36 @@
-const mongoose = require('mongoose');
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
-const ideaSchema = new mongoose.Schema({
+export interface IIdea extends Document {
+    title: string;
+    description: string;
+    status: 'Ideation' | 'Evaluation' | 'POC' | 'Pilot' | 'Scale';
+    owner?: mongoose.Types.ObjectId;
+    linkedChallenge?: mongoose.Types.ObjectId;
+    tags: string[];
+    stats: {
+        appreciations: number;
+        comments: number;
+        views: number;
+    };
+    approach: string[];
+    problemStatement?: string;
+    proposedSolution?: string;
+    expectedImpact?: string;
+    implementationPlan?: string;
+    expectedSavings?: string;
+    impactLevel: 'High' | 'Medium' | 'Low';
+    activity: {
+        author: string;
+        avatar?: string;
+        avatarColor?: string;
+        text: string;
+        time: Date;
+    }[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const ideaSchema: Schema<IIdea> = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -48,4 +78,5 @@ const ideaSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('Idea', ideaSchema);
+const Idea: Model<IIdea> = mongoose.model<IIdea>('Idea', ideaSchema);
+export default Idea;

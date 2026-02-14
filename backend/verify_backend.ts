@@ -1,11 +1,6 @@
-
-// Node 18+ has native fetch, no need to require it.
-
 async function testBackend() {
-    const baseUrl = 'http://localhost:5000/api';
+    const baseUrl = 'http://127.0.0.1:5000/api';
     let token = '';
-    let userId = '';
-    let challengeId = '';
 
     console.log('--- Starting Verification ---');
 
@@ -18,31 +13,28 @@ async function testBackend() {
             body: JSON.stringify({
                 name: 'Test User',
                 email: `test${Date.now()}@example.com`,
-                password: 'password123'
+                password: 'password123',
+                opco: 'Tensor Workshop — India',
+                platform: 'BFSI',
+                interests: ['AI']
             })
         });
 
-        let signupData;
-        try {
-            signupData = await signupRes.json();
-        } catch (err) {
-            console.error('Signup JSON Parse Error:', err, await signupRes.text());
-        }
+        const signupData: any = await signupRes.json();
 
         if (signupRes.ok) {
             console.log('   Signup Successful:', signupData.email);
             token = signupData.token;
-            userId = signupData._id;
         } else {
             console.error('   Signup Failed:', signupData);
             return;
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error('   Signup Error:', e.message);
         return;
     }
 
-    // 3. Create Challenge
+    // 2. Create Challenge
     try {
         console.log('2. Testing Create Challenge...');
         const chalRes = await fetch(`${baseUrl}/challenges`, {
@@ -52,23 +44,22 @@ async function testBackend() {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                title: 'Test Challenge',
-                description: 'Description of test challenge',
+                title: 'Test Challenge TS',
+                description: 'Description of test challenge in TS',
                 stage: 'Ideation'
             })
         });
-        const chalData = await chalRes.json();
+        const chalData: any = await chalRes.json();
         if (chalRes.ok) {
             console.log('   Create Challenge Successful:', chalData.title);
-            challengeId = chalData._id;
         } else {
             console.error('   Create Challenge Failed:', chalData);
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error('   Create Challenge Error:', e.message);
     }
 
-    // 4. Get Metrics
+    // 3. Get Metrics
     try {
         console.log('3. Testing Get Metrics...');
         const metricRes = await fetch(`${baseUrl}/metrics`, {
@@ -76,17 +67,17 @@ async function testBackend() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        const metricData = await metricRes.json();
+        const metricData: any = await metricRes.json();
         if (metricRes.ok) {
             console.log('   Get Metrics Successful:', metricData);
         } else {
             console.error('   Get Metrics Failed:', metricData);
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error('   Get Metrics Error:', e.message);
     }
 
-    // 5. Create Task
+    // 4. Create Task
     try {
         console.log('4. Testing Create Task...');
         const taskRes = await fetch(`${baseUrl}/tasks`, {
@@ -96,17 +87,17 @@ async function testBackend() {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                title: 'Test Task',
+                title: 'Test Task TS',
                 stage: 'Ideation'
             })
         });
-        const taskData = await taskRes.json();
+        const taskData: any = await taskRes.json();
         if (taskRes.ok) {
             console.log('   Create Task Successful:', taskData.title);
         } else {
             console.error('   Create Task Failed:', taskData);
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error('   Create Task Error:', e.message);
     }
 

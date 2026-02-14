@@ -1,13 +1,15 @@
-const Idea = require('../models/Idea');
+import { Response } from 'express';
+import Idea from '../models/Idea';
+import { AuthRequest } from '../types';
 
 // @desc    Get all ideas
 // @route   GET /api/ideas
 // @access  Private
-const getIdeas = async (req, res) => {
+export const getIdeas = async (req: AuthRequest, res: Response) => {
     try {
         const ideas = await Idea.find().populate('owner', 'name avatar avatarColor').populate('linkedChallenge', 'title');
         res.status(200).json(ideas);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -15,7 +17,7 @@ const getIdeas = async (req, res) => {
 // @desc    Create an idea
 // @route   POST /api/ideas
 // @access  Private
-const createIdea = async (req, res) => {
+export const createIdea = async (req: AuthRequest, res: Response) => {
     if (!req.body.title) {
         return res.status(400).json({ message: 'Please add a title' });
     }
@@ -23,10 +25,10 @@ const createIdea = async (req, res) => {
     try {
         const idea = await Idea.create({
             ...req.body,
-            owner: req.user.id
+            owner: req.user?.id
         });
         res.status(201).json(idea);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -34,7 +36,7 @@ const createIdea = async (req, res) => {
 // @desc    Update an idea
 // @route   PUT /api/ideas/:id
 // @access  Private
-const updateIdea = async (req, res) => {
+export const updateIdea = async (req: AuthRequest, res: Response) => {
     try {
         const idea = await Idea.findById(req.params.id);
 
@@ -47,7 +49,7 @@ const updateIdea = async (req, res) => {
         });
 
         res.status(200).json(updatedIdea);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -55,7 +57,7 @@ const updateIdea = async (req, res) => {
 // @desc    Delete an idea
 // @route   DELETE /api/ideas/:id
 // @access  Private
-const deleteIdea = async (req, res) => {
+export const deleteIdea = async (req: AuthRequest, res: Response) => {
     try {
         const idea = await Idea.findById(req.params.id);
 
@@ -66,14 +68,7 @@ const deleteIdea = async (req, res) => {
         await idea.deleteOne();
 
         res.status(200).json({ id: req.params.id });
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    getIdeas,
-    createIdea,
-    updateIdea,
-    deleteIdea
 };

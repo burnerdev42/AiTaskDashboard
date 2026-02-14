@@ -1,12 +1,14 @@
-const Challenge = require('../models/Challenge');
-const Idea = require('../models/Idea');
-const Task = require('../models/Task');
-const User = require('../models/User');
+import { Response } from 'express';
+import Challenge from '../models/Challenge';
+import Idea from '../models/Idea';
+import Task from '../models/Task';
+import User from '../models/User';
+import { AuthRequest } from '../types';
 
 // @desc    Get dashboard metrics
 // @route   GET /api/metrics
 // @access  Private
-const getMetrics = async (req, res) => {
+export const getMetrics = async (req: AuthRequest, res: Response) => {
     try {
         // Run aggregation in parallel for performance
         const [
@@ -61,12 +63,8 @@ const getMetrics = async (req, res) => {
         };
 
         res.status(200).json(metrics);
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    getMetrics
 };
