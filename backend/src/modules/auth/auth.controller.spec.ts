@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
-
 describe('AuthController', () => {
   let controller: AuthController;
   let service: AuthService;
@@ -32,9 +31,9 @@ describe('AuthController', () => {
   describe('login', () => {
     it('should login a user', async () => {
       const dto = { email: 'test@example.com', password: 'password' };
-      const result = { access_token: 'token', user: {} as any };
+      const result = { access_token: 'token', user: {} as unknown as any };
       jest.spyOn(service, 'login').mockResolvedValue(result);
-      expect(await controller.login(dto)).toEqual(result);
+      expect((await controller.login(dto)).data).toEqual(result);
     });
   });
 
@@ -42,8 +41,10 @@ describe('AuthController', () => {
     it('should register a user', async () => {
       const body = { email: 'test@example.com', password: 'password' };
       const result = { access_token: 'token', user: {} };
-      jest.spyOn(service, 'register').mockResolvedValue(result as any);
-      expect(await controller.register(body)).toEqual(result);
+      jest
+        .spyOn(service, 'register')
+        .mockResolvedValue(result as unknown as any);
+      expect((await controller.register(body)).data).toEqual(result);
     });
   });
 });

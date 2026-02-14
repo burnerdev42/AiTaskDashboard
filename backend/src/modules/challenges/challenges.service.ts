@@ -10,6 +10,7 @@ import { CreateChallengeDto } from '../../dto/challenges/create-challenge.dto';
 import { UpdateChallengeDto } from '../../dto/challenges/update-challenge.dto';
 import { QueryDto } from '../../common/dto/query.dto';
 import { AbstractService } from '../../common';
+import { ChallengeDocument } from '../../models/challenges/challenge.schema';
 
 /**
  * Service for Challenges.
@@ -28,7 +29,9 @@ export class ChallengesService extends AbstractService {
    * @returns The created challenge.
    */
   async create(createChallengeDto: CreateChallengeDto) {
-    return this.challengesRepository.create(createChallengeDto as any);
+    return this.challengesRepository.create(
+      createChallengeDto as unknown as Partial<ChallengeDocument>,
+    );
   }
 
   /**

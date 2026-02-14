@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChallengesService } from './challenges.service';
 import { ChallengesRepository } from './challenges.repository';
-
+import { ChallengeDocument } from '../../models/challenges/challenge.schema';
+import { CreateChallengeDto } from '../../dto/challenges/create-challenge.dto';
+import { QueryDto } from '../../common/dto/query.dto';
 
 describe('ChallengesService', () => {
   let service: ChallengesService;
@@ -41,9 +43,11 @@ describe('ChallengesService', () => {
 
   describe('create', () => {
     it('should create a challenge', async () => {
-      jest.spyOn(repository, 'create').mockResolvedValue(mockChallenge as any);
-      const dto = { title: 'Test', description: 'Test Desc' };
-      const result = await service.create(dto as any);
+      jest
+        .spyOn(repository, 'create')
+        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
+      const dto = { title: 'Test', description: 'Test Desc' } as unknown as CreateChallengeDto;
+      const result = await service.create(dto);
       expect(result).toEqual(mockChallenge);
       expect(repository.create).toHaveBeenCalledWith(dto);
     });
@@ -51,7 +55,9 @@ describe('ChallengesService', () => {
 
   describe('findAll', () => {
     it('should return all challenges with defaults', async () => {
-      jest.spyOn(repository, 'find').mockResolvedValue([mockChallenge] as any);
+      jest
+        .spyOn(repository, 'find')
+        .mockResolvedValue([mockChallenge] as unknown as ChallengeDocument[]);
       const result = await service.findAll({});
       expect(result).toEqual([mockChallenge]);
       expect(repository.find).toHaveBeenCalledWith(
@@ -66,13 +72,15 @@ describe('ChallengesService', () => {
     });
 
     it('should apply filters and pagination and sort', async () => {
-      jest.spyOn(repository, 'find').mockResolvedValue([mockChallenge] as any);
+      jest
+        .spyOn(repository, 'find')
+        .mockResolvedValue([mockChallenge] as unknown as ChallengeDocument[]);
       await service.findAll({
         page: 2,
         limit: 5,
         sort: 'title',
         title: 'Test',
-      } as any);
+      } as unknown as QueryDto);
       expect(repository.find).toHaveBeenCalledWith(
         { title: 'Test' },
         { skip: 5, limit: 5, sort: { title: 1 }, populate: 'owner' },
@@ -82,7 +90,9 @@ describe('ChallengesService', () => {
 
   describe('findOne', () => {
     it('should find one challenge', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockChallenge as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
       const result = await service.findOne('1');
       expect(result).toEqual(mockChallenge);
       expect(repository.findOne).toHaveBeenCalledWith(
@@ -96,7 +106,7 @@ describe('ChallengesService', () => {
     it('should update challenge', async () => {
       jest
         .spyOn(repository, 'findOneAndUpdate')
-        .mockResolvedValue(mockChallenge as any);
+        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
       const result = await service.update('1', { title: 'Updated' });
       expect(result).toEqual(mockChallenge);
       expect(repository.findOneAndUpdate).toHaveBeenCalledWith(
@@ -108,7 +118,9 @@ describe('ChallengesService', () => {
 
   describe('remove', () => {
     it('should remove challenge', async () => {
-      jest.spyOn(repository, 'delete').mockResolvedValue(mockChallenge as any);
+      jest
+        .spyOn(repository, 'delete')
+        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
       const result = await service.remove('1');
       expect(result).toEqual(mockChallenge);
       expect(repository.delete).toHaveBeenCalledWith({ _id: '1' });

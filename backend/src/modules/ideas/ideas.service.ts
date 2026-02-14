@@ -10,6 +10,7 @@ import { CreateIdeaDto } from '../../dto/ideas/create-idea.dto';
 import { UpdateIdeaDto } from '../../dto/ideas/update-idea.dto';
 import { QueryDto } from '../../common/dto/query.dto';
 import { AbstractService } from '../../common';
+import { IdeaDocument } from '../../models/ideas/idea.schema';
 
 /**
  * Service for Ideas.
@@ -23,7 +24,9 @@ export class IdeasService extends AbstractService {
   }
 
   async create(createIdeaDto: CreateIdeaDto) {
-    return this.ideasRepository.create(createIdeaDto as any);
+    return this.ideasRepository.create(
+      createIdeaDto as unknown as Partial<IdeaDocument>,
+    );
   }
 
   async findAll(query: QueryDto) {

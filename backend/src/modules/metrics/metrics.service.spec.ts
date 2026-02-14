@@ -3,11 +3,8 @@ import { MetricsService } from './metrics.service';
 import { ChallengesService } from '../challenges/challenges.service';
 import { IdeasService } from '../ideas/ideas.service';
 
-
 describe('MetricsService', () => {
   let service: MetricsService;
-  let challengesService: ChallengesService;
-  let ideasService: IdeasService;
 
   const mockChallengesService = {
     findAll: jest.fn(),
@@ -27,8 +24,6 @@ describe('MetricsService', () => {
     }).compile();
 
     service = module.get<MetricsService>(MetricsService);
-    challengesService = module.get<ChallengesService>(ChallengesService);
-    ideasService = module.get<IdeasService>(IdeasService);
   });
 
   it('should be defined', () => {

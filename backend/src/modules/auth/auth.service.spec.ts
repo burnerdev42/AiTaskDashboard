@@ -55,7 +55,9 @@ describe('AuthService', () => {
 
   describe('validateUser', () => {
     it('should return user without password if valid', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockUser as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(mockUser as unknown as any);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await service.validateUser('test@example.com', 'pass');
@@ -64,14 +66,18 @@ describe('AuthService', () => {
     });
 
     it('should return null if user not found', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(null as unknown as any);
 
       const result = await service.validateUser('test@example.com', 'pass');
       expect(result).toBeNull();
     });
 
     it('should return null if password invalid', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockUser as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(mockUser as unknown as any);
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
       const result = await service.validateUser('test@example.com', 'pass');
       expect(result).toBeNull();
@@ -100,7 +106,9 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if validation fails', async () => {
-      jest.spyOn(service, 'validateUser').mockResolvedValue(null as any);
+      jest
+        .spyOn(service, 'validateUser')
+        .mockResolvedValue(null as unknown as any);
       await expect(
         service.login({ email: 'test@example.com', password: 'pass' }),
       ).rejects.toThrow(UnauthorizedException);
@@ -109,8 +117,13 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should create user if unique', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-      jest.spyOn(repository, 'create').mockResolvedValue(mockUser as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(null as unknown as any);
+
+      jest
+        .spyOn(repository, 'create')
+        .mockResolvedValue(mockUser as unknown as any);
 
       const result = await service.register({
         email: 'test@example.com',
@@ -122,7 +135,9 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user exists', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockUser as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(mockUser as unknown as any);
       await expect(
         service.register({ email: 'test@example.com', password: 'pass' }),
       ).rejects.toThrow(UnauthorizedException);
@@ -132,7 +147,9 @@ describe('AuthService', () => {
       jest
         .spyOn(repository, 'findOne')
         .mockRejectedValue(new Error('Connection error'));
-      jest.spyOn(repository, 'create').mockResolvedValue(mockUser as any);
+      jest
+        .spyOn(repository, 'create')
+        .mockResolvedValue(mockUser as unknown as any);
 
       const result = await service.register({
         email: 'test@example.com',

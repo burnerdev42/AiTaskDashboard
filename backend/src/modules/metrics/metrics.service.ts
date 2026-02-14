@@ -45,7 +45,7 @@ export class MetricsService extends AbstractService {
 
   async getThroughput() {
     // Return mock 12-month data for chart
-    return [
+    return Promise.resolve([
       { month: 'Jan', value: 12 },
       { month: 'Feb', value: 19 },
       { month: 'Mar', value: 3 },
@@ -58,6 +58,6 @@ export class MetricsService extends AbstractService {
       { month: 'Oct', value: 35 },
       { month: 'Nov', value: 10 },
       { month: 'Dec', value: 20 },
-    ];
+    ]);
   }
 }

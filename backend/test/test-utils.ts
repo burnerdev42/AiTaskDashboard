@@ -35,10 +35,10 @@ export async function createTestApp(): Promise<INestApplication> {
 
 export async function closeTestApp(app: INestApplication) {
   try {
-    if (mongoose.connection.readyState !== 0) {
+    if (mongoose.connection.readyState !== (0 as any)) {
       await mongoose.disconnect();
     }
-  } catch (e) {
+  } catch {
     // console.error('Error disconnecting Mongoose:', e);
   }
   if (app) {

@@ -25,7 +25,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      const responseBody: any = exception.getResponse();
+      const responseBody = exception.getResponse() as Record<string, any>;
       message = responseBody.message || exception.message;
       errors = responseBody.errors || null;
     } else if (exception instanceof Error) {
@@ -36,8 +36,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
     }
 
-    const requestId = (request as any)?.id || (request as any)?.headers?.['x-request-id'] || 'N/A';
-
+    const requestId =
+      (request as any).id ||
+      (request as any).headers?.['x-request-id'] ||
+      'N/A';
 
     this.logger.error(
       `[${requestId}] Http Status: ${status} Error Message: ${JSON.stringify(message)}`,

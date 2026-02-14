@@ -20,16 +20,16 @@ export abstract class AbstractRepository<TDocument extends Document> {
    * @param options Save options.
    * @returns The created document.
    */
-  async create(
+  create = async (
     document: Partial<TDocument>,
     options?: SaveOptions,
-  ): Promise<TDocument> {
+  ): Promise<TDocument> => {
     const createdDocument = new this.model({
       ...document,
       _id: new Types.ObjectId(),
     });
     return (await createdDocument.save(options)) as unknown as TDocument;
-  }
+  };
 
   /**
    * Finds a single document matching the filter.
@@ -38,10 +38,10 @@ export abstract class AbstractRepository<TDocument extends Document> {
    * @returns The found document.
    * @throws NotFoundException if not found.
    */
-  async findOne(
+  findOne = async (
     filterQuery: Record<string, any>,
     options?: { populate?: string | string[] },
-  ): Promise<TDocument> {
+  ): Promise<TDocument> => {
     const query = this.model.findOne(filterQuery, {}, { lean: true });
 
     if (options?.populate) {
@@ -56,7 +56,7 @@ export abstract class AbstractRepository<TDocument extends Document> {
     }
 
     return document as unknown as TDocument;
-  }
+  };
 
   /**
    * Finds a document and updates it.
@@ -64,10 +64,10 @@ export abstract class AbstractRepository<TDocument extends Document> {
    * @param update Update operations.
    * @returns The updated document.
    */
-  async findOneAndUpdate(
+  findOneAndUpdate = async (
     filterQuery: Record<string, any>,
     update: UpdateQuery<TDocument>,
-  ): Promise<TDocument> {
+  ): Promise<TDocument> => {
     const document = await this.model.findOneAndUpdate(filterQuery, update, {
       lean: true,
       new: true,
@@ -79,15 +79,18 @@ export abstract class AbstractRepository<TDocument extends Document> {
     }
 
     return document as unknown as TDocument;
-  }
+  };
 
-  async upsert(filterQuery: Record<string, any>, document: Partial<TDocument>) {
+  upsert = async (
+    filterQuery: Record<string, any>,
+    document: Partial<TDocument>,
+  ) => {
     return this.model.findOneAndUpdate(filterQuery, document, {
       lean: true,
       upsert: true,
       new: true,
     });
-  }
+  };
 
   /**
    * Finds multiple documents.
@@ -95,7 +98,7 @@ export abstract class AbstractRepository<TDocument extends Document> {
    * @param options Sorting, skipping, limiting, and population options.
    * @returns List of documents.
    */
-  async find(
+  find = async (
     filterQuery: Record<string, any>,
     options?: {
       sort?: any;
@@ -103,7 +106,7 @@ export abstract class AbstractRepository<TDocument extends Document> {
       limit?: number;
       populate?: string | string[];
     },
-  ): Promise<TDocument[]> {
+  ): Promise<TDocument[]> => {
     const query = this.model.find(filterQuery, {}, { lean: true, ...options });
 
     if (options?.populate) {
@@ -111,9 +114,9 @@ export abstract class AbstractRepository<TDocument extends Document> {
     }
 
     return query.exec() as unknown as Promise<TDocument[]>;
-  }
+  };
 
-  async delete(filterQuery: Record<string, any>): Promise<TDocument> {
+  delete = async (filterQuery: Record<string, any>): Promise<TDocument> => {
     const document = await this.model.findOneAndDelete(filterQuery, {
       lean: true,
     });
@@ -121,11 +124,11 @@ export abstract class AbstractRepository<TDocument extends Document> {
       throw new NotFoundException('Document not found.');
     }
     return document as unknown as TDocument;
-  }
+  };
 
-  async startTransaction() {
+  startTransaction = async () => {
     const session = await this.connection.startSession();
     session.startTransaction();
     return session;
-  }
+  };
 }

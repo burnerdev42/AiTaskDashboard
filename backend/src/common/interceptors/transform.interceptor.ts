@@ -19,8 +19,7 @@ export class TransformInterceptor<T> implements NestInterceptor<
     next: CallHandler,
   ): Observable<ApiResponse<T>> {
     const request = context.switchToHttp().getRequest();
-    const requestId = request?.id || request?.headers?.['x-request-id'] || 'N/A';
-
+    const requestId = request.id || request.headers?.['x-request-id'] || 'N/A';
 
     return next.handle().pipe(
       map((data) => ({

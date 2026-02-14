@@ -14,6 +14,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(404);
+    const server = app.getHttpServer() as unknown as import('http').Server;
+    return request(server).get('/').expect(404);
   });
 });

@@ -10,7 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         uri:
           configService.get<string>('MONGO_URI') ||
           'mongodb://localhost:27017/aitaskdashboard-test',

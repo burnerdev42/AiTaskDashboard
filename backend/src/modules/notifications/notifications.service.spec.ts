@@ -18,12 +18,12 @@ describe('NotificationsService', () => {
   });
 
   describe('notify', () => {
-    it('should log a notification message', async () => {
+    it('should log a notification message', () => {
       const loggerSpy = jest
         .spyOn(Logger.prototype, 'log')
         .mockImplementation(() => {});
 
-      await service.notify('123', 'Test Message');
+      service.notify('123', 'Test Message');
 
       expect(loggerSpy).toHaveBeenCalledWith(
         'Sending notification to User 123: Test Message',

@@ -131,7 +131,7 @@ describe('AbstractRepository', () => {
     it('should update and return document', async () => {
       jest
         .spyOn(model, 'findOneAndUpdate')
-        .mockResolvedValue(mockDocument as any);
+        .mockResolvedValue(mockDocument as unknown as any);
       const result = await repository.findOneAndUpdate(
         { _id: '1' },
         { name: 'update' },
@@ -151,7 +151,7 @@ describe('AbstractRepository', () => {
     it('should upsert document', async () => {
       jest
         .spyOn(model, 'findOneAndUpdate')
-        .mockResolvedValue(mockDocument as any);
+        .mockResolvedValue(mockDocument as unknown as any);
       const result = await repository.upsert({ _id: '1' }, { name: 'update' });
       expect(result).toEqual(mockDocument);
     });
@@ -176,7 +176,7 @@ describe('AbstractRepository', () => {
     it('should delete and return document', async () => {
       jest
         .spyOn(model, 'findOneAndDelete')
-        .mockResolvedValue(mockDocument as any);
+        .mockResolvedValue(mockDocument as unknown as any);
       const result = await repository.delete({ _id: '1' });
       expect(result).toEqual(mockDocument);
     });

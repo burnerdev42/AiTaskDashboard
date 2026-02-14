@@ -19,15 +19,26 @@ describe('TransformInterceptor', () => {
       handle: () => of('test data'),
     };
 
-    interceptor.intercept(null, mockCallHandler).subscribe((result) => {
-      expect(result).toEqual(
-        expect.objectContaining({
-          status: ApiStatus.SUCCESS,
-          data: 'test data',
+    const mockExecutionContext = {
+      switchToHttp: () => ({
+        getRequest: () => ({
+          id: 'test-id',
+          headers: {},
         }),
-      );
-      expect(result.timestamp).toBeDefined();
-      done();
-    });
+      }),
+    } as any;
+
+    interceptor
+      .intercept(mockExecutionContext, mockCallHandler)
+      .subscribe((result) => {
+        expect(result).toEqual(
+          expect.objectContaining({
+            status: ApiStatus.SUCCESS,
+            data: 'test data',
+          }),
+        );
+        expect(result.timestamp).toBeDefined();
+        done();
+      });
   });
 });

@@ -16,12 +16,9 @@ describe('NewsletterController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should subscribe a user', async () => {
-    const result = await controller.subscribe('test@example.com');
-    expect(result).toEqual({
-      status: 'success',
-      message: 'Subscribed successfully',
-      email: 'test@example.com',
-    });
+  it('should subscribe a user', () => {
+    const result = controller.subscribe('test@example.com');
+    expect(result.data).toEqual({ email: 'test@example.com' });
+    expect(result.message).toEqual('Subscribed successfully');
   });
 });

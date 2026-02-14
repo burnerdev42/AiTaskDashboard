@@ -109,7 +109,8 @@ A generic implementation providing standard CRUD operations (`find`, `findOne`, 
 
 ### `TransformInterceptor`
 Automatically wraps all successful responses into a standardized format.
-- **Authentic Feature**: Ensures every API response contains `status: "success"`, `data`, and `timestamp`.
+- **Authentic Feature**: Ensures every API response contains `status: "success"`, `data`, `requestId`, `traceId`, and `timestamp`.
+
 
 ### `GlobalExceptionFilter`
 Captures all exceptions (Http, Database, Runtime) and converts them into a secure, standard error format.
@@ -123,8 +124,9 @@ Intercepts every request to log the HTTP method, URL, and total execution time i
 
 ### RESTful Conventions
 - **Base Prefix**: `/api`
-- **Versioning**: Versioning via header or prefix is supported (currently `v1` implied).
-- **Paths**: Plural nouns for resource names (e.g., `/api/challenges`).
+- **Versioning**: Explicitly versioned via URI prefix (`/api/v1`).
+- **Paths**: Plural nouns for resource names (e.g., `/api/v1/challenges`).
+
 
 ### Communication Formats
 **Success Response (200 OK / 201 Created)**
@@ -132,6 +134,8 @@ Intercepts every request to log the HTTP method, URL, and total execution time i
 {
   "status": "success",
   "data": { ... },
+  "requestId": "uuid-v4",
+  "traceId": "uuid-v4",
   "timestamp": "2024-03-20T10:00:00.000Z"
 }
 ```
@@ -142,10 +146,13 @@ Intercepts every request to log the HTTP method, URL, and total execution time i
   "status": "error",
   "message": "User-friendly error message",
   "errors": [ ... ],
-  "path": "/api/resource",
+  "requestId": "uuid-v4",
+  "traceId": "uuid-v4",
+  "path": "/api/v1/resource",
   "timestamp": "2024-03-20T10:00:00.000Z"
 }
 ```
+
 
 ---
 
@@ -258,11 +265,13 @@ Copy `.env.example` to `.env` and configure the following:
 ## 15. Frontend Integration Guide
 
 ### How to use these APIs
-1.  **Base URL**: `http://localhost:3000/api`
+1.  **Base URL**: `http://localhost:3000/api/v1`
 2.  **Auth**: Send JWT in the header: `Authorization: Bearer <token>`.
 3.  **Standard Response**: Expect the `data` object for the actual payload.
-4.  **Errors**: Check for `status: "error"` and the `message` field for user feedback.
-5.  **Swagger UI**: Visit `/api/docs` for the interactive playground and model definitions.
+4.  **Traceability**: Every response includes `requestId` and `traceId` for debugging.
+5.  **Errors**: Check for `status: "error"` and the `message` field for user feedback.
+6.  **Swagger UI**: Visit `/api/docs` for the interactive playground and model definitions.
+
 
 ---
 © 2024 AiTaskDashboard. All Rights Reserved.

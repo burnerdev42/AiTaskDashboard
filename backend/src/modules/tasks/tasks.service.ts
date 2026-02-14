@@ -10,6 +10,7 @@ import { CreateTaskDto } from '../../dto/tasks/create-task.dto';
 import { UpdateTaskDto } from '../../dto/tasks/update-task.dto';
 import { QueryDto } from '../../common/dto/query.dto';
 import { AbstractService } from '../../common';
+import { TaskDocument } from '../../models/tasks/task.schema';
 
 /**
  * Service for Tasks.
@@ -23,7 +24,9 @@ export class TasksService extends AbstractService {
   }
 
   async create(createTaskDto: CreateTaskDto) {
-    return this.tasksRepository.create(createTaskDto as any);
+    return this.tasksRepository.create(
+      createTaskDto as unknown as Partial<TaskDocument>,
+    );
   }
 
   async findAll(query: QueryDto) {

@@ -23,7 +23,7 @@ export class NotificationsService extends AbstractService {
    * @param userId - User ID
    * @param message - Notification message
    */
-  async notify(userId: string, message: string) {
+  notify(userId: string, message: string) {
     this.logger.log(`Sending notification to User ${userId}: ${message}`);
     // Implement actual logic (Email/Push) here
   }

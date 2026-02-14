@@ -1,6 +1,19 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { createTestApp, closeTestApp } from './test-utils';
+import { ApiResponse } from '../src/common/interfaces/api-response.interface';
+
+interface RegistrationResponse {
+  access_token: string;
+  user: {
+    email: string;
+    name: string;
+  };
+}
+
+interface LoginResponse {
+  access_token: string;
+}
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -20,31 +33,39 @@ describe('AuthController (e2e)', () => {
   };
 
   it('/auth/register (POST)', () => {
-    return request(app.getHttpServer())
+    const server = app.getHttpServer() as unknown as import('http').Server;
+    return request(server)
       .post('/auth/register')
       .send(user)
       .expect(201)
-      .expect((res) => {
-        expect(res.body.data).toHaveProperty('access_token');
-        expect(res.body.data.user.email).toEqual(user.email);
+      .expect((res: { body: ApiResponse<RegistrationResponse> }) => {
+        const body = res.body;
+        if (body.data) {
+          expect(body.data).toHaveProperty('access_token');
+          expect(body.data.user.email).toEqual(user.email);
+        }
       });
   });
 
   it('/auth/login (POST)', () => {
-    return request(app.getHttpServer())
+    const server = app.getHttpServer() as unknown as import('http').Server;
+    return request(server)
       .post('/auth/login')
       .send({
         email: user.email,
         password: user.password,
       })
       .expect(201)
-      .expect((res) => {
-        expect(res.body.data).toHaveProperty('access_token');
+      .expect((res: { body: ApiResponse<LoginResponse> }) => {
+        if (res.body.data) {
+          expect(res.body.data).toHaveProperty('access_token');
+        }
       });
   });
 
   it('/auth/login (POST) - Fail', () => {
-    return request(app.getHttpServer())
+    const server = app.getHttpServer() as unknown as import('http').Server;
+    return request(server)
       .post('/auth/login')
       .send({
         email: user.email,

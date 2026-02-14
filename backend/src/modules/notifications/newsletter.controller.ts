@@ -27,7 +27,7 @@ export class NewsletterController extends AbstractController {
   @Post('subscribe')
   @ApiOperation({ summary: 'Subscribe to newsletter' })
   @ApiResponse({ status: 201, description: 'Subscribed successfully.' })
-  async subscribe(@Body('email') email: string) {
+  subscribe(@Body('email') email: string) {
     // Mock subscription logic
     return this.success({ email }, 'Subscribed successfully');
   }

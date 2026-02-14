@@ -3,7 +3,6 @@ import { DashboardService } from './dashboard.service';
 import { ChallengesService } from '../challenges/challenges.service';
 import { IdeasService } from '../ideas/ideas.service';
 
-
 describe('DashboardService', () => {
   let service: DashboardService;
   let challengesService: ChallengesService;

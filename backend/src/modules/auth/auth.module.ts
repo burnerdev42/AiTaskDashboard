@@ -13,8 +13,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 import { UsersRepository } from '../users/users.repository';
-import { JwtStrategy } from '../../common/auth/jwt.strategy';
-import { LocalStrategy } from '../../common/auth/local.strategy';
+import { JwtStrategy } from './jwt.strategy';
+import { LocalStrategy } from './local.strategy';
 import { User, UserSchema } from '../../models/users/user.schema';
 
 /**

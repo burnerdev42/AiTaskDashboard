@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IdeasService } from './ideas.service';
 import { IdeasRepository } from './ideas.repository';
-
+import { IdeaDocument } from '../../models/ideas/idea.schema';
+import { CreateIdeaDto } from '../../dto/ideas/create-idea.dto';
+import { QueryDto } from '../../common/dto/query.dto';
 
 describe('IdeasService', () => {
   let service: IdeasService;
@@ -45,10 +47,12 @@ describe('IdeasService', () => {
         title: 'Test Idea',
         description: 'Description',
         category: 'Test',
-      };
-      jest.spyOn(repository, 'create').mockResolvedValue(mockIdea as any);
+      } as unknown as CreateIdeaDto;
+      jest
+        .spyOn(repository, 'create')
+        .mockResolvedValue(mockIdea as unknown as IdeaDocument);
 
-      const result = await service.create(createIdeaDto as any);
+      const result = await service.create(createIdeaDto);
       expect(result).toEqual(mockIdea);
       expect(repository.create).toHaveBeenCalledWith(createIdeaDto);
     });
@@ -56,7 +60,9 @@ describe('IdeasService', () => {
 
   describe('findAll', () => {
     it('should return an array of ideas with defaults', async () => {
-      jest.spyOn(repository, 'find').mockResolvedValue([mockIdea] as any);
+      jest
+        .spyOn(repository, 'find')
+        .mockResolvedValue([mockIdea] as unknown as IdeaDocument[]);
 
       const result = await service.findAll({});
       expect(result).toEqual([mockIdea]);
@@ -72,13 +78,15 @@ describe('IdeasService', () => {
     });
 
     it('should return sorted ideas', async () => {
-      jest.spyOn(repository, 'find').mockResolvedValue([mockIdea] as any);
+      jest
+        .spyOn(repository, 'find')
+        .mockResolvedValue([mockIdea] as unknown as IdeaDocument[]);
 
       const result = await service.findAll({
         sort: 'title',
         page: 2,
         limit: 5,
-      });
+      } as unknown as QueryDto);
       expect(result).toEqual([mockIdea]);
       expect(repository.find).toHaveBeenCalledWith(
         {},
@@ -94,7 +102,9 @@ describe('IdeasService', () => {
 
   describe('findOne', () => {
     it('should return a single idea', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockIdea as any);
+      jest
+        .spyOn(repository, 'findOne')
+        .mockResolvedValue(mockIdea as unknown as IdeaDocument);
 
       const result = await service.findOne('1');
       expect(result).toEqual(mockIdea);
@@ -111,7 +121,7 @@ describe('IdeasService', () => {
       const expectedIdea = { ...mockIdea, title: 'Updated' };
       jest
         .spyOn(repository, 'findOneAndUpdate')
-        .mockResolvedValue(expectedIdea as any);
+        .mockResolvedValue(expectedIdea as unknown as IdeaDocument);
 
       const result = await service.update('1', updateIdeaDto);
       expect(result).toEqual(expectedIdea);
@@ -120,7 +130,9 @@ describe('IdeasService', () => {
 
   describe('remove', () => {
     it('should remove an idea', async () => {
-      jest.spyOn(repository, 'delete').mockResolvedValue(mockIdea as any);
+      jest
+        .spyOn(repository, 'delete')
+        .mockResolvedValue(mockIdea as unknown as IdeaDocument);
 
       await service.remove('1');
       expect(repository.delete).toHaveBeenCalledWith({ _id: '1' });

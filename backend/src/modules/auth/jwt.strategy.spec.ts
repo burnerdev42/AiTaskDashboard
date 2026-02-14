@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
-  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,7 +22,6 @@ describe('JwtStrategy', () => {
     }).compile();
 
     strategy = module.get<JwtStrategy>(JwtStrategy);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {
@@ -31,9 +29,9 @@ describe('JwtStrategy', () => {
   });
 
   describe('validate', () => {
-    it('should return user payload', async () => {
+    it('should return user payload', () => {
       const payload = { sub: '123', username: 'testuser', roles: ['User'] };
-      const result = await strategy.validate(payload);
+      const result = strategy.validate(payload);
       expect(result).toEqual({
         userId: '123',
         username: 'testuser',
