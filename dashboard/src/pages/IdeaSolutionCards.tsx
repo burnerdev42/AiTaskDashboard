@@ -51,25 +51,46 @@ export const IdeaSolutionCards: React.FC = () => {
                         <span className="ideas-total-badge">{filteredCards.length} challenges</span>
                     </h2>
                     <div className="ideas-toolbar-filters">
-                        {IMPACT_FILTERS.map(filter => (
-                            <button
-                                key={filter}
-                                className={`ideas-filter-btn ${activeFilter === filter ? 'active' : ''}`}
-                                onClick={() => setActiveFilter(filter)}
-                            >
-                                {filter !== 'All' && getImpactIcon(filter)} {filter}
-                            </button>
-                        ))}
+                        {/* Desktop: Button Group */}
+                        <div className="desktop-filters">
+                            {IMPACT_FILTERS.map(filter => (
+                                <button
+                                    key={filter}
+                                    className={`ideas-filter-btn ${activeFilter === filter ? 'active' : ''}`}
+                                    onClick={() => setActiveFilter(filter)}
+                                >
+                                    {filter !== 'All' && getImpactIcon(filter)} {filter}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Mobile: Select Dropdown */}
+                        <div className="mobile-filters">
+                            <label className="mobile-filter-label">Filter by Impact:</label>
+                            <div className="mobile-select-wrapper">
+                                <select
+                                    value={activeFilter}
+                                    onChange={(e) => setActiveFilter(e.target.value)}
+                                    className="mobile-filter-select"
+                                >
+                                    {IMPACT_FILTERS.map(filter => (
+                                        <option key={filter} value={filter}>
+                                            {filter === 'All' ? 'All Impacts' : `${filter} Impact`}
+                                        </option>
+                                    ))}
+                                </select>
+                                <span className="select-arrow">▼</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                <div className="ideas-toolbar-actions">
                     <input
                         type="text"
                         className="detail-form-input"
                         placeholder="🔍 Search challenges..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
-                        style={{ width: 220 }}
                     />
                     <button className="ideas-btn-new" onClick={() => navigate('/challenges/submit')}>
                         ✨ New Challenge

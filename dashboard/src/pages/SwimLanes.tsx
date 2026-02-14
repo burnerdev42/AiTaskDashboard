@@ -139,6 +139,9 @@ export const SwimLanes: React.FC = () => {
     const priorityColor = (p: string) =>
         p === 'High' ? 'var(--accent-red)' : p === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-green)';
 
+    /* ── Mobile: active lane tab ── */
+    const [activeLaneIndex, setActiveLaneIndex] = useState(0);
+
     return (
         <div className="main-wrapper" style={{ height: 'calc(100vh - 80px)', display: 'flex', flexDirection: 'column' }}>
 
@@ -148,16 +151,36 @@ export const SwimLanes: React.FC = () => {
                 <div className="flow-arrow"></div>
             </div>
 
+            {/* ═══ MOBILE LANE TABS (hidden on desktop) ═══ */}
+            <div className="mobile-lane-tabs">
+                {lanes.map((lane, index) => (
+                    <button
+                        key={lane.id}
+                        className={`mobile-lane-tab ${index === activeLaneIndex ? 'active' : ''}`}
+                        style={{
+                            '--tab-color': lane.color,
+                        } as React.CSSProperties}
+                        onClick={() => setActiveLaneIndex(index)}
+                    >
+                        <span className="mobile-lane-tab-icon">{lane.icon}</span>
+                        <span className="mobile-lane-tab-label" dangerouslySetInnerHTML={{ __html: lane.title.replace('<br/>', ' ') }} />
+                        <span className="mobile-lane-tab-count" style={{ background: lane.badgeBg, color: lane.color }}>
+                            {getCardsByLane(lane.id).length}
+                        </span>
+                    </button>
+                ))}
+            </div>
+
             {/* ═══ SWIM LANES ══════════════════════════= */}
             <div className="lanes-wrapper" style={{ flex: 1 }}>
-                {lanes.map((lane) => {
+                {lanes.map((lane, laneIndex) => {
                     const laneCards = getCardsByLane(lane.id);
                     const isDragOver = dragOverLaneId === lane.id && draggedCardId !== null;
 
                     return (
                         <div
                             key={lane.id}
-                            className={`lane ${lane.laneClass} ${lane.widthClass}`}
+                            className={`lane ${lane.laneClass} ${lane.widthClass} ${laneIndex === activeLaneIndex ? 'lane-mobile-active' : 'lane-mobile-hidden'}`}
                             onDragOver={handleLaneDragOver}
                             onDragEnter={(e) => handleDragEnter(e, lane.id)}
                             onDragLeave={(e) => handleDragLeave(e, e.currentTarget)}
