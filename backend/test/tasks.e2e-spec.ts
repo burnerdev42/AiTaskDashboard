@@ -16,10 +16,11 @@ interface TaskResponse {
 
 describe('TasksController (e2e)', () => {
   let app: INestApplication;
+  let createdId: string;
 
   beforeAll(async () => {
     app = await createTestApp();
-  });
+  }, 60000);
 
   afterAll(async () => {
     await closeTestApp(app);
@@ -33,8 +34,6 @@ describe('TasksController (e2e)', () => {
     priority: Priority.MEDIUM,
   };
 
-  let createdId: string;
-
   it('/tasks (POST) - Success', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
     const response = await request(server)
@@ -43,11 +42,10 @@ describe('TasksController (e2e)', () => {
       .expect(201);
 
     const body = response.body as ApiResponse<TaskResponse>;
-    if (body.data) {
-      expect(body.data).toHaveProperty('_id');
-      expect(body.data.title).toEqual(taskDto.title);
-      createdId = body.data._id;
-    }
+    expect(body.data).toBeDefined();
+    expect(body.data!._id).toBeDefined();
+    expect(body.data!.title).toEqual(taskDto.title);
+    createdId = body.data!._id;
   });
 
   it('/tasks (POST) - Fail (Validation)', () => {
@@ -55,39 +53,36 @@ describe('TasksController (e2e)', () => {
     return request(server).post('/tasks').send({}).expect(400);
   });
 
-  it('/tasks (GET)', () => {
+  it('/tasks (GET)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
-      .get('/tasks')
-      .expect(200)
-      .expect((res: { body: ApiResponse<TaskResponse[]> }) => {
-        expect(Array.isArray(res.body.data)).toBe(true);
-      });
+    const response = await request(server).get('/tasks').expect(200);
+
+    const body = response.body as ApiResponse<TaskResponse[]>;
+    expect(body.data).toBeDefined();
+    expect(Array.isArray(body.data)).toBe(true);
   });
 
-  it('/tasks/:id (GET)', () => {
+  it('/tasks/:id (GET)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .get(`/tasks/${createdId}`)
-      .expect(200)
-      .expect((res: { body: ApiResponse<TaskResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data.title).toEqual(taskDto.title);
-        }
-      });
+      .expect(200);
+
+    const body = response.body as ApiResponse<TaskResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.title).toEqual(taskDto.title);
   });
 
-  it('/tasks/:id (PUT)', () => {
+  it('/tasks/:id (PUT)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .put(`/tasks/${createdId}`)
       .send({ title: 'Updated E2E Task Title' })
-      .expect(200)
-      .expect((res: { body: ApiResponse<TaskResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data.title).toEqual('Updated E2E Task Title');
-        }
-      });
+      .expect(200);
+
+    const body = response.body as ApiResponse<TaskResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.title).toEqual('Updated E2E Task Title');
   });
 
   it('/tasks/:id (DELETE)', () => {

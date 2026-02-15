@@ -27,6 +27,15 @@
 - [13. Scripts & Lifecycle Commands](#13-scripts--lifecycle-commands)
 - [14. Performance & Scalability](#14-performance--scalability)
 - [15. Frontend Integration Guide](#15-frontend-integration-guide)
+- [16. Complete API Reference](#16-complete-api-reference)
+- [17. Data Models](#17-data-models)
+- [18. Docker & Deployment](#18-docker--deployment)
+- [19. Current Test Status](#19-current-test-status)
+- [20. Enums Reference](#20-enums-reference)
+- [21. Query Parameters](#21-query-parameters)
+- [22. Swagger/OpenAPI Documentation](#22-swaggeropenapi-documentation)
+- [23. Distributed Tracing](#23-distributed-tracing)
+- [24. Healthcheck Endpoints](#24-healthcheck-endpoints)
 
 ---
 
@@ -60,10 +69,16 @@ src/
 │   ├── dashboard/         # Aggregated views (e.g., Swimlanes)
 │   └── metrics/           # ROI and KPI reporting APIs
 ├── common/                # Shared Cross-Cutting Concerns
+│   ├── auth/              # Authentication decorators (CurrentUser, etc.)
+│   ├── controllers/       # Abstract base controller
+│   ├── database/          # Abstract repository and schema
 │   ├── enums/             # System-wide Enums (ApiStatus, UserRole, etc.)
 │   ├── filters/           # Global Exception Filters
 │   ├── interceptors/      # Response Transformers & Logging Interceptors
 │   ├── interfaces/        # Shared Type definitions & Interfaces
+│   ├── middleware/        # Request middleware (Correlation/TraceId)
+│   ├── metrics/           # Prometheus metrics module
+│   ├── services/          # Abstract base service
 │   └── library/           # Shared logic (CommonModule)
 ├── database/              # Persistence Layer
 │   ├── seeds/             # Database seeding scripts for Mock Data
@@ -117,6 +132,12 @@ Captures all exceptions (Http, Database, Runtime) and converts them into a secur
 
 ### `LoggingInterceptor`
 Intercepts every request to log the HTTP method, URL, and total execution time in milliseconds.
+
+### `CorrelationMiddleware`
+Assigns a unique trace ID (`traceId`) to every incoming request for distributed tracing.
+- **Authentic Feature**: Accepts `x-correlation-id`, `x-trace-id`, or `x-request-id` headers from clients.
+- **Authentic Feature**: Sets trace ID in response headers for client visibility.
+- **Authentic Feature**: Attaches trace ID to request object for downstream access in logs and error responses.
 
 ---
 
@@ -274,4 +295,519 @@ Copy `.env.example` to `.env` and configure the following:
 
 
 ---
+
+## 16. Complete API Reference
+
+### Authentication (`/api/v1/auth`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/auth/register` | Register a new user | ❌ |
+| `POST` | `/auth/login` | Authenticate and receive JWT token | ❌ |
+
+**Register Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123",
+  "name": "John Doe",
+  "role": "user"
+}
+```
+
+**Login Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Login Response:**
+```json
+{
+  "status": "success",
+  "data": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "_id": "60d21b4667d0d8992e610c85",
+      "email": "user@example.com",
+      "name": "John Doe",
+      "role": "user"
+    }
+  }
+}
+```
+
+---
+
+### Users (`/api/v1/users`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/users` | List all users | ✅ |
+| `GET` | `/users/:id` | Get user by ID | ✅ |
+
+---
+
+### Challenges (`/api/v1/challenges`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/challenges` | Create a new challenge | ✅ |
+| `GET` | `/challenges` | List all challenges (supports pagination) | ✅ |
+| `GET` | `/challenges/:id` | Get challenge by ID | ✅ |
+| `PUT` | `/challenges/:id` | Update challenge | ✅ |
+| `DELETE` | `/challenges/:id` | Delete challenge | ✅ |
+
+**Create Challenge Request Body:**
+```json
+{
+  "title": "AI-Powered Customer Support",
+  "description": "Implement conversational AI for customer queries",
+  "stage": "Ideation",
+  "owner": "60d21b4667d0d8992e610c85",
+  "accentColor": "blue",
+  "tags": ["AI", "Customer Experience"]
+}
+```
+
+**Challenge Stages:** `Ideation` | `Prototype` | `Pilot` | `Scale`
+
+---
+
+### Ideas (`/api/v1/ideas`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/ideas` | Submit a new idea | ✅ |
+| `GET` | `/ideas` | List all ideas (supports pagination) | ✅ |
+| `GET` | `/ideas/:id` | Get idea by ID | ✅ |
+| `PUT` | `/ideas/:id` | Update idea | ✅ |
+| `DELETE` | `/ideas/:id` | Delete idea | ✅ |
+
+**Create Idea Request Body:**
+```json
+{
+  "title": "Chatbot for FAQ Handling",
+  "description": "Automate common customer questions with AI",
+  "status": "Ideation",
+  "owner": "60d21b4667d0d8992e610c85",
+  "linkedChallenge": "60d21b4667d0d8992e610c86",
+  "tags": ["AI", "Automation"],
+  "problemStatement": "High volume of repetitive customer queries",
+  "proposedSolution": "AI-powered FAQ chatbot",
+  "expectedImpact": "30% reduction in support tickets"
+}
+```
+
+**Idea Statuses:** `Ideation` | `Evaluation` | `POC` | `Pilot` | `Scale`
+
+---
+
+### Tasks (`/api/v1/tasks`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/tasks` | Create a new task | ✅ |
+| `GET` | `/tasks` | List all tasks (supports pagination) | ✅ |
+| `GET` | `/tasks/:id` | Get task by ID | ✅ |
+| `PUT` | `/tasks/:id` | Update task | ✅ |
+| `DELETE` | `/tasks/:id` | Delete task | ✅ |
+
+**Create Task Request Body:**
+```json
+{
+  "title": "Review prototype feedback",
+  "description": "Analyze user feedback from prototype testing",
+  "stage": "Prototype",
+  "owner": "60d21b4667d0d8992e610c85",
+  "priority": "High",
+  "status": "pending"
+}
+```
+
+**Task Priorities:** `High` | `Medium` | `Low`  
+**Task Statuses:** `pending` | `in_progress` | `completed` | `cancelled`
+
+---
+
+### Notifications (`/api/v1/notifications`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/notifications` | Create a notification | ✅ |
+| `GET` | `/notifications/user/:userId` | Get notifications for a user | ✅ |
+| `GET` | `/notifications/user/:userId/unread-count` | Get unread notification count | ✅ |
+| `POST` | `/notifications/user/:userId/mark-read` | Mark all notifications as read | ✅ |
+| `GET` | `/notifications/:id` | Get notification by ID | ✅ |
+| `PUT` | `/notifications/:id` | Update notification | ✅ |
+| `DELETE` | `/notifications/:id` | Soft delete notification | ✅ |
+
+**Create Notification Request Body:**
+```json
+{
+  "userId": "60d21b4667d0d8992e610c85",
+  "type": "challenge",
+  "title": "New Challenge Submitted",
+  "message": "Ravi Patel submitted 'Optimize Cloud Infrastructure'",
+  "link": "/challenges/CH-001"
+}
+```
+
+**Notification Types:** `challenge` | `idea` | `comment` | `mention` | `status` | `system`
+
+---
+
+### Newsletter (`/api/v1/newsletter`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/newsletter/subscribe` | Subscribe to newsletter | ❌ |
+
+---
+
+### Dashboard (`/api/v1/dashboard`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/dashboard/swimlanes` | Get aggregated swimlane view | ✅ |
+
+---
+
+### Metrics (`/api/v1/metrics`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/metrics/summary` | Get KPI summary (ROI, savings, etc.) | ✅ |
+| `GET` | `/metrics/throughput` | Get throughput metrics | ✅ |
+
+---
+
+### Prometheus Metrics (`/metrics`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/metrics` | Prometheus-compatible metrics endpoint | ❌ |
+
+---
+
+## 17. Data Models
+
+### User Schema
+
+```typescript
+{
+  _id: ObjectId,
+  email: string,           // Unique, required
+  password: string,        // Hashed with bcrypt
+  name: string,            // Required
+  role: UserRole,          // 'admin' | 'user' | 'manager' | 'viewer'
+  avatar?: string,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Challenge Schema
+
+```typescript
+{
+  _id: ObjectId,
+  title: string,           // Required, min 3 chars
+  description: string,     // Required, min 10 chars
+  stage: ChallengeStage,   // 'Ideation' | 'Prototype' | 'Pilot' | 'Scale'
+  owner: ObjectId,         // Reference to User
+  accentColor: string,     // UI theming color
+  tags: string[],
+  stats: {
+    appreciations: number,
+    comments: number,
+    roi?: string,
+    savings?: string,
+    votes?: number
+  },
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Idea Schema
+
+```typescript
+{
+  _id: ObjectId,
+  title: string,           // Required
+  description: string,     // Required
+  status: IdeaStatus,      // 'Ideation' | 'Evaluation' | 'POC' | 'Pilot' | 'Scale'
+  owner: ObjectId,         // Reference to User
+  linkedChallenge?: ObjectId,
+  tags: string[],
+  stats: {
+    appreciations: number,
+    comments: number,
+    views: number
+  },
+  problemStatement?: string,
+  proposedSolution?: string,
+  expectedImpact?: string,
+  implementationPlan?: string,
+  impactLevel?: 'High' | 'Medium' | 'Low',
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Task Schema
+
+```typescript
+{
+  _id: ObjectId,
+  title: string,           // Required
+  description: string,     // Required
+  stage: ChallengeStage,   // Related challenge stage
+  owner: ObjectId,         // Reference to User
+  priority: Priority,      // 'High' | 'Medium' | 'Low'
+  status: TaskStatus,      // 'pending' | 'in_progress' | 'completed' | 'cancelled'
+  progress?: number,       // 0-100
+  dueDate?: Date,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Notification Schema
+
+```typescript
+{
+  _id: ObjectId,
+  userId: ObjectId,        // Reference to User
+  type: NotificationType,  // 'challenge' | 'idea' | 'comment' | 'mention' | 'status' | 'system'
+  title: string,           // Required
+  message: string,         // Required
+  link?: string,           // Deep link to related resource
+  read: boolean,           // Default: false
+  deleted: boolean,        // Soft delete flag
+  deletedAt?: Date,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+---
+
+## 18. Docker & Deployment
+
+### Docker Compose
+
+```yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/aitaskdashboard
+      - JWT_SECRET=your-production-secret
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+```
+
+### Running with Docker
+
+```bash
+# Build and start containers
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f app
+
+# Stop containers
+docker-compose down
+```
+
+---
+
+## 19. Current Test Status
+
+### ✅ Test Coverage Summary
+
+| Metric | Coverage |
+|--------|----------|
+| **Statements** | 72.4% |
+| **Branches** | 61.08% |
+| **Functions** | 67.1% |
+| **Lines** | 72.56% |
+
+### Test Results
+
+| Test Suite | Tests | Status |
+|------------|-------|--------|
+| Unit Tests | 105 | ✅ Passing |
+| E2E Tests | 25 | ✅ Passing |
+| Lint Errors | 0 | ✅ Clean |
+| Lint Warnings | 8 | ⚠️ (test files only) |
+
+### Running Tests
+
+```bash
+# Unit tests
+npm run test
+
+# Unit tests with watch mode
+npm run test:watch
+
+# Test coverage report
+npm run test:cov
+
+# E2E tests
+npm run test:e2e
+```
+
+---
+
+## 20. Enums Reference
+
+### UserRole
+```typescript
+enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  MANAGER = 'manager',
+  VIEWER = 'viewer'
+}
+```
+
+### ChallengeStage
+```typescript
+enum ChallengeStage {
+  IDEATION = 'Ideation',
+  PROTOTYPE = 'Prototype',
+  PILOT = 'Pilot',
+  SCALE = 'Scale'
+}
+```
+
+### IdeaStatus
+```typescript
+enum IdeaStatus {
+  IDEATION = 'Ideation',
+  EVALUATION = 'Evaluation',
+  POC = 'POC',
+  PILOT = 'Pilot',
+  SCALE = 'Scale'
+}
+```
+
+### TaskStatus
+```typescript
+enum TaskStatus {
+  PENDING = 'pending',
+  IN_PROGRESS = 'in_progress',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled'
+}
+```
+
+### Priority
+```typescript
+enum Priority {
+  HIGH = 'High',
+  MEDIUM = 'Medium',
+  LOW = 'Low'
+}
+```
+
+### NotificationType
+```typescript
+enum NotificationType {
+  CHALLENGE = 'challenge',
+  IDEA = 'idea',
+  COMMENT = 'comment',
+  MENTION = 'mention',
+  STATUS = 'status',
+  SYSTEM = 'system'
+}
+```
+
+---
+
+## 21. Query Parameters
+
+All list endpoints support standard query parameters:
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `page` | number | Page number (1-indexed) | `?page=2` |
+| `limit` | number | Items per page (default: 10, max: 100) | `?limit=20` |
+| `sort` | string | Sort field | `?sort=createdAt` |
+| `order` | string | Sort order (`asc` or `desc`) | `?order=desc` |
+
+**Example:**
+```
+GET /api/v1/challenges?page=1&limit=10&sort=createdAt&order=desc
+```
+
+---
+
+## 22. Swagger/OpenAPI Documentation
+
+Interactive API documentation is available at:
+
+```
+http://localhost:3000/api/docs
+```
+
+Features:
+- 📖 Full endpoint documentation
+- 🧪 Try-it-out functionality
+- 📋 Request/Response schemas
+- 🔐 JWT authentication support
+
+---
+
+## 23. Distributed Tracing
+
+Every request is assigned a unique trace ID for debugging and correlation across services.
+
+### Headers
+
+| Header | Purpose |
+|--------|---------|
+| `x-correlation-id` | Client-provided correlation ID (honored if present) |
+| `x-trace-id` | Server-assigned trace ID (always in response) |
+| `x-request-id` | Alternative to correlation ID |
+
+### Response Headers
+
+```
+x-correlation-id: 02c8f2b9-bf88-4dd5-bd79-e060b20bb1c3
+x-trace-id: 02c8f2b9-bf88-4dd5-bd79-e060b20bb1c3
+```
+
+---
+
+## 24. Healthcheck Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/metrics` | Prometheus metrics (system health) |
+| `/api/docs` | Swagger UI (API health) |
+
+---
+
 © 2024 AiTaskDashboard. All Rights Reserved.

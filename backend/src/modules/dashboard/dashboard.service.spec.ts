@@ -5,8 +5,6 @@ import { IdeasService } from '../ideas/ideas.service';
 
 describe('DashboardService', () => {
   let service: DashboardService;
-  let challengesService: ChallengesService;
-  let ideasService: IdeasService;
 
   const mockChallengesService = {
     findAll: jest.fn(),
@@ -26,8 +24,10 @@ describe('DashboardService', () => {
     }).compile();
 
     service = module.get<DashboardService>(DashboardService);
-    challengesService = module.get<ChallengesService>(ChallengesService);
-    ideasService = module.get<IdeasService>(IdeasService);
+
+    // Reset mocks before each test
+    mockChallengesService.findAll.mockReset();
+    mockIdeasService.findAll.mockReset();
   });
 
   it('should be defined', () => {

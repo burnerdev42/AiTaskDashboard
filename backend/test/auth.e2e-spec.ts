@@ -20,7 +20,7 @@ describe('AuthController (e2e)', () => {
 
   beforeAll(async () => {
     app = await createTestApp();
-  });
+  }, 60000);
 
   afterAll(async () => {
     await closeTestApp(app);
@@ -32,35 +32,32 @@ describe('AuthController (e2e)', () => {
     name: 'Test User',
   };
 
-  it('/auth/register (POST)', () => {
+  it('/auth/register (POST)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .post('/auth/register')
       .send(user)
-      .expect(201)
-      .expect((res: { body: ApiResponse<RegistrationResponse> }) => {
-        const body = res.body;
-        if (body.data) {
-          expect(body.data).toHaveProperty('access_token');
-          expect(body.data.user.email).toEqual(user.email);
-        }
-      });
+      .expect(201);
+
+    const body = response.body as ApiResponse<RegistrationResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.access_token).toBeDefined();
+    expect(body.data!.user.email).toEqual(user.email);
   });
 
-  it('/auth/login (POST)', () => {
+  it('/auth/login (POST)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .post('/auth/login')
       .send({
         email: user.email,
         password: user.password,
       })
-      .expect(201)
-      .expect((res: { body: ApiResponse<LoginResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data).toHaveProperty('access_token');
-        }
-      });
+      .expect(201);
+
+    const body = response.body as ApiResponse<LoginResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.access_token).toBeDefined();
   });
 
   it('/auth/login (POST) - Fail', () => {

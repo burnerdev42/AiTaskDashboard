@@ -1,23 +1,40 @@
-import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+/**
+ * @file test-database.module.ts
+ * @description Test database module using MongoDB Memory Server.
+ * @responsibility Provides isolated in-memory MongoDB for E2E tests.
+ */
 
+import { Module, OnModuleDestroy } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+
+let mongod: MongoMemoryServer | undefined;
+
+/**
+ * Test database module that uses MongoDB Memory Server.
+ * Provides an isolated in-memory database for each test run.
+ */
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env.test',
-      isGlobal: true,
-    }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        uri:
-          configService.get<string>('MONGO_URI') ||
-          'mongodb://localhost:27017/aitaskdashboard-test',
-      }),
-      inject: [ConfigService],
+      useFactory: async () => {
+        mongod = await MongoMemoryServer.create();
+        const uri = mongod.getUri();
+        return {
+          uri,
+        };
+      },
     }),
   ],
   exports: [MongooseModule],
 })
-export class TestDatabaseModule {}
+export class TestDatabaseModule implements OnModuleDestroy {
+  /**
+   * Cleanup handler to stop the MongoDB Memory Server.
+   */
+  async onModuleDestroy(): Promise<void> {
+    if (mongod) {
+      await mongod.stop();
+    }
+  }
+}

@@ -5,16 +5,17 @@ import { UsersRepository } from '../users/users.repository';
 
 import * as bcrypt from 'bcryptjs';
 import { UnauthorizedException } from '@nestjs/common';
+import { Types } from 'mongoose';
 
 jest.mock('bcryptjs');
 
 describe('AuthService', () => {
   let service: AuthService;
   let repository: UsersRepository;
-  let jwtService: JwtService;
 
   const mockUser = {
-    _id: '1',
+    _id: new Types.ObjectId('507f1f77bcf86cd799439011'),
+    name: 'Test User',
     email: 'test@example.com',
     password: 'hashedpassword',
     role: 'User',
@@ -42,7 +43,6 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     repository = module.get<UsersRepository>(UsersRepository);
-    jwtService = module.get<JwtService>(JwtService);
 
     // Mock bcrypt defaults
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
@@ -94,9 +94,9 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return access_token and user', async () => {
-      jest
-        .spyOn(service, 'validateUser')
-        .mockResolvedValue({ ...mockUser, password: undefined });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- intentionally discarding password
+      const { password, ...safeUser } = mockUser;
+      jest.spyOn(service, 'validateUser').mockResolvedValue(safeUser);
       const result = await service.login({
         email: 'test@example.com',
         password: 'pass',
@@ -106,9 +106,7 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if validation fails', async () => {
-      jest
-        .spyOn(service, 'validateUser')
-        .mockResolvedValue(null as unknown as any);
+      jest.spyOn(service, 'validateUser').mockResolvedValue(null);
       await expect(
         service.login({ email: 'test@example.com', password: 'pass' }),
       ).rejects.toThrow(UnauthorizedException);

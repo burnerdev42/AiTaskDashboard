@@ -13,5 +13,7 @@
     "moduleNameMapper": {
         "^@app/common(|/.*)$": "<rootDir>/../src/common/$1",
         "^@app/database(|/.*)$": "<rootDir>/../src/database/$1"
-    }
+    },
+    "testTimeout": 30000,
+    "setupFilesAfterEnv": ["<rootDir>/jest-e2e-setup.ts"]
 }

@@ -27,13 +27,13 @@ describe('LocalStrategy', () => {
 
   it('should return user if valid', async () => {
     const user = { userId: '1', username: 'test' };
-    jest.spyOn(authService, 'validateUser').mockResolvedValue(user);
+
+    const validateUserSpy = jest
+      .spyOn(authService, 'validateUser')
+      .mockResolvedValue(user as never);
     const result = await strategy.validate('test@example.com', 'pass');
     expect(result).toBe(user);
-    expect(authService.validateUser).toHaveBeenCalledWith(
-      'test@example.com',
-      'pass',
-    );
+    expect(validateUserSpy).toHaveBeenCalledWith('test@example.com', 'pass');
   });
 
   it('should throw UnauthorizedException if invalid', async () => {

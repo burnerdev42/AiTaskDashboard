@@ -1,14 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AbstractRepository } from './abstract.repository';
-import { Model, Types, Connection } from 'mongoose';
+import { Model, Types, Connection, Document } from 'mongoose';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
-import { AbstractDocument } from './abstract.schema';
 
-class MockDocument extends AbstractDocument {
+/**
+ * Mock document interface for testing purposes.
+ * Extends Mongoose Document to satisfy AbstractRepository constraints.
+ */
+interface MockDocument extends Document {
+  _id: Types.ObjectId;
   name: string;
 }
 
+/**
+ * Concrete implementation of AbstractRepository for testing.
+ */
 class MockRepository extends AbstractRepository<MockDocument> {
   protected readonly logger = new Logger(MockRepository.name);
   constructor(model: Model<MockDocument>, connection: Connection) {
@@ -16,15 +23,21 @@ class MockRepository extends AbstractRepository<MockDocument> {
   }
 }
 
+/**
+ * Model name constant for dependency injection.
+ */
+const MOCK_MODEL_NAME = 'MockDocument';
+
 describe('AbstractRepository', () => {
   let repository: MockRepository;
   let model: Model<MockDocument>;
   let connection: Connection;
 
+  const mockDocumentId = new Types.ObjectId();
   const mockDocument = {
-    _id: new Types.ObjectId(),
+    _id: mockDocumentId,
     name: 'test',
-    save: jest.fn().mockResolvedValue({ _id: '1', name: 'test' }),
+    save: jest.fn().mockResolvedValue({ _id: mockDocumentId, name: 'test' }),
   };
 
   const mockQuery = {
@@ -41,10 +54,19 @@ describe('AbstractRepository', () => {
     constructor: jest.fn().mockImplementation(() => mockDocument),
   };
 
-  const modelConstructorMock = jest.fn().mockImplementation((dto) => ({
-    ...dto,
-    save: jest.fn().mockResolvedValue({ ...dto, _id: new Types.ObjectId() }),
-  }));
+  const modelConstructorMock = jest
+    .fn()
+    .mockImplementation((dto: Partial<MockDocument>) => {
+      const doc = {
+        _id: new Types.ObjectId(),
+        name: '',
+        ...dto,
+        save: jest
+          .fn()
+          .mockResolvedValue({ ...dto, _id: new Types.ObjectId() }),
+      };
+      return doc as unknown as MockDocument;
+    });
 
   Object.assign(modelConstructorMock, mockModel);
 
@@ -65,10 +87,10 @@ describe('AbstractRepository', () => {
           useFactory: (model: Model<MockDocument>, connection: Connection) => {
             return new MockRepository(model, connection);
           },
-          inject: [getModelToken(MockDocument.name), 'DatabaseConnection'],
+          inject: [getModelToken(MOCK_MODEL_NAME), 'DatabaseConnection'],
         },
         {
-          provide: getModelToken(MockDocument.name),
+          provide: getModelToken(MOCK_MODEL_NAME),
           useValue: modelConstructorMock,
         },
         {
@@ -78,7 +100,7 @@ describe('AbstractRepository', () => {
       ],
     }).compile();
 
-    model = module.get(getModelToken(MockDocument.name));
+    model = module.get(getModelToken(MOCK_MODEL_NAME));
     connection = module.get('DatabaseConnection');
     repository = new MockRepository(model, connection);
 
@@ -104,10 +126,11 @@ describe('AbstractRepository', () => {
 
   describe('findOne', () => {
     it('should return a document if found', async () => {
+      const findOneSpy = jest.spyOn(model, 'findOne');
       mockQuery.exec.mockResolvedValue(mockDocument);
       const result = await repository.findOne({ _id: mockDocument._id });
       expect(result).toEqual(mockDocument);
-      expect(model.findOne).toHaveBeenCalled();
+      expect(findOneSpy).toHaveBeenCalled();
       expect(mockQuery.exec).toHaveBeenCalled();
     });
 
@@ -159,10 +182,11 @@ describe('AbstractRepository', () => {
 
   describe('find', () => {
     it('should return array of documents', async () => {
+      const findSpy = jest.spyOn(model, 'find');
       mockQuery.exec.mockResolvedValue([mockDocument]);
       const result = await repository.find({});
       expect(result).toEqual([mockDocument]);
-      expect(model.find).toHaveBeenCalled();
+      expect(findSpy).toHaveBeenCalled();
     });
 
     it('should populate fields if options provided in find', async () => {
@@ -192,8 +216,13 @@ describe('AbstractRepository', () => {
   describe('startTransaction', () => {
     it('should start a session and transaction', async () => {
       const session = await repository.startTransaction();
-      expect(mockConnection.startSession).toHaveBeenCalled();
-      expect(session.startTransaction).toHaveBeenCalled();
+
+      expect(mockConnection.startSession).toHaveBeenCalledWith();
+
+      expect(
+        (session as unknown as { startTransaction: jest.Mock })
+          .startTransaction,
+      ).toHaveBeenCalledWith();
     });
   });
 });

@@ -4,9 +4,8 @@
  * @responsibility Initializes the NestJS application, global modules, and feature modules.
  */
 
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { LoggerModule } from 'nestjs-pino';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ChallengesModule } from './modules/challenges/challenges.module';
@@ -19,6 +18,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
 import { UsersModule } from './modules/users/users.module';
+import { CorrelationMiddleware } from './common/middleware/correlation.middleware';
 
 @Module({
   imports: [
@@ -35,7 +35,7 @@ import { UsersModule } from './modules/users/users.module';
     LoggerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const nodeEnv = configService.get('NODE_ENV') || 'development';
+        const nodeEnv = configService.get<string>('NODE_ENV') ?? 'development';
         const isProduction = nodeEnv === 'production';
         const isTest = nodeEnv === 'test';
 
@@ -43,16 +43,10 @@ import { UsersModule } from './modules/users/users.module';
           return { pinoHttp: { level: 'silent' } };
         }
 
+        // Note: pino-pretty transport disabled due to webpack bundling issues
+        // For pretty logs in dev, pipe output: npm run start:dev | npx pino-pretty
         return {
           pinoHttp: {
-            transport: isProduction
-              ? undefined
-              : {
-                  target: 'pino-pretty',
-                  options: {
-                    singleLine: true,
-                  },
-                },
             level: isProduction ? 'info' : 'debug',
           },
         };
@@ -72,4 +66,13 @@ import { UsersModule } from './modules/users/users.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  /**
+   * Configures middleware for all routes.
+   * @param consumer - Middleware consumer for route configuration
+   */
+  configure(consumer: MiddlewareConsumer): void {
+    // Apply correlation middleware to all routes for distributed tracing
+    consumer.apply(CorrelationMiddleware).forRoutes('*');
+  }
+}

@@ -8,38 +8,54 @@ import { GlobalExceptionFilter } from '../src/common/filters/global-exception.fi
 import { DatabaseModule } from '../src/database/database.module';
 import { TestDatabaseModule } from './test-database.module';
 
+/**
+ * Creates a NestJS application instance for E2E testing.
+ * Overrides the database module with TestDatabaseModule for test isolation.
+ * @returns Initialized NestJS application
+ */
 export async function createTestApp(): Promise<INestApplication> {
-  const moduleFixture: TestingModule = await Test.createTestingModule({
-    imports: [AppModule],
-  })
-    .overrideModule(DatabaseModule)
-    .useModule(TestDatabaseModule)
-    .compile();
+  try {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    })
+      .overrideModule(DatabaseModule)
+      .useModule(TestDatabaseModule)
+      .compile();
 
-  const app = moduleFixture.createNestApplication();
+    const app = moduleFixture.createNestApplication();
 
-  // Apply global pipes/filters/interceptors to match main.ts
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
-  app.useGlobalInterceptors(new TransformInterceptor());
-  app.useGlobalFilters(new GlobalExceptionFilter());
+    // Apply global pipes/filters/interceptors to match main.ts
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        forbidNonWhitelisted: true,
+      }),
+    );
+    app.useGlobalInterceptors(new TransformInterceptor());
+    app.useGlobalFilters(new GlobalExceptionFilter());
 
-  await app.init();
-  return app;
+    await app.init();
+    return app;
+  } catch (error) {
+    console.error('Failed to create test app:', error);
+    throw error;
+  }
 }
 
-export async function closeTestApp(app: INestApplication) {
+/**
+ * Closes the test application and disconnects from MongoDB.
+ * @param app - NestJS application instance to close
+ */
+export async function closeTestApp(app: INestApplication): Promise<void> {
   try {
-    if (mongoose.connection.readyState !== (0 as any)) {
+    // Connection states: 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
+    const state: number = mongoose.connection.readyState as number;
+    if (state !== 0 && state !== 3) {
       await mongoose.disconnect();
     }
   } catch {
-    // console.error('Error disconnecting Mongoose:', e);
+    // Ignore disconnect errors
   }
   if (app) {
     await app.close();

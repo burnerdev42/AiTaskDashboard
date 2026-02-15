@@ -46,7 +46,10 @@ describe('ChallengesService', () => {
       jest
         .spyOn(repository, 'create')
         .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
-      const dto = { title: 'Test', description: 'Test Desc' } as unknown as CreateChallengeDto;
+      const dto = {
+        title: 'Test',
+        description: 'Test Desc',
+      } as unknown as CreateChallengeDto;
       const result = await service.create(dto);
       expect(result).toEqual(mockChallenge);
       expect(repository.create).toHaveBeenCalledWith(dto);

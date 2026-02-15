@@ -16,11 +16,11 @@ interface ChallengeResponse {
 
 describe('ChallengesController (e2e)', () => {
   let app: INestApplication;
+  let createdId: string;
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
     app = await createTestApp();
-  });
+  }, 60000);
 
   afterAll(async () => {
     await closeTestApp(app);
@@ -33,8 +33,6 @@ describe('ChallengesController (e2e)', () => {
     priority: Priority.MEDIUM,
   };
 
-  let createdId: string;
-
   it('/challenges (POST) - Success', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
     const response = await request(server)
@@ -43,11 +41,10 @@ describe('ChallengesController (e2e)', () => {
       .expect(201);
 
     const body = response.body as ApiResponse<ChallengeResponse>;
-    if (body.data) {
-      expect(body.data).toHaveProperty('_id');
-      expect(body.data.title).toEqual(challengeDto.title);
-      createdId = body.data._id;
-    }
+    expect(body.data).toBeDefined();
+    expect(body.data!._id).toBeDefined();
+    expect(body.data!.title).toEqual(challengeDto.title);
+    createdId = body.data!._id;
   });
 
   it('/challenges (POST) - Fail (Validation)', () => {
@@ -55,39 +52,36 @@ describe('ChallengesController (e2e)', () => {
     return request(server).post('/challenges').send({}).expect(400);
   });
 
-  it('/challenges (GET)', () => {
+  it('/challenges (GET)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
-      .get('/challenges')
-      .expect(200)
-      .expect((res: { body: ApiResponse<ChallengeResponse[]> }) => {
-        expect(Array.isArray(res.body.data)).toBe(true);
-      });
+    const response = await request(server).get('/challenges').expect(200);
+
+    const body = response.body as ApiResponse<ChallengeResponse[]>;
+    expect(body.data).toBeDefined();
+    expect(Array.isArray(body.data)).toBe(true);
   });
 
-  it('/challenges/:id (GET)', () => {
+  it('/challenges/:id (GET)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .get(`/challenges/${createdId}`)
-      .expect(200)
-      .expect((res: { body: ApiResponse<ChallengeResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data.title).toEqual(challengeDto.title);
-        }
-      });
+      .expect(200);
+
+    const body = response.body as ApiResponse<ChallengeResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.title).toEqual(challengeDto.title);
   });
 
-  it('/challenges/:id (PUT)', () => {
+  it('/challenges/:id (PUT)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .put(`/challenges/${createdId}`)
       .send({ title: 'Updated E2E Title' })
-      .expect(200)
-      .expect((res: { body: ApiResponse<ChallengeResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data.title).toEqual('Updated E2E Title');
-        }
-      });
+      .expect(200);
+
+    const body = response.body as ApiResponse<ChallengeResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.title).toEqual('Updated E2E Title');
   });
 
   it('/challenges/:id (DELETE)', () => {

@@ -14,10 +14,11 @@ interface IdeaResponse {
 
 describe('IdeasController (e2e)', () => {
   let app: INestApplication;
+  let createdId: string;
 
   beforeAll(async () => {
     app = await createTestApp();
-  });
+  }, 60000);
 
   afterAll(async () => {
     await closeTestApp(app);
@@ -29,8 +30,6 @@ describe('IdeasController (e2e)', () => {
     status: IdeaStatus.IDEATION,
   };
 
-  let createdId: string;
-
   it('/ideas (POST) - Success', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
     const response = await request(server)
@@ -39,11 +38,10 @@ describe('IdeasController (e2e)', () => {
       .expect(201);
 
     const body = response.body as ApiResponse<IdeaResponse>;
-    if (body.data) {
-      expect(body.data).toHaveProperty('_id');
-      expect(body.data.title).toEqual(ideaDto.title);
-      createdId = body.data._id;
-    }
+    expect(body.data).toBeDefined();
+    expect(body.data!._id).toBeDefined();
+    expect(body.data!.title).toEqual(ideaDto.title);
+    createdId = body.data!._id;
   });
 
   it('/ideas (POST) - Fail (Validation)', () => {
@@ -51,39 +49,36 @@ describe('IdeasController (e2e)', () => {
     return request(server).post('/ideas').send({}).expect(400);
   });
 
-  it('/ideas (GET)', () => {
+  it('/ideas (GET)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
-      .get('/ideas')
-      .expect(200)
-      .expect((res: { body: ApiResponse<IdeaResponse[]> }) => {
-        expect(Array.isArray(res.body.data)).toBe(true);
-      });
+    const response = await request(server).get('/ideas').expect(200);
+
+    const body = response.body as ApiResponse<IdeaResponse[]>;
+    expect(body.data).toBeDefined();
+    expect(Array.isArray(body.data)).toBe(true);
   });
 
-  it('/ideas/:id (GET)', () => {
+  it('/ideas/:id (GET)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .get(`/ideas/${createdId}`)
-      .expect(200)
-      .expect((res: { body: ApiResponse<IdeaResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data.title).toEqual(ideaDto.title);
-        }
-      });
+      .expect(200);
+
+    const body = response.body as ApiResponse<IdeaResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.title).toEqual(ideaDto.title);
   });
 
-  it('/ideas/:id (PUT)', () => {
+  it('/ideas/:id (PUT)', async () => {
     const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server)
+    const response = await request(server)
       .put(`/ideas/${createdId}`)
       .send({ title: 'Updated E2E Idea Title' })
-      .expect(200)
-      .expect((res: { body: ApiResponse<IdeaResponse> }) => {
-        if (res.body.data) {
-          expect(res.body.data.title).toEqual('Updated E2E Idea Title');
-        }
-      });
+      .expect(200);
+
+    const body = response.body as ApiResponse<IdeaResponse>;
+    expect(body.data).toBeDefined();
+    expect(body.data!.title).toEqual('Updated E2E Idea Title');
   });
 
   it('/ideas/:id (DELETE)', () => {

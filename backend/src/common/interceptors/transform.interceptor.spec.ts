@@ -1,10 +1,10 @@
 import { TransformInterceptor } from './transform.interceptor';
-import { CallHandler } from '@nestjs/common';
+import { CallHandler, ExecutionContext } from '@nestjs/common';
 import { of } from 'rxjs';
 import { ApiStatus } from '../enums/api-status.enum';
 
 describe('TransformInterceptor', () => {
-  let interceptor: TransformInterceptor<any>;
+  let interceptor: TransformInterceptor<unknown>;
 
   beforeEach(() => {
     interceptor = new TransformInterceptor();
@@ -19,14 +19,23 @@ describe('TransformInterceptor', () => {
       handle: () => of('test data'),
     };
 
-    const mockExecutionContext = {
+    const mockExecutionContext: ExecutionContext = {
       switchToHttp: () => ({
         getRequest: () => ({
           id: 'test-id',
           headers: {},
         }),
+        getResponse: jest.fn(),
+        getNext: jest.fn(),
       }),
-    } as any;
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      getType: jest.fn(),
+      getClass: jest.fn(),
+      getHandler: jest.fn(),
+      getArgs: jest.fn(),
+      getArgByIndex: jest.fn(),
+    } as unknown as ExecutionContext;
 
     interceptor
       .intercept(mockExecutionContext, mockCallHandler)
