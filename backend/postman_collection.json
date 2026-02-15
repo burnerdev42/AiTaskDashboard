@@ -1,0 +1,163 @@
+{
+    "info": {
+        "_postman_id": "b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e",
+        "name": "AiTaskDashboard API",
+        "description": "Collection for AiTaskDashboard Backend API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"name\": \"Test User\",\n    \"role\": \"User\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/register",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Dashboard",
+            "item": [
+                {
+                    "name": "Get Swimlanes",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/dashboard/swimlanes",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "swimlanes"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Challenges",
+            "item": [
+                {
+                    "name": "Get All Challenges",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Challenge",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"New Challenge\",\n    \"description\": \"Description here\",\n    \"stage\": \"Ideation\",\n    \"priority\": \"High\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Ideas",
+            "item": [
+                {
+                    "name": "Get All Ideas",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/ideas",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "ideas"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000/api",
+            "type": "string"
+        }
+    ]
+}
