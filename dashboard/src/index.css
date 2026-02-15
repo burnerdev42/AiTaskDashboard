@@ -2993,16 +2993,19 @@ body {
   background: linear-gradient(135deg, var(--accent-yellow, #ffee58), var(--accent-orange));
   border: none;
   color: #0d0f1a;
-  padding: 9px 22px;
+  padding: 0 20px;
+  height: 38px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   transition: all .2s;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
+  white-space: nowrap;
 }
 
 .ideas-btn-new:hover {
@@ -3782,10 +3785,13 @@ body {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 24px 16px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 14px;
+  text-align: center;
+  gap: 12px;
   transition: all .25s;
 }
 
@@ -3797,14 +3803,15 @@ body {
 
 .kpi-icon {
   font-size: 24px;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   background: var(--bg-card);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-bottom: 4px;
 }
 
 .kpi-content {
@@ -6140,4 +6147,884 @@ svg {
   background-color: rgba(239, 83, 80, 0.15);
   color: #ef5350 !important;
   transform: scale(1.1);
+}
+
+
+/* ── Filter Dropdown Styles ────────────────── */
+.desktop-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mobile-filters {
+  display: none;
+  width: 100%;
+}
+
+.mobile-filter-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mobile-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.mobile-filter-select {
+  width: 100%;
+  appearance: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.mobile-filter-select:focus {
+  outline: none;
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 3px rgba(38, 198, 218, .15);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 10px;
+  pointer-events: none;
+}
+
+/* ── Button Wraps ── */
+.join-btn,
+.carousel-btn {
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Mobile & Tablet
+   ═══════════════════════════════════════════════ */
+
+/* ── Toolbar Actions Helper ────────────────── */
+.ideas-toolbar-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ── User Controls (Profile + Bell) ────────── */
+.header-user-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Hamburger Button (hidden on desktop) ──── */
+.hamburger-btn {
+  display: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+  z-index: 120;
+}
+
+.hamburger-btn:hover {
+  border-color: var(--accent-teal);
+  background: var(--bg-card-hover);
+}
+
+/* ── Mobile Nav Backdrop ──────────────────── */
+.mobile-nav-backdrop {
+  display: none;
+}
+
+/* ── Mobile Lane Tabs (hidden on desktop) ── */
+.mobile-lane-tabs {
+  display: none;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-lane-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-lane-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all .2s;
+}
+
+.mobile-lane-tab:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-muted);
+}
+
+.mobile-lane-tab.active {
+  background: var(--bg-card);
+  border-color: var(--tab-color, var(--accent-teal));
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+.mobile-lane-tab-icon {
+  font-size: 14px;
+}
+
+.mobile-lane-tab-label {
+  font-size: 11px;
+}
+
+.mobile-lane-tab-count {
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* ═══ ≤ 1024px — Tablet Landscape ═══ */
+@media (max-width: 1024px) {
+  .header-band {
+    padding: 14px 24px;
+  }
+
+  .carousel-section,
+  .team-section,
+  .success-strip {
+    padding: 28px 24px;
+  }
+
+  .newsletter-section {
+    padding: 40px 24px;
+  }
+
+  .detail-page-header {
+    padding: 22px 24px;
+  }
+
+  .detail-page-header-top {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .detail-page-header-right {
+    align-self: flex-start;
+  }
+
+  .submit-challenge-container {
+    padding: 28px 24px;
+  }
+
+  .notifications-page {
+    padding: 24px 20px 48px;
+  }
+
+  .footer {
+    padding: 14px 16px;
+  }
+}
+
+/* ═══ ≤ 768px — Tablet & Mobile ═══ */
+@media (max-width: 768px) {
+
+  /* ── Header: show hamburger, collapse nav ── */
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .header-band {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .header-logo {
+    width: 38px;
+    height: 38px;
+    font-size: 28px;
+  }
+
+  .header-left {
+    gap: 12px;
+  }
+
+  .header-titles h1 {
+    font-size: 16px;
+    letter-spacing: 4px;
+  }
+
+  .header-titles p {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .header-right {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, #15395f 0%, #0a1929 100%);
+    border-bottom: 2px solid var(--accent-teal);
+    flex-direction: column;
+    padding: 16px 20px;
+    gap: 6px;
+    z-index: 110;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+  }
+
+  .header-right.mobile-nav-open {
+    display: flex;
+  }
+
+  .header-right .nav-link {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    text-align: left;
+  }
+
+  .header-right .nav-link.active {
+    background: rgba(232, 167, 88, .15);
+  }
+
+  .header-right .header-user-controls {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .header-right .notification-wrapper {
+    width: auto;
+    padding: 0;
+  }
+
+  .header-right .avatar {
+    align-self: center;
+    margin-top: 0;
+  }
+
+  /* Mobile backdrop */
+  .mobile-nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    z-index: 105;
+  }
+
+  /* ── Notification Panel on Mobile ── */
+  .notification-panel {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 16px 16px 0 0;
+    z-index: 300;
+  }
+
+  /* ── Carousel Section ── */
+  .carousel-section {
+    padding: 24px 16px;
+  }
+
+  .carousel-header h2 {
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+
+  .challenge-card {
+    padding: 20px 18px;
+  }
+
+  .challenge-card h3 {
+    font-size: 17px;
+  }
+
+  .challenge-right {
+    flex-direction: column;
+  }
+
+  .challenge-stat {
+    min-width: unset;
+    padding: 12px 16px;
+  }
+
+  .challenge-top {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── Metrics Dashboard on Home ── */
+  .metrics-dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .metric-panel {
+    padding: 14px 16px;
+  }
+
+  /* ── Success Stories ── */
+  .success-strip {
+    padding: 24px 16px;
+  }
+
+  .story-card {
+    min-width: 260px;
+  }
+
+  .strip-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* ── Team Section ── */
+  .team-section {
+    padding: 28px 16px;
+  }
+
+  .team-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .team-card {
+    min-width: 200px;
+    max-width: 200px;
+  }
+
+  .team-join-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* ── Newsletter ── */
+  .newsletter-section {
+    padding: 36px 16px;
+  }
+
+  .newsletter-section h2 {
+    font-size: 22px;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-btn {
+    width: 100%;
+  }
+
+  /* ── Flow Banner ── */
+  .flow-banner {
+    padding: 8px 16px;
+    font-size: 10px;
+    gap: 8px;
+  }
+
+  /* ── Swim Lanes ── */
+  .mobile-lane-tabs {
+    display: flex;
+  }
+
+  .flow-banner {
+    display: none;
+  }
+
+  .lanes-wrapper {
+    flex-direction: column;
+    padding: 0;
+    min-height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .lane {
+    min-width: unset;
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .lane.w-sm,
+  .lane.w-md {
+    min-width: unset;
+    flex: unset;
+  }
+
+  /* Hide inactive lanes, show active lane */
+  .lane.lane-mobile-hidden {
+    display: none;
+  }
+
+  .lane.lane-mobile-active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .lane-body {
+    max-height: none;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .lane-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg-secondary);
+  }
+
+  /* ── Detail Pages ── */
+  .detail-page-container {
+    padding: 16px 12px;
+  }
+
+  .detail-page-header {
+    padding: 18px 16px;
+  }
+
+  .detail-page-title {
+    font-size: 20px;
+  }
+
+  .detail-content-section {
+    padding: 20px 16px;
+  }
+
+  .detail-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-meta-row {
+    gap: 14px;
+  }
+
+  .detail-action-buttons {
+    flex-wrap: wrap;
+  }
+
+  /* ── Ideas / Solutions Cards ── */
+  .ideas-cards-grid {
+    grid-template-columns: 1fr;
+    padding: 18px 14px;
+    gap: 16px;
+  }
+
+  .ideas-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .ideas-toolbar-left {
+    width: 100%;
+  }
+
+  .ideas-toolbar-filters {
+    width: 100%;
+    margin-top: 8px;
+    display: block;
+  }
+
+  .desktop-filters {
+    display: none;
+  }
+
+  .mobile-filters {
+    display: block;
+  }
+
+  .ideas-toolbar-actions {
+    width: 100%;
+  }
+
+  .ideas-toolbar-actions input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ── Submit Challenge ── */
+  .submit-challenge-container {
+    padding: 20px 14px;
+  }
+
+  .submit-form-section {
+    padding: 20px 16px;
+  }
+
+  .submit-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-impact-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-form-actions {
+    padding: 16px;
+    flex-direction: column;
+  }
+
+  .submit-form-actions .btn {
+    width: 100%;
+  }
+
+  /* ── Register / Login ── */
+  .register-page-container {
+    margin: 32px auto;
+    padding: 0 14px 48px;
+  }
+
+  .form-card {
+    padding: 28px 20px 28px;
+  }
+
+  .form-header {
+    margin-bottom: 24px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  /* ── Metrics Page ── */
+  .metrics-page {
+    padding: 16px 12px 36px;
+  }
+
+  .metrics-kpi-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metrics-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Notifications Page ── */
+  .notifications-page {
+    padding: 20px 14px 48px;
+  }
+
+  .notifications-page .page-header h1 {
+    font-size: 24px;
+  }
+
+  .filter-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 8px;
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+  }
+
+  .filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .notif-card {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+
+  .notif-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .notif-title {
+    font-size: 14px;
+  }
+
+  /* ── Modal ── */
+  .detail-modal-dialog {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .detail-modal-header {
+    padding: 16px 20px;
+  }
+
+  .detail-modal-body {
+    padding: 20px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 14px 12px;
+    font-size: 10px;
+  }
+}
+
+/* ═══ ≤ 480px — Small Phones ═══ */
+@media (max-width: 480px) {
+  .header-titles h1 {
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .header-titles p {
+    display: none;
+  }
+
+  .header-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+  }
+
+  .header-left {
+    gap: 10px;
+  }
+
+  /* ── Carousel ── */
+  .carousel-section {
+    padding: 18px 12px;
+  }
+
+  .carousel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .carousel-header h2 {
+    font-size: 13px;
+  }
+
+  .challenge-card {
+    padding: 16px 14px;
+  }
+
+  .challenge-card h3 {
+    font-size: 15px;
+  }
+
+  .challenge-card .challenge-desc {
+    font-size: 12px;
+  }
+
+  .challenge-stat .stat-info .stat-value {
+    font-size: 18px;
+  }
+
+  /* ── Metrics Dashboard (Home) ── */
+  .metrics-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── KPI Cards ── */
+  .metrics-kpi-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-kpi-card {
+    padding: 14px 16px;
+  }
+
+  .kpi-value {
+    font-size: 18px;
+  }
+
+  /* ── Swim Lanes ── */
+  .mobile-lane-tab {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .lanes-wrapper {
+    padding: 8px;
+  }
+
+  .lane-header h3 {
+    font-size: 11px;
+    letter-spacing: 1.2px;
+  }
+
+  /* ── Success Stories ── */
+  .story-card {
+    min-width: 230px;
+    padding: 14px;
+  }
+
+  /* ── Team ── */
+  .team-card {
+    min-width: 170px;
+    max-width: 170px;
+    padding: 18px 14px;
+  }
+
+  .team-avatar {
+    width: 52px;
+    height: 52px;
+    font-size: 18px;
+  }
+
+  /* ── Newsletter ── */
+  .newsletter-section h2 {
+    font-size: 18px;
+  }
+
+  .newsletter-icon {
+    font-size: 36px;
+  }
+
+  /* ── Detail Pages ── */
+  .detail-page-title {
+    font-size: 18px;
+  }
+
+  .detail-page-subtitle {
+    font-size: 13px;
+  }
+
+  .detail-section-title {
+    font-size: 15px;
+  }
+
+  .detail-page-header-right {
+    flex-wrap: wrap;
+  }
+
+  /* ── Metrics Page ── */
+  .value-hero-amount {
+    font-size: 32px;
+  }
+
+  .engagement-hero-count {
+    font-size: 22px;
+  }
+
+  .m-panel-body {
+    padding: 16px;
+  }
+
+  .m-panel-header {
+    padding: 16px 16px 12px;
+  }
+
+  .funnel-row {
+    grid-template-columns: 60px 1fr 50px;
+  }
+
+  .funnel-row-count {
+    font-size: 16px;
+  }
+
+  .velocity-summary {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  /* ── Forms ── */
+  .form-card {
+    padding: 22px 16px;
+  }
+
+  .form-header .icon-circle {
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+
+  .form-header h2 {
+    font-size: 20px;
+  }
+
+  .submit-challenge-title {
+    font-size: 20px;
+  }
+
+  .submit-form-section {
+    padding: 16px 14px;
+  }
+
+  .submit-form-actions {
+    padding: 14px;
+  }
+
+  /* ── Notifications ── */
+  .notifications-page .page-header h1 {
+    font-size: 20px;
+  }
+
+  .notif-card {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .notif-icon {
+    align-self: flex-start;
+  }
+
+  .notif-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    font-size: 9px;
+    padding: 12px 10px;
+  }
 }
