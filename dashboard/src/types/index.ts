@@ -7,6 +7,9 @@ export interface User {
     role: string;
     email: string;
     password?: string; // In a real app, this wouldn't be here like this
+    opco?: string;
+    platform?: string;
+    interests?: string[];
 }
 
 export interface Challenge {

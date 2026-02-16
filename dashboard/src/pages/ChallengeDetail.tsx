@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { challengeDetails } from '../data/challengeData';
 import type { ChallengeDetailData } from '../types';
 
 export const ChallengeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
+    const { isAuthenticated } = useAuth();
     const [searchParams] = useSearchParams();
     const [challenge, setChallenge] = useState<ChallengeDetailData | null>(null);
     const [editMode, setEditMode] = useState(false);
@@ -220,7 +223,7 @@ export const ChallengeDetail: React.FC = () => {
 
                         <div className="detail-comment-box">
                             <textarea className="detail-comment-input" placeholder="Add a comment..." value={comment} onChange={e => setComment(e.target.value)} />
-                            <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>💬 Post Comment</button>
+                            <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } /* post comment logic */ }}>💬 Post Comment</button>
                         </div>
                     </div>
                 </div>
@@ -252,7 +255,7 @@ export const ChallengeDetail: React.FC = () => {
                     <div className="detail-sidebar-section">
                         <div className="detail-sidebar-title">
                             <span>💡 Solution Ideas</span>
-                            <button className="add-idea-btn" onClick={() => setShowIdeaModal(true)}>✨ Add Idea</button>
+                            <button className="add-idea-btn" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>✨ Add Idea</button>
                         </div>
                         <div className="detail-ideas-list">
                             {challenge.ideas.map(idea => (
@@ -293,7 +296,7 @@ export const ChallengeDetail: React.FC = () => {
                         <div className="detail-sidebar-title">⚡ Quick Actions</div>
                         <div className="detail-quick-actions">
                             <button className="btn btn-secondary">👍 Vote for This</button>
-                            <button className="btn btn-secondary" onClick={() => setShowIdeaModal(true)}>💡 Submit Idea</button>
+                            <button className="btn btn-secondary" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>💡 Submit Idea</button>
                             <button className="btn btn-secondary">🔔 Subscribe</button>
                             <button className="btn btn-danger">🗑️ Delete</button>
                         </div>

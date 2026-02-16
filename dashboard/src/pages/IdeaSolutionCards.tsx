@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { challengeCards } from '../data/challengeData';
+import { SubmitChallengeModal } from '../components/challenges/SubmitChallengeModal';
 
 const IMPACT_FILTERS = ['All', 'Critical', 'High', 'Medium', 'Low'];
 const IMPACT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -18,8 +20,19 @@ const STAGE_COLORS: Record<string, string> = {
 
 export const IdeaSolutionCards: React.FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { isAuthenticated } = useAuth();
     const [activeFilter, setActiveFilter] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleNewChallenge = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+        setIsModalOpen(true);
+    };
 
     const filteredCards = challengeCards.filter(card => {
         // Impact filter
@@ -92,7 +105,7 @@ export const IdeaSolutionCards: React.FC = () => {
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
-                    <button className="ideas-btn-new" onClick={() => navigate('/challenges/submit')}>
+                    <button className="ideas-btn-new" onClick={handleNewChallenge}>
                         ✨ New Challenge
                     </button>
                 </div>
@@ -178,6 +191,7 @@ export const IdeaSolutionCards: React.FC = () => {
                     );
                 })}
             </div>
+            <SubmitChallengeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </>
     );
 };
