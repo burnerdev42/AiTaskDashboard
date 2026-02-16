@@ -119,7 +119,7 @@ export const Header: React.FC = () => {
                     </div>
 
                     {user ? (
-                        <div className="avatar" title={user.name} onClick={() => { logout(); closeMobileNav(); }} style={{ cursor: 'pointer' }}>
+                        <div className="avatar" title={user.name} onClick={() => { navigate('/profile'); closeMobileNav(); }} style={{ cursor: 'pointer' }}>
                             {user.avatar}
                         </div>
                     ) : (
