@@ -8,6 +8,7 @@ interface AuthContextType {
     login: (email: string) => Promise<boolean>;
     logout: () => void;
     register: (name: string, email: string) => Promise<boolean>;
+    updateUser: (data: Partial<User>) => Promise<boolean>;
     isAuthenticated: boolean;
 }
 
@@ -63,8 +64,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return true;
     };
 
+    const updateUser = async (updatedData: Partial<User>): Promise<boolean> => {
+        if (!user) return false;
+
+        const updatedUser = { ...user, ...updatedData };
+        if (storage.updateUser(updatedUser)) {
+            setUser(updatedUser);
+            return true;
+        }
+        return false;
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, register, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, login, logout, register, updateUser, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );

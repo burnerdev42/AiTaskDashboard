@@ -56,6 +56,23 @@ export const storage = {
         localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
     },
 
+    updateUser: (updatedUser: User) => {
+        const users = storage.getUsers();
+        const index = users.findIndex(u => u.email === updatedUser.email);
+        if (index !== -1) {
+            users[index] = { ...users[index], ...updatedUser };
+            localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+
+            // Also update current user if it matches
+            const currentUser = storage.getCurrentUser();
+            if (currentUser && currentUser.email === updatedUser.email) {
+                storage.setCurrentUser(users[index]);
+            }
+            return true;
+        }
+        return false;
+    },
+
     updateChallenge: (challenge: Challenge) => {
         const challenges = storage.getChallenges();
         const index = challenges.findIndex(c => c.id === challenge.id);

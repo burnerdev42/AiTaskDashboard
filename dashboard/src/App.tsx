@@ -12,6 +12,7 @@ import { Notifications } from './pages/Notifications';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -22,12 +23,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/swimlanes" element={<SwimLanes />} />
             <Route path="/challenges" element={<IdeaSolutionCards />} />
-            <Route path="/challenges/submit" element={<SubmitChallenge />} />
+            <Route path="/challenges/submit" element={<ProtectedRoute><SubmitChallenge /></ProtectedRoute>} />
             <Route path="/challenges/:id" element={<ChallengeDetail />} />
             <Route path="/challenges/:challengeId/ideas/:ideaId" element={<IdeaDetail />} />
             <Route path="/metrics" element={<Metrics />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Route>
