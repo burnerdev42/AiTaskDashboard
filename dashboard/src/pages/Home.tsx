@@ -5,8 +5,10 @@ import { storage } from '../services/storage';
 import { type Challenge } from '../types';
 
 import { TeamMember } from '../components/ui/TeamMember';
+import { useAuth } from '../context/AuthContext';
 
 export const Home: React.FC = () => {
+    const { isAuthenticated } = useAuth();
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const isPaused = useRef(false);
@@ -84,11 +86,11 @@ export const Home: React.FC = () => {
                         <div className="donut-hole">11</div>
                     </div>
                     <div className="legend">
-                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-green)' }}></span> Scale (1)</div>
-                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-blue)' }}></span> Pilot (3)</div>
-                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-orange)' }}></span> Prototype (2)</div>
-                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-purple)' }}></span> Ideation (4)</div>
-                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--text-muted)' }}></span> Parked (1)</div>
+                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-gold)' }}></span> Scaled & Deployed (1)</div>
+                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-blue)' }}></span> POC & Pilot (3)</div>
+                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-yellow)' }}></span> Ideation & Evaluation (2)</div>
+                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-red)' }}></span> Challenge Submitted (4)</div>
+                        <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-grey)' }}></span> Parking Lot (1)</div>
                     </div>
                 </div>
 
@@ -102,35 +104,33 @@ export const Home: React.FC = () => {
                         <span className="metric-label">Pilot Success Rate</span>
                         <span className="metric-value green">78%</span>
                     </div>
-                    <div className="metric-row">
-                        <span className="metric-label">ROI (Scaled)</span>
-                        <span className="metric-value blue">3.2×</span>
-                    </div>
-                    <div className="metric-row">
-                        <span className="metric-label">At-Risk Items</span>
-                        <span className="metric-value red">2</span>
-                    </div>
                 </div>
 
                 {/* Panel 3 simplified for React without specific charting lib availability yet, matching HTML structure */}
                 <div className="metric-panel">
                     <h3>📈 Monthly Throughput</h3>
                     <div className="spark-bars">
-                        {[35, 50, 40, 65, 55, 80, 70, 90, 75, 60, 85, 95].map((h, i) => (
-                            <div key={i} className="spark-bar" style={{ height: `${h}%`, background: i > 8 ? 'var(--accent-green)' : i > 5 ? 'var(--accent-blue)' : 'var(--accent-teal)' }}></div>
+                        {[
+                            { i: 80, c: 22 }, { i: 100, c: 30 },
+                            { i: 85, c: 24 }, { i: 70, c: 19 }, { i: 95, c: 28 }, { i: 110, c: 35 }
+                        ].map((d, idx) => (
+                            <div key={idx} className="grouped-month">
+                                <div className="spark-bar ideas" style={{ height: `${d.i / 1.2}%`, animationDelay: `${0.5 + idx * 0.08}s` }}></div>
+                                <div className="spark-bar challenges" style={{ height: `${d.c * 2}%`, animationDelay: `${0.5 + idx * 0.08 + 0.03}s` }}></div>
+                            </div>
                         ))}
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                        <span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+                        <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
                     </div>
                     <div style={{ marginTop: '14px' }}>
                         <div className="metric-row">
-                            <span className="metric-label">Ideas Submitted</span>
-                            <span className="metric-value teal" style={{ fontSize: '18px' }}>27</span>
+                            <span className="metric-label dot yellow">Idea Submissions</span>
+                            <span className="metric-value yellow" style={{ fontSize: '18px' }}>27</span>
                         </div>
                         <div className="metric-row">
-                            <span className="metric-label">Moved to Scale</span>
-                            <span className="metric-value green" style={{ fontSize: '18px' }}>4</span>
+                            <span className="metric-label dot orange">Challenge Submissions</span>
+                            <span className="metric-value orange" style={{ fontSize: '18px' }}>8</span>
                         </div>
                     </div>
                 </div>
@@ -260,13 +260,15 @@ export const Home: React.FC = () => {
                     <TeamMember avatar="SC" name="Sourav Chatterjee" role="DevOps Lead" bio="CI/CD evangelist automating deployment pipelines and infrastructure-as-code at scale." stats={{ ideas: 4, automated: 8, deploys: "200+" }} color="orange" />
                 </div>
 
-                <div className="team-join-banner">
-                    <div className="join-text">
-                        <h3>Join the Movement</h3>
-                        <p>Whether you're a developer, designer, data scientist, or domain expert — the Innovation Pipeline is open for everyone. Register today and start turning your ideas into impact.</p>
+                {!isAuthenticated && (
+                    <div className="team-join-banner">
+                        <div className="join-text">
+                            <h3>Join the Movement</h3>
+                            <p>Whether you're a developer, designer, data scientist, or domain expert — the Innovation Pipeline is open for everyone. Register today and start turning your ideas into impact.</p>
+                        </div>
+                        <Link to="/register" className="join-btn">✨ Register & Join</Link>
                     </div>
-                    <Link to="/register" className="join-btn">✨ Register & Join</Link>
-                </div>
+                )}
             </section>
 
             {/* ─── NEWSLETTER SECTION ═══════════════════ */}

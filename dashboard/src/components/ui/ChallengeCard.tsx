@@ -6,27 +6,24 @@ interface ChallengeCardProps {
     challenge: Challenge;
 }
 
-// Helper config for stats display
-const STAT_CONFIG: Record<string, { icon: string; label: string; colorVar: string; color: string }> = {
-    appreciations: { icon: '👍', label: 'Appreciations', colorVar: '--accent-green', color: '#66bb6a' },
-    votes: { icon: '🏆', label: 'Votes', colorVar: '--accent-orange', color: '#ffa726' },
-    comments: { icon: '💬', label: 'Comments', colorVar: '--accent-blue', color: '#f0b870' }, // using header blue-ish gold or standard blue
-    savings: { icon: '💡', label: 'Savings', colorVar: '--accent-purple', color: '#ab47bc' },
-    roi: { icon: '📈', label: 'ROI', colorVar: '--accent-teal', color: '#e8a758' },
-    members: { icon: '👥', label: 'Members', colorVar: '--accent-blue', color: '#42a5f5' },
-    accuracy: { icon: '🎯', label: 'Accuracy', colorVar: '--accent-pink', color: '#ec407a' }, // pink/red
-    active: { icon: '⚡', label: 'Active', colorVar: '--accent-yellow', color: '#ffee58' },
-    alerts: { icon: '🔔', label: 'Alerts', colorVar: '--accent-red', color: '#ef5350' },
-    units: { icon: '📦', label: 'Units', colorVar: '--accent-teal', color: '#26a69a' },
-    methods: { icon: '🔬', label: 'Methods', colorVar: '--accent-gold', color: '#ffd54f' }
+// Helper config for stats display (Standardized set as per user request)
+const STAT_CONFIG: Record<string, { icon: string; label: string; color: string }> = {
+    ideas: { icon: '💡', label: 'Ideas', color: '#ffca28' }, // yellow/gold
+    votes: { icon: '🗳️', label: 'Votes', color: '#ffa726' }, // orange
+    views: { icon: '👁️', label: 'Views', color: '#42a5f5' }, // blue
+    members: { icon: '👥', label: 'Members', color: '#66bb6a' }, // green
+    comments: { icon: '💬', label: 'Comments', color: '#8884d8' } // purple-ish
 };
+
+const REQUIRED_STATS = ['ideas', 'votes', 'views', 'members', 'comments'];
 
 export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
     const navigate = useNavigate();
 
-    // Get first 5 stats to display
-    const displayStats = Object.entries(challenge.stats).slice(0, 5).map(([key, value]) => {
-        const config = STAT_CONFIG[key] || { icon: '🔹', label: key, colorVar: '--text-secondary', color: '#b0bec5' };
+    // Enforce the specific 5 KPIs for every card
+    const displayStats = REQUIRED_STATS.map(key => {
+        const config = STAT_CONFIG[key];
+        const value = challenge.stats[key] ?? 0;
         return { key, value, ...config };
     });
 
@@ -37,16 +34,10 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
             onClick={() => navigate(`/challenges/${challenge.id}`)}
         >
             <div className="challenge-top">
-                <div className="challenge-icon">
-                    {/* Mapping icons based on title or type for now, as they aren't in the data model explicitly yet */}
-                    {challenge.title.includes('Customer') ? '✅' :
-                        challenge.title.includes('Bot') ? '🤖' :
-                            challenge.title.includes('Warehouse') ? '📦' :
-                                challenge.title.includes('Forecasting') ? '🧠' : '📱'}
-                </div>
+                {/* Icon removed as per user request */}
                 <div className="challenge-top-info">
                     <div className="challenge-badge-row">
-                        {challenge.tags?.map(tag => (
+                        {challenge.tags?.filter(tag => tag !== 'Pilot').slice(0, 1).map(tag => (
                             <span key={tag} className={`challenge-badge ${tag === 'Highlighted' ? 'highlighted' : tag === 'Most Appreciated' ? 'appreciated' : 'top-voted'}`}>
                                 {tag === 'Highlighted' && '⭐'}
                                 {tag === 'Most Appreciated' && '🏅'}
@@ -54,12 +45,18 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                                 {' ' + tag}
                             </span>
                         ))}
-                        <span className="challenge-stage-badge">
+                        <span className={`challenge-stage-badge ${challenge.stage.toLowerCase()}`}>
                             {challenge.stage === 'Scale' && '📈'}
                             {challenge.stage === 'Pilot' && '🚀'}
                             {challenge.stage === 'Prototype' && '🔧'}
                             {challenge.stage === 'Ideation' && '💡'}
-                            {' ' + challenge.stage}
+                            {' ' + (
+                                challenge.stage === 'Scale' ? 'Scaled & Deployed' :
+                                    challenge.stage === 'Pilot' ? 'POC & Pilot' :
+                                        challenge.stage === 'Prototype' ? 'Ideation & Evaluation' :
+                                            challenge.stage === 'Ideation' ? 'Challenge Submitted' :
+                                                challenge.stage
+                            )}
                         </span>
                     </div>
                     <h3>{challenge.title}</h3>

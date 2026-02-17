@@ -33,9 +33,9 @@ export const SwimLanes: React.FC = () => {
         badgeBg: string;
     }[] = [
             { id: 'Ideation', title: 'Challenge<br/>Submitted', icon: '🔴', max: 6, widthClass: 'w-sm', color: 'var(--accent-red)', laneClass: 'challenge', widthLabel: 'New problems & opportunities', addLabel: '+ Add Challenge', footerLabel: 'Challenges submitted', badgeBg: 'rgba(239,83,80,.15)' },
-            { id: 'Prototype', title: 'Ideation &<br/>Evaluation', icon: '🟡', max: 15, widthClass: 'w-md', color: 'var(--accent-yellow)', laneClass: 'ideation-evaluation', widthLabel: 'Brainstorm & feasibility', addLabel: '+ Add Idea/Evaluation', footerLabel: 'Ideas available', badgeBg: 'rgba(255,238,88,.12)' },
+            { id: 'Prototype', title: 'Ideation &<br/>Evaluation', icon: '🟡', max: 15, widthClass: 'w-md', color: 'var(--accent-yellow)', laneClass: 'ideation-evaluation', widthLabel: 'Brainstorm & feasibility', addLabel: '+ Add Idea/Evaluation', footerLabel: 'To be Evaluated', badgeBg: 'rgba(255,238,88,.12)' },
             { id: 'Pilot', title: 'POC &<br/>Pilot', icon: '🔵', max: 8, widthClass: 'w-md', color: 'var(--accent-blue)', laneClass: 'poc-pilot', widthLabel: 'Build & validate prototypes', addLabel: '+ Add POC/Pilot', footerLabel: 'Prototypes running', badgeBg: 'rgba(240,184,112,.15)' },
-            { id: 'Scale', title: 'Deployed', icon: '⭐', max: 8, widthClass: 'w-md', color: 'var(--accent-gold)', laneClass: 'deployed', widthLabel: 'Live in production', addLabel: '+ Add Deployment', footerLabel: 'In production', badgeBg: 'rgba(255,213,79,.12)' },
+            { id: 'Scale', title: 'Scaled &<br/>Deployed', icon: '⭐', max: 8, widthClass: 'w-md', color: 'var(--accent-gold)', laneClass: 'deployed', widthLabel: 'Live in production', addLabel: '+ Add Deployment', footerLabel: 'In production', badgeBg: 'rgba(255,213,79,.12)' },
             { id: 'Parking Lot', title: 'Parking<br/>Lot', icon: '⚪', max: 8, widthClass: 'w-sm', color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: '+ Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
         ];
 
