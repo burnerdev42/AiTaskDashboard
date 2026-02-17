@@ -7,6 +7,10 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MetricsService } from './metrics.service';
+import {
+  MetricsSummaryApiResponseDto,
+  ThroughputApiResponseDto,
+} from '../../dto/metrics/metrics-response.dto';
 import { AbstractController } from '../../common';
 
 /**
@@ -23,7 +27,7 @@ export class MetricsController extends AbstractController {
 
   @Get('summary')
   @ApiOperation({ summary: 'Get KPI Summary (ROI, Savings, etc.)' })
-  @ApiResponse({ status: 200, description: 'Metrics summary.' })
+  @ApiResponse({ status: 200, description: 'Metrics summary.', type: MetricsSummaryApiResponseDto })
   async getSummary() {
     const result = await this.metricsService.getSummary();
     return this.success(result, 'Metrics summary retrieved successfully');
@@ -31,7 +35,7 @@ export class MetricsController extends AbstractController {
 
   @Get('throughput')
   @ApiOperation({ summary: 'Get Monthly Throughput Data' })
-  @ApiResponse({ status: 200, description: 'Throughput data.' })
+  @ApiResponse({ status: 200, description: 'Throughput data.', type: ThroughputApiResponseDto })
   async getThroughput() {
     const result = await this.metricsService.getThroughput();
     return this.success(result, 'Monthly throughput retrieved successfully');

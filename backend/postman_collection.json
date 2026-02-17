@@ -2,7 +2,7 @@
     "info": {
         "_postman_id": "b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e",
         "name": "AiTaskDashboard API",
-        "description": "Collection for AiTaskDashboard Backend API",
+        "description": "Collection for AiTaskDashboard Backend API — Full DTO Response Model v2.1\n\nAll responses follow the standard format:\n```json\n{\n  \"status\": \"success\",\n  \"data\": {...},\n  \"message\": \"...\",\n  \"requestId\": \"uuid\",\n  \"traceId\": \"uuid\",\n  \"timestamp\": \"ISO8601\"\n}\n```",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -32,8 +32,31 @@
                                 "auth",
                                 "register"
                             ]
+                        },
+                        "description": "Registers a new user and returns JWT token.\n\nResponse: AuthApiResponseDto"
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"name\": \"Test User\",\n    \"role\": \"User\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/auth/register",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["auth", "register"]
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": "json",
+                            "body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n        \"user\": {\n            \"_id\": \"507f1f77bcf86cd799439011\",\n            \"email\": \"user@example.com\",\n            \"name\": \"Test User\",\n            \"role\": \"User\"\n        }\n    },\n    \"message\": \"User successfully registered\",\n    \"requestId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"traceId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"timestamp\": \"2024-01-15T10:30:00.000Z\"\n}"
                         }
-                    }
+                    ]
                 },
                 {
                     "name": "Login",
@@ -58,8 +81,18 @@
                                 "auth",
                                 "login"
                             ]
+                        },
+                        "description": "Authenticates user and returns JWT token.\n\nResponse: AuthApiResponseDto"
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n        \"user\": {\n            \"_id\": \"507f1f77bcf86cd799439011\",\n            \"email\": \"user@example.com\",\n            \"name\": \"Test User\",\n            \"role\": \"User\"\n        }\n    },\n    \"message\": \"Login successful\",\n    \"requestId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"traceId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"timestamp\": \"2024-01-15T10:30:00.000Z\"\n}"
                         }
-                    }
+                    ]
                 }
             ]
         },
@@ -80,7 +113,126 @@
                                 "dashboard",
                                 "swimlanes"
                             ]
+                        },
+                        "description": "Returns aggregated dashboard data organized by portfolio lanes.\n\nResponse: SwimLanesApiResponseDto"
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"Ideation\": [\n            {\n                \"_id\": \"507f1f77bcf86cd799439011\",\n                \"title\": \"AI Customer Support\",\n                \"status\": \"Submitted\",\n                \"portfolioLane\": \"Ideation\",\n                \"priority\": \"High\"\n            }\n        ],\n        \"Prototype\": [],\n        \"Pilot\": [],\n        \"Scale\": []\n    },\n    \"message\": \"Dashboard swimlanes retrieved successfully\",\n    \"requestId\": \"uuid\",\n    \"traceId\": \"uuid\",\n    \"timestamp\": \"2024-01-15T10:30:00.000Z\"\n}"
                         }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Metrics",
+            "item": [
+                {
+                    "name": "Get Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/metrics/summary",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "metrics",
+                                "summary"
+                            ]
+                        },
+                        "description": "Returns KPI summary including ROI, savings, and counts.\n\nResponse: MetricsSummaryApiResponseDto"
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"roi\": 250,\n        \"totalSavings\": 150000,\n        \"activeChallenges\": 12,\n        \"completedIdeas\": 45,\n        \"pendingTasks\": 8\n    },\n    \"message\": \"Metrics summary retrieved successfully\",\n    \"requestId\": \"uuid\",\n    \"traceId\": \"uuid\",\n    \"timestamp\": \"2024-01-15T10:30:00.000Z\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Throughput",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/metrics/throughput",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "metrics",
+                                "throughput"
+                            ]
+                        },
+                        "description": "Returns monthly throughput data for charts.\n\nResponse: ThroughputApiResponseDto"
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": "{\n    \"status\": \"success\",\n    \"data\": [\n        {\"month\": \"Jan\", \"challenges\": 5, \"ideas\": 12, \"tasks\": 30},\n        {\"month\": \"Feb\", \"challenges\": 8, \"ideas\": 18, \"tasks\": 45}\n    ],\n    \"message\": \"Monthly throughput retrieved successfully\",\n    \"requestId\": \"uuid\",\n    \"traceId\": \"uuid\",\n    \"timestamp\": \"2024-01-15T10:30:00.000Z\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/users",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users"
+                            ]
+                        },
+                        "description": "Returns list of all registered users.\n\nResponse: UserListApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Get User By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/users/{{userId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "{{userId}}"
+                            ]
+                        },
+                        "description": "Returns user details by ID.\n\nResponse: UserApiResponseDto"
                     }
                 }
             ]
@@ -94,14 +246,43 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/challenges",
+                            "raw": "{{baseUrl}}/challenges?page=1&limit=10",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
                                 "challenges"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
                             ]
-                        }
+                        },
+                        "description": "Returns paginated list of challenges.\n\nResponse: ChallengeListApiResponse"
+                    }
+                },
+                {
+                    "name": "Get Challenge By ID (Enriched)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}"
+                            ]
+                        },
+                        "description": "Returns challenge with linked ideas, upvote/downvote/subscription userIds, and short owner/contributor info.\n\nResponse: ChallengeApiResponse"
                     }
                 },
                 {
@@ -116,7 +297,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"New Challenge\",\n    \"description\": \"Description here\",\n    \"stage\": \"Ideation\",\n    \"priority\": \"High\"\n}"
+                            "raw": "{\n    \"title\": \"AI-Powered Customer Support\",\n    \"description\": \"Implement conversational AI for customer queries\",\n    \"portfolioLane\": \"Ideation\",\n    \"status\": \"Submitted\",\n    \"priority\": \"High\",\n    \"tags\": [\"AI\", \"Customer Experience\"],\n    \"opco\": [\"OpCo1\"],\n    \"platform\": [\"Web\"],\n    \"outcome\": \"30% reduction in support tickets\",\n    \"timeline\": \"Q3 2026\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/challenges",
@@ -126,7 +307,53 @@
                             "path": [
                                 "challenges"
                             ]
-                        }
+                        },
+                        "description": "Creates a new challenge.\n\nRequest: ChallengeDto\nResponse: ChallengeApiResponse"
+                    }
+                },
+                {
+                    "name": "Update Challenge",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Challenge Title\",\n    \"description\": \"Updated description\",\n    \"status\": \"Approved\",\n    \"priority\": \"Medium\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}"
+                            ]
+                        },
+                        "description": "Updates an existing challenge. All fields are optional.\n\nRequest: ChallengeDto (PartialType)\nResponse: ChallengeApiResponse"
+                    }
+                },
+                {
+                    "name": "Delete Challenge",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}"
+                            ]
+                        },
+                        "description": "Deletes a challenge by ID.\n\nResponse: ChallengeApiResponse"
                     }
                 }
             ]
@@ -140,12 +367,598 @@
                         "method": "GET",
                         "header": [],
                         "url": {
+                            "raw": "{{baseUrl}}/ideas?page=1&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "ideas"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        },
+                        "description": "Returns paginated list of ideas.\n\nResponse: IdeaListApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Get Idea By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/ideas/{{ideaId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "ideas",
+                                "{{ideaId}}"
+                            ]
+                        },
+                        "description": "Returns idea details by ID.\n\nResponse: IdeaApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Create Idea",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Chatbot for FAQ Handling\",\n    \"description\": \"Automate common customer questions with AI\",\n    \"status\": \"Ideation\",\n    \"owner\": \"507f1f77bcf86cd799439011\",\n    \"linkedChallenge\": \"507f1f77bcf86cd799439012\",\n    \"tags\": [\"AI\", \"Automation\"],\n    \"problemStatement\": \"High volume of repetitive customer queries\",\n    \"proposedSolution\": \"AI-powered FAQ chatbot\",\n    \"expectedImpact\": \"30% reduction in support tickets\"\n}"
+                        },
+                        "url": {
                             "raw": "{{baseUrl}}/ideas",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
                                 "ideas"
+                            ]
+                        },
+                        "description": "Creates a new idea.\n\nRequest: CreateIdeaDto\nResponse: IdeaApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Update Idea",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Idea Title\",\n    \"status\": \"Evaluation\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/ideas/{{ideaId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "ideas",
+                                "{{ideaId}}"
+                            ]
+                        },
+                        "description": "Updates an existing idea. All fields are optional.\n\nRequest: UpdateIdeaDto (PartialType of CreateIdeaDto)\nResponse: IdeaApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Delete Idea",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/ideas/{{ideaId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "ideas",
+                                "{{ideaId}}"
+                            ]
+                        },
+                        "description": "Deletes an idea by ID.\n\nResponse: IdeaApiResponseDto"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Tasks",
+            "item": [
+                {
+                    "name": "Get All Tasks",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/tasks?page=1&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "tasks"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        },
+                        "description": "Returns paginated list of tasks.\n\nResponse: TaskListApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Get Task By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/tasks/{{taskId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "tasks",
+                                "{{taskId}}"
+                            ]
+                        },
+                        "description": "Returns task details by ID.\n\nResponse: TaskApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Create Task",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Implement API endpoint\",\n    \"description\": \"Create REST endpoint for user management\",\n    \"stage\": \"Ideation\",\n    \"owner\": \"507f1f77bcf86cd799439011\",\n    \"priority\": \"High\",\n    \"status\": \"pending\",\n    \"progress\": 0,\n    \"dueDate\": \"2024-03-15\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/tasks",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "tasks"
+                            ]
+                        },
+                        "description": "Creates a new task.\n\nRequest: CreateTaskDto\nResponse: TaskApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Update Task",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"in_progress\",\n    \"progress\": 50\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/tasks/{{taskId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "tasks",
+                                "{{taskId}}"
+                            ]
+                        },
+                        "description": "Updates an existing task. All fields are optional.\n\nRequest: UpdateTaskDto (PartialType of CreateTaskDto)\nResponse: TaskApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Delete Task",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/tasks/{{taskId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "tasks",
+                                "{{taskId}}"
+                            ]
+                        },
+                        "description": "Deletes a task by ID.\n\nResponse: TaskApiResponseDto"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Notifications",
+            "item": [
+                {
+                    "name": "Create Notification",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"userId\": \"507f1f77bcf86cd799439011\",\n    \"type\": \"info\",\n    \"title\": \"Welcome!\",\n    \"message\": \"Welcome to AiTaskDashboard\",\n    \"isRead\": false\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications"
+                            ]
+                        },
+                        "description": "Creates a new notification.\n\nRequest: CreateNotificationDto\nResponse: NotificationApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Get Notification By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/{{notificationId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "{{notificationId}}"
+                            ]
+                        },
+                        "description": "Returns notification details by ID.\n\nResponse: NotificationApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Get User Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/user/{{userId}}?skip=0&limit=20&unreadOnly=false",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "user",
+                                "{{userId}}"
+                            ],
+                            "query": [
+                                {
+                                    "key": "skip",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                },
+                                {
+                                    "key": "unreadOnly",
+                                    "value": "false"
+                                }
+                            ]
+                        },
+                        "description": "Returns notifications for a specific user.\n\nResponse: NotificationListApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Get Unread Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/user/{{userId}}/unread-count",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "user",
+                                "{{userId}}",
+                                "unread-count"
+                            ]
+                        },
+                        "description": "Returns unread notification count for a user.\n\nResponse: UnreadCountApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Mark As Read",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"notificationIds\": [\"507f1f77bcf86cd799439011\"]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/user/{{userId}}/mark-read",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "user",
+                                "{{userId}}",
+                                "mark-read"
+                            ]
+                        },
+                        "description": "Marks notifications as read. If notificationIds is empty, marks all notifications as read.\n\nResponse: MarkReadApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Update Notification",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"isRead\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/{{notificationId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "{{notificationId}}"
+                            ]
+                        },
+                        "description": "Updates a notification.\n\nRequest: UpdateNotificationDto\nResponse: NotificationApiResponseDto"
+                    }
+                },
+                {
+                    "name": "Delete Notification",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/{{notificationId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "{{notificationId}}"
+                            ]
+                        },
+                        "description": "Deletes a notification by ID.\n\nResponse: NotificationApiResponseDto"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Newsletter",
+            "item": [
+                {
+                    "name": "Subscribe",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"subscriber@example.com\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/newsletter/subscribe",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "newsletter",
+                                "subscribe"
+                            ]
+                        },
+                        "description": "Subscribes an email to the newsletter.\n\nRequest: SubscribeNewsletterDto\nResponse: NewsletterApiResponseDto"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comments",
+            "item": [
+                {
+                    "name": "Create Comment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"userId\": \"60d21b4667d0d8992e610c85\",\n    \"comment\": \"Great challenge! Looking forward to contributing.\",\n    \"type\": \"Challenge\",\n    \"parentId\": \"60d21b4667d0d8992e610c86\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/comments",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "comments"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Comments By Parent",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/comments?parentId=60d21b4667d0d8992e610c86&type=Challenge",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "comments"
+                            ],
+                            "query": [
+                                {
+                                    "key": "parentId",
+                                    "value": "60d21b4667d0d8992e610c86"
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "Challenge"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Comment",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/comments/{{commentId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "comments",
+                                "{{commentId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "User Actions",
+            "item": [
+                {
+                    "name": "Toggle Vote/Subscribe",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"userId\": \"60d21b4667d0d8992e610c85\",\n    \"targetId\": \"60d21b4667d0d8992e610c86\",\n    \"targetType\": \"Challenge\",\n    \"actionType\": \"upvote\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/user-actions",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "user-actions"
+                            ]
+                        },
+                        "description": "Idempotent toggle: creates action if not exists, removes if exists."
+                    }
+                },
+                {
+                    "name": "Get Actions By Target",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/user-actions?targetId=60d21b4667d0d8992e610c86&targetType=Challenge",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "user-actions"
+                            ],
+                            "query": [
+                                {
+                                    "key": "targetId",
+                                    "value": "60d21b4667d0d8992e610c86"
+                                },
+                                {
+                                    "key": "targetType",
+                                    "value": "Challenge"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Action Counts",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/user-actions/counts?targetId=60d21b4667d0d8992e610c86&targetType=Challenge",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "user-actions",
+                                "counts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "targetId",
+                                    "value": "60d21b4667d0d8992e610c86"
+                                },
+                                {
+                                    "key": "targetType",
+                                    "value": "Challenge"
+                                }
                             ]
                         }
                     }
@@ -157,6 +970,41 @@
         {
             "key": "baseUrl",
             "value": "http://localhost:3000/api",
+            "type": "string"
+        },
+        {
+            "key": "accessToken",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "challengeId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "ideaId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "taskId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "userId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "notificationId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "commentId",
+            "value": "",
             "type": "string"
         }
     ]

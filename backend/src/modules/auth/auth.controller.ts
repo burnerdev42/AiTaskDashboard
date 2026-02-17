@@ -8,6 +8,8 @@ import { Controller, Post, Body, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService, AuthResponse } from './auth.service';
 import { AuthDto, RegisterDto } from '../../dto/auth/auth.dto';
+import { AuthApiResponseDto } from '../../dto/auth/auth-response.dto';
+import { ErrorResponseDto } from '../../common/dto/responses/api-response.dto';
 import { AbstractController } from '../../common';
 import { ApiResponse as ApiResponseType } from '../../common/interfaces/api-response.interface';
 
@@ -30,8 +32,8 @@ export class AuthController extends AbstractController {
    */
   @Post('login')
   @ApiOperation({ summary: 'User login' })
-  @ApiResponse({ status: 200, description: 'Login successful.' })
-  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  @ApiResponse({ status: 200, description: 'Login successful.', type: AuthApiResponseDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
   async login(
     @Body() authDto: AuthDto,
   ): Promise<ApiResponseType<AuthResponse>> {
@@ -46,8 +48,8 @@ export class AuthController extends AbstractController {
    */
   @Post('register')
   @ApiOperation({ summary: 'User registration' })
-  @ApiResponse({ status: 201, description: 'User successfully registered.' })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 201, description: 'User successfully registered.', type: AuthApiResponseDto })
+  @ApiResponse({ status: 400, description: 'Bad Request.', type: ErrorResponseDto })
   async register(
     @Body() body: RegisterDto,
   ): Promise<ApiResponseType<AuthResponse>> {

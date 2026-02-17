@@ -7,6 +7,7 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
+import { SwimLanesApiResponseDto } from '../../dto/dashboard/dashboard-response.dto';
 import { AbstractController } from '../../common';
 
 /**
@@ -26,7 +27,7 @@ export class DashboardController extends AbstractController {
    */
   @Get('swimlanes')
   @ApiOperation({ summary: 'Get KPI Summary for swimlanes' })
-  @ApiResponse({ status: 200, description: 'Aggregated swimlane data.' })
+  @ApiResponse({ status: 200, description: 'Aggregated swimlane data.', type: SwimLanesApiResponseDto })
   async getSwimLanes() {
     const result = await this.dashboardService.getSwimLanes();
     return this.success(result, 'Dashboard swimlanes retrieved successfully');

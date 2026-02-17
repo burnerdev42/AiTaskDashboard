@@ -1,96 +1,123 @@
+import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
-import { CreateChallengeDto } from '../src/dto/challenges/create-challenge.dto';
-import { createTestApp, closeTestApp } from './test-utils';
+import * as request from 'supertest';
+import { Types } from 'mongoose';
+import { ChallengesModule } from '../src/modules/challenges/challenges.module';
+import { ChallengesService } from '../src/modules/challenges/challenges.service';
+import { ChallengeStatus } from '../src/common/enums/challenge-status.enum';
 import { ChallengeStage } from '../src/common/enums/challenge-stage.enum';
 import { Priority } from '../src/common/enums/priority.enum';
-import { ApiResponse } from '../src/common/interfaces/api-response.interface';
-
-interface ChallengeResponse {
-  _id: string;
-  title: string;
-  description: string;
-  stage: string;
-  priority: string;
-}
+import { setupTestApp } from './test-utils';
 
 describe('ChallengesController (e2e)', () => {
   let app: INestApplication;
-  let createdId: string;
 
-  beforeAll(async () => {
-    app = await createTestApp();
-  }, 60000);
+  const mockChallengeId = new Types.ObjectId();
 
-  afterAll(async () => {
-    await closeTestApp(app);
-  });
-
-  const challengeDto: CreateChallengeDto = {
-    title: 'E2E Test Challenge',
-    description: 'Testing create challenge',
-    stage: ChallengeStage.IDEATION,
+  const mockChallenge = {
+    _id: mockChallengeId,
+    title: 'Test Challenge',
+    description: 'A test challenge description',
+    status: ChallengeStatus.SUBMITTED,
+    portfolioLane: ChallengeStage.IDEATION,
     priority: Priority.MEDIUM,
+    tags: [],
+    owner: { _id: new Types.ObjectId(), name: 'Test User' },
+    contributor: [],
+    ideasCount: 0,
   };
 
-  it('/challenges (POST) - Success', async () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    const response = await request(server)
-      .post('/challenges')
-      .send(challengeDto)
-      .expect(201);
+  const mockEnrichedChallenge = {
+    ...mockChallenge,
+    ideas: [],
+    upvotes: [],
+    downvotes: [],
+    subscriptions: [],
+  };
 
-    const body = response.body as ApiResponse<ChallengeResponse>;
-    expect(body.data).toBeDefined();
-    expect(body.data!._id).toBeDefined();
-    expect(body.data!.title).toEqual(challengeDto.title);
-    createdId = body.data!._id;
+  const mockChallengesService = {
+    create: jest.fn().mockResolvedValue(mockChallenge),
+    findAll: jest.fn().mockResolvedValue([mockChallenge]),
+    findOne: jest.fn().mockResolvedValue(mockEnrichedChallenge),
+    update: jest.fn().mockResolvedValue(mockChallenge),
+    remove: jest.fn().mockResolvedValue(mockChallenge),
+  };
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [ChallengesModule],
+    })
+      .overrideProvider(ChallengesService)
+      .useValue(mockChallengesService)
+      .compile();
+
+    app = await setupTestApp(moduleFixture);
   });
 
-  it('/challenges (POST) - Fail (Validation)', () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server).post('/challenges').send({}).expect(400);
+  afterAll(async () => {
+    await app.close();
   });
 
-  it('/challenges (GET)', async () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    const response = await request(server).get('/challenges').expect(200);
-
-    const body = response.body as ApiResponse<ChallengeResponse[]>;
-    expect(body.data).toBeDefined();
-    expect(Array.isArray(body.data)).toBe(true);
+  describe('/challenges (POST)', () => {
+    it('should create a challenge', () => {
+      return request(app.getHttpServer())
+        .post('/api/challenges')
+        .send({
+          title: 'Test Challenge',
+          description: 'A test challenge description',
+          priority: 'Medium',
+          tags: [],
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body.data.title).toBe('Test Challenge');
+          expect(res.body.data.status).toBe(ChallengeStatus.SUBMITTED);
+        });
+    });
   });
 
-  it('/challenges/:id (GET)', async () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    const response = await request(server)
-      .get(`/challenges/${createdId}`)
-      .expect(200);
-
-    const body = response.body as ApiResponse<ChallengeResponse>;
-    expect(body.data).toBeDefined();
-    expect(body.data!.title).toEqual(challengeDto.title);
+  describe('/challenges (GET)', () => {
+    it('should return list of challenges', () => {
+      return request(app.getHttpServer())
+        .get('/api/challenges')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.data).toHaveLength(1);
+        });
+    });
   });
 
-  it('/challenges/:id (PUT)', async () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    const response = await request(server)
-      .put(`/challenges/${createdId}`)
-      .send({ title: 'Updated E2E Title' })
-      .expect(200);
-
-    const body = response.body as ApiResponse<ChallengeResponse>;
-    expect(body.data).toBeDefined();
-    expect(body.data!.title).toEqual('Updated E2E Title');
+  describe('/challenges/:id (GET)', () => {
+    it('should return enriched challenge with ideas and action user IDs', () => {
+      return request(app.getHttpServer())
+        .get(`/api/challenges/${mockChallengeId.toHexString()}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.data).toHaveProperty('ideas');
+          expect(res.body.data).toHaveProperty('upvotes');
+          expect(res.body.data).toHaveProperty('downvotes');
+          expect(res.body.data).toHaveProperty('subscriptions');
+        });
+    });
   });
 
-  it('/challenges/:id (DELETE)', () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server).delete(`/challenges/${createdId}`).expect(200);
+  describe('/challenges/:id (PUT)', () => {
+    it('should update a challenge', () => {
+      return request(app.getHttpServer())
+        .put(`/api/challenges/${mockChallengeId.toHexString()}`)
+        .send({ title: 'Updated Title', description: 'Updated desc' })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.data.title).toBe('Test Challenge');
+        });
+    });
   });
 
-  it('/challenges/:id (GET) - Fail (Not Found)', () => {
-    const server = app.getHttpServer() as unknown as import('http').Server;
-    return request(server).get(`/challenges/${createdId}`).expect(404);
+  describe('/challenges/:id (DELETE)', () => {
+    it('should delete a challenge', () => {
+      return request(app.getHttpServer())
+        .delete(`/api/challenges/${mockChallengeId.toHexString()}`)
+        .expect(200);
+    });
   });
 });

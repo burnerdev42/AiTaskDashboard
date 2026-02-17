@@ -36,6 +36,7 @@
 - [22. Swagger/OpenAPI Documentation](#22-swaggeropenapi-documentation)
 - [23. Distributed Tracing](#23-distributed-tracing)
 - [24. Healthcheck Endpoints](#24-healthcheck-endpoints)
+- [25. DTO & Response Model Architecture](#25-dto--response-model-architecture)
 
 ---
 
@@ -64,6 +65,8 @@ src/
 │   ├── users/             # User profiles and management
 │   ├── challenges/        # Corporation innovation challenges
 │   ├── ideas/             # Idea management and status tracking
+│   ├── comments/          # Shared comments (for Challenges & Ideas)
+│   ├── user-actions/      # Shared user actions (votes, subscriptions)
 │   ├── tasks/             # Automated AI/Background tasks
 │   ├── notifications/     # Notification dispatch & Newsletter subscription
 │   ├── dashboard/         # Aggregated views (e.g., Swimlanes)
@@ -356,23 +359,55 @@ Copy `.env.example` to `.env` and configure the following:
 |--------|----------|-------------|---------------|
 | `POST` | `/challenges` | Create a new challenge | ✅ |
 | `GET` | `/challenges` | List all challenges (supports pagination) | ✅ |
-| `GET` | `/challenges/:id` | Get challenge by ID | ✅ |
+| `GET` | `/challenges/:id` | Get challenge by ID (enriched with ideas, votes) | ✅ |
 | `PUT` | `/challenges/:id` | Update challenge | ✅ |
 | `DELETE` | `/challenges/:id` | Delete challenge | ✅ |
 
-**Create Challenge Request Body:**
+**Create / Update Challenge Request Body (ChallengeDto):**
 ```json
 {
   "title": "AI-Powered Customer Support",
   "description": "Implement conversational AI for customer queries",
-  "stage": "Ideation",
+  "portfolioLane": "Ideation",
+  "status": "Submitted",
   "owner": "60d21b4667d0d8992e610c85",
-  "accentColor": "blue",
-  "tags": ["AI", "Customer Experience"]
+  "priority": "High",
+  "tags": ["AI", "Customer Experience"],
+  "opco": ["OpCo1"],
+  "platform": ["Web"],
+  "outcome": "30% reduction in support tickets",
+  "timeline": "Q3 2026"
 }
 ```
 
-**Challenge Stages:** `Ideation` | `Prototype` | `Pilot` | `Scale`
+**Challenge Statuses:** `Submitted` | `Under Review` | `Approved` | `In Progress` | `Completed` | `Rejected`
+**Portfolio Lanes:** `Ideation` | `Prototype` | `Pilot` | `Scale`
+
+> **GET /challenges/:id enriched response** includes: linked `ideas`, `upvotes` (userId list), `downvotes` (userId list), `subscriptions` (userId list), and short `owner`/`contributor` details (`_id, name, email, avatar`).
+
+---
+
+### Comments (`/api/v1/comments`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/comments` | Create a comment on a Challenge or Idea | ✅ |
+| `GET` | `/comments?parentId=&type=` | List comments for a specific entity | ✅ |
+| `DELETE` | `/comments/:id` | Delete a comment | ✅ |
+
+**Why a separate Comment collection?** Comments are shared between Challenges and Ideas using a polymorphic `type` field (`Challenge` or `Idea`) and a `parentId` reference. This avoids duplicating comment logic across modules and ensures a consistent commenting experience.
+
+---
+
+### User Actions (`/api/v1/user-actions`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/user-actions` | Toggle a vote or subscription (idempotent) | ✅ |
+| `GET` | `/user-actions?targetId=&targetType=` | Get actions on an entity | ✅ |
+| `GET` | `/user-actions/counts?targetId=&targetType=` | Get aggregated action counts | ✅ |
+
+**Why a separate UserAction collection?** Votes (upvote/downvote) and subscriptions are shared between Challenges and Ideas using polymorphic `targetType`/`targetId` fields. A unique compound index (`userId + targetId + targetType + actionType`) prevents duplicate actions. This design avoids embedding votes inside parent documents (which would cause write contention at scale).
 
 ---
 
@@ -514,23 +549,59 @@ Copy `.env.example` to `.env` and configure the following:
 ```typescript
 {
   _id: ObjectId,
-  title: string,           // Required, min 3 chars
-  description: string,     // Required, min 10 chars
-  stage: ChallengeStage,   // 'Ideation' | 'Prototype' | 'Pilot' | 'Scale'
-  owner: ObjectId,         // Reference to User
-  accentColor: string,     // UI theming color
+  title: string,              // Required
+  description: string,        // Required
+  summary?: string,
+  opco: string[],             // Operating companies
+  platform: string[],         // Platforms
+  outcome?: string,           // Expected outcome
+  timeline?: string,          // Timeline
+  portfolioLane: ChallengeStage, // 'Ideation' | 'Prototype' | 'Pilot' | 'Scale'
+  owner: ObjectId,            // Reference to User (short info: _id, name, email, avatar)
+  status: ChallengeStatus,    // 'Submitted' | 'Under Review' | 'Approved' | 'In Progress' | 'Completed' | 'Rejected'
+  priority: Priority,         // 'High' | 'Medium' | 'Low'
   tags: string[],
-  stats: {
-    appreciations: number,
-    comments: number,
-    roi?: string,
-    savings?: string,
-    votes?: number
-  },
+  constraint?: string,
+  stakeholder?: string,
+  ideasCount: number,         // Denormalized count of linked ideas
+  contributor: ObjectId[],    // References to User
   createdAt: Date,
   updatedAt: Date
 }
 ```
+
+### Comment Schema (Shared Collection)
+
+```typescript
+{
+  _id: ObjectId,
+  userId: ObjectId,           // Reference to User
+  comment: string,            // Required
+  type: TargetType,           // 'Challenge' | 'Idea'
+  parentId: ObjectId,         // Reference to parent entity
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+> Indexed on `{ parentId: 1, type: 1 }` for efficient querying.
+
+### UserAction Schema (Shared Collection)
+
+```typescript
+{
+  _id: ObjectId,
+  userId: ObjectId,           // Reference to User
+  targetId: ObjectId,         // Reference to target entity
+  targetType: TargetType,     // 'Challenge' | 'Idea'
+  actionType: ActionType,     // 'upvote' | 'downvote' | 'subscribe'
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+> Unique compound index on `{ userId, targetId, targetType, actionType }` prevents duplicates.
+> Indexed on `{ targetId: 1, targetType: 1 }` for efficient lookup.
 
 ### Idea Schema
 
@@ -692,13 +763,25 @@ enum UserRole {
 }
 ```
 
-### ChallengeStage
+### ChallengeStage (Portfolio Lane)
 ```typescript
 enum ChallengeStage {
   IDEATION = 'Ideation',
   PROTOTYPE = 'Prototype',
   PILOT = 'Pilot',
   SCALE = 'Scale'
+}
+```
+
+### ChallengeStatus
+```typescript
+enum ChallengeStatus {
+  SUBMITTED = 'Submitted',
+  UNDER_REVIEW = 'Under Review',
+  APPROVED = 'Approved',
+  IN_PROGRESS = 'In Progress',
+  COMPLETED = 'Completed',
+  REJECTED = 'Rejected'
 }
 ```
 
@@ -729,6 +812,23 @@ enum Priority {
   HIGH = 'High',
   MEDIUM = 'Medium',
   LOW = 'Low'
+}
+```
+
+### TargetType
+```typescript
+enum TargetType {
+  CHALLENGE = 'Challenge',
+  IDEA = 'Idea'
+}
+```
+
+### ActionType
+```typescript
+enum ActionType {
+  UPVOTE = 'upvote',
+  DOWNVOTE = 'downvote',
+  SUBSCRIBE = 'subscribe'
 }
 ```
 
@@ -807,6 +907,198 @@ x-trace-id: 02c8f2b9-bf88-4dd5-bd79-e060b20bb1c3
 |----------|-------------|
 | `/metrics` | Prometheus metrics (system health) |
 | `/api/docs` | Swagger UI (API health) |
+
+---
+
+## 25. DTO & Response Model Architecture
+
+The backend implements a comprehensive DTO (Data Transfer Object) structure for request validation, response typing, and Swagger documentation.
+
+### Directory Structure
+
+```text
+src/
+├── dto/                    # Request/Response DTOs by module
+│   ├── auth/
+│   │   ├── auth.dto.ts            # AuthDto, RegisterDto
+│   │   └── auth-response.dto.ts   # AuthApiResponseDto
+│   ├── challenges/
+│   │   ├── challenge.dto.ts       # ChallengeDto (create/update)
+│   │   └── challenge-response.dto.ts
+│   ├── ideas/
+│   │   ├── create-idea.dto.ts     # CreateIdeaDto
+│   │   ├── update-idea.dto.ts     # UpdateIdeaDto (PartialType)
+│   │   └── idea-response.dto.ts   # IdeaApiResponseDto, IdeaListApiResponseDto
+│   ├── tasks/
+│   │   ├── create-task.dto.ts     # CreateTaskDto
+│   │   ├── update-task.dto.ts     # UpdateTaskDto (PartialType)
+│   │   └── task-response.dto.ts   # TaskApiResponseDto, TaskListApiResponseDto
+│   ├── notifications/
+│   │   ├── create-notification.dto.ts
+│   │   ├── update-notification.dto.ts
+│   │   └── notification-response.dto.ts
+│   ├── users/
+│   │   └── user-response.dto.ts   # UserApiResponseDto, UserListApiResponseDto
+│   ├── dashboard/
+│   │   └── dashboard-response.dto.ts
+│   ├── metrics/
+│   │   └── metrics-response.dto.ts
+│   └── newsletter/
+│       └── newsletter.dto.ts
+└── common/
+    └── dto/
+        ├── query.dto.ts           # QueryDto for pagination
+        └── responses/
+            ├── api-response.dto.ts    # BaseApiResponseDto, ErrorResponseDto
+            ├── pagination.dto.ts      # PaginationMetaDto, PaginatedResponseDto
+            └── index.ts               # Barrel exports
+```
+
+### DTO Design Patterns
+
+#### 1. Create/Update Pattern
+For modules requiring both create and update operations, we use NestJS's `PartialType`:
+
+```typescript
+// create-idea.dto.ts
+export class CreateIdeaDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+  // ... other required fields
+}
+
+// update-idea.dto.ts
+import { PartialType } from '@nestjs/swagger';
+import { CreateIdeaDto } from './create-idea.dto';
+
+export class UpdateIdeaDto extends PartialType(CreateIdeaDto) {}
+```
+
+> **Important**: `PartialType` is imported from `@nestjs/swagger` (not `@nestjs/mapped-types`) to ensure proper Swagger schema generation.
+
+#### 2. Response Wrapper Pattern
+All API responses follow a consistent wrapper structure:
+
+```typescript
+// Success Response
+{
+  "status": "success",
+  "data": { ... },
+  "message": "Operation successful",
+  "requestId": "uuid-v4",
+  "traceId": "uuid-v4",
+  "timestamp": "2024-01-15T10:30:00.000Z"
+}
+
+// Error Response
+{
+  "status": "error",
+  "message": "Error description",
+  "error": "ErrorType",
+  "statusCode": 404,
+  "requestId": "uuid-v4",
+  "traceId": "uuid-v4",
+  "timestamp": "2024-01-15T10:30:00.000Z"
+}
+```
+
+#### 3. Pagination Response Pattern
+List endpoints return paginated data with metadata:
+
+```typescript
+{
+  "status": "success",
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 100,
+    "totalPages": 10,
+    "hasNext": true,
+    "hasPrevious": false
+  }
+}
+```
+
+### Response DTOs by Module
+
+| Module | Response DTOs |
+|--------|---------------|
+| **Auth** | `AuthApiResponseDto` |
+| **Challenges** | `ChallengeApiResponse`, `ChallengeListApiResponse` |
+| **Ideas** | `IdeaApiResponseDto`, `IdeaListApiResponseDto` |
+| **Tasks** | `TaskApiResponseDto`, `TaskListApiResponseDto` |
+| **Notifications** | `NotificationApiResponseDto`, `NotificationListApiResponseDto`, `UnreadCountApiResponseDto`, `MarkReadApiResponseDto` |
+| **Users** | `UserApiResponseDto`, `UserListApiResponseDto` |
+| **Dashboard** | `SwimLanesApiResponseDto` |
+| **Metrics** | `MetricsSummaryApiResponseDto`, `ThroughputApiResponseDto` |
+| **Newsletter** | `NewsletterApiResponseDto` |
+
+### Swagger Integration
+All response DTOs are annotated with `@ApiProperty()` decorators for automatic Swagger schema generation:
+
+```typescript
+export class IdeaDto {
+  @ApiProperty({ example: '507f1f77bcf86cd799439011' })
+  _id: string;
+
+  @ApiProperty({ example: 'AI-powered chatbot' })
+  title: string;
+
+  @ApiProperty({ enum: ['Ideation', 'Evaluation', 'POC', 'Pilot', 'Scale'] })
+  status: IdeaStatus;
+}
+```
+
+### Common DTOs
+
+#### QueryDto (Pagination)
+Standard query parameters for all list endpoints:
+
+```typescript
+export class QueryDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  limit?: number = 10;
+
+  @IsOptional()
+  @IsString()
+  sort?: string = 'createdAt';
+
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  order?: 'asc' | 'desc' = 'desc';
+}
+```
+
+#### ErrorResponseDto
+Standardized error response structure:
+
+```typescript
+export class ErrorResponseDto {
+  @ApiProperty({ example: 'error' })
+  status: string;
+
+  @ApiProperty({ example: 'Resource not found' })
+  message: string;
+
+  @ApiProperty({ example: 'NotFoundException' })
+  error: string;
+
+  @ApiProperty({ example: 404 })
+  statusCode: number;
+}
+```
 
 ---
 

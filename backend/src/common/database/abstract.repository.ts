@@ -3,6 +3,14 @@ import { Model, Types, UpdateQuery, SaveOptions, Connection } from 'mongoose';
 import { Document } from 'mongoose';
 
 /**
+ * Populate option type: supports simple string, array, or object with path + select.
+ */
+export type PopulateOption =
+  | string
+  | string[]
+  | { path: string; select?: string }[];
+
+/**
  * Abstract Repository class for Mongoose models.
  * Provides generic CRUD operations.
  */
@@ -12,7 +20,7 @@ export abstract class AbstractRepository<TDocument extends Document> {
   constructor(
     protected readonly model: Model<TDocument>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   /**
    * Creates a new document.
@@ -40,12 +48,13 @@ export abstract class AbstractRepository<TDocument extends Document> {
    */
   findOne = async (
     filterQuery: Record<string, any>,
-    options?: { populate?: string | string[] },
+    options?: { populate?: PopulateOption },
   ): Promise<TDocument> => {
     const query = this.model.findOne(filterQuery, {}, { lean: true });
 
     if (options?.populate) {
-      query.populate(options.populate);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      query.populate(options.populate as any);
     }
 
     const document = await query.exec();
@@ -104,13 +113,14 @@ export abstract class AbstractRepository<TDocument extends Document> {
       sort?: any;
       skip?: number;
       limit?: number;
-      populate?: string | string[];
+      populate?: PopulateOption;
     },
   ): Promise<TDocument[]> => {
     const query = this.model.find(filterQuery, {}, { lean: true, ...options });
 
     if (options?.populate) {
-      query.populate(options.populate);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      query.populate(options.populate as any);
     }
 
     return query.exec() as unknown as Promise<TDocument[]>;

@@ -31,8 +31,8 @@ export interface ChallengeForSwimLane {
   title: string;
   /** Challenge description */
   description: string;
-  /** Current stage in innovation pipeline */
-  stage: ChallengeStage;
+  /** Portfolio lane position in innovation pipeline */
+  portfolioLane: ChallengeStage;
   /** Priority level */
   priority?: Priority;
   /** Owner reference - either ObjectId or populated object */

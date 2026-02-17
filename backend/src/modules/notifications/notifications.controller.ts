@@ -20,6 +20,13 @@ import { AbstractController } from '../../common/controllers/abstract.controller
 import { NotificationsService } from './notifications.service';
 import { CreateNotificationDto } from '../../dto/notifications/create-notification.dto';
 import { UpdateNotificationDto } from '../../dto/notifications/update-notification.dto';
+import {
+  NotificationApiResponseDto,
+  NotificationListApiResponseDto,
+  UnreadCountApiResponseDto,
+  MarkReadApiResponseDto,
+} from '../../dto/notifications/notification-response.dto';
+import { ErrorResponseDto } from '../../common/dto/responses/api-response.dto';
 import { ApiResponse as ApiResponseType } from '../../common/interfaces/api-response.interface';
 import { NotificationDocument } from '../../models/notifications/notification.schema';
 
@@ -43,10 +50,8 @@ export class NotificationsController extends AbstractController {
    */
   @Post()
   @ApiOperation({ summary: 'Create a new notification' })
-  @ApiResponse({
-    status: 201,
-    description: 'Notification created successfully',
-  })
+  @ApiResponse({ status: 201, description: 'Notification created successfully', type: NotificationApiResponseDto })
+  @ApiResponse({ status: 400, description: 'Bad Request', type: ErrorResponseDto })
   async create(
     @Body() createDto: CreateNotificationDto,
   ): Promise<ApiResponseType<NotificationDocument>> {
@@ -67,10 +72,7 @@ export class NotificationsController extends AbstractController {
   @ApiQuery({ name: 'skip', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'unreadOnly', required: false, type: Boolean })
-  @ApiResponse({
-    status: 200,
-    description: 'Notifications retrieved successfully',
-  })
+  @ApiResponse({ status: 200, description: 'Notifications retrieved successfully', type: NotificationListApiResponseDto })
   async findByUser(
     @Param('userId') userId: string,
     @Query('skip') skip?: number,
@@ -93,10 +95,7 @@ export class NotificationsController extends AbstractController {
    */
   @Get('user/:userId/unread-count')
   @ApiOperation({ summary: 'Get unread notification count for a user' })
-  @ApiResponse({
-    status: 200,
-    description: 'Unread count retrieved successfully',
-  })
+  @ApiResponse({ status: 200, description: 'Unread count retrieved successfully', type: UnreadCountApiResponseDto })
   async getUnreadCount(
     @Param('userId') userId: string,
   ): Promise<ApiResponseType<{ count: number }>> {
@@ -112,7 +111,7 @@ export class NotificationsController extends AbstractController {
    */
   @Post('user/:userId/mark-read')
   @ApiOperation({ summary: 'Mark notifications as read' })
-  @ApiResponse({ status: 200, description: 'Notifications marked as read' })
+  @ApiResponse({ status: 200, description: 'Notifications marked as read', type: MarkReadApiResponseDto })
   async markAsRead(
     @Param('userId') userId: string,
     @Body() body: { notificationIds?: string[] },
@@ -131,11 +130,8 @@ export class NotificationsController extends AbstractController {
    */
   @Get(':id')
   @ApiOperation({ summary: 'Get a notification by ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'Notification retrieved successfully',
-  })
-  @ApiResponse({ status: 404, description: 'Notification not found' })
+  @ApiResponse({ status: 200, description: 'Notification retrieved successfully', type: NotificationApiResponseDto })
+  @ApiResponse({ status: 404, description: 'Notification not found', type: ErrorResponseDto })
   async findOne(
     @Param('id') id: string,
   ): Promise<ApiResponseType<NotificationDocument>> {
@@ -151,11 +147,8 @@ export class NotificationsController extends AbstractController {
    */
   @Put(':id')
   @ApiOperation({ summary: 'Update a notification' })
-  @ApiResponse({
-    status: 200,
-    description: 'Notification updated successfully',
-  })
-  @ApiResponse({ status: 404, description: 'Notification not found' })
+  @ApiResponse({ status: 200, description: 'Notification updated successfully', type: NotificationApiResponseDto })
+  @ApiResponse({ status: 404, description: 'Notification not found', type: ErrorResponseDto })
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateNotificationDto,
@@ -171,11 +164,8 @@ export class NotificationsController extends AbstractController {
    */
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a notification' })
-  @ApiResponse({
-    status: 200,
-    description: 'Notification deleted successfully',
-  })
-  @ApiResponse({ status: 404, description: 'Notification not found' })
+  @ApiResponse({ status: 200, description: 'Notification deleted successfully', type: NotificationApiResponseDto })
+  @ApiResponse({ status: 404, description: 'Notification not found', type: ErrorResponseDto })
   async delete(
     @Param('id') id: string,
   ): Promise<ApiResponseType<NotificationDocument>> {

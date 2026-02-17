@@ -48,6 +48,16 @@ export class IdeasService extends AbstractService {
     );
   }
 
+  /**
+   * Retrieves all ideas linked to a specific challenge.
+   */
+  async findByChallenge(challengeId: string): Promise<IdeaDocument[]> {
+    return this.ideasRepository.find(
+      { linkedChallenge: challengeId },
+      { populate: ['owner'] },
+    ) as unknown as Promise<IdeaDocument[]>;
+  }
+
   async update(id: string, updateIdeaDto: UpdateIdeaDto) {
     return this.ideasRepository.findOneAndUpdate({ _id: id }, updateIdeaDto);
   }

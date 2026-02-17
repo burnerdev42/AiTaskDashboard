@@ -74,7 +74,7 @@ export class DashboardService extends AbstractService {
       id: challenge._id.toString(),
       title: challenge.title,
       description: challenge.description,
-      stage: challenge.stage ?? DEFAULT_STAGE,
+      stage: challenge.portfolioLane ?? DEFAULT_STAGE,
       priority: challenge.priority ?? DEFAULT_PRIORITY,
       owner: this.extractOwnerName(challenge.owner),
       type: 'challenge' as const,
