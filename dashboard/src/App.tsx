@@ -12,6 +12,7 @@ import { Notifications } from './pages/Notifications';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
+import { WhatsNext } from './pages/WhatsNext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path="/challenges/:id" element={<ChallengeDetail />} />
             <Route path="/challenges/:challengeId/ideas/:ideaId" element={<IdeaDetail />} />
             <Route path="/metrics" element={<Metrics />} />
+            <Route path="/whats-next" element={<WhatsNext />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
