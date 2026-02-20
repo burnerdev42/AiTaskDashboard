@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What's Next – Ananta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header Band ───────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .header-right .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::before {
+      content: '\1F52E';
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    /* ── Notification Bell ──────────────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: rgba(26,58,90,.6);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.4);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px; color: var(--accent-teal);
+      cursor: pointer; padding: 4px 8px;
+      border-radius: 4px; transition: all .2s;
+    }
+    .mark-all-read:hover { background: rgba(232,167,88,.1); }
+    .notification-list {
+      overflow-y: auto; max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar { width: 6px; }
+    .notification-list::-webkit-scrollbar-track { background: rgba(26,58,90,.3); }
+    .notification-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: all .2s;
+      display: flex; gap: 12px;
+    }
+    .notification-item:hover { background: rgba(26,58,90,.4); }
+    .notification-item.unread { background: rgba(232,167,88,.05); }
+    .notification-item:last-child { border-bottom: none; }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .notification-icon.challenge { background: rgba(255,167,38,.15); color: var(--accent-orange); }
+    .notification-icon.idea { background: rgba(232,167,88,.15); color: var(--accent-teal); }
+    .notification-icon.comment { background: rgba(240,184,112,.15); color: var(--accent-blue); }
+    .notification-icon.status { background: rgba(102,187,106,.15); color: var(--accent-green); }
+    .notification-content { flex: 1; }
+    .notification-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+    .notification-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .notification-time { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px; color: var(--accent-teal);
+      text-decoration: none; font-weight: 600; transition: all .2s;
+    }
+    .view-all-link:hover { color: var(--accent-blue); }
+
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+      text-decoration: none;
+    }
+
+    /* ── Hero Banner ───────────────────────────── */
+    .hero-banner {
+      background: linear-gradient(135deg, #0f2744 0%, #1a4d7a 40%, #0a1929 100%);
+      border-bottom: 3px solid var(--accent-teal);
+      padding: 60px 36px 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(232,167,88,.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 4px;
+      text-transform: uppercase; color: var(--accent-teal);
+      margin-bottom: 16px;
+    }
+    .hero-banner h2 {
+      font-size: 40px; font-weight: 800; line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, #f0b870 60%, #e8a758 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: 17px; color: var(--text-secondary); max-width: 680px;
+      margin: 0 auto; line-height: 1.7;
+    }
+
+    /* ── Timeline Section ──────────────────────── */
+    .timeline-section {
+      padding: 48px 36px;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 36px;
+    }
+    .section-header .icon { font-size: 22px; }
+    .section-header h2 {
+      font-size: 20px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .section-header .section-line {
+      flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── Roadmap Timeline ──────────────────────── */
+    .roadmap-timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute; left: 15px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-teal) 0%, var(--accent-purple) 50%, var(--accent-green) 100%);
+      border-radius: 2px;
+    }
+
+    .timeline-quarter {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .timeline-quarter:last-child { margin-bottom: 0; }
+
+    .quarter-marker {
+      position: absolute; left: -40px; top: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+      z-index: 2;
+      border: 3px solid var(--bg-primary);
+    }
+    .quarter-marker.q1 { background: var(--accent-teal); color: #0d0f1a; }
+    .quarter-marker.q2 { background: var(--accent-blue); color: #0d0f1a; }
+    .quarter-marker.q3 { background: var(--accent-purple); color: #fff; }
+    .quarter-marker.q4 { background: var(--accent-green); color: #0d0f1a; }
+
+    .quarter-label {
+      font-size: 16px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .quarter-dates {
+      font-size: 12px; color: var(--text-muted); margin-bottom: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .quarter-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── Feature Card ──────────────────────────── */
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all .3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .feature-card:hover {
+      border-color: var(--accent-teal);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(232,167,88,.12);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .feature-card[data-accent="teal"]::before   { background: var(--accent-teal); }
+    .feature-card[data-accent="blue"]::before   { background: var(--accent-blue); }
+    .feature-card[data-accent="green"]::before  { background: var(--accent-green); }
+    .feature-card[data-accent="orange"]::before { background: var(--accent-orange); }
+    .feature-card[data-accent="purple"]::before { background: var(--accent-purple); }
+    .feature-card[data-accent="pink"]::before   { background: var(--accent-pink); }
+    .feature-card[data-accent="red"]::before    { background: var(--accent-red); }
+
+    .feature-top {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 14px;
+    }
+    .feature-icon {
+      font-size: 28px; line-height: 1; flex-shrink: 0;
+    }
+    .feature-info { flex: 1; }
+    .feature-info h4 {
+      font-size: 15px; font-weight: 700; margin-bottom: 4px; line-height: 1.35;
+    }
+    .feature-badges {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .feature-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 14px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .feature-badge.new {
+      background: rgba(102,187,106,.12); color: var(--accent-green);
+      border: 1px solid rgba(102,187,106,.25);
+    }
+    .feature-badge.beta {
+      background: rgba(171,71,188,.12); color: var(--accent-purple);
+      border: 1px solid rgba(171,71,188,.25);
+    }
+    .feature-badge.upgrade {
+      background: rgba(240,184,112,.12); color: var(--accent-blue);
+      border: 1px solid rgba(240,184,112,.25);
+    }
+    .feature-badge.ai {
+      background: rgba(232,167,88,.12); color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.25);
+    }
+    .feature-badge.product {
+      background: rgba(236,64,122,.12); color: var(--accent-pink);
+      border: 1px solid rgba(236,64,122,.25);
+    }
+    .feature-badge.infra {
+      background: rgba(255,167,38,.12); color: var(--accent-orange);
+      border: 1px solid rgba(255,167,38,.25);
+    }
+
+    .feature-desc {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .feature-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+    .feature-team {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .feature-team-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+
+    .feature-progress {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .progress-bar-sm {
+      width: 60px; height: 4px; border-radius: 2px;
+      background: var(--bg-secondary); overflow: hidden;
+    }
+    .progress-fill-sm { height: 100%; border-radius: 2px; }
+
+    /* ── Products Section ──────────────────────── */
+    .products-section {
+      background: var(--bg-secondary);
+      border-top: 3px solid var(--accent-purple);
+      padding: 48px 36px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all .3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card:hover {
+      border-color: var(--accent-purple);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(171,71,188,.12);
+    }
+    .product-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .product-card[data-accent="purple"]::before { background: var(--accent-purple); }
+    .product-card[data-accent="teal"]::before   { background: var(--accent-teal); }
+    .product-card[data-accent="green"]::before  { background: var(--accent-green); }
+    .product-card[data-accent="pink"]::before   { background: var(--accent-pink); }
+    .product-card[data-accent="orange"]::before { background: var(--accent-orange); }
+    .product-card[data-accent="blue"]::before   { background: var(--accent-blue); }
+
+    .product-header {
+      display: flex; align-items: flex-start; gap: 16px;
+      margin-bottom: 16px;
+    }
+    .product-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    .product-icon.purple { background: rgba(171,71,188,.15); }
+    .product-icon.teal   { background: rgba(232,167,88,.15); }
+    .product-icon.green  { background: rgba(102,187,106,.15); }
+    .product-icon.pink   { background: rgba(236,64,122,.15); }
+    .product-icon.orange { background: rgba(255,167,38,.15); }
+    .product-icon.blue   { background: rgba(240,184,112,.15); }
+
+    .product-title-area h3 {
+      font-size: 17px; font-weight: 700; margin-bottom: 4px;
+    }
+    .product-tagline {
+      font-size: 12px; color: var(--text-muted); font-style: italic;
+    }
+
+    .product-desc {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .product-highlights {
+      list-style: none; margin-bottom: 18px;
+    }
+    .product-highlights li {
+      font-size: 12px; color: var(--text-secondary);
+      padding: 5px 0; display: flex; align-items: baseline; gap: 8px;
+      border-bottom: 1px solid rgba(42,69,96,.4);
+    }
+    .product-highlights li:last-child { border-bottom: none; }
+    .product-highlights li .dot {
+      width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .product-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 14px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .product-status.in-dev {
+      background: rgba(232,167,88,.12); color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.25);
+    }
+    .product-status.alpha {
+      background: rgba(171,71,188,.12); color: var(--accent-purple);
+      border: 1px solid rgba(171,71,188,.25);
+    }
+    .product-status.coming-soon {
+      background: rgba(255,167,38,.12); color: var(--accent-orange);
+      border: 1px solid rgba(255,167,38,.25);
+    }
+    .product-status.planned {
+      background: rgba(107,110,138,.12); color: var(--text-muted);
+      border: 1px solid rgba(107,110,138,.25);
+    }
+
+    .product-eta {
+      font-size: 11px; color: var(--text-muted);
+    }
+
+    /* ── Idea Funnel Section ────────────────────── */
+    .funnel-section {
+      padding: 48px 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .funnel-pipeline {
+      display: flex; gap: 0; overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .funnel-pipeline::-webkit-scrollbar { height: 6px; }
+    .funnel-pipeline::-webkit-scrollbar-track { background: var(--bg-card); }
+    .funnel-pipeline::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    .funnel-stage {
+      flex: 1; min-width: 200px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      transition: all .3s;
+    }
+    .funnel-stage:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .funnel-stage:last-child  { border-radius: 0 var(--radius) var(--radius) 0; }
+    .funnel-stage:hover { background: var(--bg-card); }
+    .funnel-stage::after {
+      content: '→';
+      position: absolute; right: -12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted); font-size: 18px; z-index: 1;
+    }
+    .funnel-stage:last-child::after { display: none; }
+
+    .funnel-icon { font-size: 28px; margin-bottom: 10px; }
+    .funnel-stage h4 {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .funnel-count {
+      font-size: 28px; font-weight: 800; margin-bottom: 4px;
+    }
+    .funnel-label {
+      font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── CTA Banner ────────────────────────────── */
+    .cta-banner {
+      background: linear-gradient(135deg, #1a3a5a 0%, #0f2744 50%, #1a4d7a 100%);
+      border-top: 3px solid var(--accent-green);
+      padding: 48px 36px;
+      text-align: center;
+    }
+    .cta-icon { font-size: 42px; margin-bottom: 16px; }
+    .cta-banner h2 {
+      font-size: 26px; font-weight: 800; margin-bottom: 12px;
+    }
+    .cta-banner p {
+      font-size: 15px; color: var(--text-secondary); max-width: 600px;
+      margin: 0 auto 28px; line-height: 1.65;
+    }
+    .cta-buttons {
+      display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      text-transform: uppercase; letter-spacing: 1px;
+      transition: all .3s; cursor: pointer; border: none;
+    }
+    .cta-btn.primary {
+      background: var(--accent-teal); color: #0d0f1a;
+    }
+    .cta-btn.primary:hover {
+      background: var(--accent-blue); transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(232,167,88,.25);
+    }
+    .cta-btn.secondary {
+      background: transparent; color: var(--accent-teal);
+      border: 1px solid var(--accent-teal);
+    }
+    .cta-btn.secondary:hover {
+      background: rgba(232,167,88,.1); transform: translateY(-2px);
+    }
+
+    /* ── Footer ────────────────────────────────── */
+    .footer {
+      text-align: center; padding: 18px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Animations ────────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeInUp .6s cubic-bezier(.4,0,.2,1) both;
+    }
+
+    /* ── Responsive ────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-banner { padding: 48px 28px 40px; }
+      .hero-banner h2 { font-size: 32px; }
+      .timeline-section, .products-section, .funnel-section, .cta-banner { padding: 36px 28px; }
+    }
+    @media (max-width: 900px) {
+      .quarter-cards { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: 1fr; }
+      .funnel-pipeline { flex-direction: column; }
+      .funnel-stage { border-radius: var(--radius-sm) !important; }
+      .funnel-stage::after { display: none; }
+    }
+    @media (max-width: 640px) {
+      .hero-banner h2 { font-size: 26px; }
+      .hero-subtitle { font-size: 14px; }
+      .header-band { padding: 14px 16px; }
+      .header-right .nav-link { font-size: 11px; padding: 4px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER BAND ═══════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link active">What's Next</a>
+
+    <!-- Notification Bell -->
+    <div class="notification-wrapper">
+      <div class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notificationBadge">5</span>
+      </div>
+
+      <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+          <h3>🔔 Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+
+        <div class="notification-list" id="notificationList">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick('challenge-detail.html?id=CHG-005')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">Ravi Patel submitted "Optimize Cloud Infrastructure Costs"</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick('idea-detail.html?id=IDX-012')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Submitted</div>
+              <div class="notification-text">Meera Singh proposed "Blockchain-based Contract Management" on CHG-002</div>
+              <div class="notification-time">22 minutes ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick('idea-detail.html?id=IDX-003')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment on Your Idea</div>
+              <div class="notification-text">Siddharth Banerjee commented on "AI-powered document verification"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick('challenge-detail.html?id=CHG-001')">
+            <div class="notification-icon status">📈</div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Status Updated</div>
+              <div class="notification-text">"Reduce Customer Churn by 15%" moved to Evaluation stage</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick('idea-detail.html?id=IDX-007')">
+            <div class="notification-icon idea">💡</div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Submitted</div>
+              <div class="notification-text">Ananya Basu proposed "Predictive Maintenance Dashboard" on CHG-004</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick('challenge-detail.html?id=CHG-003')">
+            <div class="notification-icon challenge">🎯</div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">Debarati Ghosh submitted "Real-time Fraud Detection System"</div>
+              <div class="notification-time">Yesterday</div>
+            </div>
+          </div>
+
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick('idea-detail.html?id=IDX-005')">
+            <div class="notification-icon comment">💬</div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">Rohan Patel commented on "Customer Health Dashboard"</div>
+              <div class="notification-time">2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+
+    <a href="profile.html" class="avatar" title="Profile">AP</a>
+  </div>
+</header>
+
+<!-- ═══ HERO BANNER ═══════════════════════════ -->
+<section class="hero-banner">
+  <div class="hero-eyebrow">🔮 The Road Ahead</div>
+  <h2>What's Next in Ananta</h2>
+  <p class="hero-subtitle">
+    A glimpse into the upcoming features, products, and innovations being brewed at Ananta.
+    From AI-powered tooling to next-gen platform capabilities — here's what's on the horizon.
+  </p>
+</section>
+
+<main>
+
+<!-- ═══ ROADMAP TIMELINE ═══════════════════════ -->
+<section class="timeline-section">
+  <div class="section-header">
+    <span class="icon">🗺️</span>
+    <h2>Feature Roadmap — 2026</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="roadmap-timeline">
+
+    <!-- ── Q1 2026 ──────────────────────────── -->
+    <div class="timeline-quarter animate-in" style="animation-delay:.1s">
+      <div class="quarter-marker q1">Q1</div>
+      <div class="quarter-label" style="color:var(--accent-teal)">Q1 · 2026</div>
+      <div class="quarter-dates">January – March 2026</div>
+      <div class="quarter-cards">
+
+        <div class="feature-card" data-accent="teal">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Agentic AI Co-Pilot</h4>
+              <div class="feature-badges">
+                <span class="feature-badge ai">AI</span>
+                <span class="feature-badge new">New</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            An intelligent AI assistant embedded into the pipeline — auto-suggests solutions for challenges,
+            drafts idea proposals, and connects innovators with relevant past solutions.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-teal)"></span>
+              AI & Platform Team
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:75%;background:var(--accent-teal)"></div>
+              </div>
+              75%
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-accent="green">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Advanced Analytics Dashboard v2</h4>
+              <div class="feature-badges">
+                <span class="feature-badge upgrade">Upgrade</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Revamped metrics dashboard with real-time KPIs, drill-down charts, innovation health scores,
+            and predictive trend analysis for leadership visibility.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-green)"></span>
+              Data & Visualization Team
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:60%;background:var(--accent-green)"></div>
+              </div>
+              60%
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-accent="orange">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Smart Notification Engine</h4>
+              <div class="feature-badges">
+                <span class="feature-badge upgrade">Upgrade</span>
+                <span class="feature-badge ai">AI</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Context-aware notifications powered by ML — get notified only about what matters. Includes
+            digest mode, priority scoring, and Slack/Teams integration.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-orange)"></span>
+              Platform Engineering
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:85%;background:var(--accent-orange)"></div>
+              </div>
+              85%
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Q2 2026 ──────────────────────────── -->
+    <div class="timeline-quarter animate-in" style="animation-delay:.3s">
+      <div class="quarter-marker q2">Q2</div>
+      <div class="quarter-label" style="color:var(--accent-blue)">Q2 · 2026</div>
+      <div class="quarter-dates">April – June 2026</div>
+      <div class="quarter-cards">
+
+        <div class="feature-card" data-accent="blue">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Gamification & Rewards System</h4>
+              <div class="feature-badges">
+                <span class="feature-badge new">New</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Earn XP, badges, and leaderboard rankings for submitting ideas, mentoring, reviewing, and
+            prototyping. Integrated with the Ananta badge system and redeemable rewards.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-blue)"></span>
+              Product & UX Team
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:35%;background:var(--accent-blue)"></div>
+              </div>
+              35%
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-accent="purple">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Cross-Team Collaboration Hub</h4>
+              <div class="feature-badges">
+                <span class="feature-badge new">New</span>
+                <span class="feature-badge beta">Beta</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Break down silos with a shared workspace — cross-ODC ideation boards, joint challenge ownership,
+            and real-time co-authoring on innovation proposals.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-purple)"></span>
+              Collaboration Squad
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:20%;background:var(--accent-purple)"></div>
+              </div>
+              20%
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-accent="pink">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Ananta Mobile App</h4>
+              <div class="feature-badges">
+                <span class="feature-badge new">New</span>
+                <span class="feature-badge product">Product</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Submit ideas on-the-go, vote, get real-time updates, and attend virtual innovation sprints —
+            all from a native mobile experience on iOS and Android.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-pink)"></span>
+              Mobile Engineering
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:10%;background:var(--accent-pink)"></div>
+              </div>
+              10%
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Q3 2026 ──────────────────────────── -->
+    <div class="timeline-quarter animate-in" style="animation-delay:.5s">
+      <div class="quarter-marker q3">Q3</div>
+      <div class="quarter-label" style="color:var(--accent-purple)">Q3 · 2026</div>
+      <div class="quarter-dates">July – September 2026</div>
+      <div class="quarter-cards">
+
+        <div class="feature-card" data-accent="purple">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Innovation Sandbox / Playground</h4>
+              <div class="feature-badges">
+                <span class="feature-badge new">New</span>
+                <span class="feature-badge infra">Infra</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            On-demand cloud sandboxes to prototype and demo ideas — pre-configured with AI frameworks,
+            databases, and CI/CD. Spin up, build, present, done.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-purple)"></span>
+              DevOps & Infra
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:5%;background:var(--accent-purple)"></div>
+              </div>
+              5%
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-accent="teal">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Challenge Auto-Matcher</h4>
+              <div class="feature-badges">
+                <span class="feature-badge ai">AI</span>
+                <span class="feature-badge beta">Beta</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            AI-driven matching engine that recommends relevant challenges to individuals based on their
+            skills, past contributions, interests, and team context.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-teal)"></span>
+              AI & Platform Team
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:0%;background:var(--accent-teal)"></div>
+              </div>
+              Planned
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Q4 2026 ──────────────────────────── -->
+    <div class="timeline-quarter animate-in" style="animation-delay:.7s">
+      <div class="quarter-marker q4">Q4</div>
+      <div class="quarter-label" style="color:var(--accent-green)">Q4 · 2026</div>
+      <div class="quarter-dates">October – December 2026</div>
+      <div class="quarter-cards">
+
+        <div class="feature-card" data-accent="green">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Multi-ODC Global Rollout</h4>
+              <div class="feature-badges">
+                <span class="feature-badge new">New</span>
+                <span class="feature-badge infra">Infra</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Bring Ananta to every ODC worldwide — multi-tenant architecture, localised dashboards,
+            region-specific challenges, and unified global leaderboard.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-green)"></span>
+              Platform & Leadership
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:0%;background:var(--accent-green)"></div>
+              </div>
+              Planned
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-accent="red">
+          <div class="feature-top">
+            <div class="feature-info">
+              <h4>Innovation ROI Tracker</h4>
+              <div class="feature-badges">
+                <span class="feature-badge new">New</span>
+              </div>
+            </div>
+          </div>
+          <p class="feature-desc">
+            Measure the real business impact of every implemented idea — cost savings, revenue uplift,
+            efficiency gains — with automated data collection and executive reporting.
+          </p>
+          <div class="feature-meta">
+            <div class="feature-team">
+              <span class="feature-team-dot" style="background:var(--accent-red)"></span>
+              Analytics & Strategy
+            </div>
+            <div class="feature-progress">
+              <div class="progress-bar-sm">
+                <div class="progress-fill-sm" style="width:0%;background:var(--accent-red)"></div>
+              </div>
+              Planned
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ UPCOMING PRODUCTS ═════════════════════ -->
+<section class="products-section">
+  <div class="section-header">
+    <span class="icon">🚀</span>
+    <h2>Upcoming Products from Ananta</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="products-grid">
+
+    <!-- Product 1 -->
+    <div class="product-card" data-accent="purple">
+      <div class="product-header">
+        <div class="product-title-area">
+          <h3>Ananta Cortex</h3>
+          <div class="product-tagline">Enterprise Knowledge Intelligence</div>
+        </div>
+      </div>
+      <p class="product-desc">
+        An AI-powered knowledge management platform that ingests documents, wikis, and code repositories
+        to create a searchable organizational brain. Ask questions in natural language, get answers with citations.
+      </p>
+      <ul class="product-highlights">
+        <li><span class="dot" style="background:var(--accent-purple)"></span> RAG-based document Q&A</li>
+        <li><span class="dot" style="background:var(--accent-purple)"></span> Multi-source knowledge graph</li>
+        <li><span class="dot" style="background:var(--accent-purple)"></span> Role-based access control</li>
+        <li><span class="dot" style="background:var(--accent-purple)"></span> Integrates with Confluence, SharePoint, Git</li>
+      </ul>
+      <div class="product-footer">
+        <span class="product-status alpha">⚗️ Alpha</span>
+        <span class="product-eta">ETA: Q2 2026</span>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card" data-accent="teal">
+      <div class="product-header">
+        <div class="product-title-area">
+          <h3>Ananta Forge</h3>
+          <div class="product-tagline">Rapid Prototype Builder</div>
+        </div>
+      </div>
+      <p class="product-desc">
+        A low-code/no-code platform for quickly building functional prototypes of innovation ideas.
+        Drag-and-drop UI, pre-built API connectors, and one-click deployment for demos.
+      </p>
+      <ul class="product-highlights">
+        <li><span class="dot" style="background:var(--accent-teal)"></span> Visual workflow designer</li>
+        <li><span class="dot" style="background:var(--accent-teal)"></span> 50+ pre-built connectors</li>
+        <li><span class="dot" style="background:var(--accent-teal)"></span> Auto-generate REST APIs</li>
+        <li><span class="dot" style="background:var(--accent-teal)"></span> One-click cloud deployment</li>
+      </ul>
+      <div class="product-footer">
+        <span class="product-status in-dev">🔧 In Development</span>
+        <span class="product-eta">ETA: Q3 2026</span>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card" data-accent="green">
+      <div class="product-header">
+        <div class="product-title-area">
+          <h3>Ananta Shield</h3>
+          <div class="product-tagline">AI-Powered Code Quality Gate</div>
+        </div>
+      </div>
+      <p class="product-desc">
+        Automated code review and security scanning tool that leverages AI to detect vulnerabilities,
+        enforce best practices, and provide actionable fix suggestions before merge.
+      </p>
+      <ul class="product-highlights">
+        <li><span class="dot" style="background:var(--accent-green)"></span> Real-time vulnerability scanning</li>
+        <li><span class="dot" style="background:var(--accent-green)"></span> AI-suggested code fixes</li>
+        <li><span class="dot" style="background:var(--accent-green)"></span> CI/CD pipeline integration</li>
+        <li><span class="dot" style="background:var(--accent-green)"></span> Custom rule engine</li>
+      </ul>
+      <div class="product-footer">
+        <span class="product-status coming-soon">🔜 Coming Soon</span>
+        <span class="product-eta">ETA: Q3 2026</span>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="product-card" data-accent="pink">
+      <div class="product-header">
+        <div class="product-title-area">
+          <h3>Ananta Pulse</h3>
+          <div class="product-tagline">Team Sentiment & Innovation Health</div>
+        </div>
+      </div>
+      <p class="product-desc">
+        Lightweight surveys and sentiment analysis engine that measures innovation culture health,
+        team morale, and engagement. Generates actionable insights for people managers.
+      </p>
+      <ul class="product-highlights">
+        <li><span class="dot" style="background:var(--accent-pink)"></span> Anonymous micro-surveys</li>
+        <li><span class="dot" style="background:var(--accent-pink)"></span> NLP-powered sentiment analysis</li>
+        <li><span class="dot" style="background:var(--accent-pink)"></span> Trend dashboards for managers</li>
+        <li><span class="dot" style="background:var(--accent-pink)"></span> Integration with HR systems</li>
+      </ul>
+      <div class="product-footer">
+        <span class="product-status planned">📋 Planned</span>
+        <span class="product-eta">ETA: Q4 2026</span>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="product-card" data-accent="orange">
+      <div class="product-header">
+        <div class="product-title-area">
+          <h3>Ananta Lens</h3>
+          <div class="product-tagline">Visual Process Mining</div>
+        </div>
+      </div>
+      <p class="product-desc">
+        Process discovery and mining tool that visualizes how work actually flows through teams —
+        identifies bottlenecks, redundancies, and automation opportunities using event logs.
+      </p>
+      <ul class="product-highlights">
+        <li><span class="dot" style="background:var(--accent-orange)"></span> Automated process discovery</li>
+        <li><span class="dot" style="background:var(--accent-orange)"></span> Bottleneck heat maps</li>
+        <li><span class="dot" style="background:var(--accent-orange)"></span> Conformance checking</li>
+        <li><span class="dot" style="background:var(--accent-orange)"></span> Simulation & what-if analysis</li>
+      </ul>
+      <div class="product-footer">
+        <span class="product-status planned">📋 Planned</span>
+        <span class="product-eta">ETA: Q1 2027</span>
+      </div>
+    </div>
+
+    <!-- Product 6 -->
+    <div class="product-card" data-accent="blue">
+      <div class="product-header">
+        <div class="product-title-area">
+          <h3>Ananta Academy</h3>
+          <div class="product-tagline">Innovation Skill-Building Platform</div>
+        </div>
+      </div>
+      <p class="product-desc">
+        A curated learning platform with micro-courses on design thinking, AI/ML, rapid prototyping,
+        and intrapreneurship — powered by AI-personalized learning paths.
+      </p>
+      <ul class="product-highlights">
+        <li><span class="dot" style="background:var(--accent-blue)"></span> AI-personalized learning paths</li>
+        <li><span class="dot" style="background:var(--accent-blue)"></span> Hands-on project challenges</li>
+        <li><span class="dot" style="background:var(--accent-blue)"></span> Certificate & badge system</li>
+        <li><span class="dot" style="background:var(--accent-blue)"></span> Peer mentorship matching</li>
+      </ul>
+      <div class="product-footer">
+        <span class="product-status planned">📋 Planned</span>
+        <span class="product-eta">ETA: Q1 2027</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ IDEA PIPELINE FUNNEL ═══════════════════ -->
+<section class="funnel-section">
+  <div class="section-header">
+    <span class="icon">🔬</span>
+    <h2>Innovation Pipeline Status</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="funnel-pipeline">
+    <div class="funnel-stage">
+      <div class="funnel-icon">💡</div>
+      <h4>Ideation</h4>
+      <div class="funnel-count" style="color:var(--accent-teal)">42</div>
+      <div class="funnel-label">Ideas Submitted</div>
+    </div>
+    <div class="funnel-stage">
+      <div class="funnel-icon">🔍</div>
+      <h4>Evaluation</h4>
+      <div class="funnel-count" style="color:var(--accent-blue)">28</div>
+      <div class="funnel-label">Under Review</div>
+    </div>
+    <div class="funnel-stage">
+      <div class="funnel-icon">🧪</div>
+      <h4>Prototyping</h4>
+      <div class="funnel-count" style="color:var(--accent-purple)">12</div>
+      <div class="funnel-label">Being Built</div>
+    </div>
+    <div class="funnel-stage">
+      <div class="funnel-icon">🚀</div>
+      <h4>Piloting</h4>
+      <div class="funnel-count" style="color:var(--accent-orange)">5</div>
+      <div class="funnel-label">In Pilot</div>
+    </div>
+    <div class="funnel-stage">
+      <div class="funnel-icon">🏆</div>
+      <h4>Scaled</h4>
+      <div class="funnel-count" style="color:var(--accent-green)">3</div>
+      <div class="funnel-label">In Production</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA BANNER ═════════════════════════════ -->
+<section class="cta-banner">
+  <div class="cta-icon">💡</div>
+  <h2>Got an Idea That Could Shape the Future?</h2>
+  <p>
+    The best innovations start with a single spark. Submit your idea, join a challenge, or collaborate
+    with fellow innovators — the pipeline is waiting for you.
+  </p>
+  <div class="cta-buttons">
+    <a href="submit-challenge.html" class="cta-btn primary">🚀 Submit a Challenge</a>
+    <a href="register.html" class="cta-btn secondary" id="joinAnantaBtn">✨ Join Ananta</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.ananta.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The Innovation engineering LAB</strong>, Kolkata ODC.
+</footer>
+
+<script>
+// Scroll-triggered animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .product-card, .funnel-stage').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
+
+// Hide "Join Ananta" button if already logged in
+if (localStorage.getItem('ip_loggedIn') === 'true') {
+  const joinBtn = document.getElementById('joinAnantaBtn');
+  if (joinBtn) joinBtn.style.display = 'none';
+}
+
+// Notification System
+function toggleNotifications() {
+  const panel = document.getElementById('notificationPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const unreadItems = document.querySelectorAll('.notification-item.unread');
+  unreadItems.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notificationBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(url) {
+  event.currentTarget.classList.remove('unread');
+  const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+  const badge = document.getElementById('notificationBadge');
+  badge.textContent = unreadCount;
+  if (unreadCount === 0) badge.style.display = 'none';
+  window.location.href = url;
+}
+
+document.addEventListener('click', function(event) {
+  const wrapper = document.querySelector('.notification-wrapper');
+  const panel = document.getElementById('notificationPanel');
+  if (wrapper && !wrapper.contains(event.target)) {
+    panel.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>
