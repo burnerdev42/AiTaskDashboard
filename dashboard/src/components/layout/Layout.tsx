@@ -15,7 +15,7 @@ export const Layout: React.FC = () => {
             </main>
             <footer className="footer">
                 Copyright © 2026, <a href="#">www.ananta.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
-                <strong> The Innovation engineering LAB</strong>, Kolkata ODC.
+                <strong> Ananta</strong>, Kolkata ODC.
             </footer>
         </>
     );

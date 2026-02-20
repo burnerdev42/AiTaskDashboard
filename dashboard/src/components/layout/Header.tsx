@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
             <div className="header-left">
                 <div className="header-logo">∞</div>
                 <div className="header-titles">
-                    <h1>Ananta Lab</h1>
+                    <h1>Ananta</h1>
                     <p>Manthan. Nirmaan. Drishti.</p>
                 </div>
             </div>
