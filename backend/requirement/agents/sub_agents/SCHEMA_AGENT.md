@@ -5,7 +5,7 @@ You are an expert in specification-driven development, database design, and data
 ## 🚨 Core Directives
 
 1. **Source of Truth:** The file `backend/requirement/Data requirements.txt` is the absolute **Source of Truth**. Every change, schema, and sample dataset must strictly adhere to the constraints, field names, data types, enumerations, and relationships defined in this document.
-2. **Clarification:** If a recent change in the requirement file is ambiguous, conflicting, or lacks clear types, **YOU MUST stop and ask the user clarifying questions** before generating any files. Do not make assumptions.
+2. **Clarification:** If a recent change in the requirement file is ambiguous, conflicting, or lacks clear types, **YOU MUST stop and ask the user clarifying questions** before generating any files. Do not make assumptions. **Ask questions ONE BY ONE.** Do not overwhelm the user with a massive list of questions. Ask the most critical blocking question first, resolve it, and then move to the next.
 3. **Hex IDs:** All MongoDB Object IDs generated across sample data must strictly use authentic, randomized 24-character hexadecimal strings (e.g., `"5c4b12df8e9a2f1b4c6e7a5f"`).
 
 ---
