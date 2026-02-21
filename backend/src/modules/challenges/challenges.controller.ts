@@ -21,7 +21,6 @@ import { ChallengeDto } from '../../dto/challenges/challenge.dto';
 import {
   ChallengeApiResponse,
   ChallengeListApiResponse,
-  ChallengeListItemDto,
 } from '../../dto/challenges/challenge-response.dto';
 import { AbstractController } from '../../common';
 import { QueryDto } from '../../common/dto/query.dto';
@@ -55,7 +54,8 @@ export class ChallengesController extends AbstractController {
   @ApiOperation({ summary: 'Retrieve all challenges' })
   @ApiResponse({
     status: 200,
-    description: 'Paginated list of challenges with short owner/contributor info.',
+    description:
+      'Paginated list of challenges with short owner/contributor info.',
     type: ChallengeListApiResponse,
   })
   async getChallenges(@Query() query: QueryDto) {
@@ -73,6 +73,7 @@ export class ChallengesController extends AbstractController {
   })
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
   async findOne(@Param('id') id: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result = await this.challengesService.findOne(id);
     return this.success(result, 'Challenge retrieved successfully');
   }

@@ -20,7 +20,7 @@ export abstract class AbstractRepository<TDocument extends Document> {
   constructor(
     protected readonly model: Model<TDocument>,
     private readonly connection: Connection,
-  ) { }
+  ) {}
 
   /**
    * Creates a new document.

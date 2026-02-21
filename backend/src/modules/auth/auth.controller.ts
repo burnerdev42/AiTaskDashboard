@@ -32,8 +32,16 @@ export class AuthController extends AbstractController {
    */
   @Post('login')
   @ApiOperation({ summary: 'User login' })
-  @ApiResponse({ status: 200, description: 'Login successful.', type: AuthApiResponseDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful.',
+    type: AuthApiResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized.',
+    type: ErrorResponseDto,
+  })
   async login(
     @Body() authDto: AuthDto,
   ): Promise<ApiResponseType<AuthResponse>> {
@@ -48,8 +56,16 @@ export class AuthController extends AbstractController {
    */
   @Post('register')
   @ApiOperation({ summary: 'User registration' })
-  @ApiResponse({ status: 201, description: 'User successfully registered.', type: AuthApiResponseDto })
-  @ApiResponse({ status: 400, description: 'Bad Request.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: 'User successfully registered.',
+    type: AuthApiResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request.',
+    type: ErrorResponseDto,
+  })
   async register(
     @Body() body: RegisterDto,
   ): Promise<ApiResponseType<AuthResponse>> {

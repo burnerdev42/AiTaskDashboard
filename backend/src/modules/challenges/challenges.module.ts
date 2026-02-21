@@ -33,4 +33,4 @@ import { UserActionsModule } from '../user-actions/user-actions.module';
   providers: [ChallengesService, ChallengesRepository],
   exports: [ChallengesService],
 })
-export class ChallengesModule { }
+export class ChallengesModule {}

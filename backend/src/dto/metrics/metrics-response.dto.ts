@@ -17,7 +17,10 @@ export class MetricsSummaryDto {
   @ApiProperty({ description: 'Total ideas submitted', example: 42 })
   totalIdeas: number;
 
-  @ApiProperty({ description: 'Return on investment percentage', example: '1250%' })
+  @ApiProperty({
+    description: 'Return on investment percentage',
+    example: '1250%',
+  })
   roi: string;
 
   @ApiProperty({ description: 'Total savings achieved', example: '$450k' })

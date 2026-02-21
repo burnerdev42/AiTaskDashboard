@@ -31,10 +31,16 @@ export class UserDto {
   @ApiPropertyOptional({ description: 'Avatar URL or initials', example: 'JD' })
   avatar?: string;
 
-  @ApiProperty({ description: 'Creation timestamp', example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Creation timestamp',
+    example: '2026-02-18T10:00:00.000Z',
+  })
   createdAt: string;
 
-  @ApiProperty({ description: 'Last update timestamp', example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Last update timestamp',
+    example: '2026-02-18T10:00:00.000Z',
+  })
   updatedAt: string;
 }
 

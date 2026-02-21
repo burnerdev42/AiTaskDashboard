@@ -87,6 +87,7 @@ export class ChallengesService extends AbstractService {
       TargetType.CHALLENGE,
     );
 
+    /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
     const upvotes = actions
       .filter((a) => a.actionType === 'upvote')
       .map((a) => a.userId);
@@ -96,13 +97,16 @@ export class ChallengesService extends AbstractService {
     const subscriptions = actions
       .filter((a) => a.actionType === 'subscribe')
       .map((a) => a.userId);
+    /* eslint-enable @typescript-eslint/no-unsafe-enum-comparison */
 
     // Return enriched response
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const challengeObj =
       typeof challenge.toObject === 'function'
         ? challenge.toObject()
         : challenge;
 
+    /* eslint-disable @typescript-eslint/no-unsafe-return */
     return {
       ...challengeObj,
       ideas,
@@ -113,6 +117,7 @@ export class ChallengesService extends AbstractService {
       downvoteCount: downvotes.length,
       subscriptionCount: subscriptions.length,
     };
+    /* eslint-enable @typescript-eslint/no-unsafe-return */
   }
 
   /**

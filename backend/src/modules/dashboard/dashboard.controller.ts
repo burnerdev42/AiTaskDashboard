@@ -27,7 +27,11 @@ export class DashboardController extends AbstractController {
    */
   @Get('swimlanes')
   @ApiOperation({ summary: 'Get KPI Summary for swimlanes' })
-  @ApiResponse({ status: 200, description: 'Aggregated swimlane data.', type: SwimLanesApiResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Aggregated swimlane data.',
+    type: SwimLanesApiResponseDto,
+  })
   async getSwimLanes() {
     const result = await this.dashboardService.getSwimLanes();
     return this.success(result, 'Dashboard swimlanes retrieved successfully');

@@ -19,7 +19,10 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { IdeasService } from './ideas.service';
 import { CreateIdeaDto } from '../../dto/ideas/create-idea.dto';
 import { UpdateIdeaDto } from '../../dto/ideas/update-idea.dto';
-import { IdeaApiResponseDto, IdeaListApiResponseDto } from '../../dto/ideas/idea-response.dto';
+import {
+  IdeaApiResponseDto,
+  IdeaListApiResponseDto,
+} from '../../dto/ideas/idea-response.dto';
 import { ErrorResponseDto } from '../../common/dto/responses/api-response.dto';
 import { AbstractController } from '../../common';
 import { QueryDto } from '../../common/dto/query.dto';
@@ -38,8 +41,16 @@ export class IdeasController extends AbstractController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new idea' })
-  @ApiResponse({ status: 201, description: 'The idea has been successfully created.', type: IdeaApiResponseDto })
-  @ApiResponse({ status: 400, description: 'Bad Request.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: 'The idea has been successfully created.',
+    type: IdeaApiResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request.',
+    type: ErrorResponseDto,
+  })
   async create(@Body() createIdeaDto: CreateIdeaDto) {
     const result = await this.ideasService.create(createIdeaDto);
     return this.success(result, 'Idea successfully created');
@@ -47,7 +58,11 @@ export class IdeasController extends AbstractController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieve all ideas' })
-  @ApiResponse({ status: 200, description: 'List of ideas.', type: IdeaListApiResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'List of ideas.',
+    type: IdeaListApiResponseDto,
+  })
   async getIdeas(@Query() query: QueryDto) {
     const result = await this.ideasService.findAll(query);
     return this.success(result, 'Ideas retrieved successfully');
@@ -55,8 +70,16 @@ export class IdeasController extends AbstractController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve an idea by ID' })
-  @ApiResponse({ status: 200, description: 'The idea.', type: IdeaApiResponseDto })
-  @ApiResponse({ status: 404, description: 'Idea not found.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'The idea.',
+    type: IdeaApiResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Idea not found.',
+    type: ErrorResponseDto,
+  })
   async findOne(@Param('id') id: string) {
     const result = await this.ideasService.findOne(id);
     return this.success(result, 'Idea retrieved successfully');
@@ -64,8 +87,16 @@ export class IdeasController extends AbstractController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update an idea' })
-  @ApiResponse({ status: 200, description: 'The updated idea.', type: IdeaApiResponseDto })
-  @ApiResponse({ status: 404, description: 'Idea not found.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'The updated idea.',
+    type: IdeaApiResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Idea not found.',
+    type: ErrorResponseDto,
+  })
   async update(@Param('id') id: string, @Body() updateIdeaDto: UpdateIdeaDto) {
     const result = await this.ideasService.update(id, updateIdeaDto);
     return this.success(result, 'Idea updated successfully');
@@ -73,8 +104,16 @@ export class IdeasController extends AbstractController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an idea' })
-  @ApiResponse({ status: 200, description: 'The idea has been successfully deleted.', type: IdeaApiResponseDto })
-  @ApiResponse({ status: 404, description: 'Idea not found.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'The idea has been successfully deleted.',
+    type: IdeaApiResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Idea not found.',
+    type: ErrorResponseDto,
+  })
   async remove(@Param('id') id: string) {
     const result = await this.ideasService.remove(id);
     return this.success(result, 'Idea deleted successfully');

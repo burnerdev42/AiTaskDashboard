@@ -4,10 +4,10 @@
  */
 
 export enum ChallengeStatus {
-    SUBMITTED = 'Submitted',
-    UNDER_REVIEW = 'Under Review',
-    APPROVED = 'Approved',
-    IN_PROGRESS = 'In Progress',
-    COMPLETED = 'Completed',
-    REJECTED = 'Rejected',
+  SUBMITTED = 'Submitted',
+  UNDER_REVIEW = 'Under Review',
+  APPROVED = 'Approved',
+  IN_PROGRESS = 'In Progress',
+  COMPLETED = 'Completed',
+  REJECTED = 'Rejected',
 }

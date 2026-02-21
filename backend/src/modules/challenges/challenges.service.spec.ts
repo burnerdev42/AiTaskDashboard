@@ -27,19 +27,37 @@ describe('ChallengesService', () => {
     status: ChallengeStatus.SUBMITTED,
     priority: Priority.HIGH,
     tags: ['AI'],
-    owner: { _id: mockOwnerId, name: 'John', email: 'john@test.com', avatar: null },
+    owner: {
+      _id: mockOwnerId,
+      name: 'John',
+      email: 'john@test.com',
+      avatar: null,
+    },
     contributor: [],
     toObject: jest.fn().mockReturnThis(),
   };
 
   const mockIdeas = [
-    { _id: new Types.ObjectId(), title: 'Idea 1', owner: { _id: mockOwnerId, name: 'John' } },
+    {
+      _id: new Types.ObjectId(),
+      title: 'Idea 1',
+      owner: { _id: mockOwnerId, name: 'John' },
+    },
   ];
 
   const mockActions = [
-    { actionType: 'upvote', userId: { _id: new Types.ObjectId(), name: 'Alice' } },
-    { actionType: 'downvote', userId: { _id: new Types.ObjectId(), name: 'Bob' } },
-    { actionType: 'subscribe', userId: { _id: new Types.ObjectId(), name: 'Carol' } },
+    {
+      actionType: 'upvote',
+      userId: { _id: new Types.ObjectId(), name: 'Alice' },
+    },
+    {
+      actionType: 'downvote',
+      userId: { _id: new Types.ObjectId(), name: 'Bob' },
+    },
+    {
+      actionType: 'subscribe',
+      userId: { _id: new Types.ObjectId(), name: 'Carol' },
+    },
   ];
 
   const mockChallengesRepository = {
@@ -71,7 +89,8 @@ describe('ChallengesService', () => {
     }).compile();
 
     service = module.get<ChallengesService>(ChallengesService);
-    challengesRepository = module.get<ChallengesRepository>(ChallengesRepository);
+    challengesRepository =
+      module.get<ChallengesRepository>(ChallengesRepository);
     ideasService = module.get<IdeasService>(IdeasService);
     userActionsService = module.get<UserActionsService>(UserActionsService);
   });
@@ -107,23 +126,34 @@ describe('ChallengesService', () => {
 
   describe('findOne', () => {
     it('should return enriched challenge with ideas and user actions', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result = await service.findOne(mockChallengeId.toHexString());
 
       expect(challengesRepository.findOne).toHaveBeenCalled();
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(ideasService.findByChallenge).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
       );
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(userActionsService.findByTarget).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
         TargetType.CHALLENGE,
       );
+
       expect(result).toHaveProperty('ideas');
+
       expect(result).toHaveProperty('upvotes');
+
       expect(result).toHaveProperty('downvotes');
+
       expect(result).toHaveProperty('subscriptions');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.ideas).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.upvotes).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.downvotes).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.subscriptions).toHaveLength(1);
     });
   });

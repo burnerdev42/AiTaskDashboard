@@ -27,7 +27,11 @@ export class MetricsController extends AbstractController {
 
   @Get('summary')
   @ApiOperation({ summary: 'Get KPI Summary (ROI, Savings, etc.)' })
-  @ApiResponse({ status: 200, description: 'Metrics summary.', type: MetricsSummaryApiResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Metrics summary.',
+    type: MetricsSummaryApiResponseDto,
+  })
   async getSummary() {
     const result = await this.metricsService.getSummary();
     return this.success(result, 'Metrics summary retrieved successfully');
@@ -35,7 +39,11 @@ export class MetricsController extends AbstractController {
 
   @Get('throughput')
   @ApiOperation({ summary: 'Get Monthly Throughput Data' })
-  @ApiResponse({ status: 200, description: 'Throughput data.', type: ThroughputApiResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Throughput data.',
+    type: ThroughputApiResponseDto,
+  })
   async getThroughput() {
     const result = await this.metricsService.getThroughput();
     return this.success(result, 'Monthly throughput retrieved successfully');

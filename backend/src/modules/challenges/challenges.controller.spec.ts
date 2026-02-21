@@ -64,6 +64,7 @@ describe('ChallengesController', () => {
       };
       const result = await controller.create(dto);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.create).toHaveBeenCalledWith(dto);
       expect(result.data).toEqual(mockChallenge);
     });
@@ -73,6 +74,7 @@ describe('ChallengesController', () => {
     it('should return list of challenges', async () => {
       const result = await controller.getChallenges({ page: 1, limit: 10 });
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.findAll).toHaveBeenCalled();
       expect(result.data).toHaveLength(1);
     });
@@ -82,7 +84,10 @@ describe('ChallengesController', () => {
     it('should return enriched challenge', async () => {
       const result = await controller.findOne(mockChallengeId.toHexString());
 
-      expect(service.findOne).toHaveBeenCalledWith(mockChallengeId.toHexString());
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(service.findOne).toHaveBeenCalledWith(
+        mockChallengeId.toHexString(),
+      );
       expect(result.data).toHaveProperty('ideas');
       expect(result.data).toHaveProperty('upvotes');
     });
@@ -91,9 +96,16 @@ describe('ChallengesController', () => {
   describe('update', () => {
     it('should update a challenge', async () => {
       const dto = { title: 'Updated', description: 'Updated desc' };
-      const result = await controller.update(mockChallengeId.toHexString(), dto);
+      const result = await controller.update(
+        mockChallengeId.toHexString(),
+        dto,
+      );
 
-      expect(service.update).toHaveBeenCalledWith(mockChallengeId.toHexString(), dto);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(service.update).toHaveBeenCalledWith(
+        mockChallengeId.toHexString(),
+        dto,
+      );
       expect(result.data).toEqual(mockChallenge);
     });
   });
@@ -102,7 +114,10 @@ describe('ChallengesController', () => {
     it('should delete a challenge', async () => {
       const result = await controller.remove(mockChallengeId.toHexString());
 
-      expect(service.remove).toHaveBeenCalledWith(mockChallengeId.toHexString());
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(service.remove).toHaveBeenCalledWith(
+        mockChallengeId.toHexString(),
+      );
       expect(result.data).toEqual(mockChallenge);
     });
   });

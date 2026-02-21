@@ -20,7 +20,10 @@ export class IdeaOwnerDto {
   @ApiPropertyOptional({ description: 'Owner name', example: 'John Doe' })
   name?: string;
 
-  @ApiPropertyOptional({ description: 'Owner email', example: 'john@example.com' })
+  @ApiPropertyOptional({
+    description: 'Owner email',
+    example: 'john@example.com',
+  })
   email?: string;
 
   @ApiPropertyOptional({ description: 'Owner avatar', example: 'JD' })
@@ -31,10 +34,16 @@ export class IdeaOwnerDto {
  * Linked challenge reference in idea response.
  */
 export class LinkedChallengeDto {
-  @ApiProperty({ description: 'Challenge ID', example: '507f1f77bcf86cd799439012' })
+  @ApiProperty({
+    description: 'Challenge ID',
+    example: '507f1f77bcf86cd799439012',
+  })
   _id: string;
 
-  @ApiProperty({ description: 'Challenge title', example: 'AI Innovation Challenge' })
+  @ApiProperty({
+    description: 'Challenge title',
+    example: 'AI Innovation Challenge',
+  })
   title: string;
 }
 
@@ -59,22 +68,36 @@ export class IdeaDto {
   @ApiProperty({ description: 'Idea ID', example: '507f1f77bcf86cd799439013' })
   _id: string;
 
-  @ApiProperty({ description: 'Idea title', example: 'Automated Code Reviewer' })
+  @ApiProperty({
+    description: 'Idea title',
+    example: 'Automated Code Reviewer',
+  })
   title: string;
 
   @ApiProperty({ description: 'Idea description' })
   description: string;
 
-  @ApiProperty({ enum: IdeaStatus, description: 'Current status', example: IdeaStatus.IDEATION })
+  @ApiProperty({
+    enum: IdeaStatus,
+    description: 'Current status',
+    example: IdeaStatus.IDEATION,
+  })
   status: IdeaStatus;
 
   @ApiPropertyOptional({ type: IdeaOwnerDto, description: 'Idea owner' })
   owner?: IdeaOwnerDto;
 
-  @ApiPropertyOptional({ type: LinkedChallengeDto, description: 'Linked challenge' })
+  @ApiPropertyOptional({
+    type: LinkedChallengeDto,
+    description: 'Linked challenge',
+  })
   linkedChallenge?: LinkedChallengeDto;
 
-  @ApiPropertyOptional({ type: [String], description: 'Tags', example: ['AI', 'Automation'] })
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Tags',
+    example: ['AI', 'Automation'],
+  })
   tags?: string[];
 
   @ApiPropertyOptional({ type: IdeaStatsDto, description: 'Engagement stats' })
@@ -98,13 +121,23 @@ export class IdeaDto {
   @ApiPropertyOptional({ description: 'Expected savings', example: '$500K' })
   expectedSavings?: string;
 
-  @ApiPropertyOptional({ enum: Priority, description: 'Impact level', example: Priority.HIGH })
+  @ApiPropertyOptional({
+    enum: Priority,
+    description: 'Impact level',
+    example: Priority.HIGH,
+  })
   impactLevel?: Priority;
 
-  @ApiProperty({ description: 'Creation timestamp', example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Creation timestamp',
+    example: '2026-02-18T10:00:00.000Z',
+  })
   createdAt: string;
 
-  @ApiProperty({ description: 'Last update timestamp', example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Last update timestamp',
+    example: '2026-02-18T10:00:00.000Z',
+  })
   updatedAt: string;
 }
 

@@ -7,7 +7,10 @@
 import { Controller, Post, Body, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AbstractController } from '../../common';
-import { SubscribeNewsletterDto, NewsletterApiResponseDto } from '../../dto/newsletter/newsletter.dto';
+import {
+  SubscribeNewsletterDto,
+  NewsletterApiResponseDto,
+} from '../../dto/newsletter/newsletter.dto';
 import { ErrorResponseDto } from '../../common/dto/responses/api-response.dto';
 
 /**
@@ -28,10 +31,21 @@ export class NewsletterController extends AbstractController {
    */
   @Post('subscribe')
   @ApiOperation({ summary: 'Subscribe to newsletter' })
-  @ApiResponse({ status: 201, description: 'Subscribed successfully.', type: NewsletterApiResponseDto })
-  @ApiResponse({ status: 400, description: 'Bad Request.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Subscribed successfully.',
+    type: NewsletterApiResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request.',
+    type: ErrorResponseDto,
+  })
   subscribe(@Body() subscribeDto: SubscribeNewsletterDto) {
     // Mock subscription logic
-    return this.success({ email: subscribeDto.email, subscribed: true }, 'Subscribed successfully');
+    return this.success(
+      { email: subscribeDto.email, subscribed: true },
+      'Subscribed successfully',
+    );
   }
 }

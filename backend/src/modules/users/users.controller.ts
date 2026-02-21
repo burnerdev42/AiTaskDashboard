@@ -7,7 +7,10 @@
 import { Controller, Get, Param, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { UserApiResponseDto, UserListApiResponseDto } from '../../dto/users/user-response.dto';
+import {
+  UserApiResponseDto,
+  UserListApiResponseDto,
+} from '../../dto/users/user-response.dto';
 import { ErrorResponseDto } from '../../common/dto/responses/api-response.dto';
 import { AbstractController } from '../../common';
 
@@ -28,7 +31,11 @@ export class UsersController extends AbstractController {
    */
   @Get()
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'List of users.', type: UserListApiResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'List of users.',
+    type: UserListApiResponseDto,
+  })
   async findAll() {
     const result = await this.usersService.findAll();
     return this.success(result, 'Users retrieved successfully');
@@ -40,8 +47,16 @@ export class UsersController extends AbstractController {
    */
   @Get(':id')
   @ApiOperation({ summary: 'Get user by ID' })
-  @ApiResponse({ status: 200, description: 'User details.', type: UserApiResponseDto })
-  @ApiResponse({ status: 404, description: 'User not found.', type: ErrorResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'User details.',
+    type: UserApiResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found.',
+    type: ErrorResponseDto,
+  })
   async findOne(@Param('id') id: string) {
     const result = await this.usersService.findOne(id);
     return this.success(result, 'User retrieved successfully');

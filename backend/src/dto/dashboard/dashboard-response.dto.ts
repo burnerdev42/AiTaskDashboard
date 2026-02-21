@@ -14,7 +14,10 @@ export class SwimLaneCardDto {
   @ApiProperty({ description: 'Card ID', example: '507f1f77bcf86cd799439011' })
   id: string;
 
-  @ApiProperty({ description: 'Card title', example: 'AI Innovation Challenge' })
+  @ApiProperty({
+    description: 'Card title',
+    example: 'AI Innovation Challenge',
+  })
   title: string;
 
   @ApiPropertyOptional({ description: 'Card description' })
@@ -44,10 +47,16 @@ export class SwimLaneCardDto {
   })
   type: 'challenge' | 'idea';
 
-  @ApiPropertyOptional({ description: 'Progress percentage (0-100)', example: 50 })
+  @ApiPropertyOptional({
+    description: 'Progress percentage (0-100)',
+    example: 50,
+  })
   progress?: number;
 
-  @ApiPropertyOptional({ description: 'Value description', example: '$500K savings' })
+  @ApiPropertyOptional({
+    description: 'Value description',
+    example: '$500K savings',
+  })
   value?: string;
 
   @ApiPropertyOptional({ description: 'Recognition points', example: 25 })
@@ -61,7 +70,9 @@ export class SwimLanesApiResponseDto {
   @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
   status: ApiStatus;
 
-  @ApiPropertyOptional({ example: 'Dashboard swimlanes retrieved successfully' })
+  @ApiPropertyOptional({
+    example: 'Dashboard swimlanes retrieved successfully',
+  })
   message?: string;
 
   @ApiProperty({ type: [SwimLaneCardDto] })

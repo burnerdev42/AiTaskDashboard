@@ -20,7 +20,10 @@ export class TaskOwnerDto {
   @ApiPropertyOptional({ description: 'Owner name', example: 'John Doe' })
   name?: string;
 
-  @ApiPropertyOptional({ description: 'Owner email', example: 'john@example.com' })
+  @ApiPropertyOptional({
+    description: 'Owner email',
+    example: 'john@example.com',
+  })
   email?: string;
 }
 
@@ -40,16 +43,27 @@ export class TaskDto {
   @ApiProperty({ type: TaskOwnerDto, description: 'Task owner/assignee' })
   owner: TaskOwnerDto | string;
 
-  @ApiProperty({ enum: Priority, description: 'Priority level', example: Priority.MEDIUM })
+  @ApiProperty({
+    enum: Priority,
+    description: 'Priority level',
+    example: Priority.MEDIUM,
+  })
   priority: Priority;
 
   @ApiProperty({ description: 'Workflow stage', example: 'In Progress' })
   stage: string;
 
-  @ApiProperty({ enum: TaskType, description: 'Task category', example: TaskType.STANDARD })
+  @ApiProperty({
+    enum: TaskType,
+    description: 'Task category',
+    example: TaskType.STANDARD,
+  })
   type: TaskType;
 
-  @ApiPropertyOptional({ description: 'Completion percentage (0-100)', example: 50 })
+  @ApiPropertyOptional({
+    description: 'Completion percentage (0-100)',
+    example: 50,
+  })
   progress?: number;
 
   @ApiPropertyOptional({ description: 'Task value description' })
@@ -58,10 +72,16 @@ export class TaskDto {
   @ApiPropertyOptional({ description: 'Recognition points', example: 10 })
   kudos?: number;
 
-  @ApiProperty({ description: 'Creation timestamp', example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Creation timestamp',
+    example: '2026-02-18T10:00:00.000Z',
+  })
   createdAt: string;
 
-  @ApiProperty({ description: 'Last update timestamp', example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Last update timestamp',
+    example: '2026-02-18T10:00:00.000Z',
+  })
   updatedAt: string;
 }
 
