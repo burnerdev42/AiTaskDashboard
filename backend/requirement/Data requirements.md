@@ -107,6 +107,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `Platform`: String (One from hardcoded dropdown)
 - `Company Tech Role`: String
 - `Email`: String (Unique Identifier)
+- `Password`: String (encrypted string)
 - `Interest Areas`: List of Strings (Hardcoded options, Default: `[]`)
 - `Role`: String (ADMIN | MEMBER | USER)
 - `Created At`: DateTime
@@ -118,9 +119,9 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 
 ### Derived Fields
 - `Upvote Count`: Number (Sum of upvotes on challenges + ideas submitted by user)
-- `Recent Activity` (Top 3): List of Objects (From Notification Event DB, sorted by timestamp)
-- `Recent Submission` (Top 5): List of Objects (From Activity DB, types: `challenge_created` or `idea_created`)
-- `Contribution Graph`: Data Object (From Activity DB, events grouped by month for last 6 months)
+- `Recent Activity` (Top 3): List of Activity Objects (From Activity DB, sorted by timestamp)
+- `Recent Submission` (Top 5): List of Activity Objects (From Activity DB, types: `challenge_created` or `idea_created`)
+- `Contribution Graph`: Map of String (Month) to Long (Count) (From Activity DB, events grouped by month for last 6 months)
 - `Comment Count`: Number (Total comments from Comment DB)
 - `Challenge Count`: Number (Total challenges created from Challenge DB)
 - `Total Idea Count`: Number (Total ideas created from Idea DB)

@@ -13,6 +13,7 @@ This specification is designed to be fed to an LLM for generating a MongoDB (Mon
 - `Platform`: String (Enum, conceptually a hardcoded dropdown)
 - `Company Tech Role`: String
 - `Email`: String (Must be a Unique Identifier)
+- `Password`: String (encrypted string)
 - `Interest Areas`: List of Strings (Enum/Hardcoded options). Default: `[]`
 - `Role`: String (Enum: `ADMIN`, `MEMBER`, `USER`)
 - `Created At`: DateTime (Should map to Mongoose's `createdAt` timestamp)

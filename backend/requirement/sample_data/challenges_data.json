@@ -1,17 +1,17 @@
 [
   {
     "_id": {
-      "$oid": "f3657e422c17e6870dc3a090"
+      "$oid": "6f9c4645be80750f9c7c837f"
     },
     "title": "Challenge: Optimize Process 1",
-    "opco": "OpCo Alpha",
+    "opco": "OpCo Beta",
     "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 1.",
     "summary": "Summary of optimization challenge 1",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q2",
-    "portfolioLane": "Adjacent",
-    "priority": "Medium",
+    "portfolioLane": "Core",
+    "priority": "High",
     "tags": [
       "ai",
       "optimization",
@@ -20,49 +20,68 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 1",
     "virtualId": "CH-001",
-    "status": "Under Review",
+    "status": "Completed",
     "userId": {
-      "$oid": "f7c3c52501648868ea0408ea"
+      "$oid": "ec3672e7f3cb324cb2c22642"
     },
     "createdAt": {
-      "$date": "2026-02-10T19:45:00.558Z"
+      "$date": "2026-02-17T16:14:41.393Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "f546ff3e8b00451f67c3724d"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       }
     ],
-    "viewCount": 24,
-    "timestampOfStatusChangedToPilot": null,
-    "timestampOfCompleted": null
+    "viewCount": 223,
+    "timestampOfStatusChangedToPilot": {
+      "$date": "2026-02-14T14:39:27.634Z"
+    },
+    "timestampOfCompleted": {
+      "$date": "2026-02-21T14:39:27.634Z"
+    }
   },
   {
     "_id": {
-      "$oid": "aa9db019c8504c4f5169b44c"
+      "$oid": "07f5de9c0abbfad9733c0a11"
     },
     "title": "Challenge: Optimize Process 2",
-    "opco": "OpCo Beta",
-    "platform": "Mobile - Android",
+    "opco": "OpCo Gamma",
+    "platform": "Web",
     "description": "This is the detailed description for challenge 2.",
     "summary": "Summary of optimization challenge 2",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
+    "timeline": "Q2",
     "portfolioLane": "Transformational",
     "priority": "High",
     "tags": [
@@ -73,52 +92,47 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 2",
     "virtualId": "CH-002",
-    "status": "Completed",
+    "status": "In Pilot",
     "userId": {
-      "$oid": "dc5d66d8d8b89b45b82e8df2"
+      "$oid": "679408078edc8d77ffd426b2"
     },
     "createdAt": {
-      "$date": "2025-12-27T12:12:26.177Z"
+      "$date": "2025-11-11T16:43:37.566Z"
     },
-    "month": 12,
+    "month": 11,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "195be17693e221f7f3db7bff"
-      },
-      {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       }
     ],
-    "viewCount": 274,
+    "viewCount": 116,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-14T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
-    "timestampOfCompleted": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    }
+    "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "8616a0d98b82c6295bc9ceb6"
+      "$oid": "8ecb24f2256ca9a4e18cc173"
     },
     "title": "Challenge: Optimize Process 3",
     "opco": "OpCo Beta",
-    "platform": "Mobile - iOS",
+    "platform": "Web",
     "description": "This is the detailed description for challenge 3.",
     "summary": "Summary of optimization challenge 3",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q3",
-    "portfolioLane": "Core",
-    "priority": "Low",
+    "timeline": "Q1",
+    "portfolioLane": "Transformational",
+    "priority": "Medium",
     "tags": [
       "ai",
       "optimization",
@@ -129,54 +143,72 @@
     "virtualId": "CH-003",
     "status": "In Pilot",
     "userId": {
-      "$oid": "439cdb3fc677d002898e62e9"
+      "$oid": "424aa1cdf5c40c8421367aa5"
     },
     "createdAt": {
-      "$date": "2026-02-01T06:31:36.505Z"
+      "$date": "2026-01-04T22:58:13.338Z"
     },
-    "month": 2,
+    "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "bacbb385c81efaae3612dfe0"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       }
     ],
-    "viewCount": 171,
+    "viewCount": 199,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "3eb3fb7fd3a44eed1f1b3e62"
+      "$oid": "cc8314f009737671b4944bc6"
     },
     "title": "Challenge: Optimize Process 4",
-    "opco": "OpCo Beta",
-    "platform": "Mobile - Android",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 4.",
     "summary": "Summary of optimization challenge 4",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
-    "portfolioLane": "Core",
-    "priority": "Medium",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -187,55 +219,70 @@
     "virtualId": "CH-004",
     "status": "Active Voting",
     "userId": {
-      "$oid": "00d1453e5299f601c71ff78c"
+      "$oid": "424aa1cdf5c40c8421367aa5"
     },
     "createdAt": {
-      "$date": "2025-11-26T22:32:15.784Z"
+      "$date": "2025-12-27T01:01:19.135Z"
     },
-    "month": 11,
+    "month": 12,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "f7bb0a7827888e63529587ca"
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "68f7f79898ea61b7752b68c3"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "dd982d28e012d4704c572bd3"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "bacbb385c81efaae3612dfe0"
       }
     ],
-    "viewCount": 159,
+    "viewCount": 127,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "28cd6680382700680845c872"
+      "$oid": "10643985c2fad7d06f436fe8"
     },
     "title": "Challenge: Optimize Process 5",
-    "opco": "OpCo Beta",
-    "platform": "Mobile - iOS",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 5.",
     "summary": "Summary of optimization challenge 5",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Transformational",
-    "priority": "Medium",
+    "timeline": "Q4",
+    "portfolioLane": "Core",
+    "priority": "High",
     "tags": [
       "ai",
       "optimization",
@@ -244,66 +291,37 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 5",
     "virtualId": "CH-005",
-    "status": "Draft",
+    "status": "Active Voting",
     "userId": {
-      "$oid": "2167c63c20140c2ea0ef260a"
+      "$oid": "f546ff3e8b00451f67c3724d"
     },
     "createdAt": {
-      "$date": "2025-11-19T00:09:49.581Z"
+      "$date": "2026-01-21T00:42:33.897Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
-    "upVotes": [
-      {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      },
-      {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "f7bb0a7827888e63529587ca"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      }
-    ],
-    "subcriptions": [
-      {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      },
-      {
-        "$oid": "8dd9e42484a1fce5fb487638"
-      },
-      {
-        "$oid": "00d1453e5299f601c71ff78c"
-      }
-    ],
-    "viewCount": 251,
+    "upVotes": [],
+    "subcriptions": [],
+    "viewCount": 46,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "7691ed47f5b0338abeba49c7"
+      "$oid": "b645467965cfdde1571eda0e"
     },
     "title": "Challenge: Optimize Process 6",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - iOS",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 6.",
     "summary": "Summary of optimization challenge 6",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
+    "timeline": "Q3",
     "portfolioLane": "Core",
-    "priority": "Medium",
+    "priority": "High",
     "tags": [
       "ai",
       "optimization",
@@ -312,72 +330,75 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 6",
     "virtualId": "CH-006",
-    "status": "Active Voting",
+    "status": "Under Review",
     "userId": {
-      "$oid": "8dd9e42484a1fce5fb487638"
+      "$oid": "2b30fcf2e90897f2225edca8"
     },
     "createdAt": {
-      "$date": "2025-11-11T07:39:45.892Z"
+      "$date": "2026-01-14T07:10:10.784Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "d6d689a4cf42160b67a413c6"
       }
     ],
-    "viewCount": 185,
+    "viewCount": 122,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "53e493a2c367bf0edf7a08e2"
+      "$oid": "7babf239de2cde6789ecf39f"
     },
     "title": "Challenge: Optimize Process 7",
-    "opco": "OpCo Beta",
-    "platform": "Desktop",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - iOS",
     "description": "This is the detailed description for challenge 7.",
     "summary": "Summary of optimization challenge 7",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Adjacent",
-    "priority": "High",
+    "timeline": "Q3",
+    "portfolioLane": "Core",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -388,73 +409,58 @@
     "virtualId": "CH-007",
     "status": "Under Review",
     "userId": {
-      "$oid": "1b707c147202a68b759cd58d"
+      "$oid": "308297a4c754ce1f5200ce85"
     },
     "createdAt": {
-      "$date": "2026-01-27T04:16:28.726Z"
+      "$date": "2025-11-29T10:43:23.923Z"
     },
-    "month": 1,
-    "year": 2026,
+    "month": 11,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "7410e6fbdf8906dd06056e9e"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "2b30fcf2e90897f2225edca8"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
-    "viewCount": 50,
+    "viewCount": 146,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "a0fa7ee6ad74221881363a37"
+      "$oid": "be2b7c484a293c380210965b"
     },
     "title": "Challenge: Optimize Process 8",
-    "opco": "OpCo Gamma",
-    "platform": "Desktop",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 8.",
     "summary": "Summary of optimization challenge 8",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Transformational",
-    "priority": "Medium",
+    "timeline": "Q1",
+    "portfolioLane": "Adjacent",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -463,68 +469,73 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 8",
     "virtualId": "CH-008",
-    "status": "In Pilot",
+    "status": "Under Review",
     "userId": {
-      "$oid": "03ccfe7ba2a83b7eca263679"
+      "$oid": "2245086b5bc06d315ccedbdc"
     },
     "createdAt": {
-      "$date": "2026-02-13T00:22:22.070Z"
+      "$date": "2026-01-26T12:45:44.535Z"
     },
-    "month": 2,
+    "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
-    "subcriptions": [],
-    "viewCount": 222,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
+    "subcriptions": [
+      {
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "268b8a5741b7bd1797a14026"
+      }
+    ],
+    "viewCount": 133,
+    "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "942a8b53933b77955d92d5a5"
+      "$oid": "ae2a841be8b323cae419de98"
     },
     "title": "Challenge: Optimize Process 9",
-    "opco": "OpCo Alpha",
-    "platform": "Web",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 9.",
     "summary": "Summary of optimization challenge 9",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q4",
+    "timeline": "Q2",
     "portfolioLane": "Core",
     "priority": "High",
     "tags": [
@@ -537,220 +548,79 @@
     "virtualId": "CH-009",
     "status": "Completed",
     "userId": {
-      "$oid": "1b707c147202a68b759cd58d"
+      "$oid": "e995c32f1437cd735b64e3f3"
     },
     "createdAt": {
-      "$date": "2026-01-27T16:20:44.618Z"
+      "$date": "2026-01-06T05:12:55.699Z"
     },
     "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "f7bb0a7827888e63529587ca"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ],
-    "viewCount": 201,
+    "viewCount": 88,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-14T14:03:53.979Z"
+      "$date": "2026-02-14T14:39:27.635Z"
     },
     "timestampOfCompleted": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     }
   },
   {
     "_id": {
-      "$oid": "d0045236cf3de5f55206d44a"
+      "$oid": "34a85eb889536ac0af987ed7"
     },
     "title": "Challenge: Optimize Process 10",
     "opco": "OpCo Alpha",
-    "platform": "Desktop",
+    "platform": "Web",
     "description": "This is the detailed description for challenge 10.",
     "summary": "Summary of optimization challenge 10",
-    "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Adjacent",
-    "priority": "Medium",
-    "tags": [
-      "ai",
-      "optimization",
-      "process"
-    ],
-    "constraint": "Budget limited to $5000",
-    "stackeHolder": "Stakeholder 10",
-    "virtualId": "CH-010",
-    "status": "In Pilot",
-    "userId": {
-      "$oid": "03ccfe7ba2a83b7eca263679"
-    },
-    "createdAt": {
-      "$date": "2026-02-20T09:20:58.704Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
-    "upVotes": [
-      {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
-      },
-      {
-        "$oid": "00d1453e5299f601c71ff78c"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      }
-    ],
-    "subcriptions": [
-      {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "00d1453e5299f601c71ff78c"
-      },
-      {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      },
-      {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      }
-    ],
-    "viewCount": 76,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
-    "timestampOfCompleted": null
-  },
-  {
-    "_id": {
-      "$oid": "4bcc4d295bc204e54775e1cf"
-    },
-    "title": "Challenge: Optimize Process 11",
-    "opco": "OpCo Alpha",
-    "platform": "Web",
-    "description": "This is the detailed description for challenge 11.",
-    "summary": "Summary of optimization challenge 11",
-    "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
-    "portfolioLane": "Transformational",
-    "priority": "High",
-    "tags": [
-      "ai",
-      "optimization",
-      "process"
-    ],
-    "constraint": "Budget limited to $5000",
-    "stackeHolder": "Stakeholder 11",
-    "virtualId": "CH-011",
-    "status": "Under Review",
-    "userId": {
-      "$oid": "3b5b278fe53500f702e5c60b"
-    },
-    "createdAt": {
-      "$date": "2026-01-13T13:46:22.472Z"
-    },
-    "month": 1,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
-    "upVotes": [
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
-      }
-    ],
-    "subcriptions": [
-      {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
-      },
-      {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      }
-    ],
-    "viewCount": 105,
-    "timestampOfStatusChangedToPilot": null,
-    "timestampOfCompleted": null
-  },
-  {
-    "_id": {
-      "$oid": "4dd69a5ea0187cd1d89f72c2"
-    },
-    "title": "Challenge: Optimize Process 12",
-    "opco": "OpCo Gamma",
-    "platform": "Desktop",
-    "description": "This is the detailed description for challenge 12.",
-    "summary": "Summary of optimization challenge 12",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q4",
     "portfolioLane": "Core",
@@ -761,62 +631,182 @@
       "process"
     ],
     "constraint": "Budget limited to $5000",
-    "stackeHolder": "Stakeholder 12",
-    "virtualId": "CH-012",
-    "status": "Draft",
+    "stackeHolder": "Stakeholder 10",
+    "virtualId": "CH-010",
+    "status": "Completed",
     "userId": {
-      "$oid": "dd982d28e012d4704c572bd3"
+      "$oid": "bef7a718d953662eebedbc13"
     },
     "createdAt": {
-      "$date": "2025-11-01T09:31:04.055Z"
+      "$date": "2026-02-18T18:12:24.243Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 2,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "2b30fcf2e90897f2225edca8"
+      }
+    ],
+    "subcriptions": [],
+    "viewCount": 222,
+    "timestampOfStatusChangedToPilot": {
+      "$date": "2026-02-14T14:39:27.635Z"
+    },
+    "timestampOfCompleted": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "819c2c2886d5df137793e83b"
+    },
+    "title": "Challenge: Optimize Process 11",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 11.",
+    "summary": "Summary of optimization challenge 11",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Transformational",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 11",
+    "virtualId": "CH-011",
+    "status": "Draft",
+    "userId": {
+      "$oid": "18453cdfc20c9d7e345da6bb"
+    },
+    "createdAt": {
+      "$date": "2025-12-04T15:51:11.114Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    },
+    "upVotes": [
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "2b30fcf2e90897f2225edca8"
+      },
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "b67695827cecb99d4ead1707"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ],
-    "viewCount": 43,
+    "viewCount": 250,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "aff1dc453ca4c03506514a9a"
+      "$oid": "a2bb783fd06680321e007e43"
     },
-    "title": "Challenge: Optimize Process 13",
+    "title": "Challenge: Optimize Process 12",
     "opco": "OpCo Alpha",
-    "platform": "Mobile - Android",
-    "description": "This is the detailed description for challenge 13.",
-    "summary": "Summary of optimization challenge 13",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 12.",
+    "summary": "Summary of optimization challenge 12",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q3",
     "portfolioLane": "Core",
-    "priority": "Medium",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 12",
+    "virtualId": "CH-012",
+    "status": "In Pilot",
+    "userId": {
+      "$oid": "53241fad407ef95937248331"
+    },
+    "createdAt": {
+      "$date": "2026-01-09T14:52:15.410Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    },
+    "upVotes": [
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      }
+    ],
+    "subcriptions": [
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      }
+    ],
+    "viewCount": 84,
+    "timestampOfStatusChangedToPilot": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    },
+    "timestampOfCompleted": null
+  },
+  {
+    "_id": {
+      "$oid": "62ebcba609a8caaa79d8b344"
+    },
+    "title": "Challenge: Optimize Process 13",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 13.",
+    "summary": "Summary of optimization challenge 13",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Core",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -825,70 +815,56 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 13",
     "virtualId": "CH-013",
-    "status": "In Pilot",
+    "status": "Under Review",
     "userId": {
-      "$oid": "dae61077eacf5dffb98929f3"
+      "$oid": "ec3672e7f3cb324cb2c22642"
     },
     "createdAt": {
-      "$date": "2025-12-11T15:10:33.758Z"
+      "$date": "2026-01-09T05:36:38.067Z"
     },
-    "month": 12,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
-    "viewCount": 150,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
+    "viewCount": 270,
+    "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "519e8be9c85659cd00a2000a"
+      "$oid": "3fe0be3a67b43364605dac35"
     },
     "title": "Challenge: Optimize Process 14",
     "opco": "OpCo Beta",
@@ -896,8 +872,8 @@
     "description": "This is the detailed description for challenge 14.",
     "summary": "Summary of optimization challenge 14",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
-    "portfolioLane": "Adjacent",
+    "timeline": "Q2",
+    "portfolioLane": "Transformational",
     "priority": "High",
     "tags": [
       "ai",
@@ -907,60 +883,67 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 14",
     "virtualId": "CH-014",
-    "status": "Completed",
+    "status": "In Pilot",
     "userId": {
-      "$oid": "c5c3cfc0903ba2d661e41e5d"
+      "$oid": "2245086b5bc06d315ccedbdc"
     },
     "createdAt": {
-      "$date": "2025-11-29T16:36:10.256Z"
+      "$date": "2026-01-21T09:59:58.982Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       },
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "2bc621e1361d668aaabfbf57"
       }
     ],
-    "viewCount": 76,
+    "viewCount": 59,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-14T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
-    "timestampOfCompleted": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    }
+    "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "fc8ba864571d20d246fb153b"
+      "$oid": "b596acc32c430378fa2fd413"
     },
     "title": "Challenge: Optimize Process 15",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - iOS",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 15.",
     "summary": "Summary of optimization challenge 15",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Core",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
     "priority": "Medium",
     "tags": [
       "ai",
@@ -970,50 +953,54 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 15",
     "virtualId": "CH-015",
-    "status": "Under Review",
+    "status": "Draft",
     "userId": {
-      "$oid": "03ccfe7ba2a83b7eca263679"
+      "$oid": "68f7f79898ea61b7752b68c3"
     },
     "createdAt": {
-      "$date": "2025-11-01T18:43:22.481Z"
+      "$date": "2026-02-08T00:03:27.922Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 2,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
-    "subcriptions": [],
-    "viewCount": 116,
+    "subcriptions": [
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      }
+    ],
+    "viewCount": 87,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "ef2286a7422b760553e11ac6"
+      "$oid": "644b9ab64cddb5ad858d260e"
     },
     "title": "Challenge: Optimize Process 16",
     "opco": "OpCo Alpha",
-    "platform": "Web",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 16.",
     "summary": "Summary of optimization challenge 16",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q3",
-    "portfolioLane": "Adjacent",
-    "priority": "High",
+    "portfolioLane": "Transformational",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -1022,50 +1009,68 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 16",
     "virtualId": "CH-016",
-    "status": "Completed",
+    "status": "Draft",
     "userId": {
-      "$oid": "03ccfe7ba2a83b7eca263679"
+      "$oid": "2e69c5f1d36087afbd354bca"
     },
     "createdAt": {
-      "$date": "2025-11-24T03:37:40.417Z"
+      "$date": "2025-12-23T01:43:12.601Z"
     },
-    "month": 11,
+    "month": 12,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
-    "subcriptions": [],
-    "viewCount": 172,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-14T14:03:53.979Z"
-    },
-    "timestampOfCompleted": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    }
+    "subcriptions": [
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      }
+    ],
+    "viewCount": 41,
+    "timestampOfStatusChangedToPilot": null,
+    "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "6642edb1c65814cbc473602a"
+      "$oid": "48de8c39447ab4717d6b60ca"
     },
     "title": "Challenge: Optimize Process 17",
-    "opco": "OpCo Gamma",
-    "platform": "Desktop",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - iOS",
     "description": "This is the detailed description for challenge 17.",
     "summary": "Summary of optimization challenge 17",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q3",
-    "portfolioLane": "Transformational",
+    "portfolioLane": "Core",
     "priority": "Medium",
     "tags": [
       "ai",
@@ -1075,77 +1080,64 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 17",
     "virtualId": "CH-017",
-    "status": "In Pilot",
+    "status": "Completed",
     "userId": {
-      "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      "$oid": "424aa1cdf5c40c8421367aa5"
     },
     "createdAt": {
-      "$date": "2025-11-16T14:45:59.502Z"
+      "$date": "2025-12-11T16:19:01.779Z"
     },
-    "month": 11,
+    "month": 12,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "e5ad220c675a802b9d2993ef"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
-    "viewCount": 217,
+    "viewCount": 206,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-14T14:39:27.635Z"
     },
-    "timestampOfCompleted": null
+    "timestampOfCompleted": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    }
   },
   {
     "_id": {
-      "$oid": "9f8b26ddd74b18062569d8c3"
+      "$oid": "38d33015ec821d8b806a9f18"
     },
     "title": "Challenge: Optimize Process 18",
-    "opco": "OpCo Alpha",
+    "opco": "OpCo Beta",
     "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 18.",
     "summary": "Summary of optimization challenge 18",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
+    "timeline": "Q4",
     "portfolioLane": "Core",
-    "priority": "High",
+    "priority": "Medium",
     "tags": [
       "ai",
       "optimization",
@@ -1154,40 +1146,62 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 18",
     "virtualId": "CH-018",
-    "status": "Draft",
+    "status": "Under Review",
     "userId": {
-      "$oid": "439cdb3fc677d002898e62e9"
+      "$oid": "268b8a5741b7bd1797a14026"
     },
     "createdAt": {
-      "$date": "2025-12-13T07:01:30.754Z"
+      "$date": "2025-12-21T16:28:15.770Z"
     },
     "month": 12,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "2245086b5bc06d315ccedbdc"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ],
-    "subcriptions": [],
-    "viewCount": 171,
+    "subcriptions": [
+      {
+        "$oid": "53241fad407ef95937248331"
+      }
+    ],
+    "viewCount": 284,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "3e08e7111ab13e34a43dbd29"
+      "$oid": "682f67cfbe6aeb0a319a8253"
     },
     "title": "Challenge: Optimize Process 19",
-    "opco": "OpCo Gamma",
+    "opco": "OpCo Beta",
     "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 19.",
     "summary": "Summary of optimization challenge 19",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Core",
+    "timeline": "Q1",
+    "portfolioLane": "Transformational",
     "priority": "High",
     "tags": [
       "ai",
@@ -1197,60 +1211,77 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 19",
     "virtualId": "CH-019",
-    "status": "Draft",
+    "status": "Completed",
     "userId": {
-      "$oid": "7410e6fbdf8906dd06056e9e"
+      "$oid": "268b8a5741b7bd1797a14026"
     },
     "createdAt": {
-      "$date": "2025-12-23T01:29:56.810Z"
+      "$date": "2025-12-06T02:02:44.006Z"
     },
     "month": 12,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ],
-    "subcriptions": [],
-    "viewCount": 78,
-    "timestampOfStatusChangedToPilot": null,
-    "timestampOfCompleted": null
+    "subcriptions": [
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      }
+    ],
+    "viewCount": 33,
+    "timestampOfStatusChangedToPilot": {
+      "$date": "2026-02-14T14:39:27.635Z"
+    },
+    "timestampOfCompleted": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    }
   },
   {
     "_id": {
-      "$oid": "cc2240ea74c8dfa24038bb1b"
+      "$oid": "a26dc3f2f9154f79f612e04e"
     },
     "title": "Challenge: Optimize Process 20",
     "opco": "OpCo Alpha",
-    "platform": "Mobile - iOS",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 20.",
     "summary": "Summary of optimization challenge 20",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q4",
+    "timeline": "Q2",
     "portfolioLane": "Adjacent",
     "priority": "Medium",
     "tags": [
@@ -1261,71 +1292,50 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 20",
     "virtualId": "CH-020",
-    "status": "In Pilot",
+    "status": "Active Voting",
     "userId": {
-      "$oid": "195be17693e221f7f3db7bff"
+      "$oid": "424aa1cdf5c40c8421367aa5"
     },
     "createdAt": {
-      "$date": "2025-12-27T03:14:12.984Z"
+      "$date": "2026-01-22T10:02:26.753Z"
     },
-    "month": 12,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "b67695827cecb99d4ead1707"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "969bf9a0094364a075abab0b"
       }
     ],
-    "subcriptions": [
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      }
-    ],
-    "viewCount": 256,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
+    "subcriptions": [],
+    "viewCount": 41,
+    "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "2460e08c86ec5c09e688ff1d"
+      "$oid": "895c7b4344f49927ac824885"
     },
     "title": "Challenge: Optimize Process 21",
     "opco": "OpCo Beta",
-    "platform": "Mobile - Android",
+    "platform": "Web",
     "description": "This is the detailed description for challenge 21.",
     "summary": "Summary of optimization challenge 21",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q2",
-    "portfolioLane": "Adjacent",
-    "priority": "High",
+    "portfolioLane": "Transformational",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -1334,70 +1344,39 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 21",
     "virtualId": "CH-021",
-    "status": "Draft",
+    "status": "Under Review",
     "userId": {
-      "$oid": "439cdb3fc677d002898e62e9"
+      "$oid": "2bc621e1361d668aaabfbf57"
     },
     "createdAt": {
-      "$date": "2025-11-23T16:57:50.586Z"
+      "$date": "2025-11-16T08:37:29.241Z"
     },
     "month": 11,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "268b8a5741b7bd1797a14026"
       }
     ],
-    "subcriptions": [
-      {
-        "$oid": "f7bb0a7827888e63529587ca"
-      },
-      {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
-      }
-    ],
-    "viewCount": 67,
+    "subcriptions": [],
+    "viewCount": 277,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "6e9025b7b99b709ac06d30c7"
+      "$oid": "e26b1f8bae84e20f70427f41"
     },
     "title": "Challenge: Optimize Process 22",
-    "opco": "OpCo Beta",
-    "platform": "Web",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 22.",
     "summary": "Summary of optimization challenge 22",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q3",
+    "timeline": "Q4",
     "portfolioLane": "Adjacent",
     "priority": "Medium",
     "tags": [
@@ -1410,73 +1389,67 @@
     "virtualId": "CH-022",
     "status": "Active Voting",
     "userId": {
-      "$oid": "6dbfb3010ec8c034cca681a8"
+      "$oid": "2bc621e1361d668aaabfbf57"
     },
     "createdAt": {
-      "$date": "2026-01-07T02:55:05.248Z"
+      "$date": "2025-11-04T13:49:53.008Z"
     },
-    "month": 1,
-    "year": 2026,
+    "month": 11,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
-      },
-      {
-        "$oid": "f7bb0a7827888e63529587ca"
-      },
-      {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
       }
     ],
-    "viewCount": 123,
+    "viewCount": 217,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "0ca5ea4ec96ab227f7344713"
+      "$oid": "345245c9f6b8e7ff7e376ac4"
     },
     "title": "Challenge: Optimize Process 23",
     "opco": "OpCo Alpha",
-    "platform": "Mobile - iOS",
+    "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 23.",
     "summary": "Summary of optimization challenge 23",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q3",
-    "portfolioLane": "Adjacent",
-    "priority": "High",
+    "portfolioLane": "Transformational",
+    "priority": "Medium",
     "tags": [
       "ai",
       "optimization",
@@ -1485,56 +1458,69 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 23",
     "virtualId": "CH-023",
-    "status": "Active Voting",
+    "status": "Draft",
     "userId": {
-      "$oid": "ccf33468e120def030df5657"
+      "$oid": "679408078edc8d77ffd426b2"
     },
     "createdAt": {
-      "$date": "2025-12-02T17:13:56.829Z"
+      "$date": "2025-11-28T17:50:37.709Z"
     },
-    "month": 12,
+    "month": 11,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
-    "subcriptions": [],
-    "viewCount": 197,
+    "subcriptions": [
+      {
+        "$oid": "68f7f79898ea61b7752b68c3"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      }
+    ],
+    "viewCount": 37,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "a9c82638c593430b309361c4"
+      "$oid": "c0c66e72bfa1b8fa818b6bb4"
     },
     "title": "Challenge: Optimize Process 24",
     "opco": "OpCo Beta",
-    "platform": "Mobile - iOS",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 24.",
     "summary": "Summary of optimization challenge 24",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
     "timeline": "Q3",
-    "portfolioLane": "Core",
-    "priority": "Low",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
     "tags": [
       "ai",
       "optimization",
@@ -1543,63 +1529,54 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 24",
     "virtualId": "CH-024",
-    "status": "Under Review",
+    "status": "Active Voting",
     "userId": {
-      "$oid": "d359db34d4873a213ef8bd49"
+      "$oid": "308297a4c754ce1f5200ce85"
     },
     "createdAt": {
-      "$date": "2025-11-07T17:06:27.551Z"
+      "$date": "2026-01-24T02:56:36.068Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "e995c32f1437cd735b64e3f3"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "53241fad407ef95937248331"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "969bf9a0094364a075abab0b"
       }
     ],
-    "viewCount": 63,
+    "viewCount": 124,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "55b308d4f75ac095374d46c8"
+      "$oid": "ec56db4a419b423b4fe5a6bb"
     },
     "title": "Challenge: Optimize Process 25",
-    "opco": "OpCo Alpha",
+    "opco": "OpCo Gamma",
     "platform": "Desktop",
     "description": "This is the detailed description for challenge 25.",
     "summary": "Summary of optimization challenge 25",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Transformational",
-    "priority": "High",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
+    "priority": "Low",
     "tags": [
       "ai",
       "optimization",
@@ -1608,76 +1585,65 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 25",
     "virtualId": "CH-025",
-    "status": "In Pilot",
+    "status": "Draft",
     "userId": {
-      "$oid": "dae61077eacf5dffb98929f3"
+      "$oid": "268b8a5741b7bd1797a14026"
     },
     "createdAt": {
-      "$date": "2025-11-14T00:08:42.044Z"
+      "$date": "2026-01-29T15:23:22.136Z"
     },
-    "month": 11,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "53241fad407ef95937248331"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "f7bb0a7827888e63529587ca"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "268b8a5741b7bd1797a14026"
       }
     ],
-    "viewCount": 176,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
+    "viewCount": 268,
+    "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "9a622ff0d1fded3630464f22"
+      "$oid": "8d78a2e96e74fc43fbe97a07"
     },
     "title": "Challenge: Optimize Process 26",
     "opco": "OpCo Alpha",
-    "platform": "Mobile - iOS",
+    "platform": "Web",
     "description": "This is the detailed description for challenge 26.",
     "summary": "Summary of optimization challenge 26",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q1",
-    "portfolioLane": "Transformational",
+    "timeline": "Q2",
+    "portfolioLane": "Adjacent",
     "priority": "High",
     "tags": [
       "ai",
@@ -1687,74 +1653,81 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 26",
     "virtualId": "CH-026",
-    "status": "In Pilot",
+    "status": "Active Voting",
     "userId": {
-      "$oid": "f7c3c52501648868ea0408ea"
+      "$oid": "d6d689a4cf42160b67a413c6"
     },
     "createdAt": {
-      "$date": "2025-12-06T00:07:32.407Z"
+      "$date": "2025-11-26T23:33:13.114Z"
     },
-    "month": 12,
+    "month": 11,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "b67695827cecb99d4ead1707"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "2e69c5f1d36087afbd354bca"
       }
     ],
-    "viewCount": 127,
-    "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
-    },
+    "viewCount": 179,
+    "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "87ccacc255f2c34205c1b280"
+      "$oid": "2b6f98ab90c8304ba50abfba"
     },
     "title": "Challenge: Optimize Process 27",
-    "opco": "OpCo Beta",
+    "opco": "OpCo Gamma",
     "platform": "Mobile - Android",
     "description": "This is the detailed description for challenge 27.",
     "summary": "Summary of optimization challenge 27",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Transformational",
-    "priority": "High",
+    "timeline": "Q3",
+    "portfolioLane": "Core",
+    "priority": "Medium",
     "tags": [
       "ai",
       "optimization",
@@ -1765,82 +1738,79 @@
     "virtualId": "CH-027",
     "status": "In Pilot",
     "userId": {
-      "$oid": "dae61077eacf5dffb98929f3"
+      "$oid": "ec3672e7f3cb324cb2c22642"
     },
     "createdAt": {
-      "$date": "2025-12-19T01:50:14.407Z"
+      "$date": "2025-11-22T13:54:41.834Z"
     },
-    "month": 12,
+    "month": 11,
     "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "53241fad407ef95937248331"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
     "subcriptions": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "bacbb385c81efaae3612dfe0"
       }
     ],
-    "viewCount": 101,
+    "viewCount": 266,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "2ee18df8ed87ab3614f27174"
+      "$oid": "894fd748050ec8a7d6df11cb"
     },
     "title": "Challenge: Optimize Process 28",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - iOS",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 28.",
     "summary": "Summary of optimization challenge 28",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q3",
+    "timeline": "Q4",
     "portfolioLane": "Transformational",
     "priority": "High",
     "tags": [
@@ -1851,60 +1821,55 @@
     "constraint": "Budget limited to $5000",
     "stackeHolder": "Stakeholder 28",
     "virtualId": "CH-028",
-    "status": "Draft",
+    "status": "In Pilot",
     "userId": {
-      "$oid": "d359db34d4873a213ef8bd49"
+      "$oid": "b67695827cecb99d4ead1707"
     },
     "createdAt": {
-      "$date": "2026-02-02T05:36:14.642Z"
+      "$date": "2026-02-02T05:58:24.826Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
-    "upVotes": [
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
-      }
-    ],
+    "upVotes": [],
     "subcriptions": [
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "2b30fcf2e90897f2225edca8"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ],
-    "viewCount": 244,
-    "timestampOfStatusChangedToPilot": null,
+    "viewCount": 10,
+    "timestampOfStatusChangedToPilot": {
+      "$date": "2026-02-21T14:39:27.635Z"
+    },
     "timestampOfCompleted": null
   },
   {
     "_id": {
-      "$oid": "75539b5ec6c5dc61d63a78da"
+      "$oid": "93da01dba89e41b89b6faf04"
     },
     "title": "Challenge: Optimize Process 29",
-    "opco": "OpCo Gamma",
-    "platform": "Desktop",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
     "description": "This is the detailed description for challenge 29.",
     "summary": "Summary of optimization challenge 29",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q2",
-    "portfolioLane": "Core",
-    "priority": "Medium",
+    "timeline": "Q1",
+    "portfolioLane": "Transformational",
+    "priority": "High",
     "tags": [
       "ai",
       "optimization",
@@ -1915,79 +1880,45 @@
     "virtualId": "CH-029",
     "status": "Completed",
     "userId": {
-      "$oid": "195be17693e221f7f3db7bff"
+      "$oid": "2bc621e1361d668aaabfbf57"
     },
     "createdAt": {
-      "$date": "2025-12-10T23:03:59.366Z"
+      "$date": "2026-01-17T11:22:45.776Z"
     },
-    "month": 12,
-    "year": 2025,
+    "month": 1,
+    "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "68f7f79898ea61b7752b68c3"
       }
     ],
-    "subcriptions": [
-      {
-        "$oid": "dd982d28e012d4704c572bd3"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
-      },
-      {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      }
-    ],
-    "viewCount": 249,
+    "subcriptions": [],
+    "viewCount": 246,
     "timestampOfStatusChangedToPilot": {
-      "$date": "2026-02-14T14:03:53.979Z"
+      "$date": "2026-02-14T14:39:27.635Z"
     },
     "timestampOfCompleted": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     }
   },
   {
     "_id": {
-      "$oid": "33aa03ba76d6b58690ec110d"
+      "$oid": "50b527bafd61a0811d42e330"
     },
     "title": "Challenge: Optimize Process 30",
-    "opco": "OpCo Beta",
-    "platform": "Web",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
     "description": "This is the detailed description for challenge 30.",
     "summary": "Summary of optimization challenge 30",
     "outcome": "Expected outcome includes a 20% increase in efficiency.",
-    "timeline": "Q3",
-    "portfolioLane": "Transformational",
+    "timeline": "Q2",
+    "portfolioLane": "Adjacent",
     "priority": "Low",
     "tags": [
       "ai",
@@ -1999,57 +1930,35 @@
     "virtualId": "CH-030",
     "status": "Active Voting",
     "userId": {
-      "$oid": "1b707c147202a68b759cd58d"
+      "$oid": "e5ad220c675a802b9d2993ef"
     },
     "createdAt": {
-      "$date": "2026-02-10T01:35:40.807Z"
+      "$date": "2025-12-15T16:07:02.998Z"
     },
-    "month": 2,
-    "year": 2026,
+    "month": 12,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "upVotes": [
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "68f7f79898ea61b7752b68c3"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "e5ad220c675a802b9d2993ef"
       }
     ],
-    "subcriptions": [
-      {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      }
-    ],
-    "viewCount": 151,
+    "subcriptions": [],
+    "viewCount": 114,
     "timestampOfStatusChangedToPilot": null,
     "timestampOfCompleted": null
   }

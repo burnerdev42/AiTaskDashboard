@@ -53,11 +53,14 @@ Whenever the schema or requirements need to be updated, follow this exact 5-step
   - **Relational Accuracy:** If a `Comment` relies on a `UserId`, that user ID *must* exist within the `users_data.json` payload. You must maintain these tight reference bonds across collections. 
   - Formatted strictly as valid JSON arrays matching the Mongoose syntax structure appropriate for seeding (e.g., matching `_id` and timestamps via `$oid` and `$date` syntaxes if intended for direct Mongo import, or standard ISO formats depending on the seeding tool used).
 
+### Phase 5: Cleanup
+- **Task:** After successfully generating and verifying the sample data, ALWAYS delete any temporary generation scripts (e.g., `generate_sample_data.js`) to keep the repository clean.
+
 ---
 
 ## 🛠️ On Any Triggered Update
 If instructed to "refresh the schemas" or perform a "requirement update":
 1. Confirm the collections involved.
 2. Read the source of truth document.
-3. Automatically execute Phases 2, 3, and 4 in sequence.
+3. Automatically execute Phases 2, 3, 4, and 5 in sequence.
 4. Provide a summarized checklist to the user verifying that the pipelines have completed successfully.

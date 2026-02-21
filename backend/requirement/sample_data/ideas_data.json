@@ -1,7 +1,7 @@
 [
   {
     "_id": {
-      "$oid": "bc7becce7ff91a20e09111f2"
+      "$oid": "ab5609be28d75724d4f46af3"
     },
     "ideaId": "ID-0001",
     "title": "Idea implementation for Challenge 1",
@@ -9,39 +9,66 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "aff1dc453ca4c03506514a9a"
+      "$oid": "b596acc32c430378fa2fd413"
     },
-    "appreciationCount": 103,
-    "viewCount": 237,
+    "appreciationCount": 124,
+    "viewCount": 116,
     "userId": {
-      "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      "$oid": "2e69c5f1d36087afbd354bca"
     },
     "subscription": [
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "2245086b5bc06d315ccedbdc"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T21:35:00.348Z"
+      "$date": "2026-02-20T17:30:40.795Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "f546ff3e8b00451f67c3724d"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "5ac28d93c36ace74c2f07e37"
+      "$oid": "925de4f4d562411401a8da08"
     },
     "ideaId": "ID-0002",
     "title": "Idea implementation for Challenge 2",
@@ -49,38 +76,63 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "a9c82638c593430b309361c4"
+      "$oid": "ec56db4a419b423b4fe5a6bb"
     },
-    "appreciationCount": 23,
-    "viewCount": 481,
+    "appreciationCount": 123,
+    "viewCount": 325,
     "userId": {
-      "$oid": "dd982d28e012d4704c572bd3"
+      "$oid": "7266fc2a6ba991e5e9f1a626"
     },
     "subscription": [
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T17:38:34.287Z"
+      "$date": "2026-02-20T11:53:52.479Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
-    "upVotes": []
+    "upVotes": [
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "68f7f79898ea61b7752b68c3"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "2245086b5bc06d315ccedbdc"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "f546ff3e8b00451f67c3724d"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "469f9922ab15cf2e2cd6fc6b"
+      "$oid": "e0395a8a14b5256d6c4f137a"
     },
     "ideaId": "ID-0003",
     "title": "Idea implementation for Challenge 3",
@@ -88,63 +140,60 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "aff1dc453ca4c03506514a9a"
+      "$oid": "10643985c2fad7d06f436fe8"
     },
-    "appreciationCount": 71,
-    "viewCount": 26,
+    "appreciationCount": 86,
+    "viewCount": 351,
     "userId": {
-      "$oid": "7410e6fbdf8906dd06056e9e"
+      "$oid": "206e353ed387b5a732cb1f0e"
     },
     "subscription": [
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "2245086b5bc06d315ccedbdc"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T22:44:06.835Z"
+      "$date": "2026-02-20T15:47:38.925Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "53241fad407ef95937248331"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "e20452c4923e180788e679fb"
+      "$oid": "6dac12e70626ef452d54582c"
     },
     "ideaId": "ID-0004",
     "title": "Idea implementation for Challenge 4",
@@ -152,57 +201,60 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "7691ed47f5b0338abeba49c7"
+      "$oid": "7babf239de2cde6789ecf39f"
     },
-    "appreciationCount": 141,
-    "viewCount": 272,
+    "appreciationCount": 77,
+    "viewCount": 431,
     "userId": {
-      "$oid": "acadfa4ea62f87f8e95c9d0c"
+      "$oid": "68f7f79898ea61b7752b68c3"
     },
     "subscription": [
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "68f7f79898ea61b7752b68c3"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T12:30:10.856Z"
+      "$date": "2026-02-20T18:29:15.319Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "f546ff3e8b00451f67c3724d"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "03070793690f92237ba086c2"
+      "$oid": "fc901a55559e1699bbfb4528"
     },
     "ideaId": "ID-0005",
     "title": "Idea implementation for Challenge 5",
@@ -210,45 +262,54 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "519e8be9c85659cd00a2000a"
+      "$oid": "b645467965cfdde1571eda0e"
     },
-    "appreciationCount": 64,
-    "viewCount": 197,
+    "appreciationCount": 74,
+    "viewCount": 263,
     "userId": {
-      "$oid": "acadfa4ea62f87f8e95c9d0c"
+      "$oid": "bacbb385c81efaae3612dfe0"
     },
     "subscription": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "969bf9a0094364a075abab0b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T05:17:14.482Z"
+      "$date": "2026-02-21T10:29:04.672Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "d359db34d4873a213ef8bd49"
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "2245086b5bc06d315ccedbdc"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "c6eacb25fc71f0931b7e1625"
+      "$oid": "d9ab88fc79172fc298ed7740"
     },
     "ideaId": "ID-0006",
     "title": "Idea implementation for Challenge 6",
@@ -256,32 +317,63 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "cc2240ea74c8dfa24038bb1b"
+      "$oid": "10643985c2fad7d06f436fe8"
     },
-    "appreciationCount": 51,
-    "viewCount": 343,
+    "appreciationCount": 141,
+    "viewCount": 215,
     "userId": {
-      "$oid": "efff247c2f53da2d9683867e"
+      "$oid": "969bf9a0094364a075abab0b"
     },
-    "subscription": [],
+    "subscription": [
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      }
+    ],
     "createdAt": {
-      "$date": "2026-02-20T23:44:43.734Z"
+      "$date": "2026-02-21T04:59:47.891Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "2bc621e1361d668aaabfbf57"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "87857504f11ba1199a1003ae"
+      "$oid": "0352a8ea5453b7cd7351687f"
     },
     "ideaId": "ID-0007",
     "title": "Idea implementation for Challenge 7",
@@ -289,63 +381,72 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "33aa03ba76d6b58690ec110d"
+      "$oid": "07f5de9c0abbfad9733c0a11"
     },
-    "appreciationCount": 6,
-    "viewCount": 289,
+    "appreciationCount": 85,
+    "viewCount": 440,
     "userId": {
-      "$oid": "dae61077eacf5dffb98929f3"
+      "$oid": "6e9b6e972adf98037fb1eb13"
     },
     "subscription": [
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "68f7f79898ea61b7752b68c3"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T18:02:10.392Z"
+      "$date": "2026-02-21T01:19:44.318Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "5d6c43911b1b6be91cb2314b"
+      "$oid": "75ba935198426b1f6aa52f7d"
     },
     "ideaId": "ID-0008",
     "title": "Idea implementation for Challenge 8",
@@ -353,63 +454,35 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "2460e08c86ec5c09e688ff1d"
+      "$oid": "8ecb24f2256ca9a4e18cc173"
     },
-    "appreciationCount": 105,
-    "viewCount": 142,
+    "appreciationCount": 70,
+    "viewCount": 262,
     "userId": {
-      "$oid": "2167c63c20140c2ea0ef260a"
+      "$oid": "ec3672e7f3cb324cb2c22642"
     },
-    "subscription": [
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T04:06:56.005Z"
+      "$date": "2026-02-20T14:42:30.381Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "00d1453e5299f601c71ff78c"
-      },
-      {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "9d83cbdf2a7cd10574e922bf"
+      "$oid": "f3ae21c8d9c09cd1e3573c2e"
     },
     "ideaId": "ID-0009",
     "title": "Idea implementation for Challenge 9",
@@ -417,39 +490,50 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "a9c82638c593430b309361c4"
+      "$oid": "7babf239de2cde6789ecf39f"
     },
-    "appreciationCount": 12,
-    "viewCount": 186,
+    "appreciationCount": 112,
+    "viewCount": 45,
     "userId": {
-      "$oid": "dc5d66d8d8b89b45b82e8df2"
+      "$oid": "f546ff3e8b00451f67c3724d"
     },
-    "subscription": [
-      {
-        "$oid": "7410e6fbdf8906dd06056e9e"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-20T17:51:22.078Z"
+      "$date": "2026-02-21T10:17:13.475Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "7f990b7524c1eaae5fd60fee"
+      "$oid": "d541fbb008be437ccc1a7072"
     },
     "ideaId": "ID-0010",
     "title": "Idea implementation for Challenge 10",
@@ -457,69 +541,69 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "a0fa7ee6ad74221881363a37"
+      "$oid": "10643985c2fad7d06f436fe8"
     },
-    "appreciationCount": 84,
-    "viewCount": 331,
+    "appreciationCount": 62,
+    "viewCount": 283,
     "userId": {
-      "$oid": "2167c63c20140c2ea0ef260a"
+      "$oid": "bef7a718d953662eebedbc13"
     },
     "subscription": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "68f7f79898ea61b7752b68c3"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "b67695827cecb99d4ead1707"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T21:10:27.793Z"
+      "$date": "2026-02-20T14:48:33.373Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       },
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "9912720c9ce378217c35ac4d"
+      "$oid": "3f8f27f57eecc027c1eef5dc"
     },
     "ideaId": "ID-0011",
     "title": "Idea implementation for Challenge 11",
@@ -527,48 +611,63 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "7691ed47f5b0338abeba49c7"
+      "$oid": "a2bb783fd06680321e007e43"
     },
-    "appreciationCount": 17,
-    "viewCount": 359,
+    "appreciationCount": 99,
+    "viewCount": 125,
     "userId": {
-      "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      "$oid": "268b8a5741b7bd1797a14026"
     },
     "subscription": [
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T21:38:26.907Z"
+      "$date": "2026-02-20T22:01:44.779Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.979Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "b67695827cecb99d4ead1707"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "35417fc7432272e89b11567d"
+      "$oid": "9627a24a6bf84856efa7c8aa"
     },
     "ideaId": "ID-0012",
     "title": "Idea implementation for Challenge 12",
@@ -576,66 +675,57 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "fc8ba864571d20d246fb153b"
+      "$oid": "644b9ab64cddb5ad858d260e"
     },
-    "appreciationCount": 99,
-    "viewCount": 228,
+    "appreciationCount": 11,
+    "viewCount": 150,
     "userId": {
-      "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      "$oid": "679408078edc8d77ffd426b2"
     },
     "subscription": [
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "68f7f79898ea61b7752b68c3"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T01:46:07.255Z"
+      "$date": "2026-02-21T08:29:46.922Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "68f7f79898ea61b7752b68c3"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "969bf9a0094364a075abab0b"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "18be189710a396dd119a70e8"
+      "$oid": "20f5af1764ed79fe31738b2a"
     },
     "ideaId": "ID-0013",
     "title": "Idea implementation for Challenge 13",
@@ -643,51 +733,63 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "87ccacc255f2c34205c1b280"
+      "$oid": "3fe0be3a67b43364605dac35"
     },
-    "appreciationCount": 47,
-    "viewCount": 48,
+    "appreciationCount": 2,
+    "viewCount": 155,
     "userId": {
-      "$oid": "8dd9e42484a1fce5fb487638"
+      "$oid": "b67695827cecb99d4ead1707"
     },
     "subscription": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "bef7a718d953662eebedbc13"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T17:57:49.399Z"
+      "$date": "2026-02-20T23:16:20.646Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "172d60500f83c0bbee497e25"
+      "$oid": "5c0afe02805d5fc63f0ba68c"
     },
     "ideaId": "ID-0014",
     "title": "Idea implementation for Challenge 14",
@@ -695,66 +797,54 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "33aa03ba76d6b58690ec110d"
+      "$oid": "34a85eb889536ac0af987ed7"
     },
-    "appreciationCount": 91,
-    "viewCount": 471,
+    "appreciationCount": 14,
+    "viewCount": 155,
     "userId": {
-      "$oid": "ccf33468e120def030df5657"
+      "$oid": "969bf9a0094364a075abab0b"
     },
     "subscription": [
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T18:04:18.041Z"
+      "$date": "2026-02-20T15:19:12.415Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "dd982d28e012d4704c572bd3"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "fdcd9923288910fb093a5fda"
+      "$oid": "f2782f258dbe35429da3b635"
     },
     "ideaId": "ID-0015",
     "title": "Idea implementation for Challenge 15",
@@ -762,39 +852,35 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "33aa03ba76d6b58690ec110d"
+      "$oid": "8d78a2e96e74fc43fbe97a07"
     },
-    "appreciationCount": 143,
-    "viewCount": 430,
+    "appreciationCount": 88,
+    "viewCount": 32,
     "userId": {
-      "$oid": "f7c3c52501648868ea0408ea"
+      "$oid": "68f7f79898ea61b7752b68c3"
     },
-    "subscription": [
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T13:05:38.456Z"
+      "$date": "2026-02-21T03:28:15.569Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "023150122254f7bde3091e6b"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "f546ff3e8b00451f67c3724d"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "f6cc719b107e01e8160d3c6b"
+      "$oid": "ae05fb1ab580ff7d24604d70"
     },
     "ideaId": "ID-0016",
     "title": "Idea implementation for Challenge 16",
@@ -802,39 +888,63 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "2ee18df8ed87ab3614f27174"
+      "$oid": "644b9ab64cddb5ad858d260e"
     },
-    "appreciationCount": 150,
-    "viewCount": 48,
+    "appreciationCount": 31,
+    "viewCount": 422,
     "userId": {
-      "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      "$oid": "bef7a718d953662eebedbc13"
     },
     "subscription": [
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      },
+      {
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "2b30fcf2e90897f2225edca8"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T14:35:34.618Z"
+      "$date": "2026-02-20T13:45:41.075Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "bef7a718d953662eebedbc13"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "943b04ff67af63730a592684"
+      "$oid": "2d9d3cd387769ee53821755d"
     },
     "ideaId": "ID-0017",
     "title": "Idea implementation for Challenge 17",
@@ -842,57 +952,38 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "9a622ff0d1fded3630464f22"
+      "$oid": "682f67cfbe6aeb0a319a8253"
     },
-    "appreciationCount": 91,
-    "viewCount": 219,
+    "appreciationCount": 64,
+    "viewCount": 192,
     "userId": {
-      "$oid": "efff247c2f53da2d9683867e"
+      "$oid": "206e353ed387b5a732cb1f0e"
     },
-    "subscription": [
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-20T17:47:38.106Z"
+      "$date": "2026-02-20T16:56:36.659Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
-      },
-      {
-        "$oid": "023150122254f7bde3091e6b"
-      },
-      {
-        "$oid": "7410e6fbdf8906dd06056e9e"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "e995c32f1437cd735b64e3f3"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "b33fbe5d46af50a5e856a18f"
+      "$oid": "87d5c3f31fae26580fc6c2f7"
     },
     "ideaId": "ID-0018",
     "title": "Idea implementation for Challenge 18",
@@ -900,51 +991,60 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "cc2240ea74c8dfa24038bb1b"
+      "$oid": "50b527bafd61a0811d42e330"
     },
-    "appreciationCount": 61,
-    "viewCount": 448,
+    "appreciationCount": 51,
+    "viewCount": 59,
     "userId": {
-      "$oid": "0a904c53d7efbb868225a2b9"
+      "$oid": "679408078edc8d77ffd426b2"
     },
     "subscription": [
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "2bc621e1361d668aaabfbf57"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T12:40:19.276Z"
+      "$date": "2026-02-20T23:11:28.815Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      },
+      {
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "a774d61faccb0c0baebbae7d"
+      "$oid": "d47700bf424140df4471486e"
     },
     "ideaId": "ID-0019",
     "title": "Idea implementation for Challenge 19",
@@ -952,45 +1052,39 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "0ca5ea4ec96ab227f7344713"
+      "$oid": "3fe0be3a67b43364605dac35"
     },
-    "appreciationCount": 140,
-    "viewCount": 404,
+    "appreciationCount": 143,
+    "viewCount": 80,
     "userId": {
-      "$oid": "7410e6fbdf8906dd06056e9e"
+      "$oid": "206e353ed387b5a732cb1f0e"
     },
     "subscription": [
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "7410e6fbdf8906dd06056e9e"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "68f7f79898ea61b7752b68c3"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T12:26:57.942Z"
+      "$date": "2026-02-20T16:12:06.570Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "c07e17acaf9b6970f26e1eef"
+      "$oid": "0c7a068970afeceb3d85f5b5"
     },
     "ideaId": "ID-0020",
     "title": "Idea implementation for Challenge 20",
@@ -998,53 +1092,45 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "6e9025b7b99b709ac06d30c7"
+      "$oid": "93da01dba89e41b89b6faf04"
     },
-    "appreciationCount": 144,
-    "viewCount": 383,
+    "appreciationCount": 0,
+    "viewCount": 424,
     "userId": {
-      "$oid": "6dbfb3010ec8c034cca681a8"
+      "$oid": "2b30fcf2e90897f2225edca8"
     },
-    "subscription": [],
+    "subscription": [
+      {
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "68f7f79898ea61b7752b68c3"
+      },
+      {
+        "$oid": "68f7f79898ea61b7752b68c3"
+      },
+      {
+        "$oid": "2245086b5bc06d315ccedbdc"
+      }
+    ],
     "createdAt": {
-      "$date": "2026-02-21T00:44:01.363Z"
+      "$date": "2026-02-21T06:30:57.137Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
-      },
-      {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
-      },
-      {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "b67695827cecb99d4ead1707"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "8e4e54575925bcd16ceed763"
+      "$oid": "22f24be0cac8a9e86c728592"
     },
     "ideaId": "ID-0021",
     "title": "Idea implementation for Challenge 21",
@@ -1052,59 +1138,38 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "aff1dc453ca4c03506514a9a"
+      "$oid": "38d33015ec821d8b806a9f18"
     },
-    "appreciationCount": 6,
-    "viewCount": 323,
+    "appreciationCount": 93,
+    "viewCount": 415,
     "userId": {
-      "$oid": "1b707c147202a68b759cd58d"
+      "$oid": "bacbb385c81efaae3612dfe0"
     },
     "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T08:34:57.081Z"
+      "$date": "2026-02-20T20:15:47.580Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
-      },
-      {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
-      },
-      {
-        "$oid": "dd982d28e012d4704c572bd3"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "61ad6a50b1fe87a160f514ac"
+      "$oid": "0e84b41e4e25019eb9e317bd"
     },
     "ideaId": "ID-0022",
     "title": "Idea implementation for Challenge 22",
@@ -1112,63 +1177,48 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "2460e08c86ec5c09e688ff1d"
+      "$oid": "8ecb24f2256ca9a4e18cc173"
     },
-    "appreciationCount": 14,
-    "viewCount": 281,
+    "appreciationCount": 111,
+    "viewCount": 110,
     "userId": {
-      "$oid": "dae61077eacf5dffb98929f3"
+      "$oid": "d6d689a4cf42160b67a413c6"
     },
     "subscription": [
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T22:46:25.442Z"
+      "$date": "2026-02-20T22:48:50.302Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
-      },
-      {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "e8fa8890364b1d65146b47ee"
+      "$oid": "f57aa72ca15acb71bb9e4604"
     },
     "ideaId": "ID-0023",
     "title": "Idea implementation for Challenge 23",
@@ -1176,51 +1226,54 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "fc8ba864571d20d246fb153b"
+      "$oid": "b645467965cfdde1571eda0e"
     },
-    "appreciationCount": 122,
-    "viewCount": 44,
+    "appreciationCount": 142,
+    "viewCount": 359,
     "userId": {
-      "$oid": "9cb2bba2c311c8d894a30f0f"
+      "$oid": "424aa1cdf5c40c8421367aa5"
     },
     "subscription": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T13:23:03.735Z"
+      "$date": "2026-02-21T03:08:57.489Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "b67695827cecb99d4ead1707"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "9e0ca96dcb06cd8a634665fd"
+      "$oid": "afb64587094b9ff1c0a8dc27"
     },
     "ideaId": "ID-0024",
     "title": "Idea implementation for Challenge 24",
@@ -1228,54 +1281,42 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "8616a0d98b82c6295bc9ceb6"
+      "$oid": "93da01dba89e41b89b6faf04"
     },
-    "appreciationCount": 105,
-    "viewCount": 483,
+    "appreciationCount": 10,
+    "viewCount": 270,
     "userId": {
-      "$oid": "1b707c147202a68b759cd58d"
+      "$oid": "18453cdfc20c9d7e345da6bb"
     },
     "subscription": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "2b30fcf2e90897f2225edca8"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "439cdb3fc677d002898e62e9"
-      },
-      {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T09:22:46.778Z"
+      "$date": "2026-02-21T13:04:15.439Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "f546ff3e8b00451f67c3724d"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "8c3876f2acbaba1cc67c52ee"
+      "$oid": "2e96474c59c327aa92296db5"
     },
     "ideaId": "ID-0025",
     "title": "Idea implementation for Challenge 25",
@@ -1283,32 +1324,51 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "ef2286a7422b760553e11ac6"
+      "$oid": "a26dc3f2f9154f79f612e04e"
     },
-    "appreciationCount": 99,
-    "viewCount": 116,
+    "appreciationCount": 23,
+    "viewCount": 42,
     "userId": {
-      "$oid": "6dbfb3010ec8c034cca681a8"
+      "$oid": "18453cdfc20c9d7e345da6bb"
     },
-    "subscription": [],
+    "subscription": [
+      {
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
+      }
+    ],
     "createdAt": {
-      "$date": "2026-02-20T18:57:27.349Z"
+      "$date": "2026-02-21T11:19:33.825Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "439cdb3fc677d002898e62e9"
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "53241fad407ef95937248331"
+      },
+      {
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "9b77d87c29bd8a31cbc87b66"
+      "$oid": "e78932dd8701bb0cdb207687"
     },
     "ideaId": "ID-0026",
     "title": "Idea implementation for Challenge 26",
@@ -1316,57 +1376,66 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "0ca5ea4ec96ab227f7344713"
+      "$oid": "ec56db4a419b423b4fe5a6bb"
     },
-    "appreciationCount": 143,
-    "viewCount": 472,
+    "appreciationCount": 86,
+    "viewCount": 55,
     "userId": {
-      "$oid": "3b5b278fe53500f702e5c60b"
+      "$oid": "404f08da5d4fd716ff80b1e4"
     },
     "subscription": [
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "bacbb385c81efaae3612dfe0"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T13:12:15.478Z"
+      "$date": "2026-02-20T15:02:15.136Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "b67695827cecb99d4ead1707"
       },
       {
-        "$oid": "195be17693e221f7f3db7bff"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "404f08da5d4fd716ff80b1e4"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "206e353ed387b5a732cb1f0e"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "e30dcc6acfc6cfb60c472817"
+      "$oid": "9b1ee63a06c2683ac9bfa411"
     },
     "ideaId": "ID-0027",
     "title": "Idea implementation for Challenge 27",
@@ -1374,51 +1443,60 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "aff1dc453ca4c03506514a9a"
+      "$oid": "345245c9f6b8e7ff7e376ac4"
     },
-    "appreciationCount": 26,
-    "viewCount": 185,
+    "appreciationCount": 77,
+    "viewCount": 251,
     "userId": {
-      "$oid": "6dbfb3010ec8c034cca681a8"
+      "$oid": "18453cdfc20c9d7e345da6bb"
     },
     "subscription": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T19:57:24.337Z"
+      "$date": "2026-02-20T23:00:18.400Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "ec3672e7f3cb324cb2c22642"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "2e69c5f1d36087afbd354bca"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "e995c32f1437cd735b64e3f3"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "0a0df1defe95d46d5fb2b9a8"
+      "$oid": "75b9127d73404b70ce0098b2"
     },
     "ideaId": "ID-0028",
     "title": "Idea implementation for Challenge 28",
@@ -1426,35 +1504,66 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "9a622ff0d1fded3630464f22"
+      "$oid": "682f67cfbe6aeb0a319a8253"
     },
-    "appreciationCount": 60,
-    "viewCount": 379,
+    "appreciationCount": 150,
+    "viewCount": 489,
     "userId": {
-      "$oid": "c5c3cfc0903ba2d661e41e5d"
+      "$oid": "68f7f79898ea61b7752b68c3"
     },
-    "subscription": [],
+    "subscription": [
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "2bc621e1361d668aaabfbf57"
+      },
+      {
+        "$oid": "424aa1cdf5c40c8421367aa5"
+      },
+      {
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      }
+    ],
     "createdAt": {
-      "$date": "2026-02-21T12:15:24.902Z"
+      "$date": "2026-02-21T14:16:00.759Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "2245086b5bc06d315ccedbdc"
+      },
+      {
+        "$oid": "bacbb385c81efaae3612dfe0"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "10136a3211d77cb3ff06b6bd"
+      "$oid": "d8f53e182ca83191b631786b"
     },
     "ideaId": "ID-0029",
     "title": "Idea implementation for Challenge 29",
@@ -1462,66 +1571,69 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "53e493a2c367bf0edf7a08e2"
+      "$oid": "cc8314f009737671b4944bc6"
     },
-    "appreciationCount": 58,
-    "viewCount": 81,
+    "appreciationCount": 40,
+    "viewCount": 271,
     "userId": {
-      "$oid": "195be17693e221f7f3db7bff"
+      "$oid": "969bf9a0094364a075abab0b"
     },
     "subscription": [
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+        "$oid": "f546ff3e8b00451f67c3724d"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
+        "$oid": "bacbb385c81efaae3612dfe0"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "308297a4c754ce1f5200ce85"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T19:44:26.348Z"
+      "$date": "2026-02-20T20:59:27.491Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "f7bb0a7827888e63529587ca"
+        "$oid": "68f7f79898ea61b7752b68c3"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "53241fad407ef95937248331"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "2167c63c20140c2ea0ef260a"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "e995c32f1437cd735b64e3f3"
       },
       {
-        "$oid": "00d1453e5299f601c71ff78c"
+        "$oid": "2245086b5bc06d315ccedbdc"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "76c15823eb2366389067e093"
+      "$oid": "2f24e72fdb2927fef3cc1317"
     },
     "ideaId": "ID-0030",
     "title": "Idea implementation for Challenge 30",
@@ -1529,60 +1641,69 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "a9c82638c593430b309361c4"
+      "$oid": "a2bb783fd06680321e007e43"
     },
-    "appreciationCount": 23,
-    "viewCount": 82,
+    "appreciationCount": 70,
+    "viewCount": 167,
     "userId": {
-      "$oid": "2167c63c20140c2ea0ef260a"
+      "$oid": "2e69c5f1d36087afbd354bca"
     },
     "subscription": [
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "7266fc2a6ba991e5e9f1a626"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "969bf9a0094364a075abab0b"
+      },
+      {
+        "$oid": "ec3672e7f3cb324cb2c22642"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T10:23:15.019Z"
+      "$date": "2026-02-21T03:19:43.591Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.635Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "969bf9a0094364a075abab0b"
       },
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "f7c3c52501648868ea0408ea"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "6dbfb3010ec8c034cca681a8"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "2b30fcf2e90897f2225edca8"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "6fcf80d3f69359126b2e3760"
+      "$oid": "8fc6fb7f03ce02e8ed2a1573"
     },
     "ideaId": "ID-0031",
     "title": "Idea implementation for Challenge 31",
@@ -1590,48 +1711,42 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "aff1dc453ca4c03506514a9a"
+      "$oid": "93da01dba89e41b89b6faf04"
     },
-    "appreciationCount": 22,
-    "viewCount": 175,
+    "appreciationCount": 118,
+    "viewCount": 150,
     "userId": {
-      "$oid": "9cb2bba2c311c8d894a30f0f"
+      "$oid": "9c9a8f0a668ac333a1b9db88"
     },
     "subscription": [
       {
-        "$oid": "7410e6fbdf8906dd06056e9e"
+        "$oid": "424aa1cdf5c40c8421367aa5"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T16:32:54.346Z"
+      "$date": "2026-02-20T19:25:15.923Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.636Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "9cb2bba2c311c8d894a30f0f"
+        "$oid": "2245086b5bc06d315ccedbdc"
       },
       {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "268b8a5741b7bd1797a14026"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
-      },
-      {
-        "$oid": "3b5b278fe53500f702e5c60b"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "68f7f79898ea61b7752b68c3"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "d220ebc9b371ab501e25161e"
+      "$oid": "111936514c1279d1f415f119"
     },
     "ideaId": "ID-0032",
     "title": "Idea implementation for Challenge 32",
@@ -1639,42 +1754,66 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "ef2286a7422b760553e11ac6"
+      "$oid": "62ebcba609a8caaa79d8b344"
     },
-    "appreciationCount": 42,
-    "viewCount": 400,
+    "appreciationCount": 39,
+    "viewCount": 470,
     "userId": {
-      "$oid": "0a904c53d7efbb868225a2b9"
+      "$oid": "2e69c5f1d36087afbd354bca"
     },
     "subscription": [
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "e5ad220c675a802b9d2993ef"
       },
       {
-        "$oid": "3b5b278fe53500f702e5c60b"
+        "$oid": "206e353ed387b5a732cb1f0e"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T08:38:11.801Z"
+      "$date": "2026-02-20T23:17:57.219Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.636Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "6e9b6e972adf98037fb1eb13"
       },
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "e5ad220c675a802b9d2993ef"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "308297a4c754ce1f5200ce85"
+      },
+      {
+        "$oid": "d6d689a4cf42160b67a413c6"
+      },
+      {
+        "$oid": "404f08da5d4fd716ff80b1e4"
+      },
+      {
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "f546ff3e8b00451f67c3724d"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "c5e2262ac01c592f87e581e9"
+      "$oid": "a6d1a3b0ed2dcaafc3773f9e"
     },
     "ideaId": "ID-0033",
     "title": "Idea implementation for Challenge 33",
@@ -1682,51 +1821,41 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "55b308d4f75ac095374d46c8"
+      "$oid": "93da01dba89e41b89b6faf04"
     },
-    "appreciationCount": 27,
-    "viewCount": 351,
+    "appreciationCount": 0,
+    "viewCount": 317,
     "userId": {
-      "$oid": "03ccfe7ba2a83b7eca263679"
+      "$oid": "68f7f79898ea61b7752b68c3"
     },
     "subscription": [
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "18453cdfc20c9d7e345da6bb"
       },
       {
-        "$oid": "dd982d28e012d4704c572bd3"
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       },
       {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "206e353ed387b5a732cb1f0e"
       },
       {
-        "$oid": "03ccfe7ba2a83b7eca263679"
-      },
-      {
-        "$oid": "acadfa4ea62f87f8e95c9d0c"
+        "$oid": "bef7a718d953662eebedbc13"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T02:38:20.941Z"
+      "$date": "2026-02-21T02:20:30.216Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.636Z"
     },
     "status": true,
-    "upVotes": [
-      {
-        "$oid": "00d1453e5299f601c71ff78c"
-      },
-      {
-        "$oid": "195be17693e221f7f3db7bff"
-      }
-    ]
+    "upVotes": []
   },
   {
     "_id": {
-      "$oid": "92d6e82ef8de5a7bd1260518"
+      "$oid": "380dc2e2df7ff60dac511033"
     },
     "ideaId": "ID-0034",
     "title": "Idea implementation for Challenge 34",
@@ -1734,54 +1863,48 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "aa9db019c8504c4f5169b44c"
+      "$oid": "2b6f98ab90c8304ba50abfba"
     },
-    "appreciationCount": 126,
-    "viewCount": 365,
+    "appreciationCount": 147,
+    "viewCount": 480,
     "userId": {
-      "$oid": "0a904c53d7efbb868225a2b9"
+      "$oid": "206e353ed387b5a732cb1f0e"
     },
     "subscription": [
       {
-        "$oid": "0a904c53d7efbb868225a2b9"
+        "$oid": "d6d689a4cf42160b67a413c6"
       },
       {
-        "$oid": "1b707c147202a68b759cd58d"
+        "$oid": "b67695827cecb99d4ead1707"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
+      },
+      {
+        "$oid": "679408078edc8d77ffd426b2"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T11:53:22.875Z"
+      "$date": "2026-02-20T18:00:10.772Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.636Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
+        "$oid": "679408078edc8d77ffd426b2"
       },
       {
-        "$oid": "150c4ce3ce6b3ee7a983cc0b"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
-      },
-      {
-        "$oid": "ccf33468e120def030df5657"
-      },
-      {
-        "$oid": "0a904c53d7efbb868225a2b9"
-      },
-      {
-        "$oid": "dc5d66d8d8b89b45b82e8df2"
+        "$oid": "2e69c5f1d36087afbd354bca"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "31e110ae3d3305279df02842"
+      "$oid": "05a72d8d66451cec8e8664f5"
     },
     "ideaId": "ID-0035",
     "title": "Idea implementation for Challenge 35",
@@ -1789,39 +1912,50 @@
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "4bcc4d295bc204e54775e1cf"
+      "$oid": "10643985c2fad7d06f436fe8"
     },
-    "appreciationCount": 102,
-    "viewCount": 30,
+    "appreciationCount": 145,
+    "viewCount": 233,
     "userId": {
-      "$oid": "f7c3c52501648868ea0408ea"
+      "$oid": "f546ff3e8b00451f67c3724d"
     },
-    "subscription": [
-      {
-        "$oid": "dae61077eacf5dffb98929f3"
-      },
-      {
-        "$oid": "c5c3cfc0903ba2d661e41e5d"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T07:06:49.988Z"
+      "$date": "2026-02-20T14:44:22.211Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:03:53.980Z"
+      "$date": "2026-02-21T14:39:27.636Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "ccf33468e120def030df5657"
+        "$oid": "308297a4c754ce1f5200ce85"
       },
       {
-        "$oid": "efff247c2f53da2d9683867e"
+        "$oid": "bef7a718d953662eebedbc13"
       },
       {
-        "$oid": "8dd9e42484a1fce5fb487638"
+        "$oid": "268b8a5741b7bd1797a14026"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
+      },
+      {
+        "$oid": "18453cdfc20c9d7e345da6bb"
+      },
+      {
+        "$oid": "f546ff3e8b00451f67c3724d"
+      },
+      {
+        "$oid": "6e9b6e972adf98037fb1eb13"
+      },
+      {
+        "$oid": "2e69c5f1d36087afbd354bca"
+      },
+      {
+        "$oid": "9c9a8f0a668ac333a1b9db88"
       }
     ]
   }

@@ -515,6 +515,40 @@ components:
 
   schemas:
     # ------------------
+    # MINIMAL SCHEMAS (FOR REUSE)
+    # ------------------
+    UserMinimal:
+      type: object
+      properties:
+        _id: { type: string, description: "MongoDB hex ID" }
+        name: { type: string }
+        email: { type: string }
+        companyTechRole: { type: string }
+        role: { type: string, enum: ['ADMIN', 'MEMBER', 'USER'] }
+
+    ChallengeMinimal:
+      type: object
+      properties:
+        _id: { type: string, description: "MongoDB hex ID" }
+        virtualId: { type: string, description: "CH-XXX format" }
+        title: { type: string }
+
+    IdeaMinimal:
+      type: object
+      properties:
+        _id: { type: string, description: "MongoDB hex ID" }
+        ideaId: { type: string, description: "ID-XXXX format" }
+        title: { type: string }
+
+    CommentMinimal:
+      type: object
+      properties:
+        _id: { type: string, description: "MongoDB hex ID" }
+        comment: { type: string }
+        userId: { type: string }
+        createdat: { type: string, format: date-time }
+
+    # ------------------
     # BASE DB SCHEMAS mapping to input DB fields
     # ------------------
     UserBase:
@@ -526,9 +560,11 @@ components:
         companyTechRole: { type: string }
         email: { type: string }
         interestAreas: { type: array, items: { type: string } }
-        role: { type: string }
-        status: { type: string }
-        innovationScore: { type: integer }
+        role: { type: string, enum: ['ADMIN', 'MEMBER', 'USER'] }
+        status: { type: string, enum: ['PENDING', 'APPROVED', 'BLOCKED', 'INACTIVE'] }
+        innovationScore: { type: integer, minimum: 1, maximum: 999 }
+        upvotedChallengeList: { type: array, items: { type: string } }
+        upvotedAppreciatedIdeaList: { type: array, items: { type: string } }
 
     ChallengeBase:
       type: object
@@ -542,19 +578,37 @@ components:
         timeline: { type: string }
         portfolioLane: { type: string }
         priority: { type: string }
-        tags: { type: array, items: { type: string } }
+        tags: { type: array, items: { type: string }, default: ["ai"] }
         constraint: { type: string }
         stackeHolder: { type: string }
+        virtualId: { type: string }
         status: { type: string }
+        userId: { type: string }
+        month: { type: integer }
+        year: { type: integer }
+        upVotes: { type: array, items: { type: string } }
+        subcriptions: { type: array, items: { type: string } }
+        viewCount: { type: integer }
+        timestampOfStatusChangedToPilot: { type: string, format: date-time, nullable: true }
+        timestampOfCompleted: { type: string, format: date-time, nullable: true }
 
     IdeaBase:
       type: object
       properties:
+        ideaId: { type: string }
         title: { type: string }
         description: { type: string }
         proposedSolution: { type: string }
         expectedImpact: { type: string }
         challengeId: { type: string }
+        appreciationCount: { type: integer }
+        viewCount: { type: integer }
+        userId: { type: string }
+        subscription: { type: array, items: { type: string } }
+        month: { type: integer }
+        year: { type: integer }
+        status: { type: boolean }
+        upVotes: { type: array, items: { type: string } }
 
     CommentBase:
       type: object
@@ -563,21 +617,41 @@ components:
         comment: { type: string }
         type: { type: string, enum: ['CH', 'ID'] }
         typeId: { type: string }
+        createdat: { type: string, format: date-time }
 
     ActivityBase:
       type: object
       properties:
-        type: { type: string }
+        type:
+          type: string
+          enum: [
+            'challenge_created', 'idea_created', 'challenge_status_update',
+            'challenge_edited', 'idea_edited', 'challenge_upvoted',
+            'idea_upvoted', 'challenge_commented', 'idea_commented',
+            'challenge_subscribed', 'idea_subscribed', 'challenge_deleted',
+            'idea_deleted', 'log_in', 'log_out'
+          ]
         fk_id: { type: string, nullable: true }
         userId: { type: string }
+        month: { type: integer }
+        year: { type: integer }
+        createdAt: { type: string, format: date-time }
 
     NotificationBase:
       type: object
       properties:
-        type: { type: string }
+        type:
+          type: string
+          enum: [
+            'challenge_created', 'challenge_status_update', 'challenge_edited',
+            'idea_edited', 'challenge_upvoted', 'idea_upvoted',
+            'challenge_commented', 'idea_commented', 'challenge_subscribed',
+            'idea_subscribed', 'challenge_deleted', 'idea_deleted'
+          ]
         fk_id: { type: string, nullable: true }
         userId: { type: string }
-        isSeen: { type: boolean }
+        isSeen: { type: boolean, default: false }
+        createdAt: { type: string, format: date-time }
 
     # ------------------
     # RESPONSE SCHEMAS combining Base + Derived Fields
@@ -588,34 +662,25 @@ components:
         - type: object
           properties:
             _id: { type: string }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
             upvoteCount: { type: integer, description: "(DERIVED) Sum of upvotes on challenges and ideas" }
             recentActivity:
               type: array
-              description: "(DERIVED) Top 3 from Notification Event DB"
+              description: "(DERIVED) Top 3 from Activity DB"
               items:
-                type: object
-                properties:
-                  type: { type: string }
-                  timestamp: { type: string, format: date-time }
-                  description: { type: string }
+                $ref: '#/components/schemas/ActivityResponse'
             recentSubmission:
               type: array
               description: "(DERIVED) Top 5 from Activity DB (challenge_created or idea_created)"
               items:
-                type: object
-                properties:
-                  type: { type: string }
-                  timestamp: { type: string, format: date-time }
-                  itemTitle: { type: string }
+                $ref: '#/components/schemas/ActivityResponse'
             contributionGraph:
-              type: array
-              description: "(DERIVED) Activity group by month for 6 months"
-              items:
-                type: object
-                properties:
-                  month: { type: string }
-                  year: { type: integer }
-                  activityCount: { type: integer }
+              type: object
+              description: "(DERIVED) Activity group by month for 6 months. Map of month (string) to count (long)"
+              additionalProperties:
+                type: integer
+                format: int64
             commentCount: { type: integer, description: "(DERIVED) Total comments" }
             challengeCount: { type: integer, description: "(DERIVED) Total challenges" }
             totalIdeaCount: { type: integer, description: "(DERIVED) Total ideas" }
@@ -626,13 +691,14 @@ components:
         - type: object
           properties:
             _id: { type: string }
-            virtualId: { type: string }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
             countOfIdeas: { type: integer, description: "(DERIVED) Total active ideas linked" }
-            ownerDetails: { type: object, description: "(DERIVED) Fetched from Users" }
-            contributorsDetails: { type: array, items: { type: object }, description: "(DERIVED) Populated contributors users details" }
+            ownerDetails: { $ref: '#/components/schemas/UserMinimal' }
+            contributorsDetails: { type: array, items: { $ref: '#/components/schemas/UserMinimal' }, description: "(DERIVED) Populated contributors users details" }
             commentCount: { type: integer, description: "(DERIVED) Calculated from Comments table" }
-            ideaList: { type: array, items: { type: object }, description: "(DERIVED) Full list from Idea collection" }
-            comments: { type: array, items: { type: object }, description: "(DERIVED) Full list from Comment collection" }
+            ideaList: { type: array, items: { $ref: '#/components/schemas/IdeaMinimal' }, description: "(DERIVED) Full list from Idea collection" }
+            comments: { type: array, items: { $ref: '#/components/schemas/CommentMinimal' }, description: "(DERIVED) Full list from Comment collection" }
 
     IdeaResponse:
       allOf:
@@ -640,12 +706,13 @@ components:
         - type: object
           properties:
             _id: { type: string }
-            ideaId: { type: string }
-            challengeDetails: { type: object, description: "(DERIVED) Object fetched from Challenge DB" }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+            challengeDetails: { $ref: '#/components/schemas/ChallengeMinimal' }
             problemStatement: { type: string, description: "(DERIVED) The description from the parent Challenge" }
             commentCount: { type: integer, description: "(DERIVED) Count calculated from Comments DB" }
-            comments: { type: array, items: { type: object }, description: "(DERIVED) Populated list of comments" }
-            ownerDetails: { type: object, description: "(DERIVED) Fetched from User DB via User Id" }
+            comments: { type: array, items: { $ref: '#/components/schemas/CommentMinimal' }, description: "(DERIVED) Populated list of comments" }
+            ownerDetails: { $ref: '#/components/schemas/UserMinimal' }
 
     CommentResponse:
       allOf:
@@ -653,7 +720,7 @@ components:
         - type: object
           properties:
             _id: { type: string }
-            userDetails: { type: object, description: "(DERIVED) From user DB by userId" }
+            userDetails: { $ref: '#/components/schemas/UserMinimal' }
 
     ActivityResponse:
       allOf:
@@ -661,8 +728,13 @@ components:
         - type: object
           properties:
             _id: { type: string }
-            userDetails: { type: object, description: "(DERIVED) Who performed the action" }
-            entityDetails: { type: object, description: "(DERIVED) What was acted upon" }
+            userDetails: { $ref: '#/components/schemas/UserMinimal' }
+            entityDetails:
+              type: object
+              oneOf:
+                - $ref: '#/components/schemas/ChallengeMinimal'
+                - $ref: '#/components/schemas/IdeaMinimal'
+              description: "(DERIVED) What was acted upon"
             activitySummary: { type: string, description: "(DERIVED) Human readable string generated dynamically" }
 
     NotificationResponse:
@@ -672,5 +744,10 @@ components:
           properties:
             _id: { type: string }
             description: { type: string, description: "(DERIVED) Dynamically generated based on Type and initiator" }
-            linkedEntityDetails: { type: object, description: "(DERIVED) Details of Challenge/Idea linked via fk_id" }
-            recipientDetails: { type: object, description: "(DERIVED) User details fetched via userId" }
+            linkedEntityDetails:
+              type: object
+              oneOf:
+                - $ref: '#/components/schemas/ChallengeMinimal'
+                - $ref: '#/components/schemas/IdeaMinimal'
+              description: "(DERIVED) Details of Challenge/Idea linked via fk_id"
+            recipientDetails: { $ref: '#/components/schemas/UserMinimal' }

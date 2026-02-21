@@ -27,6 +27,10 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
     interestAreas: {
       type: [String],
       enum: [], // Populate with hardcoded options
