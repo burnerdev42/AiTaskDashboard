@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec-Driven Development — Building Self-Updating AI Pipelines</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 1: TITLE                                -->
+    <!-- ============================================ -->
+    <section class="slide active" data-theme="title">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        <div class="slide-content center-content">
+            <p class="tag animate" data-delay="0">A Case Study in AI-Assisted Engineering</p>
+            <h1 class="animate" data-delay="1">Spec-Driven<br>Development</h1>
+            <p class="subtitle animate" data-delay="2">Building Self-Updating AI Pipelines<br>by Teaching, Not Just
+                Prompting</p>
+            <p class="author animate" data-delay="3">Asmit Basu</p>
+            <div class="cta animate" data-delay="4">
+                <span class="key-hint">Press <kbd>→</kbd> or <kbd>Space</kbd> to begin</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 2: THE PROBLEM                          -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="problem">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(239,68,68,0.3), transparent 70%);"></div>
+        </div>
+        <div class="slide-content two-col">
+            <div class="col-text">
+                <p class="step-label animate" data-delay="0">The Problem</p>
+                <h2 class="animate" data-delay="1">AI Without a System<br>is Just <span class="text-red">Chaos</span>
+                </h2>
+                <p class="body-text animate" data-delay="2">When you use AI to code without structure, you get:</p>
+            </div>
+            <div class="col-visual">
+                <div class="chaos-list">
+                    <div class="chaos-item animate" data-delay="2">
+                        <span class="chaos-icon">🔀</span>
+                        <div>
+                            <strong>Requirements Drift</strong>
+                            <p>The spec says one thing, the code does another.</p>
+                        </div>
+                    </div>
+                    <div class="chaos-item animate" data-delay="3">
+                        <span class="chaos-icon">🔁</span>
+                        <div>
+                            <strong>Endless Re-prompting</strong>
+                            <p>Every conversation starts from scratch.</p>
+                        </div>
+                    </div>
+                    <div class="chaos-item animate" data-delay="4">
+                        <span class="chaos-icon">💔</span>
+                        <div>
+                            <strong>Zero Institutional Memory</strong>
+                            <p>The AI forgets your architecture choices.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 3: STEP 1 — ROUGH REQUIREMENT           -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="step-human">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(251,191,36,0.2), transparent 70%);"></div>
+        </div>
+        <div class="slide-content two-col">
+            <div class="col-text">
+                <p class="step-label animate" data-delay="0"><span class="human-badge">Human</span> Step 1</p>
+                <h2 class="animate" data-delay="1">Write the Rough<br>Requirement</h2>
+                <p class="body-text animate" data-delay="2">Start with <strong>human thinking</strong>, not
+                    automation.<br>A plain-text file captures every field, type, relationship, and constraint in your
+                    head.</p>
+                <div class="file-badge animate" data-delay="3">
+                    <span class="file-icon">📄</span> Data requirements.txt
+                </div>
+            </div>
+            <div class="col-visual animate" data-delay="2">
+                <div class="code-window">
+                    <div class="window-bar">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="filename">Data requirements.txt</span>
+                    </div>
+                    <pre><code><span class="cm-comment">## 1. Challenge</span>
+<span class="cm-key">Title</span>: String
+<span class="cm-key">Opco</span>: String (hardcoded dropdown)
+<span class="cm-key">Priority</span>: String
+<span class="cm-key">userId</span>: ObjectID (Creator)
+<span class="cm-key">Virtual Id</span>: String (CH-001..CH-999)
+<span class="cm-key">Status</span>: String (Swim lane)
+<span class="cm-key">upVotes</span>: List of User IDs []
+<span class="cm-comment">
+## Derived Fields</span>
+<span class="cm-derived">countOfIdeas</span>: from idea collection
+<span class="cm-derived">ownerDetails</span>: via user id
+<span class="cm-derived">commentCount</span>: from comment collection</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 4: STEP 2 — HUMAN-READABLE MD           -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="step-ai">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-2"
+                style="background: radial-gradient(circle, rgba(56,189,248,0.2), transparent 70%);"></div>
+        </div>
+        <div class="slide-content two-col">
+            <div class="col-text">
+                <p class="step-label animate" data-delay="0"><span class="ai-badge">AI</span> Step 2</p>
+                <h2 class="animate" data-delay="1">Create the<br>Human-Readable View</h2>
+                <p class="body-text animate" data-delay="2">Asked AI to transform the rough .txt into a structured
+                    Markdown document for <strong>user review</strong>.</p>
+                <div class="feedback-loop animate" data-delay="3">
+                    <svg width="280" height="60" viewBox="0 0 280 60">
+                        <path d="M10 30 L80 30" stroke="var(--accent-amber)" stroke-width="2" fill="none"
+                            marker-end="url(#arrow-amber)" />
+                        <text x="45" y="20" fill="var(--accent-amber)" font-size="11" text-anchor="middle"
+                            font-family="Inter">Review</text>
+                        <rect x="85" y="15" width="110" height="30" rx="6" fill="rgba(251,191,36,0.1)"
+                            stroke="var(--accent-amber)" stroke-width="1" />
+                        <text x="140" y="35" fill="var(--text-primary)" font-size="12" text-anchor="middle"
+                            font-family="Inter">Correct &amp; Iterate</text>
+                        <path d="M200 30 L270 30" stroke="var(--accent-cyan)" stroke-width="2" fill="none"
+                            marker-end="url(#arrow-cyan)" />
+                        <text x="235" y="20" fill="var(--accent-cyan)" font-size="11" text-anchor="middle"
+                            font-family="Inter">Update</text>
+                        <defs>
+                            <marker id="arrow-amber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L8,3 L0,6" fill="var(--accent-amber)" />
+                            </marker>
+                            <marker id="arrow-cyan" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L8,3 L0,6" fill="var(--accent-cyan)" />
+                            </marker>
+                        </defs>
+                    </svg>
+                    <p class="loop-label">First feedback loop established</p>
+                </div>
+                <div class="file-badge animate" data-delay="4">
+                    <span class="file-icon">📝</span> Data requirements.md
+                </div>
+            </div>
+            <div class="col-visual animate" data-delay="2">
+                <div class="code-window">
+                    <div class="window-bar">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="filename">Data requirements.md</span>
+                    </div>
+                    <pre><code><span class="cm-comment"># AI Task Dashboard</span>
+<span class="cm-comment">## 1. Challenge</span>
+<span class="cm-comment">### Database Fields</span>
+- <span class="cm-key">`_id`</span>: MongoDB ObjectId (PK)
+- <span class="cm-key">`Title`</span>: String
+- <span class="cm-key">`Status`</span>: String (Swim lane)
+- <span class="cm-key">`upVotes`</span>: List of User IDs
+
+<span class="cm-comment">### Derived Fields</span>
+- <span class="cm-derived">`countOfIdeas`</span>: Number
+- <span class="cm-derived">`ownerDetails`</span>: Object
+- <span class="cm-derived">`commentCount`</span>: Number</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 5: STEP 3 — SCHEMA SPEC                 -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="step-collab">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%);"></div>
+        </div>
+        <div class="slide-content two-col">
+            <div class="col-text">
+                <p class="step-label animate" data-delay="0"><span class="collab-badge">Collab</span> Step 3</p>
+                <h2 class="animate" data-delay="1">Build the<br>Schema Spec</h2>
+                <p class="body-text animate" data-delay="2">Created detailed model specs in
+                    <code>spec/db_models/</code>. This is where we <strong>debated types</strong>, validated
+                    relationships, and refined constraints together.
+                </p>
+                <div class="review-cycle animate" data-delay="3">
+                    <div class="cycle-step">📐 Generate Spec</div>
+                    <div class="cycle-arrow">↓</div>
+                    <div class="cycle-step highlight-step">👁️ Human Review</div>
+                    <div class="cycle-arrow">↓</div>
+                    <div class="cycle-step">✏️ Refine & Change</div>
+                    <div class="cycle-arrow">↓</div>
+                    <div class="cycle-step">✅ Approve</div>
+                </div>
+            </div>
+            <div class="col-visual animate" data-delay="2">
+                <div class="code-window">
+                    <div class="window-bar">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="filename">challenge_model_spec.md</span>
+                    </div>
+                    <pre><code><span class="cm-comment"># Challenge Model Specification</span>
+<span class="cm-key">Collection</span>: challenges
+<span class="cm-key">Engine</span>: Mongoose / MongoDB
+
+<span class="cm-comment">## Field Definitions</span>
+| Field       | Type     | Required |
+|-------------|----------|----------|
+| title       | String   | yes      |
+| opco        | String   | yes      |
+| status      | String   | yes      |
+| upVotes     | [String] | no       |
+| viewCount   | Number   | no       |</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 6: STEP 4 — SCHEMAS + DATA               -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="step-ai">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-3"
+                style="background: radial-gradient(circle, rgba(34,197,94,0.2), transparent 70%);"></div>
+        </div>
+        <div class="slide-content two-col">
+            <div class="col-text">
+                <p class="step-label animate" data-delay="0"><span class="ai-badge">AI</span> Step 4</p>
+                <h2 class="animate" data-delay="1">Generate Schemas<br>& Sample Data</h2>
+                <p class="body-text animate" data-delay="2">Once the spec was <strong>approved</strong>, the AI
+                    generated production-ready Mongoose schemas and 20+ relational records per collection. Each reviewed
+                    before moving on.</p>
+                <div class="output-files animate" data-delay="3">
+                    <div class="file-badge"><span class="file-icon">⚙️</span> challenges_schema.md</div>
+                    <div class="file-badge"><span class="file-icon">⚙️</span> users_schema.md</div>
+                    <div class="file-badge"><span class="file-icon">📊</span> challenges_data.json</div>
+                    <div class="file-badge"><span class="file-icon">📊</span> users_data.json</div>
+                </div>
+            </div>
+            <div class="col-visual animate" data-delay="2">
+                <div class="code-window">
+                    <div class="window-bar">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="filename">challenges_schema.md</span>
+                    </div>
+                    <pre><code><span class="cm-key">const</span> challengeSchema = <span class="cm-key">new</span> Schema({
+  title: { type: String, required: <span class="cm-derived">true</span> },
+  opco: { type: String },
+  status: { type: String, <span class="cm-derived">default</span>: 'Open' },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: <span class="cm-str">'User'</span>
+  },
+  upVotes: [{ type: String }],
+  viewCount: { type: Number, <span class="cm-derived">default</span>: 0 }
+}, { <span class="cm-derived">timestamps</span>: true });</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 7: STEP 5 — SWAGGER / API                -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="step-collab">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-2"
+                style="background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%);"></div>
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(251,191,36,0.1), transparent 70%); top: 60%; left: 70%;">
+            </div>
+        </div>
+        <div class="slide-content two-col">
+            <div class="col-text">
+                <p class="step-label animate" data-delay="0"><span class="collab-badge">Collab</span> Step 5</p>
+                <h2 class="animate" data-delay="1">The API Contract<br>& Cross-Sync</h2>
+                <p class="body-text animate" data-delay="2">Same iterative process for Swagger. The key rule:
+                    <strong>Base vs. Response</strong> schema split — DB fields for input, derived fields for output.
+                </p>
+                <div class="key-insight animate" data-delay="3">
+                    <div class="insight-icon">🔄</div>
+                    <div>
+                        <strong>Cross-Sync at Every Step</strong>
+                        <p>Found a missing field in Swagger? Update the source of truth first. Always.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-visual animate" data-delay="2">
+                <div class="split-panels">
+                    <div class="mini-panel">
+                        <h4>EntityBase</h4>
+                        <p>Pure DB fields</p>
+                        <p class="panel-usage">Used in POST / PUT</p>
+                    </div>
+                    <div class="panel-arrow">
+                        <svg width="40" height="40" viewBox="0 0 40 40">
+                            <text x="20" y="25" fill="var(--text-secondary)" font-size="20"
+                                text-anchor="middle">+</text>
+                        </svg>
+                    </div>
+                    <div class="mini-panel derived-panel">
+                        <h4>EntityResponse</h4>
+                        <p>Base + Derived fields</p>
+                        <p class="panel-usage">Used in GET responses</p>
+                    </div>
+                </div>
+                <div class="file-badge animate" data-delay="3" style="margin-top: 1.5rem">
+                    <span class="file-icon">📋</span> swagger.yaml — 962 lines, auto-synced
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 8: THE INSIGHT                          -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="insight">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(251,191,36,0.25), transparent 70%); width: 800px; height: 800px;">
+            </div>
+            <div class="gradient-orb orb-2"
+                style="background: radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%); width: 600px; height: 600px; top: 50%; left: 60%;">
+            </div>
+        </div>
+        <div class="slide-content center-content">
+            <p class="step-label animate" data-delay="0">The Turning Point</p>
+            <h2 class="big-quote animate" data-delay="1">"I just taught the AI<br>how to do all of this.</h2>
+            <h2 class="big-quote glow-text animate" data-delay="2">Now I'll make it<br><em>remember.</em>"</h2>
+            <p class="body-text animate" data-delay="3" style="max-width: 700px; margin-top: 2rem;">
+                Consolidate all learnings, rules, and constraints into a structured <strong>Agent Instruction
+                    File</strong> — so the entire process is repeatable, autonomous, and self-updating.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 9: THE SELF-UPDATING SYSTEM              -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="system">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(168,85,247,0.15), transparent 70%);"></div>
+            <div class="gradient-orb orb-3"
+                style="background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%); top: 70%; left: 60%;">
+            </div>
+        </div>
+        <div class="slide-content center-content">
+            <p class="step-label animate" data-delay="0">The System</p>
+            <h2 class="animate" data-delay="1">The Self-Updating Pipeline</h2>
+            <p class="body-text animate" data-delay="2" style="max-width: 700px; margin-bottom: 3rem;">Update the source
+                of truth once → the Master Agent cascades changes through every layer.</p>
+
+            <div class="pipeline animate" data-delay="3">
+                <div class="pipeline-node source-node">
+                    <div class="node-icon">📄</div>
+                    <div class="node-label">Data requirements.txt</div>
+                    <div class="node-sub">Source of Truth</div>
+                </div>
+                <div class="pipeline-connector">
+                    <svg width="60" height="4">
+                        <line x1="0" y1="2" x2="60" y2="2" stroke="var(--accent-purple)" stroke-width="2"
+                            stroke-dasharray="6,4" />
+                    </svg>
+                </div>
+                <div class="pipeline-node agent-node">
+                    <div class="node-icon">🤖</div>
+                    <div class="node-label">SCHEMA_AGENT</div>
+                    <div class="node-sub">Models + Data</div>
+                </div>
+                <div class="pipeline-connector">
+                    <svg width="60" height="4">
+                        <line x1="0" y1="2" x2="60" y2="2" stroke="var(--accent-purple)" stroke-width="2"
+                            stroke-dasharray="6,4" />
+                    </svg>
+                </div>
+                <div class="pipeline-node agent-node">
+                    <div class="node-icon">📋</div>
+                    <div class="node-label">SWAGGER_AGENT</div>
+                    <div class="node-sub">API Contract</div>
+                </div>
+                <div class="pipeline-connector">
+                    <svg width="60" height="4">
+                        <line x1="0" y1="2" x2="60" y2="2" stroke="var(--accent-purple)" stroke-width="2"
+                            stroke-dasharray="6,4" />
+                    </svg>
+                </div>
+                <div class="pipeline-node agent-node">
+                    <div class="node-icon">⚡</div>
+                    <div class="node-label">API_SPEC_AGENT</div>
+                    <div class="node-sub">Business Logic</div>
+                </div>
+                <div class="pipeline-connector">
+                    <svg width="60" height="4">
+                        <line x1="0" y1="2" x2="60" y2="2" stroke="var(--accent-purple)" stroke-width="2"
+                            stroke-dasharray="6,4" />
+                    </svg>
+                </div>
+                <div class="pipeline-node agent-node">
+                    <div class="node-icon">💻</div>
+                    <div class="node-label">CODER_AGENT</div>
+                    <div class="node-sub">Working Code</div>
+                </div>
+            </div>
+            <div class="master-label animate" data-delay="4">
+                <span>Orchestrated by</span> <strong>MASTER_BACKEND_AGENT</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 10: OPENSPEC & THE MOVEMENT              -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="openspec">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%); width: 700px; height: 700px;">
+            </div>
+            <div class="gradient-orb orb-2"
+                style="background: radial-gradient(circle, rgba(168,85,247,0.15), transparent 70%); top: 60%; left: 65%;">
+            </div>
+        </div>
+        <div class="slide-content center-content">
+            <p class="step-label animate" data-delay="0">The Bigger Picture</p>
+            <h2 class="animate" data-delay="1">OpenSpec & The Future<br>of <em>Spec-Driven Dev</em></h2>
+            <p class="body-text animate" data-delay="2" style="max-width: 750px; margin-bottom: 2rem;">
+                OpenSpec is an open-source SDD framework that formalizes the same philosophy:<br><strong>"Structure
+                    before code. Spec as the contract."</strong>
+            </p>
+
+            <div class="comparison-table animate" data-delay="3">
+                <div class="compare-col">
+                    <div class="compare-header openspec-header">OpenSpec Framework</div>
+                    <div class="compare-row">
+                        <span class="compare-icon">📝</span>
+                        <span>Markdown-based specs in version control</span>
+                    </div>
+                    <div class="compare-row">
+                        <span class="compare-icon">🔄</span>
+                        <span>4-phase workflow: Draft → Review → Implement → Archive</span>
+                    </div>
+                    <div class="compare-row">
+                        <span class="compare-icon">🤖</span>
+                        <span>AI implements from approved specs</span>
+                    </div>
+                    <div class="compare-row">
+                        <span class="compare-icon">🔌</span>
+                        <span>Works with 20+ AI coding tools</span>
+                    </div>
+                </div>
+
+                <div class="compare-divider">
+                    <span class="vs-badge">SHARED<br>DNA</span>
+                </div>
+
+                <div class="compare-col">
+                    <div class="compare-header ours-header">Our Approach</div>
+                    <div class="compare-row ours-row">
+                        <span class="compare-icon">📄</span>
+                        <span>Single Source of Truth + living markdown docs</span>
+                    </div>
+                    <div class="compare-row ours-row">
+                        <span class="compare-icon">🔄</span>
+                        <span>Iterative loop: Generate → Review → Refine → Approve</span>
+                    </div>
+                    <div class="compare-row ours-row">
+                        <span class="compare-icon">🧠</span>
+                        <span>AI agents <strong>codified from proven manual work</strong></span>
+                    </div>
+                    <div class="compare-row ours-row highlight-row">
+                        <span class="compare-icon">⚡</span>
+                        <span><strong>Self-orchestrating pipeline</strong> — cascading multi-agent execution</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="future-statement animate" data-delay="4">
+                <p>The world is transitioning from <span class="text-muted-strike">vibe coding</span> to <strong
+                        class="text-glow">specification-driven development</strong>.<br>This is not a trend — it's the
+                    <em>inevitable</em> architecture of AI-assisted engineering.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 11: WHY THIS MATTERS                     -->
+    <!-- ============================================ -->
+    <section class="slide" data-theme="closing">
+        <div class="slide-bg">
+            <div class="gradient-orb orb-1"
+                style="background: radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%); width: 900px; height: 900px;">
+            </div>
+            <div class="gradient-orb orb-2"
+                style="background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%); top: 60%; left: 70%;">
+            </div>
+        </div>
+        <div class="slide-content center-content">
+            <p class="step-label animate" data-delay="0">Why This Matters</p>
+            <h2 class="animate" data-delay="1">The Agents are a <em>Recording</em><br>of Your Expertise</h2>
+            <div class="benefits animate" data-delay="2">
+                <div class="benefit-card">
+                    <div class="benefit-number">01</div>
+                    <h4>Zero Spec Drift</h4>
+                    <p>Implementation is always a mirror of the spec, never a guess.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-number">02</div>
+                    <h4>Minutes, Not Days</h4>
+                    <p>Add a new field → the entire backend regenerates end-to-end.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-number">03</div>
+                    <h4>Self-Healing Loop</h4>
+                    <p>Missing requirements are caught mid-pipeline, synced back to source.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-number">04</div>
+                    <h4>OpenAPI Native</h4>
+                    <p>Aligned with Open Spec philosophy. Any tool can consume the contract.</p>
+                </div>
+            </div>
+            <div class="closing-cta animate" data-delay="3">
+                <p class="closing-text">You didn't build agents and hope they work.<br> You <strong>did the work
+                        manually first</strong>, proved the process, then automated it.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE INDICATOR DOTS -->
+    <nav class="slide-nav" id="slideNav"></nav>
+
+    <!-- KEYBOARD HINT -->
+    <div class="nav-hint">
+        <kbd>←</kbd> <kbd>→</kbd> <kbd>Space</kbd>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
