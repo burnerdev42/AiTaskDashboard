@@ -45,18 +45,12 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                                 {' ' + tag}
                             </span>
                         ))}
-                        <span className={`challenge-stage-badge ${challenge.stage.toLowerCase()}`}>
-                            {challenge.stage === 'Scale' && '📈'}
-                            {challenge.stage === 'Pilot' && '🚀'}
-                            {challenge.stage === 'Prototype' && '🔧'}
-                            {challenge.stage === 'Ideation' && '💡'}
-                            {' ' + (
-                                challenge.stage === 'Scale' ? 'Scaled & Deployed' :
-                                    challenge.stage === 'Pilot' ? 'POC & Pilot' :
-                                        challenge.stage === 'Prototype' ? 'Ideation & Evaluation' :
-                                            challenge.stage === 'Ideation' ? 'Challenge Submitted' :
-                                                challenge.stage
-                            )}
+                        <span className="challenge-stage-badge" data-stage={challenge.stage.toLowerCase()}>
+                            {challenge.stage.includes('Scale') && '📈'}
+                            {challenge.stage.includes('Pilot') && '🚀'}
+                            {challenge.stage.includes('Evaluation') && '🔧'}
+                            {challenge.stage.includes('Submitted') && '💡'}
+                            {' ' + challenge.stage}
                         </span>
                     </div>
                     <h3>{challenge.title}</h3>

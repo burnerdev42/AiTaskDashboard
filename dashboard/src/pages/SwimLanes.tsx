@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../services/storage';
 import { type SwimLaneCard, type ChallengeStage } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 export const SwimLanes: React.FC = () => {
     const [cards, setCards] = useState<SwimLaneCard[]>([]);
@@ -9,6 +10,7 @@ export const SwimLanes: React.FC = () => {
     const [dragOverLaneId, setDragOverLaneId] = useState<string | null>(null);
     const [dropIndex, setDropIndex] = useState<number>(0);
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
     const draggedRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
@@ -18,13 +20,30 @@ export const SwimLanes: React.FC = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    /* ── Lane Definitions (matching swim-lane.html) ── */
+    /* ── Lane Icon SVGs – outlined, inheriting lane color via currentColor ── */
+    const S = 16;
+    const laneIcons: Record<string, React.ReactNode> = {
+        'Challenge Submitted': (
+            <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg>
+        ),
+        'Ideation & Evaluation': (
+            <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+        ),
+        'POC & Pilot': (
+            <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+        ),
+        'Scaled & Deployed': (
+            <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
+        ),
+        'Parking Lot': (
+            <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="10" y1="15" x2="10" y2="9" /><line x1="14" y1="15" x2="14" y2="9" /></svg>
+        ),
+    };
+
     const lanes: {
         id: ChallengeStage | 'Parking Lot';
         title: string;
-        icon: string;
         max: number;
-        widthClass: 'w-sm' | 'w-md';
         color: string;
         laneClass: string;
         widthLabel: string;
@@ -32,11 +51,11 @@ export const SwimLanes: React.FC = () => {
         footerLabel: string;
         badgeBg: string;
     }[] = [
-            { id: 'Ideation', title: 'Challenge<br/>Submitted', icon: '🔴', max: 6, widthClass: 'w-sm', color: 'var(--accent-red)', laneClass: 'challenge', widthLabel: 'New problems & opportunities', addLabel: '+ Add Challenge', footerLabel: 'Challenges submitted', badgeBg: 'rgba(239,83,80,.15)' },
-            { id: 'Prototype', title: 'Ideation &<br/>Evaluation', icon: '🟡', max: 15, widthClass: 'w-md', color: 'var(--accent-yellow)', laneClass: 'ideation-evaluation', widthLabel: 'Brainstorm & feasibility', addLabel: '+ Add Idea/Evaluation', footerLabel: 'To be Evaluated', badgeBg: 'rgba(255,238,88,.12)' },
-            { id: 'Pilot', title: 'POC &<br/>Pilot', icon: '🔵', max: 8, widthClass: 'w-md', color: 'var(--accent-blue)', laneClass: 'poc-pilot', widthLabel: 'Build & validate prototypes', addLabel: '+ Add POC/Pilot', footerLabel: 'Prototypes running', badgeBg: 'rgba(240,184,112,.15)' },
-            { id: 'Scale', title: 'Scaled &<br/>Deployed', icon: '⭐', max: 8, widthClass: 'w-md', color: 'var(--accent-gold)', laneClass: 'deployed', widthLabel: 'Live in production', addLabel: '+ Add Deployment', footerLabel: 'In production', badgeBg: 'rgba(255,213,79,.12)' },
-            { id: 'Parking Lot', title: 'Parking<br/>Lot', icon: '⚪', max: 8, widthClass: 'w-sm', color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: '+ Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
+            { id: 'Challenge Submitted', title: 'Challenge<br/>Submitted', max: 6, color: 'var(--accent-red)', laneClass: 'challenge', widthLabel: 'New problems & opportunities', addLabel: 'Add Challenge', footerLabel: 'Challenges submitted', badgeBg: 'rgba(239,83,80,.15)' },
+            { id: 'Ideation & Evaluation', title: 'Ideation &<br/>Evaluation', max: 15, color: 'var(--accent-yellow)', laneClass: 'ideation-evaluation', widthLabel: 'Brainstorm & feasibility', addLabel: 'Add Idea/Evaluation', footerLabel: 'To be Evaluated', badgeBg: 'rgba(255,238,88,.12)' },
+            { id: 'POC & Pilot', title: 'POC &<br/>Pilot', max: 8, color: 'var(--accent-blue)', laneClass: 'poc-pilot', widthLabel: 'Build & validate prototypes', addLabel: 'Add POC/Pilot', footerLabel: 'Prototypes running', badgeBg: 'rgba(240,184,112,.15)' },
+            { id: 'Scaled & Deployed', title: 'Scaled &<br/>Deployed', max: 8, color: 'var(--accent-gold)', laneClass: 'deployed', widthLabel: 'Live in production', addLabel: 'Add Deployment', footerLabel: 'In production', badgeBg: 'rgba(255,213,79,.12)' },
+            { id: 'Parking Lot', title: 'Parking<br/>Lot', max: 8, color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: 'Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
         ];
 
     const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId);
@@ -142,6 +161,14 @@ export const SwimLanes: React.FC = () => {
     /* ── Mobile: active lane tab ── */
     const [activeLaneIndex, setActiveLaneIndex] = useState(0);
 
+    const handleNewChallenge = () => {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+        navigate('/challenges/submit');
+    };
+
     return (
         <div className="main-wrapper" style={{ height: 'calc(100vh - 80px)', display: 'flex', flexDirection: 'column' }}>
 
@@ -162,7 +189,7 @@ export const SwimLanes: React.FC = () => {
                         } as React.CSSProperties}
                         onClick={() => setActiveLaneIndex(index)}
                     >
-                        <span className="mobile-lane-tab-icon">{lane.icon}</span>
+                        <span className="mobile-lane-tab-icon">{laneIcons[lane.id]}</span>
                         <span className="mobile-lane-tab-label" dangerouslySetInnerHTML={{ __html: lane.title.replace('<br/>', ' ') }} />
                         <span className="mobile-lane-tab-count" style={{ background: lane.badgeBg, color: lane.color }}>
                             {getCardsByLane(lane.id).length}
@@ -180,7 +207,7 @@ export const SwimLanes: React.FC = () => {
                     return (
                         <div
                             key={lane.id}
-                            className={`lane ${lane.laneClass} ${lane.widthClass} ${laneIndex === activeLaneIndex ? 'lane-mobile-active' : 'lane-mobile-hidden'}`}
+                            className={`lane ${lane.laneClass} ${laneIndex === activeLaneIndex ? 'lane-mobile-active' : 'lane-mobile-hidden'}`}
                             onDragOver={handleLaneDragOver}
                             onDragEnter={(e) => handleDragEnter(e, lane.id)}
                             onDragLeave={(e) => handleDragLeave(e, e.currentTarget)}
@@ -188,7 +215,7 @@ export const SwimLanes: React.FC = () => {
                         >
                             {/* ── Lane Header ── */}
                             <div className="lane-header">
-                                <div className="stage-icon" style={{ background: lane.color }}>{lane.icon}</div>
+                                <div className="stage-icon" style={{ color: lane.color }}>{laneIcons[lane.id]}</div>
                                 <h3 dangerouslySetInnerHTML={{ __html: lane.title }} />
                                 <span className="width-tag">{lane.widthLabel}</span>
                             </div>
@@ -207,7 +234,7 @@ export const SwimLanes: React.FC = () => {
                                             onDragStart={(e) => handleDragStart(e, card.id)}
                                             onDragEnd={handleDragEnd}
                                             onDragOver={(e) => handleCardDragOver(e, lane.id, cardIndex)}
-                                            onClick={() => navigate('/challenges/1')}
+                                            onClick={() => navigate(`/challenges/${card.id}`)}
                                         >
                                             <span className="card-drag-handle">⠿</span>
                                             <div className="card-title">{card.title}</div>
@@ -232,6 +259,7 @@ export const SwimLanes: React.FC = () => {
                                 <div
                                     className="empty-slot"
                                     onDragOver={(e) => handleEmptyAreaDragOver(e, lane.id, laneCards.length)}
+                                    onClick={handleNewChallenge}
                                 >
                                     {lane.addLabel}
                                 </div>

@@ -6,7 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 export const Header: React.FC = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
             <div className="header-left">
                 <div className="header-logo">∞</div>
                 <div className="header-titles">
-                    <h1>Ananta Lab</h1>
+                    <h1>Ananta</h1>
                     <p>Manthan. Nirmaan. Drishti.</p>
                 </div>
             </div>
@@ -89,7 +89,7 @@ export const Header: React.FC = () => {
                                         }}
                                     >
                                         <div className={`notification-icon ${notification.type}`}>
-                                            {notification.type === 'challenge' && '🎯'}
+                                            {notification.type === 'challenge' && 'CH'}
                                             {notification.type === 'idea' && '💡'}
                                             {notification.type === 'comment' && '💬'}
                                             {notification.type === 'status' && '📈'}
