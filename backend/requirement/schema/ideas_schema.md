@@ -21,9 +21,6 @@ const ideaSchema = new Schema(
       type: String,
       required: true,
     },
-    expectedImpact: {
-      type: String,
-    },
     challengeId: {
       type: Schema.Types.ObjectId,
       ref: 'Challenge',

@@ -1,1961 +1,2366 @@
 [
   {
     "_id": {
-      "$oid": "ab5609be28d75724d4f46af3"
+      "$oid": "b69098e89a68b9908a123362"
     },
     "ideaId": "ID-0001",
-    "title": "Idea implementation for Challenge 1",
-    "description": "I propose we implement a microservices architecture for idea 1.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "title": "Idea 1",
+    "description": "Description for idea 1",
+    "proposedSolution": "Proposed solution for idea 1",
     "challengeId": {
-      "$oid": "b596acc32c430378fa2fd413"
+      "$oid": "3e76e13ff729e6ab67ee4ab8"
     },
-    "appreciationCount": 124,
-    "viewCount": 116,
+    "appreciationCount": 18,
+    "viewCount": 380,
     "userId": {
-      "$oid": "2e69c5f1d36087afbd354bca"
+      "$oid": "7bf8a1d76d4944fb6e48ac37"
     },
     "subscription": [
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "e8943bbd112ccdad754c0c2b"
       },
       {
-        "$oid": "2245086b5bc06d315ccedbdc"
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T17:30:40.795Z"
+      "$date": "2026-02-04T04:19:50.133Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "bacbb385c81efaae3612dfe0"
+        "$oid": "2774e66d55504858a6ee5cb9"
       },
       {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
+        "$oid": "a0ec6594d276d8b5445f7368"
       },
       {
-        "$oid": "d6d689a4cf42160b67a413c6"
+        "$oid": "6fe58f4ee50e8425f463fe02"
       },
       {
-        "$oid": "2e69c5f1d36087afbd354bca"
+        "$oid": "c0c9ee155390b486fd788b52"
       },
       {
-        "$oid": "6e9b6e972adf98037fb1eb13"
+        "$oid": "5d784903322d35f983642bf2"
       },
       {
-        "$oid": "53241fad407ef95937248331"
+        "$oid": "6fe58f4ee50e8425f463fe02"
       },
       {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
+        "$oid": "e8943bbd112ccdad754c0c2b"
       },
       {
-        "$oid": "969bf9a0094364a075abab0b"
+        "$oid": "e8943bbd112ccdad754c0c2b"
       },
       {
-        "$oid": "18453cdfc20c9d7e345da6bb"
+        "$oid": "a0ec6594d276d8b5445f7368"
       },
       {
-        "$oid": "f546ff3e8b00451f67c3724d"
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "925de4f4d562411401a8da08"
+      "$oid": "316be715ce9c69e87110c84d"
     },
     "ideaId": "ID-0002",
-    "title": "Idea implementation for Challenge 2",
-    "description": "I propose we implement a microservices architecture for idea 2.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "title": "Idea 2",
+    "description": "Description for idea 2",
+    "proposedSolution": "Proposed solution for idea 2",
     "challengeId": {
-      "$oid": "ec56db4a419b423b4fe5a6bb"
+      "$oid": "6c699ec299b59f9bebfb16af"
     },
-    "appreciationCount": 123,
-    "viewCount": 325,
+    "appreciationCount": 15,
+    "viewCount": 409,
     "userId": {
-      "$oid": "7266fc2a6ba991e5e9f1a626"
+      "$oid": "433b50699cd91e0b81cf370e"
     },
     "subscription": [
       {
-        "$oid": "308297a4c754ce1f5200ce85"
+        "$oid": "aa1b3dd36647dea0dd1831fc"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T11:53:52.479Z"
+      "$date": "2025-11-17T21:43:02.814Z"
     },
-    "month": 2,
-    "year": 2026,
+    "month": 11,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "424aa1cdf5c40c8421367aa5"
+        "$oid": "dc96f600fa1b053ec422683a"
       },
       {
-        "$oid": "206e353ed387b5a732cb1f0e"
+        "$oid": "4750dd98014b39f0075fdae2"
       },
       {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      },
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "f546ff3e8b00451f67c3724d"
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "e0395a8a14b5256d6c4f137a"
+      "$oid": "31438c6fdcfec154579b8b40"
     },
     "ideaId": "ID-0003",
-    "title": "Idea implementation for Challenge 3",
-    "description": "I propose we implement a microservices architecture for idea 3.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "title": "Idea 3",
+    "description": "Description for idea 3",
+    "proposedSolution": "Proposed solution for idea 3",
     "challengeId": {
-      "$oid": "10643985c2fad7d06f436fe8"
+      "$oid": "6c699ec299b59f9bebfb16af"
     },
-    "appreciationCount": 86,
-    "viewCount": 351,
+    "appreciationCount": 8,
+    "viewCount": 221,
     "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
+      "$oid": "7bf8a1d76d4944fb6e48ac37"
     },
     "subscription": [
       {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
+        "$oid": "a0ec6594d276d8b5445f7368"
       },
       {
-        "$oid": "2245086b5bc06d315ccedbdc"
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T15:47:38.925Z"
+      "$date": "2026-01-08T17:17:19.118Z"
     },
-    "month": 2,
+    "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
-    "status": true,
+    "status": false,
     "upVotes": [
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "539a172580a5d1ae79c5d550"
       },
       {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "679408078edc8d77ffd426b2"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
+        "$oid": "c0c9ee155390b486fd788b52"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "6dac12e70626ef452d54582c"
+      "$oid": "4574952ca2599b7d9956b2d6"
     },
     "ideaId": "ID-0004",
-    "title": "Idea implementation for Challenge 4",
-    "description": "I propose we implement a microservices architecture for idea 4.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "title": "Idea 4",
+    "description": "Description for idea 4",
+    "proposedSolution": "Proposed solution for idea 4",
     "challengeId": {
-      "$oid": "7babf239de2cde6789ecf39f"
+      "$oid": "820d88627a04f93a32685ba4"
     },
-    "appreciationCount": 77,
-    "viewCount": 431,
+    "appreciationCount": 36,
+    "viewCount": 400,
     "userId": {
-      "$oid": "68f7f79898ea61b7752b68c3"
+      "$oid": "dc96f600fa1b053ec422683a"
     },
-    "subscription": [
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-20T18:29:15.319Z"
+      "$date": "2026-01-25T03:07:59.696Z"
     },
-    "month": 2,
+    "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "424aa1cdf5c40c8421367aa5"
+        "$oid": "2e503bf00a7b6800810b4d2d"
       },
       {
-        "$oid": "bacbb385c81efaae3612dfe0"
+        "$oid": "e8943bbd112ccdad754c0c2b"
       },
       {
-        "$oid": "404f08da5d4fd716ff80b1e4"
+        "$oid": "4f2edf00d100250522f8d6a1"
       },
       {
-        "$oid": "2245086b5bc06d315ccedbdc"
+        "$oid": "433b50699cd91e0b81cf370e"
       },
       {
-        "$oid": "e5ad220c675a802b9d2993ef"
+        "$oid": "29c4702815d3afff92ab7f4e"
       },
       {
-        "$oid": "404f08da5d4fd716ff80b1e4"
+        "$oid": "a70e9a9a717093756f7067ee"
       },
       {
-        "$oid": "404f08da5d4fd716ff80b1e4"
+        "$oid": "efd500699094d6d629928a82"
       },
       {
-        "$oid": "6e9b6e972adf98037fb1eb13"
+        "$oid": "2e503bf00a7b6800810b4d2d"
       },
       {
-        "$oid": "f546ff3e8b00451f67c3724d"
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "fc901a55559e1699bbfb4528"
+      "$oid": "f2848f51e48927f8a06d9e39"
     },
     "ideaId": "ID-0005",
-    "title": "Idea implementation for Challenge 5",
-    "description": "I propose we implement a microservices architecture for idea 5.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "title": "Idea 5",
+    "description": "Description for idea 5",
+    "proposedSolution": "Proposed solution for idea 5",
     "challengeId": {
-      "$oid": "b645467965cfdde1571eda0e"
-    },
-    "appreciationCount": 74,
-    "viewCount": 263,
-    "userId": {
-      "$oid": "bacbb385c81efaae3612dfe0"
-    },
-    "subscription": [
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T10:29:04.672Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      },
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "d9ab88fc79172fc298ed7740"
-    },
-    "ideaId": "ID-0006",
-    "title": "Idea implementation for Challenge 6",
-    "description": "I propose we implement a microservices architecture for idea 6.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "10643985c2fad7d06f436fe8"
-    },
-    "appreciationCount": 141,
-    "viewCount": 215,
-    "userId": {
-      "$oid": "969bf9a0094364a075abab0b"
-    },
-    "subscription": [
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T04:59:47.891Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "0352a8ea5453b7cd7351687f"
-    },
-    "ideaId": "ID-0007",
-    "title": "Idea implementation for Challenge 7",
-    "description": "I propose we implement a microservices architecture for idea 7.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "07f5de9c0abbfad9733c0a11"
-    },
-    "appreciationCount": 85,
-    "viewCount": 440,
-    "userId": {
-      "$oid": "6e9b6e972adf98037fb1eb13"
-    },
-    "subscription": [
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "2b30fcf2e90897f2225edca8"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T01:19:44.318Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      },
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "75ba935198426b1f6aa52f7d"
-    },
-    "ideaId": "ID-0008",
-    "title": "Idea implementation for Challenge 8",
-    "description": "I propose we implement a microservices architecture for idea 8.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "8ecb24f2256ca9a4e18cc173"
-    },
-    "appreciationCount": 70,
-    "viewCount": 262,
-    "userId": {
-      "$oid": "ec3672e7f3cb324cb2c22642"
-    },
-    "subscription": [],
-    "createdAt": {
-      "$date": "2026-02-20T14:42:30.381Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "f3ae21c8d9c09cd1e3573c2e"
-    },
-    "ideaId": "ID-0009",
-    "title": "Idea implementation for Challenge 9",
-    "description": "I propose we implement a microservices architecture for idea 9.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "7babf239de2cde6789ecf39f"
-    },
-    "appreciationCount": 112,
-    "viewCount": 45,
-    "userId": {
-      "$oid": "f546ff3e8b00451f67c3724d"
-    },
-    "subscription": [],
-    "createdAt": {
-      "$date": "2026-02-21T10:17:13.475Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "d541fbb008be437ccc1a7072"
-    },
-    "ideaId": "ID-0010",
-    "title": "Idea implementation for Challenge 10",
-    "description": "I propose we implement a microservices architecture for idea 10.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "10643985c2fad7d06f436fe8"
-    },
-    "appreciationCount": 62,
-    "viewCount": 283,
-    "userId": {
-      "$oid": "bef7a718d953662eebedbc13"
-    },
-    "subscription": [
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      },
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T14:48:33.373Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "f546ff3e8b00451f67c3724d"
-      },
-      {
-        "$oid": "2e69c5f1d36087afbd354bca"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "2b30fcf2e90897f2225edca8"
-      },
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "3f8f27f57eecc027c1eef5dc"
-    },
-    "ideaId": "ID-0011",
-    "title": "Idea implementation for Challenge 11",
-    "description": "I propose we implement a microservices architecture for idea 11.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "a2bb783fd06680321e007e43"
-    },
-    "appreciationCount": 99,
-    "viewCount": 125,
-    "userId": {
-      "$oid": "268b8a5741b7bd1797a14026"
-    },
-    "subscription": [
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T22:01:44.779Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "2b30fcf2e90897f2225edca8"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "9627a24a6bf84856efa7c8aa"
-    },
-    "ideaId": "ID-0012",
-    "title": "Idea implementation for Challenge 12",
-    "description": "I propose we implement a microservices architecture for idea 12.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "644b9ab64cddb5ad858d260e"
+      "$oid": "2ff11c6891c2ff4c5217811a"
     },
     "appreciationCount": 11,
-    "viewCount": 150,
+    "viewCount": 165,
     "userId": {
-      "$oid": "679408078edc8d77ffd426b2"
+      "$oid": "7bf8a1d76d4944fb6e48ac37"
     },
     "subscription": [
       {
-        "$oid": "68f7f79898ea61b7752b68c3"
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
       },
       {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
+        "$oid": "dc96f600fa1b053ec422683a"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T08:29:46.922Z"
+      "$date": "2026-01-06T04:07:55.718Z"
     },
-    "month": 2,
+    "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
-    "status": true,
+    "status": false,
     "upVotes": [
       {
-        "$oid": "308297a4c754ce1f5200ce85"
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
       },
       {
-        "$oid": "68f7f79898ea61b7752b68c3"
+        "$oid": "433b50699cd91e0b81cf370e"
       },
       {
-        "$oid": "2b30fcf2e90897f2225edca8"
+        "$oid": "d5a5377d911f14b874f5a3be"
       },
       {
-        "$oid": "2245086b5bc06d315ccedbdc"
+        "$oid": "31358eca0576dda2193b5e59"
       },
       {
-        "$oid": "969bf9a0094364a075abab0b"
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "20f5af1764ed79fe31738b2a"
+      "$oid": "39c461e348f380f2c97fc9b5"
     },
-    "ideaId": "ID-0013",
-    "title": "Idea implementation for Challenge 13",
-    "description": "I propose we implement a microservices architecture for idea 13.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "ideaId": "ID-0006",
+    "title": "Idea 6",
+    "description": "Description for idea 6",
+    "proposedSolution": "Proposed solution for idea 6",
     "challengeId": {
-      "$oid": "3fe0be3a67b43364605dac35"
+      "$oid": "6c699ec299b59f9bebfb16af"
     },
-    "appreciationCount": 2,
-    "viewCount": 155,
+    "appreciationCount": 13,
+    "viewCount": 29,
     "userId": {
-      "$oid": "b67695827cecb99d4ead1707"
+      "$oid": "4750dd98014b39f0075fdae2"
     },
     "subscription": [
       {
-        "$oid": "bef7a718d953662eebedbc13"
+        "$oid": "1686f209190324419a11c518"
       },
       {
-        "$oid": "6e9b6e972adf98037fb1eb13"
+        "$oid": "aa1b3dd36647dea0dd1831fc"
       },
       {
-        "$oid": "308297a4c754ce1f5200ce85"
+        "$oid": "c0c9ee155390b486fd788b52"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T23:16:20.646Z"
+      "$date": "2025-11-10T07:59:51.277Z"
     },
-    "month": 2,
-    "year": 2026,
+    "month": 11,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "f546ff3e8b00451f67c3724d"
+        "$oid": "2774e66d55504858a6ee5cb9"
       },
       {
-        "$oid": "2b30fcf2e90897f2225edca8"
+        "$oid": "dc96f600fa1b053ec422683a"
       },
       {
-        "$oid": "206e353ed387b5a732cb1f0e"
+        "$oid": "7dbe1b16210b53cedb4a377e"
       },
       {
-        "$oid": "969bf9a0094364a075abab0b"
+        "$oid": "29c4702815d3afff92ab7f4e"
       },
       {
-        "$oid": "d6d689a4cf42160b67a413c6"
+        "$oid": "2e503bf00a7b6800810b4d2d"
       },
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "aa1b3dd36647dea0dd1831fc"
       },
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "29c4702815d3afff92ab7f4e"
       },
       {
-        "$oid": "969bf9a0094364a075abab0b"
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "5c0afe02805d5fc63f0ba68c"
+      "$oid": "816645b312d3e9c1e2974246"
     },
-    "ideaId": "ID-0014",
-    "title": "Idea implementation for Challenge 14",
-    "description": "I propose we implement a microservices architecture for idea 14.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "ideaId": "ID-0007",
+    "title": "Idea 7",
+    "description": "Description for idea 7",
+    "proposedSolution": "Proposed solution for idea 7",
     "challengeId": {
-      "$oid": "34a85eb889536ac0af987ed7"
+      "$oid": "132b3e740302ff1da08bc403"
     },
-    "appreciationCount": 14,
-    "viewCount": 155,
+    "appreciationCount": 47,
+    "viewCount": 60,
     "userId": {
-      "$oid": "969bf9a0094364a075abab0b"
+      "$oid": "1686f209190324419a11c518"
     },
     "subscription": [
       {
-        "$oid": "f546ff3e8b00451f67c3724d"
+        "$oid": "efd500699094d6d629928a82"
       },
       {
-        "$oid": "b67695827cecb99d4ead1707"
+        "$oid": "e8943bbd112ccdad754c0c2b"
       },
       {
-        "$oid": "206e353ed387b5a732cb1f0e"
+        "$oid": "e8943bbd112ccdad754c0c2b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T15:19:12.415Z"
+      "$date": "2025-11-29T02:15:12.040Z"
     },
-    "month": 2,
-    "year": 2026,
+    "month": 11,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "679408078edc8d77ffd426b2"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "679408078edc8d77ffd426b2"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
+        "$oid": "6fe58f4ee50e8425f463fe02"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "f2782f258dbe35429da3b635"
+      "$oid": "53b18cd205685a3c9bf7391f"
     },
-    "ideaId": "ID-0015",
-    "title": "Idea implementation for Challenge 15",
-    "description": "I propose we implement a microservices architecture for idea 15.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "ideaId": "ID-0008",
+    "title": "Idea 8",
+    "description": "Description for idea 8",
+    "proposedSolution": "Proposed solution for idea 8",
     "challengeId": {
-      "$oid": "8d78a2e96e74fc43fbe97a07"
+      "$oid": "8530751475bf9abb11d3f19d"
     },
-    "appreciationCount": 88,
-    "viewCount": 32,
+    "appreciationCount": 33,
+    "viewCount": 318,
     "userId": {
-      "$oid": "68f7f79898ea61b7752b68c3"
-    },
-    "subscription": [],
-    "createdAt": {
-      "$date": "2026-02-21T03:28:15.569Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "f546ff3e8b00451f67c3724d"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "ae05fb1ab580ff7d24604d70"
-    },
-    "ideaId": "ID-0016",
-    "title": "Idea implementation for Challenge 16",
-    "description": "I propose we implement a microservices architecture for idea 16.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "644b9ab64cddb5ad858d260e"
-    },
-    "appreciationCount": 31,
-    "viewCount": 422,
-    "userId": {
-      "$oid": "bef7a718d953662eebedbc13"
+      "$oid": "aa1b3dd36647dea0dd1831fc"
     },
     "subscription": [
       {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "2b30fcf2e90897f2225edca8"
+        "$oid": "5d784903322d35f983642bf2"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T13:45:41.075Z"
+      "$date": "2025-12-03T10:45:53.326Z"
     },
-    "month": 2,
-    "year": 2026,
+    "month": 12,
+    "year": 2025,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "2d9d3cd387769ee53821755d"
-    },
-    "ideaId": "ID-0017",
-    "title": "Idea implementation for Challenge 17",
-    "description": "I propose we implement a microservices architecture for idea 17.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "682f67cfbe6aeb0a319a8253"
-    },
-    "appreciationCount": 64,
-    "viewCount": 192,
-    "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "subscription": [],
-    "createdAt": {
-      "$date": "2026-02-20T16:56:36.659Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "87d5c3f31fae26580fc6c2f7"
-    },
-    "ideaId": "ID-0018",
-    "title": "Idea implementation for Challenge 18",
-    "description": "I propose we implement a microservices architecture for idea 18.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "50b527bafd61a0811d42e330"
-    },
-    "appreciationCount": 51,
-    "viewCount": 59,
-    "userId": {
-      "$oid": "679408078edc8d77ffd426b2"
-    },
-    "subscription": [
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T23:11:28.815Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "d47700bf424140df4471486e"
-    },
-    "ideaId": "ID-0019",
-    "title": "Idea implementation for Challenge 19",
-    "description": "I propose we implement a microservices architecture for idea 19.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "3fe0be3a67b43364605dac35"
-    },
-    "appreciationCount": 143,
-    "viewCount": 80,
-    "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "subscription": [
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T16:12:06.570Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "0c7a068970afeceb3d85f5b5"
-    },
-    "ideaId": "ID-0020",
-    "title": "Idea implementation for Challenge 20",
-    "description": "I propose we implement a microservices architecture for idea 20.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "93da01dba89e41b89b6faf04"
-    },
-    "appreciationCount": 0,
-    "viewCount": 424,
-    "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
-    },
-    "subscription": [
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      },
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      },
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T06:30:57.137Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "22f24be0cac8a9e86c728592"
-    },
-    "ideaId": "ID-0021",
-    "title": "Idea implementation for Challenge 21",
-    "description": "I propose we implement a microservices architecture for idea 21.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "38d33015ec821d8b806a9f18"
-    },
-    "appreciationCount": 93,
-    "viewCount": 415,
-    "userId": {
-      "$oid": "bacbb385c81efaae3612dfe0"
-    },
-    "subscription": [],
-    "createdAt": {
-      "$date": "2026-02-20T20:15:47.580Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "0e84b41e4e25019eb9e317bd"
-    },
-    "ideaId": "ID-0022",
-    "title": "Idea implementation for Challenge 22",
-    "description": "I propose we implement a microservices architecture for idea 22.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "8ecb24f2256ca9a4e18cc173"
-    },
-    "appreciationCount": 111,
-    "viewCount": 110,
-    "userId": {
-      "$oid": "d6d689a4cf42160b67a413c6"
-    },
-    "subscription": [
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T22:48:50.302Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "679408078edc8d77ffd426b2"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "f57aa72ca15acb71bb9e4604"
-    },
-    "ideaId": "ID-0023",
-    "title": "Idea implementation for Challenge 23",
-    "description": "I propose we implement a microservices architecture for idea 23.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "b645467965cfdde1571eda0e"
-    },
-    "appreciationCount": 142,
-    "viewCount": 359,
-    "userId": {
-      "$oid": "424aa1cdf5c40c8421367aa5"
-    },
-    "subscription": [
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T03:08:57.489Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "afb64587094b9ff1c0a8dc27"
-    },
-    "ideaId": "ID-0024",
-    "title": "Idea implementation for Challenge 24",
-    "description": "I propose we implement a microservices architecture for idea 24.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "93da01dba89e41b89b6faf04"
-    },
-    "appreciationCount": 10,
-    "viewCount": 270,
-    "userId": {
-      "$oid": "18453cdfc20c9d7e345da6bb"
-    },
-    "subscription": [
-      {
-        "$oid": "2b30fcf2e90897f2225edca8"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T13:04:15.439Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "f546ff3e8b00451f67c3724d"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "2e96474c59c327aa92296db5"
-    },
-    "ideaId": "ID-0025",
-    "title": "Idea implementation for Challenge 25",
-    "description": "I propose we implement a microservices architecture for idea 25.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "a26dc3f2f9154f79f612e04e"
-    },
-    "appreciationCount": 23,
-    "viewCount": 42,
-    "userId": {
-      "$oid": "18453cdfc20c9d7e345da6bb"
-    },
-    "subscription": [
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T11:19:33.825Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "e78932dd8701bb0cdb207687"
-    },
-    "ideaId": "ID-0026",
-    "title": "Idea implementation for Challenge 26",
-    "description": "I propose we implement a microservices architecture for idea 26.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "ec56db4a419b423b4fe5a6bb"
-    },
-    "appreciationCount": 86,
-    "viewCount": 55,
-    "userId": {
-      "$oid": "404f08da5d4fd716ff80b1e4"
-    },
-    "subscription": [
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T15:02:15.136Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "679408078edc8d77ffd426b2"
-      },
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "9b1ee63a06c2683ac9bfa411"
-    },
-    "ideaId": "ID-0027",
-    "title": "Idea implementation for Challenge 27",
-    "description": "I propose we implement a microservices architecture for idea 27.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "345245c9f6b8e7ff7e376ac4"
-    },
-    "appreciationCount": 77,
-    "viewCount": 251,
-    "userId": {
-      "$oid": "18453cdfc20c9d7e345da6bb"
-    },
-    "subscription": [
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T23:00:18.400Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      },
-      {
-        "$oid": "2e69c5f1d36087afbd354bca"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "75b9127d73404b70ce0098b2"
-    },
-    "ideaId": "ID-0028",
-    "title": "Idea implementation for Challenge 28",
-    "description": "I propose we implement a microservices architecture for idea 28.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "682f67cfbe6aeb0a319a8253"
-    },
-    "appreciationCount": 150,
-    "viewCount": 489,
-    "userId": {
-      "$oid": "68f7f79898ea61b7752b68c3"
-    },
-    "subscription": [
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "2bc621e1361d668aaabfbf57"
-      },
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      },
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T14:16:00.759Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "d8f53e182ca83191b631786b"
-    },
-    "ideaId": "ID-0029",
-    "title": "Idea implementation for Challenge 29",
-    "description": "I propose we implement a microservices architecture for idea 29.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "cc8314f009737671b4944bc6"
-    },
-    "appreciationCount": 40,
-    "viewCount": 271,
-    "userId": {
-      "$oid": "969bf9a0094364a075abab0b"
-    },
-    "subscription": [
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "f546ff3e8b00451f67c3724d"
-      },
-      {
-        "$oid": "bacbb385c81efaae3612dfe0"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T20:59:27.491Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      },
-      {
-        "$oid": "53241fad407ef95937248331"
-      },
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      },
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "e995c32f1437cd735b64e3f3"
-      },
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "2f24e72fdb2927fef3cc1317"
-    },
-    "ideaId": "ID-0030",
-    "title": "Idea implementation for Challenge 30",
-    "description": "I propose we implement a microservices architecture for idea 30.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "a2bb783fd06680321e007e43"
-    },
-    "appreciationCount": 70,
-    "viewCount": 167,
-    "userId": {
-      "$oid": "2e69c5f1d36087afbd354bca"
-    },
-    "subscription": [
-      {
-        "$oid": "7266fc2a6ba991e5e9f1a626"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "2e69c5f1d36087afbd354bca"
-      },
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "ec3672e7f3cb324cb2c22642"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T03:19:43.591Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.635Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "969bf9a0094364a075abab0b"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      },
-      {
-        "$oid": "679408078edc8d77ffd426b2"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      },
-      {
-        "$oid": "2b30fcf2e90897f2225edca8"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "8fc6fb7f03ce02e8ed2a1573"
-    },
-    "ideaId": "ID-0031",
-    "title": "Idea implementation for Challenge 31",
-    "description": "I propose we implement a microservices architecture for idea 31.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "93da01dba89e41b89b6faf04"
-    },
-    "appreciationCount": 118,
-    "viewCount": 150,
-    "userId": {
-      "$oid": "9c9a8f0a668ac333a1b9db88"
-    },
-    "subscription": [
-      {
-        "$oid": "424aa1cdf5c40c8421367aa5"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T19:25:15.923Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.636Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "2245086b5bc06d315ccedbdc"
-      },
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "68f7f79898ea61b7752b68c3"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "111936514c1279d1f415f119"
-    },
-    "ideaId": "ID-0032",
-    "title": "Idea implementation for Challenge 32",
-    "description": "I propose we implement a microservices architecture for idea 32.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "62ebcba609a8caaa79d8b344"
-    },
-    "appreciationCount": 39,
-    "viewCount": 470,
-    "userId": {
-      "$oid": "2e69c5f1d36087afbd354bca"
-    },
-    "subscription": [
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-20T23:17:57.219Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.636Z"
-    },
-    "status": true,
-    "upVotes": [
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "e5ad220c675a802b9d2993ef"
-      },
-      {
-        "$oid": "6e9b6e972adf98037fb1eb13"
-      },
-      {
-        "$oid": "b67695827cecb99d4ead1707"
-      },
-      {
-        "$oid": "308297a4c754ce1f5200ce85"
-      },
-      {
-        "$oid": "d6d689a4cf42160b67a413c6"
-      },
-      {
-        "$oid": "404f08da5d4fd716ff80b1e4"
-      },
-      {
-        "$oid": "268b8a5741b7bd1797a14026"
-      },
-      {
-        "$oid": "f546ff3e8b00451f67c3724d"
-      }
-    ]
-  },
-  {
-    "_id": {
-      "$oid": "a6d1a3b0ed2dcaafc3773f9e"
-    },
-    "ideaId": "ID-0033",
-    "title": "Idea implementation for Challenge 33",
-    "description": "I propose we implement a microservices architecture for idea 33.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
-    "challengeId": {
-      "$oid": "93da01dba89e41b89b6faf04"
-    },
-    "appreciationCount": 0,
-    "viewCount": 317,
-    "userId": {
-      "$oid": "68f7f79898ea61b7752b68c3"
-    },
-    "subscription": [
-      {
-        "$oid": "18453cdfc20c9d7e345da6bb"
-      },
-      {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
-      },
-      {
-        "$oid": "206e353ed387b5a732cb1f0e"
-      },
-      {
-        "$oid": "bef7a718d953662eebedbc13"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-02-21T02:20:30.216Z"
-    },
-    "month": 2,
-    "year": 2026,
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.636Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": []
   },
   {
     "_id": {
-      "$oid": "380dc2e2df7ff60dac511033"
+      "$oid": "c0dfc62f479a2a7b56e04aa5"
     },
-    "ideaId": "ID-0034",
-    "title": "Idea implementation for Challenge 34",
-    "description": "I propose we implement a microservices architecture for idea 34.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "ideaId": "ID-0009",
+    "title": "Idea 9",
+    "description": "Description for idea 9",
+    "proposedSolution": "Proposed solution for idea 9",
     "challengeId": {
-      "$oid": "2b6f98ab90c8304ba50abfba"
+      "$oid": "1db5a7169d87368c2581189c"
     },
-    "appreciationCount": 147,
-    "viewCount": 480,
+    "appreciationCount": 39,
+    "viewCount": 244,
     "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
+      "$oid": "7dbe1b16210b53cedb4a377e"
     },
     "subscription": [
       {
-        "$oid": "d6d689a4cf42160b67a413c6"
+        "$oid": "6fe58f4ee50e8425f463fe02"
       },
       {
-        "$oid": "b67695827cecb99d4ead1707"
+        "$oid": "dc96f600fa1b053ec422683a"
       },
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "a0ec6594d276d8b5445f7368"
       },
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T18:00:10.772Z"
+      "$date": "2026-01-09T12:59:55.782Z"
     },
-    "month": 2,
+    "month": 1,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.636Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "679408078edc8d77ffd426b2"
+        "$oid": "31358eca0576dda2193b5e59"
       },
       {
-        "$oid": "2e69c5f1d36087afbd354bca"
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
       }
     ]
   },
   {
     "_id": {
-      "$oid": "05a72d8d66451cec8e8664f5"
+      "$oid": "2ccfee68f7f5d64ec079c10b"
     },
-    "ideaId": "ID-0035",
-    "title": "Idea implementation for Challenge 35",
-    "description": "I propose we implement a microservices architecture for idea 35.",
-    "proposedSolution": "Use Docker and Kubernetes for implementation.",
-    "expectedImpact": "High scalability and reduced downtime.",
+    "ideaId": "ID-0010",
+    "title": "Idea 10",
+    "description": "Description for idea 10",
+    "proposedSolution": "Proposed solution for idea 10",
     "challengeId": {
-      "$oid": "10643985c2fad7d06f436fe8"
+      "$oid": "79fe63b9a09c06670add5dfa"
     },
-    "appreciationCount": 145,
-    "viewCount": 233,
+    "appreciationCount": 41,
+    "viewCount": 283,
     "userId": {
-      "$oid": "f546ff3e8b00451f67c3724d"
+      "$oid": "efd500699094d6d629928a82"
     },
-    "subscription": [],
+    "subscription": [
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      }
+    ],
     "createdAt": {
-      "$date": "2026-02-20T14:44:22.211Z"
+      "$date": "2026-02-19T05:23:17.807Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.636Z"
+      "$date": "2026-02-21T15:22:54.594Z"
     },
     "status": true,
     "upVotes": [
       {
-        "$oid": "308297a4c754ce1f5200ce85"
+        "$oid": "2e503bf00a7b6800810b4d2d"
       },
       {
-        "$oid": "bef7a718d953662eebedbc13"
+        "$oid": "2e503bf00a7b6800810b4d2d"
       },
       {
-        "$oid": "268b8a5741b7bd1797a14026"
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "74892d67d05bbc299b713134"
+    },
+    "ideaId": "ID-0011",
+    "title": "Idea 11",
+    "description": "Description for idea 11",
+    "proposedSolution": "Proposed solution for idea 11",
+    "challengeId": {
+      "$oid": "2ff11c6891c2ff4c5217811a"
+    },
+    "appreciationCount": 8,
+    "viewCount": 167,
+    "userId": {
+      "$oid": "a0ec6594d276d8b5445f7368"
+    },
+    "subscription": [
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
       },
       {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
+        "$oid": "3c5313440ef724fcc42c8efb"
       },
       {
-        "$oid": "18453cdfc20c9d7e345da6bb"
+        "$oid": "330334d531d33723cde6452c"
       },
       {
-        "$oid": "f546ff3e8b00451f67c3724d"
+        "$oid": "3c5313440ef724fcc42c8efb"
       },
       {
-        "$oid": "6e9b6e972adf98037fb1eb13"
+        "$oid": "31358eca0576dda2193b5e59"
       },
       {
-        "$oid": "2e69c5f1d36087afbd354bca"
+        "$oid": "c0c9ee155390b486fd788b52"
       },
       {
-        "$oid": "9c9a8f0a668ac333a1b9db88"
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-01-27T16:47:46.823Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": false,
+    "upVotes": [
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "79a4959a9de453c67eee5636"
+    },
+    "ideaId": "ID-0012",
+    "title": "Idea 12",
+    "description": "Description for idea 12",
+    "proposedSolution": "Proposed solution for idea 12",
+    "challengeId": {
+      "$oid": "2e483c998a08b42fd9b6393f"
+    },
+    "appreciationCount": 45,
+    "viewCount": 250,
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "subscription": [
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-05T15:25:42.588Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "ef6a82bfe0bf7c066bf02355"
+    },
+    "ideaId": "ID-0013",
+    "title": "Idea 13",
+    "description": "Description for idea 13",
+    "proposedSolution": "Proposed solution for idea 13",
+    "challengeId": {
+      "$oid": "ca77cd7cd87496641fa81ebe"
+    },
+    "appreciationCount": 36,
+    "viewCount": 414,
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "subscription": [
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-20T07:04:12.122Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "060b72e8c916227a39ed055b"
+    },
+    "ideaId": "ID-0014",
+    "title": "Idea 14",
+    "description": "Description for idea 14",
+    "proposedSolution": "Proposed solution for idea 14",
+    "challengeId": {
+      "$oid": "78abb2ecfe0378d2da411ef9"
+    },
+    "appreciationCount": 23,
+    "viewCount": 139,
+    "userId": {
+      "$oid": "efd500699094d6d629928a82"
+    },
+    "subscription": [
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-16T18:56:31.674Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "3ebb8ead15c0e620c1dda982"
+    },
+    "ideaId": "ID-0015",
+    "title": "Idea 15",
+    "description": "Description for idea 15",
+    "proposedSolution": "Proposed solution for idea 15",
+    "challengeId": {
+      "$oid": "db03b06c6f5a6178e5da2b4d"
+    },
+    "appreciationCount": 34,
+    "viewCount": 168,
+    "userId": {
+      "$oid": "433b50699cd91e0b81cf370e"
+    },
+    "subscription": [
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-26T05:22:44.216Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "c65cebd9ec6daa4fd95c4a3a"
+    },
+    "ideaId": "ID-0016",
+    "title": "Idea 16",
+    "description": "Description for idea 16",
+    "proposedSolution": "Proposed solution for idea 16",
+    "challengeId": {
+      "$oid": "baba8adcc583bde3245cf239"
+    },
+    "appreciationCount": 38,
+    "viewCount": 255,
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "subscription": [
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-01-12T01:04:13.097Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "7de98bd136c3e58914e1c853"
+    },
+    "ideaId": "ID-0017",
+    "title": "Idea 17",
+    "description": "Description for idea 17",
+    "proposedSolution": "Proposed solution for idea 17",
+    "challengeId": {
+      "$oid": "81708930c83ba84187524333"
+    },
+    "appreciationCount": 15,
+    "viewCount": 258,
+    "userId": {
+      "$oid": "4750dd98014b39f0075fdae2"
+    },
+    "subscription": [
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-21T23:30:04.440Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "639859401eb3f3ca43d3ff78"
+    },
+    "ideaId": "ID-0018",
+    "title": "Idea 18",
+    "description": "Description for idea 18",
+    "proposedSolution": "Proposed solution for idea 18",
+    "challengeId": {
+      "$oid": "a2224a703644cc422b4d379c"
+    },
+    "appreciationCount": 10,
+    "viewCount": 203,
+    "userId": {
+      "$oid": "e8943bbd112ccdad754c0c2b"
+    },
+    "subscription": [
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-01-25T18:49:31.475Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.594Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "42cfeffaf45e03965d98b041"
+    },
+    "ideaId": "ID-0019",
+    "title": "Idea 19",
+    "description": "Description for idea 19",
+    "proposedSolution": "Proposed solution for idea 19",
+    "challengeId": {
+      "$oid": "78abb2ecfe0378d2da411ef9"
+    },
+    "appreciationCount": 31,
+    "viewCount": 345,
+    "userId": {
+      "$oid": "433b50699cd91e0b81cf370e"
+    },
+    "subscription": [
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-02-14T01:32:25.635Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "d244a16ace678e3fe6a34578"
+    },
+    "ideaId": "ID-0020",
+    "title": "Idea 20",
+    "description": "Description for idea 20",
+    "proposedSolution": "Proposed solution for idea 20",
+    "challengeId": {
+      "$oid": "79cd1df1c63357ef8deb8d3d"
+    },
+    "appreciationCount": 11,
+    "viewCount": 456,
+    "userId": {
+      "$oid": "a0ec6594d276d8b5445f7368"
+    },
+    "subscription": [
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-02-02T12:27:13.257Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "c93752e5629014003420191c"
+    },
+    "ideaId": "ID-0021",
+    "title": "Idea 21",
+    "description": "Description for idea 21",
+    "proposedSolution": "Proposed solution for idea 21",
+    "challengeId": {
+      "$oid": "d323fe5b44ac16b346641d29"
+    },
+    "appreciationCount": 8,
+    "viewCount": 319,
+    "userId": {
+      "$oid": "2774e66d55504858a6ee5cb9"
+    },
+    "subscription": [
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-02-18T16:26:51.561Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "b6c8b9bdf4be29b925b2722d"
+    },
+    "ideaId": "ID-0022",
+    "title": "Idea 22",
+    "description": "Description for idea 22",
+    "proposedSolution": "Proposed solution for idea 22",
+    "challengeId": {
+      "$oid": "81708930c83ba84187524333"
+    },
+    "appreciationCount": 25,
+    "viewCount": 343,
+    "userId": {
+      "$oid": "4f2edf00d100250522f8d6a1"
+    },
+    "subscription": [
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-31T18:30:15.044Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "0aa3a9737483a8dd1a82607b"
+    },
+    "ideaId": "ID-0023",
+    "title": "Idea 23",
+    "description": "Description for idea 23",
+    "proposedSolution": "Proposed solution for idea 23",
+    "challengeId": {
+      "$oid": "fefaa8b40fc6c83589f48b6e"
+    },
+    "appreciationCount": 23,
+    "viewCount": 56,
+    "userId": {
+      "$oid": "dc96f600fa1b053ec422683a"
+    },
+    "subscription": [
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-02-21T10:49:49.142Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "12ddde2051b3cc478529f38a"
+    },
+    "ideaId": "ID-0024",
+    "title": "Idea 24",
+    "description": "Description for idea 24",
+    "proposedSolution": "Proposed solution for idea 24",
+    "challengeId": {
+      "$oid": "b7ec47492a874dd1ea63a7a8"
+    },
+    "appreciationCount": 23,
+    "viewCount": 58,
+    "userId": {
+      "$oid": "29c4702815d3afff92ab7f4e"
+    },
+    "subscription": [
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-02-19T13:08:46.849Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "19dd59946410de9f1739c5f5"
+    },
+    "ideaId": "ID-0025",
+    "title": "Idea 25",
+    "description": "Description for idea 25",
+    "proposedSolution": "Proposed solution for idea 25",
+    "challengeId": {
+      "$oid": "170263ff683d31a241b54810"
+    },
+    "appreciationCount": 3,
+    "viewCount": 319,
+    "userId": {
+      "$oid": "7bf8a1d76d4944fb6e48ac37"
+    },
+    "subscription": [
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-01-14T22:09:06.522Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": false,
+    "upVotes": [
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "59a83fe9c4c8cda9d4777fea"
+    },
+    "ideaId": "ID-0026",
+    "title": "Idea 26",
+    "description": "Description for idea 26",
+    "proposedSolution": "Proposed solution for idea 26",
+    "challengeId": {
+      "$oid": "79cd1df1c63357ef8deb8d3d"
+    },
+    "appreciationCount": 12,
+    "viewCount": 415,
+    "userId": {
+      "$oid": "7dbe1b16210b53cedb4a377e"
+    },
+    "subscription": [
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-19T04:33:31.486Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "147ae796bf8ab64987c266d0"
+    },
+    "ideaId": "ID-0027",
+    "title": "Idea 27",
+    "description": "Description for idea 27",
+    "proposedSolution": "Proposed solution for idea 27",
+    "challengeId": {
+      "$oid": "a35c68f5a0ff4569815285c9"
+    },
+    "appreciationCount": 6,
+    "viewCount": 39,
+    "userId": {
+      "$oid": "433b50699cd91e0b81cf370e"
+    },
+    "subscription": [
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-12T18:39:28.646Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "7e1c9edd04be2e16ccc4ab86"
+    },
+    "ideaId": "ID-0028",
+    "title": "Idea 28",
+    "description": "Description for idea 28",
+    "proposedSolution": "Proposed solution for idea 28",
+    "challengeId": {
+      "$oid": "132b3e740302ff1da08bc403"
+    },
+    "appreciationCount": 6,
+    "viewCount": 399,
+    "userId": {
+      "$oid": "4f2edf00d100250522f8d6a1"
+    },
+    "subscription": [
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-01-27T20:25:43.232Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "016740f1dcaad3d97dd926fb"
+    },
+    "ideaId": "ID-0029",
+    "title": "Idea 29",
+    "description": "Description for idea 29",
+    "proposedSolution": "Proposed solution for idea 29",
+    "challengeId": {
+      "$oid": "170263ff683d31a241b54810"
+    },
+    "appreciationCount": 20,
+    "viewCount": 290,
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "subscription": [
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-20T13:13:27.002Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": false,
+    "upVotes": [
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "d5a5377d911f14b874f5a3be"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "3c5313440ef724fcc42c8efb"
+      },
+      {
+        "$oid": "dc96f600fa1b053ec422683a"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "abe28af425ddea7eb2aecd42"
+    },
+    "ideaId": "ID-0030",
+    "title": "Idea 30",
+    "description": "Description for idea 30",
+    "proposedSolution": "Proposed solution for idea 30",
+    "challengeId": {
+      "$oid": "820d88627a04f93a32685ba4"
+    },
+    "appreciationCount": 32,
+    "viewCount": 189,
+    "userId": {
+      "$oid": "cd73934ffa9ef99e1e579a1a"
+    },
+    "subscription": [
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "330334d531d33723cde6452c"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "4f2edf00d100250522f8d6a1"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      }
+    ],
+    "createdAt": {
+      "$date": "2026-02-07T15:47:08.520Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "df4065e78d80c6a7f14dd4e6"
+    },
+    "ideaId": "ID-0031",
+    "title": "Idea 31",
+    "description": "Description for idea 31",
+    "proposedSolution": "Proposed solution for idea 31",
+    "challengeId": {
+      "$oid": "6c699ec299b59f9bebfb16af"
+    },
+    "appreciationCount": 47,
+    "viewCount": 65,
+    "userId": {
+      "$oid": "7dbe1b16210b53cedb4a377e"
+    },
+    "subscription": [
+      {
+        "$oid": "2774e66d55504858a6ee5cb9"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-25T08:47:52.273Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "6fe58f4ee50e8425f463fe02"
+      },
+      {
+        "$oid": "1686f209190324419a11c518"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "a0ec6594d276d8b5445f7368"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "2b01cd9a61f71154754fbce6"
+    },
+    "ideaId": "ID-0032",
+    "title": "Idea 32",
+    "description": "Description for idea 32",
+    "proposedSolution": "Proposed solution for idea 32",
+    "challengeId": {
+      "$oid": "db03b06c6f5a6178e5da2b4d"
+    },
+    "appreciationCount": 44,
+    "viewCount": 45,
+    "userId": {
+      "$oid": "433b50699cd91e0b81cf370e"
+    },
+    "subscription": [
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-17T04:36:32.179Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "2e503bf00a7b6800810b4d2d"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "50dbc32a8990505bfd947c8c"
+    },
+    "ideaId": "ID-0033",
+    "title": "Idea 33",
+    "description": "Description for idea 33",
+    "proposedSolution": "Proposed solution for idea 33",
+    "challengeId": {
+      "$oid": "3e76e13ff729e6ab67ee4ab8"
+    },
+    "appreciationCount": 14,
+    "viewCount": 264,
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "subscription": [
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-03T08:46:42.090Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "433b50699cd91e0b81cf370e"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      },
+      {
+        "$oid": "5d784903322d35f983642bf2"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "c0c9ee155390b486fd788b52"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "566e90a184f0374e0d16e105"
+    },
+    "ideaId": "ID-0034",
+    "title": "Idea 34",
+    "description": "Description for idea 34",
+    "proposedSolution": "Proposed solution for idea 34",
+    "challengeId": {
+      "$oid": "874884651f9e4b6fffc5d0c8"
+    },
+    "appreciationCount": 19,
+    "viewCount": 384,
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "subscription": [
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "aa1b3dd36647dea0dd1831fc"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-05T21:48:39.898Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "31358eca0576dda2193b5e59"
+      },
+      {
+        "$oid": "cd73934ffa9ef99e1e579a1a"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "a8bcec4ded11051cfcb54c5b"
+    },
+    "ideaId": "ID-0035",
+    "title": "Idea 35",
+    "description": "Description for idea 35",
+    "proposedSolution": "Proposed solution for idea 35",
+    "challengeId": {
+      "$oid": "fefaa8b40fc6c83589f48b6e"
+    },
+    "appreciationCount": 7,
+    "viewCount": 220,
+    "userId": {
+      "$oid": "aa1b3dd36647dea0dd1831fc"
+    },
+    "subscription": [
+      {
+        "$oid": "7dbe1b16210b53cedb4a377e"
+      },
+      {
+        "$oid": "7bf8a1d76d4944fb6e48ac37"
+      },
+      {
+        "$oid": "4750dd98014b39f0075fdae2"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-14T16:16:54.658Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.595Z"
+    },
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "efd500699094d6d629928a82"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
+      },
+      {
+        "$oid": "fa84d66b34ef9d6fb56edc1c"
+      },
+      {
+        "$oid": "539a172580a5d1ae79c5d550"
+      },
+      {
+        "$oid": "a70e9a9a717093756f7067ee"
+      },
+      {
+        "$oid": "29c4702815d3afff92ab7f4e"
+      },
+      {
+        "$oid": "e8943bbd112ccdad754c0c2b"
       }
     ]
   }

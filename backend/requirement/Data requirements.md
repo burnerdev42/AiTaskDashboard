@@ -1,52 +1,51 @@
-# Data Requirements Analysis
+# AI Task Dashboard - Data Requirements
 
-This document outlines the data requirements for the AI Task Dashboard, covering both the database schemas and derived fields necessary for the backend API.
+This document is generated from `backend/requirement/Data requirements.txt` and serves as the definitive reference for database schemas and derived fields.
+
+---
 
 ## 1. Challenge
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
 - `Title`: String
-- `opco`: List/dropdown - one from list of hardcoded options (String)
-- `Platform`: List/dropdown - one from list of hardcoded options (String)
-- `Description`: Long text (String)
+- `Opco`: String (One from hardcoded dropdown)
+- `Platform`: String (One from hardcoded dropdown)
+- `Description`: Long text - String
 - `Summary`: String
 - `Outcome`: String
-- `Timeline`: One from list of hardcoded options (String)
-- `Portfolio Lane`: One from list of hardcoded options (String)
-- `Priority`: One from list of hardcoded options (String)
-- `Tags`: List of strings (Default: `["ai"]`)
+- `Timeline`: String (One from hardcoded dropdown)
+- `Portfolio Lane`: String (One from hardcoded dropdown)
+- `Priority`: String (Hardcoded)
+- `Tags`: List of Strings (Default: `["ai"]`)
 - `Constraint`: String
-- `StackeHolder`: String
-- `Virtual Id`: Format CH-001 (Programmatically generated 001 to 999)
-- `Status` (swim lane): One among swim lane statuses (String)
-- `userId`: Creator user ID (MongoDB hex ID from user collection)
+- `Stakeholder`: String
+- `Virtual Id`: String (Format: `CH-001` to `CH-999`)
+- `Status`: String (Swim lane status)
+- `userId`: String (Creator Mongo hex ID)
 - `CreatedAt`: DateTime
-- `month`: Number (Int)
-- `year`: Number (Int)
+- `month`: Number (Int, derived from `CreatedAt`)
+- `year`: Number (Int, derived from `CreatedAt`)
 - `updatedAt`: DateTime (Initially same as `CreatedAt`)
-- `UpVotes`: userId list (Default: `[]`)
-- `Subcriptions`: userId list (Default: `[]`)
-- `View count`: Number (Long)
-- `timestamp of status changed to pilot (z1)`: DateTime
-- `timestamp of completed (z2)`: DateTime
+- `upVotes`: List of User IDs (Default: `[]`)
+- `subscriptions`: List of User IDs (Default: `[]`)
+- `viewCount`: Number (Long)
+- `timestampOfStatusChangedToPilot`: DateTime (Nullable)
+- `timestampOfCompleted`: DateTime (Nullable)
 
 ### Derived Fields
-- `Count of Ideas`: From Idea collection
-- `Owner details`: Via user ID from Idea collection
-- `contributors details`: Via list of contributor user IDs
-- `comment count`: From Comment collection
-- `Idea list`: From Idea collection by challenge ID
-- `comments`: From Comment collection
-- `contributors`: owner details of all ideas under challenge - default []
+- `countOfIdeas`: Number (from idea collection)
+- `ownerDetails`: Object (via user id from idea collection)
+- `contributorsDetails`: List (via list of contributor user ids)
+- `commentCount`: Number (from comment collection)
+- `ideaList`: List (from idea collection by challenge id)
+- `comments`: List (from comment db)
+- `contributors`: List (owner details of all ideas under challenge - default [])
 
 ### Additional Functional Requirements
-- An API endpoint is required to change challenge status **only** for SWIM LANES.
-
-### Constraints
-- Member management system and approval process for challenges: currently hardcode members in DB among existing users.
-- Timeline, portfolio, platform list, opco list are hardcoded for now; manageable by admin later.
-- Priority is always hardcoded.
+- An API endpoint is required to change challenge status only for SWIM LANES.
+  - Required Endpoint: `PATCH /challenges/{virtualId}/status`
+  - Body: `{ "status": "New Swim Lane Status" }`
 
 ---
 
@@ -58,7 +57,6 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `Title`: String
 - `Description / Idea Summary`: String
 - `Proposed Solution`: String
-- `Expected Impact`: String
 - `Challenge Id`: String (Link to Challenge collection)
 - `Appreciation Count` (Upvote): Number (Long)
 - `View Count`: Number (Long)
@@ -72,14 +70,11 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `UpVotes`: userId list (Default: `[]`)
 
 ### Derived Fields
-- `Challenge Details`: Object (Fetched from Challenge DB by Challenge Id)
-- `Problem Statement`: String (Challenge Description from Challenge DB)
-- `Comment Count`: Number (Calculated from Comment DB)
-- `Comments`: List of Objects (Fetched from Comment DB)
-- `Owner Details`: Object (User details fetched via User Id)
-
-### Constraints
-- Moderator-based idea status to be implemented in the future.
+- `challengeDetails`: Object (Fetched from Challenge DB by Challenge Id)
+- `problemStatement`: String (Challenge Description from Challenge DB)
+- `commentCount`: Number (Calculated from Comment DB)
+- `comments`: List of Objects (Fetched from Comment DB)
+- `ownerDetails`: Object (User details fetched via User Id)
 
 ---
 
@@ -87,14 +82,14 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
-- `UserId`: Mongo hex ID
-- `Comment`: Text
-- `Type`: Challenges (CH) | Ideas (ID) - Any one from the option (String)
+- `UserId`: String (Mongo hex ID)
+- `Comment`: Text - String
+- `Type`: String (`CH` | `ID`)
 - `Createdat`: DateTime
-- `TypeId`: Either challenge or idea ID (String)
+- `TypeId`: String (Challenge or Idea ID)
 
 ### Derived Fields
-- `User details`: Fetched from user DB by user ID (Object)
+- `userDetails`: Object (from user DB by user ID)
 
 ---
 
@@ -118,13 +113,13 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `Upvoted/Appreciated Idea List`: List of Strings (Idea IDs, Default: `[]`)
 
 ### Derived Fields
-- `Upvote Count`: Number (Sum of upvotes on challenges + ideas submitted by user)
-- `Recent Activity` (Top 3): List of Activity Objects (From Activity DB, sorted by timestamp)
-- `Recent Submission` (Top 5): List of Activity Objects (From Activity DB, types: `challenge_created` or `idea_created`)
-- `Contribution Graph`: Map of String (Month) to Long (Count) (From Activity DB, events grouped by month for last 6 months)
-- `Comment Count`: Number (Total comments from Comment DB)
-- `Challenge Count`: Number (Total challenges created from Challenge DB)
-- `Total Idea Count`: Number (Total ideas created from Idea DB)
+- `upvoteCount`: Number (Sum of upvotes on challenges + ideas submitted by user)
+- `recentActivity`: List of Activity Objects (From Activity DB, sorted by timestamp, Top 3)
+- `recentSubmission`: List of Activity Objects (From Activity DB, types: `challenge_created` or `idea_created`, Top 5)
+- `contributionGraph`: Map of String (Month) to Long (Count) (From Activity DB, events grouped by month for last 6 months)
+- `commentCount`: Number (Total comments from Comment DB)
+- `challengeCount`: Number (Total challenges created from Challenge DB)
+- `totalIdeaCount`: Number (Total ideas created from Idea DB)
 
 ---
 
@@ -132,95 +127,31 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
-- `Type`: String (ENUM: `challenge_created`, `idea_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`, `log_in`, `log_out`)
-- `fk_id`: String (Nullable: ID of related Challenge, Idea, or Comment; null for login/logout)
+- `Type`: String (ENUM: `challenge_created`, `idea_created`, etc.)
+- `fk_id`: String (Nullable: ID of related entity)
 - `userId`: String (User hex ID)
 - `CreatedAt`: DateTime
 - `Month`: Number (Int, derived from `CreatedAt`)
 - `Year`: Number (Int, derived from `CreatedAt`)
 
 ### Derived Fields
-- `User Details`: Object (Fetched via `userId` for displaying 'Who' performed the action)
-- `Entity Details`: Object (Fetched via `fk_id` based on Type to show 'What' was acted upon)
-- `Activity Summary`: String (A human-readable string generated by combining Type + Entity Details)
+- `userDetails`: Object (Fetched via `userId` for displaying 'Who' performed the action)
+- `entityDetails`: Object (Fetched via `fk_id` based on Type - any of Challenge or Idea)
+- `activitySummary`: String (A human-readable string generated by combining Type + Entity Details)
 
 ---
 
-## 6. Notifications
+## 6. Notification
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
-- `Type`: String (ENUM: `challenge_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`)
-- `fk_id`: String (Nullable: ID of the linked Challenge, Idea, or Comment)
-- `userId`: String (The recipient's Mongo hex ID - Not the initiator)
+- `Type`: String (ENUM: `challenge_created`, `challenge_status_update`, etc.)
+- `fk_id`: String (Nullable: ID of linked entity)
+- `userId`: String (Recipient Mongo hex ID)
 - `CreatedAt`: DateTime
 - `IsSeen`: Boolean (Default: `false`)
 
 ### Derived Fields
-- `Description`: String (Dynamically generated based on Type and initiator name)
-- `Linked Entity Details`: Object (Details of the Challenge/Idea fetched via `fk_id`)
-- `Recipient Details`: Object (User details fetched via `userId`)
-
-### Notification Recipient Logic For Subscribers (Backend Implementation Guide)
-- `challenge_created`: All users (Except initiator)
-- `challenge_status_update` / `edited`: All challenge subscribers (Except initiator)
-- `idea_edited`: All idea subscribers + Challenge owner + Challenge subscribers (Except initiator)
-- `challenge_upvoted` / `commented` / `subscribed` / `deleted`: All challenge subscribers + Challenge owner (Except initiator)
-- `idea_upvoted` / `commented` / `subscribed` / `deleted`: All idea subscribers + Challenge owner + Challenge subscribers (Except initiator)
-
-### Additional Functional Requirement
-- Creator of challenge automatically becomes subscriber
-- Any user giving idea already becomes subscriber of challenge
-- Any user upvoting or commenting on challenge automatically subscribers to that challenge
-- Creator of idea subscribes to that idea and also to parent challenge
-- Any user upvoting or commenting on idea automatically subscribers to that idea and parent challenge
-
----
-
-## 7. Metrics (All Derived)
-
-**Note:** Blocks have individual API endpoints.
-
-### TOP Metric Summary Block
-- **Total challenges:** From Challenge table
-- **Total ideas:** From Idea table
-- **Conversion rate:** Challenges in "completed" / total challenges
-- **Average time to pilot:** All challenges with non-nullable `inpilot` timestamp. Compute number of days since creation, divide by the count.
-- **Active contributions:** All events for challenge, idea, and comment.
-- **Total Users:** Replacing pipeline value. From User table.
-
-### Innovation Funnel Block (Top 1st item)
-- **Total challenges:** From Challenge DB
-- **Total Ideas:** From Challenge DB
-- **Challenges by swim lane count:** Do this in memory
-- **Conversion rate:** Already mentioned above (target is always a hardcoded value)
-
-### Team Engagement Block (Top 2nd item)
-- **Challenges group by platform:** Group by platform (not tech, we don't have tech details)
-- **Heatmap:** Hard to calculate, show a static heatmap for now.
-
-### Portfolio Balance Block (Top 3rd item / Move to Top)
-- **Challenge count by portfolio lane**
-
-### Innovation Velocity (Bottom 1st item)
-- Total challenge and total ideas block
-- Derived from Idea table last 12 months (including the current month)
-
-### OpCo Radar Block (Bottom 2nd item)
-- Replaces Tech Radar as we lack tech details.
-- **Challenge count by opco**
-
----
-
-## 8. Home (All Derived - Separate Endpoints)
-- **Slider:** Most upvoted challenges (Top 5)
-- **Pie chart:** Challenges grouped by status
-- **Key metric:** From metric summary API, show only `pilot rate` and `conversion rate`
-- **Monthly throughput:** Fetch innovation velocity API and show only six months of data
-- **Success stories:** Hardcoded in DB for now
-- **Innovation team:** Users marked as lab users (show ideas, challenges, and comment count)
-
----
-
-## 9. What's Next
-- Currently hardcoded in UI.
+- `description`: String (Dynamically generated based on Type and initiator name)
+- `linkedEntityDetails`: Object (Details of the Challenge or Idea fetched via `fk_id`)
+- `recipientDetails`: Object (User details fetched via `userId`)

@@ -172,6 +172,28 @@ paths:
       responses:
         '200':
           description: Challenge updated
+    patch:
+      tags: [Challenges]
+      summary: Update challenge status (Swim Lane)
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  description: New swim lane status
+      responses:
+        '200':
+          description: Challenge status updated successfully
     delete:
       tags: [Challenges]
       summary: Delete a challenge
@@ -519,6 +541,7 @@ components:
     # ------------------
     UserMinimal:
       type: object
+      required: [_id, name]
       properties:
         _id: { type: string, description: "MongoDB hex ID" }
         name: { type: string }
@@ -528,6 +551,7 @@ components:
 
     ChallengeMinimal:
       type: object
+      required: [_id, title]
       properties:
         _id: { type: string, description: "MongoDB hex ID" }
         virtualId: { type: string, description: "CH-XXX format" }
@@ -535,6 +559,7 @@ components:
 
     IdeaMinimal:
       type: object
+      required: [_id, title]
       properties:
         _id: { type: string, description: "MongoDB hex ID" }
         ideaId: { type: string, description: "ID-XXXX format" }
@@ -699,6 +724,7 @@ components:
             commentCount: { type: integer, description: "(DERIVED) Calculated from Comments table" }
             ideaList: { type: array, items: { $ref: '#/components/schemas/IdeaMinimal' }, description: "(DERIVED) Full list from Idea collection" }
             comments: { type: array, items: { $ref: '#/components/schemas/CommentMinimal' }, description: "(DERIVED) Full list from Comment collection" }
+            contributors: { type: array, items: { $ref: '#/components/schemas/UserMinimal' }, description: "(DERIVED) Owner details of all ideas under challenge" }
 
     IdeaResponse:
       allOf:
@@ -734,7 +760,7 @@ components:
               oneOf:
                 - $ref: '#/components/schemas/ChallengeMinimal'
                 - $ref: '#/components/schemas/IdeaMinimal'
-              description: "(DERIVED) What was acted upon"
+              description: "(DERIVED) What was acted upon (Challenge or Idea)"
             activitySummary: { type: string, description: "(DERIVED) Human readable string generated dynamically" }
 
     NotificationResponse:
@@ -749,5 +775,5 @@ components:
               oneOf:
                 - $ref: '#/components/schemas/ChallengeMinimal'
                 - $ref: '#/components/schemas/IdeaMinimal'
-              description: "(DERIVED) Details of Challenge/Idea linked via fk_id"
+              description: "(DERIVED) Details of Challenge or Idea linked via fk_id"
             recipientDetails: { $ref: '#/components/schemas/UserMinimal' }

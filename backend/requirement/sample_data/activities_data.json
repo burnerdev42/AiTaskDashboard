@@ -1,852 +1,852 @@
 [
   {
     "_id": {
-      "$oid": "55ba713d335a668294be36db"
-    },
-    "type": "challenge_edited",
-    "fkId": {
-      "$oid": "ec56db4a419b423b4fe5a6bb"
-    },
-    "userId": {
-      "$oid": "679408078edc8d77ffd426b2"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:30:17.279Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "b0c55f67c4b4235c175fbaa4"
-    },
-    "type": "challenge_deleted",
-    "fkId": {
-      "$oid": "e0395a8a14b5256d6c4f137a"
-    },
-    "userId": {
-      "$oid": "679408078edc8d77ffd426b2"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:30:59.366Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "817685b8f89f03ef7e55054a"
-    },
-    "type": "idea_subscribed",
-    "fkId": {
-      "$oid": "d9ab88fc79172fc298ed7740"
-    },
-    "userId": {
-      "$oid": "e5ad220c675a802b9d2993ef"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:31:00.724Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "08577690584cadbf509ae332"
-    },
-    "type": "idea_created",
-    "fkId": {
-      "$oid": "38d33015ec821d8b806a9f18"
-    },
-    "userId": {
-      "$oid": "268b8a5741b7bd1797a14026"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:37:12.639Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "e29d240e9d53dbe20a4da365"
-    },
-    "type": "challenge_upvoted",
-    "fkId": {
-      "$oid": "e0395a8a14b5256d6c4f137a"
-    },
-    "userId": {
-      "$oid": "308297a4c754ce1f5200ce85"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:39:10.250Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "6b9e409638451ae1bf46a995"
-    },
-    "type": "log_in",
-    "fkId": {
-      "$oid": "0352a8ea5453b7cd7351687f"
-    },
-    "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:35:50.558Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "44356b0bc7592dd0841f2a46"
-    },
-    "type": "log_in",
-    "fkId": {
-      "$oid": "ec56db4a419b423b4fe5a6bb"
-    },
-    "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:23:56.736Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "0e3c0511efaed26be9af6c37"
-    },
-    "type": "challenge_deleted",
-    "fkId": {
-      "$oid": "3f8f27f57eecc027c1eef5dc"
-    },
-    "userId": {
-      "$oid": "bacbb385c81efaae3612dfe0"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:32:47.410Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "e63be323498002b57531df24"
-    },
-    "type": "idea_commented",
-    "fkId": {
-      "$oid": "a2bb783fd06680321e007e43"
-    },
-    "userId": {
-      "$oid": "ec3672e7f3cb324cb2c22642"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:25:09.862Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "46578b2fb1c12fa0dde163f2"
-    },
-    "type": "idea_subscribed",
-    "fkId": {
-      "$oid": "93da01dba89e41b89b6faf04"
-    },
-    "userId": {
-      "$oid": "68f7f79898ea61b7752b68c3"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:23:05.875Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "5e44ec9d3668fa51894fa310"
-    },
-    "type": "challenge_edited",
-    "fkId": {
-      "$oid": "7babf239de2cde6789ecf39f"
-    },
-    "userId": {
-      "$oid": "e995c32f1437cd735b64e3f3"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:27:17.947Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "f8355643d960b3827d0bae0a"
-    },
-    "type": "challenge_created",
-    "fkId": {
-      "$oid": "be2b7c484a293c380210965b"
-    },
-    "userId": {
-      "$oid": "d6d689a4cf42160b67a413c6"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:30:58.957Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "358e8d7b1e88630726918d52"
-    },
-    "type": "challenge_deleted",
-    "fkId": {
-      "$oid": "d541fbb008be437ccc1a7072"
-    },
-    "userId": {
-      "$oid": "9c9a8f0a668ac333a1b9db88"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:26:34.439Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "b937fd8e0863129547271d6b"
+      "$oid": "701d0d0e9dc7f88fdec2923e"
     },
     "type": "log_out",
-    "fkId": {
-      "$oid": "ae05fb1ab580ff7d24604d70"
+    "fk_id": {
+      "$oid": "6ed8fdb0d810d6e4316ec572"
     },
     "userId": {
-      "$oid": "9c9a8f0a668ac333a1b9db88"
+      "$oid": "d5a5377d911f14b874f5a3be"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:14:48.594Z"
     },
     "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:24:27.546Z"
-    }
+    "year": 2026
   },
   {
     "_id": {
-      "$oid": "203933a339808bb8c8e4db10"
+      "$oid": "ecf7bf0603f050ecd89c4f20"
     },
-    "type": "challenge_subscribed",
-    "fkId": {
-      "$oid": "34a85eb889536ac0af987ed7"
+    "type": "idea_deleted",
+    "fk_id": {
+      "$oid": "30c86bf5afa9bd20d2e2440d"
     },
     "userId": {
-      "$oid": "e995c32f1437cd735b64e3f3"
+      "$oid": "aa1b3dd36647dea0dd1831fc"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:42:34.526Z"
     },
     "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:31:42.086Z"
-    }
+    "year": 2026
   },
   {
     "_id": {
-      "$oid": "32bf20f7d8ae09867f751e43"
-    },
-    "type": "idea_subscribed",
-    "fkId": {
-      "$oid": "20f5af1764ed79fe31738b2a"
-    },
-    "userId": {
-      "$oid": "308297a4c754ce1f5200ce85"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:26:05.158Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "d0b57ea3cfb12de111b0fcfc"
-    },
-    "type": "idea_created",
-    "fkId": {
-      "$oid": "9b1ee63a06c2683ac9bfa411"
-    },
-    "userId": {
-      "$oid": "7266fc2a6ba991e5e9f1a626"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:39:21.862Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "60399ecda420800a86b248ad"
+      "$oid": "ee75b6fb5c328a9a672e4fd9"
     },
     "type": "log_in",
-    "fkId": {
-      "$oid": "cc8314f009737671b4944bc6"
+    "fk_id": {
+      "$oid": "3e76e13ff729e6ab67ee4ab8"
     },
     "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
+      "$oid": "fa84d66b34ef9d6fb56edc1c"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:16:10.726Z"
     },
     "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:29:48.538Z"
-    }
+    "year": 2026
   },
   {
     "_id": {
-      "$oid": "4a6859f5eb6fa0eca1f39385"
+      "$oid": "3625eab7fdcb3a249d7a9b03"
+    },
+    "type": "idea_subscribed",
+    "fk_id": {
+      "$oid": "3e76e13ff729e6ab67ee4ab8"
+    },
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:13:46.795Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "87bd39a3c8954a54e9575e6c"
     },
     "type": "challenge_commented",
-    "fkId": {
-      "$oid": "2e96474c59c327aa92296db5"
+    "fk_id": {
+      "$oid": "170263ff683d31a241b54810"
     },
     "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
+      "$oid": "2774e66d55504858a6ee5cb9"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:54:14.053Z"
     },
     "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:25:28.007Z"
-    }
+    "year": 2026
   },
   {
     "_id": {
-      "$oid": "37b680b411f8b071a75eb136"
-    },
-    "type": "idea_created",
-    "fkId": {
-      "$oid": "ab5609be28d75724d4f46af3"
-    },
-    "userId": {
-      "$oid": "6e9b6e972adf98037fb1eb13"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:29:59.166Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "89e4d79214a349ccdec62ccf"
-    },
-    "type": "idea_created",
-    "fkId": {
-      "$oid": "d47700bf424140df4471486e"
-    },
-    "userId": {
-      "$oid": "18453cdfc20c9d7e345da6bb"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:27:31.357Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "a47baae074a280f50fb7ca4e"
-    },
-    "type": "idea_created",
-    "fkId": {
-      "$oid": "3fe0be3a67b43364605dac35"
-    },
-    "userId": {
-      "$oid": "e995c32f1437cd735b64e3f3"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:30:26.090Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "740d29873771bd50b8a5c298"
-    },
-    "type": "log_in",
-    "fkId": {
-      "$oid": "d47700bf424140df4471486e"
-    },
-    "userId": {
-      "$oid": "d6d689a4cf42160b67a413c6"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:23:34.178Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "d9ced46e69d70a1d1587f42c"
+      "$oid": "b098c10a8a3384fdc8fe0c4c"
     },
     "type": "challenge_edited",
-    "fkId": {
-      "$oid": "e26b1f8bae84e20f70427f41"
+    "fk_id": {
+      "$oid": "42cfeffaf45e03965d98b041"
     },
     "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
+      "$oid": "2774e66d55504858a6ee5cb9"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:14:43.011Z"
     },
     "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:27:42.041Z"
-    }
+    "year": 2026
   },
   {
     "_id": {
-      "$oid": "96fff376675e77cae911e3b3"
-    },
-    "type": "idea_deleted",
-    "fkId": {
-      "$oid": "48de8c39447ab4717d6b60ca"
-    },
-    "userId": {
-      "$oid": "404f08da5d4fd716ff80b1e4"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:31:26.477Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "20c34d2248bf193ed87113d3"
-    },
-    "type": "challenge_created",
-    "fkId": {
-      "$oid": "3fe0be3a67b43364605dac35"
-    },
-    "userId": {
-      "$oid": "2245086b5bc06d315ccedbdc"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:32:18.350Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "ec467a5d82497bc23fe4cef9"
-    },
-    "type": "challenge_upvoted",
-    "fkId": {
-      "$oid": "50b527bafd61a0811d42e330"
-    },
-    "userId": {
-      "$oid": "308297a4c754ce1f5200ce85"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:34:59.951Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "c101cfc334f87e9ef4e6df15"
-    },
-    "type": "challenge_created",
-    "fkId": {
-      "$oid": "6dac12e70626ef452d54582c"
-    },
-    "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:31:22.946Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "eac31f445cf0e2cf9602bb29"
-    },
-    "type": "idea_subscribed",
-    "fkId": {
-      "$oid": "ae2a841be8b323cae419de98"
-    },
-    "userId": {
-      "$oid": "2bc621e1361d668aaabfbf57"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:27:21.988Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "21132c5d8f3f804c16e12eda"
-    },
-    "type": "challenge_created",
-    "fkId": {
-      "$oid": "111936514c1279d1f415f119"
-    },
-    "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:27:37.868Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "5476e3626d7d7e5a131ef79b"
-    },
-    "type": "idea_subscribed",
-    "fkId": {
-      "$oid": "6f9c4645be80750f9c7c837f"
-    },
-    "userId": {
-      "$oid": "679408078edc8d77ffd426b2"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:23:17.489Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "9fe00cb48a1e5b280e3222cd"
-    },
-    "type": "challenge_upvoted",
-    "fkId": {
-      "$oid": "345245c9f6b8e7ff7e376ac4"
-    },
-    "userId": {
-      "$oid": "404f08da5d4fd716ff80b1e4"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:37:25.464Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "790caadf746a8e61bf7483f5"
-    },
-    "type": "challenge_subscribed",
-    "fkId": {
-      "$oid": "48de8c39447ab4717d6b60ca"
-    },
-    "userId": {
-      "$oid": "679408078edc8d77ffd426b2"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:35:53.334Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "e8e24b4e7c9f863746b569ba"
-    },
-    "type": "idea_deleted",
-    "fkId": {
-      "$oid": "87d5c3f31fae26580fc6c2f7"
-    },
-    "userId": {
-      "$oid": "9c9a8f0a668ac333a1b9db88"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:28:28.067Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "979dd54249e84e97404d68b5"
-    },
-    "type": "challenge_deleted",
-    "fkId": {
-      "$oid": "0e84b41e4e25019eb9e317bd"
-    },
-    "userId": {
-      "$oid": "b67695827cecb99d4ead1707"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:33:52.863Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "680d08ffc0e6eb277eb10bbe"
-    },
-    "type": "challenge_created",
-    "fkId": {
-      "$oid": "d47700bf424140df4471486e"
-    },
-    "userId": {
-      "$oid": "18453cdfc20c9d7e345da6bb"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:33:24.818Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "c3023724b996343f9498fe63"
-    },
-    "type": "challenge_status_update",
-    "fkId": {
-      "$oid": "a26dc3f2f9154f79f612e04e"
-    },
-    "userId": {
-      "$oid": "ec3672e7f3cb324cb2c22642"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:35:57.903Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "1397edac794d8c4fbe30434d"
-    },
-    "type": "challenge_edited",
-    "fkId": {
-      "$oid": "0352a8ea5453b7cd7351687f"
-    },
-    "userId": {
-      "$oid": "f546ff3e8b00451f67c3724d"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:31:52.656Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "77c84ef8b39b2ce664ff7254"
-    },
-    "type": "log_out",
-    "fkId": {
-      "$oid": "d9ab88fc79172fc298ed7740"
-    },
-    "userId": {
-      "$oid": "b67695827cecb99d4ead1707"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:38:41.417Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "dd13d0b57ca5492a51720fe3"
-    },
-    "type": "idea_commented",
-    "fkId": {
-      "$oid": "8fc6fb7f03ce02e8ed2a1573"
-    },
-    "userId": {
-      "$oid": "e5ad220c675a802b9d2993ef"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:33:49.852Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "8338b698091446b30cf69644"
-    },
-    "type": "idea_deleted",
-    "fkId": {
-      "$oid": "8d78a2e96e74fc43fbe97a07"
-    },
-    "userId": {
-      "$oid": "b67695827cecb99d4ead1707"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:28:26.152Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "3e3aa6371a09af8cf2b21d40"
-    },
-    "type": "idea_upvoted",
-    "fkId": {
-      "$oid": "0e84b41e4e25019eb9e317bd"
-    },
-    "userId": {
-      "$oid": "6e9b6e972adf98037fb1eb13"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:35:32.208Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "f45a4dea5cc52aa2109bd678"
-    },
-    "type": "log_in",
-    "fkId": {
-      "$oid": "895c7b4344f49927ac824885"
-    },
-    "userId": {
-      "$oid": "2245086b5bc06d315ccedbdc"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:24:13.593Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "223520adc8ffa1a556681a6a"
-    },
-    "type": "challenge_deleted",
-    "fkId": {
-      "$oid": "9b1ee63a06c2683ac9bfa411"
-    },
-    "userId": {
-      "$oid": "2bc621e1361d668aaabfbf57"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:36:27.429Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "bbbcc53b4d116eb008e75598"
-    },
-    "type": "idea_created",
-    "fkId": {
-      "$oid": "e26b1f8bae84e20f70427f41"
-    },
-    "userId": {
-      "$oid": "e5ad220c675a802b9d2993ef"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:25:04.539Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "424c1f7eae0a407eb23257c1"
-    },
-    "type": "challenge_upvoted",
-    "fkId": {
-      "$oid": "345245c9f6b8e7ff7e376ac4"
-    },
-    "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:28:03.980Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "671f7f10a96efde406d4de24"
-    },
-    "type": "challenge_commented",
-    "fkId": {
-      "$oid": "07f5de9c0abbfad9733c0a11"
-    },
-    "userId": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:38:59.055Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "dba96f35cd1b46a967c26dd0"
-    },
-    "type": "idea_subscribed",
-    "fkId": {
-      "$oid": "2b6f98ab90c8304ba50abfba"
-    },
-    "userId": {
-      "$oid": "2b30fcf2e90897f2225edca8"
-    },
-    "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:25:09.728Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "684277cd242bf1869440a1bf"
+      "$oid": "787e976adfc8279057a225bb"
     },
     "type": "idea_edited",
-    "fkId": {
-      "$oid": "345245c9f6b8e7ff7e376ac4"
+    "fk_id": {
+      "$oid": "016740f1dcaad3d97dd926fb"
     },
     "userId": {
-      "$oid": "d6d689a4cf42160b67a413c6"
+      "$oid": "1686f209190324419a11c518"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:03:43.582Z"
     },
     "month": 2,
-    "year": 2026,
-    "createdAt": {
-      "$date": "2026-02-21T14:27:25.589Z"
-    }
+    "year": 2026
   },
   {
     "_id": {
-      "$oid": "c05c94313cb3faf056e915c5"
+      "$oid": "f91379e5495eebd8e0ed0774"
     },
-    "type": "challenge_commented",
-    "fkId": {
-      "$oid": "8fc6fb7f03ce02e8ed2a1573"
+    "type": "idea_commented",
+    "fk_id": {
+      "$oid": "ef6a82bfe0bf7c066bf02355"
     },
     "userId": {
-      "$oid": "e995c32f1437cd735b64e3f3"
+      "$oid": "efd500699094d6d629928a82"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:18:17.650Z"
     },
     "month": 2,
-    "year": 2026,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "8a42d7e6c18110daa39de817"
+    },
+    "type": "log_out",
+    "fk_id": {
+      "$oid": "9b30549b7bbcfe0c10dc98de"
+    },
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
     "createdAt": {
-      "$date": "2026-02-21T14:23:33.944Z"
-    }
+      "$date": "2026-02-21T14:21:25.570Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "c44fbfe43bfba527776e0bc0"
+    },
+    "type": "log_out",
+    "fk_id": {
+      "$oid": "d323fe5b44ac16b346641d29"
+    },
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:51:02.538Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "e2812ca422683cc01dfca46d"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "816645b312d3e9c1e2974246"
+    },
+    "userId": {
+      "$oid": "7dbe1b16210b53cedb4a377e"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:12:13.987Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "67969b26edd0c64bd35bf545"
+    },
+    "type": "challenge_commented",
+    "fk_id": {
+      "$oid": "316be715ce9c69e87110c84d"
+    },
+    "userId": {
+      "$oid": "a70e9a9a717093756f7067ee"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:04:01.954Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "831588de35ee2d852c056d3a"
+    },
+    "type": "idea_edited",
+    "fk_id": {
+      "$oid": "7de98bd136c3e58914e1c853"
+    },
+    "userId": {
+      "$oid": "fa84d66b34ef9d6fb56edc1c"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:50:55.127Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "699a39f6131bc1766774201d"
+    },
+    "type": "idea_edited",
+    "fk_id": {
+      "$oid": "f9f28eb29b1970d6fbc0d18b"
+    },
+    "userId": {
+      "$oid": "7bf8a1d76d4944fb6e48ac37"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:59:18.734Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "f770951db231a7de2af29687"
+    },
+    "type": "idea_commented",
+    "fk_id": {
+      "$oid": "df2d8be7873e3650e135469e"
+    },
+    "userId": {
+      "$oid": "aa1b3dd36647dea0dd1831fc"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:46:43.010Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "64d45af2234cdc10f5369e0d"
+    },
+    "type": "challenge_edited",
+    "fk_id": {
+      "$oid": "c65cebd9ec6daa4fd95c4a3a"
+    },
+    "userId": {
+      "$oid": "4750dd98014b39f0075fdae2"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:46:04.783Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "9cd1120a5873781286b05fb9"
+    },
+    "type": "idea_created",
+    "fk_id": {
+      "$oid": "71bebde9ec9ee5d177ad0503"
+    },
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:50:53.937Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "fd73858bc62705ab02ba3ae2"
+    },
+    "type": "challenge_commented",
+    "fk_id": {
+      "$oid": "820d88627a04f93a32685ba4"
+    },
+    "userId": {
+      "$oid": "fa84d66b34ef9d6fb56edc1c"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:02:05.143Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "ca490e8ecc90df5d777bbd4b"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "78abb2ecfe0378d2da411ef9"
+    },
+    "userId": {
+      "$oid": "31358eca0576dda2193b5e59"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:12:33.102Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "258855847d6d75ebca57d2fa"
+    },
+    "type": "idea_created",
+    "fk_id": {
+      "$oid": "874884651f9e4b6fffc5d0c8"
+    },
+    "userId": {
+      "$oid": "efd500699094d6d629928a82"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:05:12.094Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "fba1e715ff406b998b1fdbac"
+    },
+    "type": "challenge_upvoted",
+    "fk_id": {
+      "$oid": "59a83fe9c4c8cda9d4777fea"
+    },
+    "userId": {
+      "$oid": "5d784903322d35f983642bf2"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:02:29.289Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "34bfdb7610bb0540bf951320"
+    },
+    "type": "challenge_status_update",
+    "fk_id": {
+      "$oid": "ccba74e8968157afe7b1e097"
+    },
+    "userId": {
+      "$oid": "2e503bf00a7b6800810b4d2d"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:19:59.645Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "19f1a2561144a19893cdf548"
+    },
+    "type": "challenge_commented",
+    "fk_id": {
+      "$oid": "79cd1df1c63357ef8deb8d3d"
+    },
+    "userId": {
+      "$oid": "433b50699cd91e0b81cf370e"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:17:51.379Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "f9e2951a843092a6d1d108e6"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "f2848f51e48927f8a06d9e39"
+    },
+    "userId": {
+      "$oid": "a70e9a9a717093756f7067ee"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:56:53.226Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "80912b806686a434a06111e5"
+    },
+    "type": "idea_upvoted",
+    "fk_id": {
+      "$oid": "270a7747b89c1c356ebe7498"
+    },
+    "userId": {
+      "$oid": "a0ec6594d276d8b5445f7368"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:40:58.265Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "5dd87009de788d57b82102f7"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "c93752e5629014003420191c"
+    },
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:15:30.610Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "8bc73414ef85994d40259179"
+    },
+    "type": "idea_upvoted",
+    "fk_id": {
+      "$oid": "7e1c9edd04be2e16ccc4ab86"
+    },
+    "userId": {
+      "$oid": "a0ec6594d276d8b5445f7368"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:29:37.478Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "5e944c0c8021e16a508b5650"
+    },
+    "type": "challenge_deleted",
+    "fk_id": {
+      "$oid": "2e167466e08e0fbc44655b93"
+    },
+    "userId": {
+      "$oid": "4f2edf00d100250522f8d6a1"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:51:19.338Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "855c9126fc441330d7b1bc70"
+    },
+    "type": "idea_commented",
+    "fk_id": {
+      "$oid": "0d8ebb56d01cb4c830b14d40"
+    },
+    "userId": {
+      "$oid": "a70e9a9a717093756f7067ee"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:21:15.774Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "4af4f62f81aa00d133b7efa0"
+    },
+    "type": "idea_created",
+    "fk_id": {
+      "$oid": "820d88627a04f93a32685ba4"
+    },
+    "userId": {
+      "$oid": "2774e66d55504858a6ee5cb9"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:13:25.502Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "c5e71d89a66142c934432db4"
+    },
+    "type": "challenge_commented",
+    "fk_id": {
+      "$oid": "147ae796bf8ab64987c266d0"
+    },
+    "userId": {
+      "$oid": "2e503bf00a7b6800810b4d2d"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:35:04.648Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "87a5c6239346575e75a40791"
+    },
+    "type": "challenge_created",
+    "fk_id": {
+      "$oid": "b6c8b9bdf4be29b925b2722d"
+    },
+    "userId": {
+      "$oid": "539a172580a5d1ae79c5d550"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:52:52.738Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "7aa395411204589f17e3b273"
+    },
+    "type": "idea_upvoted",
+    "fk_id": {
+      "$oid": "71bebde9ec9ee5d177ad0503"
+    },
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:07:38.236Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "a32fcaa0cd8501aedfc03859"
+    },
+    "type": "idea_edited",
+    "fk_id": {
+      "$oid": "f9f28eb29b1970d6fbc0d18b"
+    },
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:06:11.859Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "8e4a6697f1c2d2bed03d7b43"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "c0dfc62f479a2a7b56e04aa5"
+    },
+    "userId": {
+      "$oid": "fa84d66b34ef9d6fb56edc1c"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:16:20.552Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "3db6de0e414bb76595b43711"
+    },
+    "type": "challenge_created",
+    "fk_id": {
+      "$oid": "cf859c62991c63eb2a116406"
+    },
+    "userId": {
+      "$oid": "c0c9ee155390b486fd788b52"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:47:25.243Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "e634431e0a9e32a2bfe43fba"
+    },
+    "type": "challenge_status_update",
+    "fk_id": {
+      "$oid": "2ccfee68f7f5d64ec079c10b"
+    },
+    "userId": {
+      "$oid": "2774e66d55504858a6ee5cb9"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:30:27.604Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "3d3d3ab89459a19de58bb32f"
+    },
+    "type": "challenge_deleted",
+    "fk_id": {
+      "$oid": "170263ff683d31a241b54810"
+    },
+    "userId": {
+      "$oid": "1686f209190324419a11c518"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:18:40.920Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "9af6ce45a999685e5753ec79"
+    },
+    "type": "idea_subscribed",
+    "fk_id": {
+      "$oid": "74892d67d05bbc299b713134"
+    },
+    "userId": {
+      "$oid": "cd73934ffa9ef99e1e579a1a"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:50:44.173Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "f093b630950fd807c3f965f2"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "8c789cf9a3d86c1e0859bebe"
+    },
+    "userId": {
+      "$oid": "7dbe1b16210b53cedb4a377e"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:12:56.112Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "bad1e7868cb2fd057d4a940a"
+    },
+    "type": "log_in",
+    "fk_id": {
+      "$oid": "12ddde2051b3cc478529f38a"
+    },
+    "userId": {
+      "$oid": "a70e9a9a717093756f7067ee"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:24:33.408Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "c75cb534b463c3c86bdd2d5b"
+    },
+    "type": "idea_deleted",
+    "fk_id": {
+      "$oid": "db03b06c6f5a6178e5da2b4d"
+    },
+    "userId": {
+      "$oid": "5d784903322d35f983642bf2"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:24:14.903Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "21f059cc65944f3cafde8413"
+    },
+    "type": "log_out",
+    "fk_id": {
+      "$oid": "9b30549b7bbcfe0c10dc98de"
+    },
+    "userId": {
+      "$oid": "5d784903322d35f983642bf2"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:46:33.272Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "a00ee07ef0c7d2cdc52f1366"
+    },
+    "type": "challenge_status_update",
+    "fk_id": {
+      "$oid": "19dd59946410de9f1739c5f5"
+    },
+    "userId": {
+      "$oid": "efd500699094d6d629928a82"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:55:03.707Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "3321377482ad84c12ebcd21b"
+    },
+    "type": "idea_upvoted",
+    "fk_id": {
+      "$oid": "d8a4d948d5fec706adc9719b"
+    },
+    "userId": {
+      "$oid": "433b50699cd91e0b81cf370e"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T12:56:33.558Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "6bc702ab52093f6863e2d1ae"
+    },
+    "type": "challenge_created",
+    "fk_id": {
+      "$oid": "50dbc32a8990505bfd947c8c"
+    },
+    "userId": {
+      "$oid": "6fe58f4ee50e8425f463fe02"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:02:32.495Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "ade6f39491bbe71d7d51ebc7"
+    },
+    "type": "challenge_created",
+    "fk_id": {
+      "$oid": "53b18cd205685a3c9bf7391f"
+    },
+    "userId": {
+      "$oid": "d5a5377d911f14b874f5a3be"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T15:11:24.218Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "21760cf57ae3ad514c33d672"
+    },
+    "type": "challenge_created",
+    "fk_id": {
+      "$oid": "fefaa8b40fc6c83589f48b6e"
+    },
+    "userId": {
+      "$oid": "2774e66d55504858a6ee5cb9"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:53:56.982Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "2f05d0af5ac35633127989e3"
+    },
+    "type": "idea_upvoted",
+    "fk_id": {
+      "$oid": "bdcbe6c2d5a7ceefccd77981"
+    },
+    "userId": {
+      "$oid": "aa1b3dd36647dea0dd1831fc"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T14:53:57.521Z"
+    },
+    "month": 2,
+    "year": 2026
+  },
+  {
+    "_id": {
+      "$oid": "21e3e1e2bace63cb922e6c2d"
+    },
+    "type": "challenge_subscribed",
+    "fk_id": {
+      "$oid": "77c02266600bad96ff953cc8"
+    },
+    "userId": {
+      "$oid": "c0c9ee155390b486fd788b52"
+    },
+    "createdAt": {
+      "$date": "2026-02-21T13:55:36.590Z"
+    },
+    "month": 2,
+    "year": 2026
   }
 ]

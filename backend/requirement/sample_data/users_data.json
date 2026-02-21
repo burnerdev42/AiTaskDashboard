@@ -1,360 +1,361 @@
 [
   {
     "_id": {
-      "$oid": "e995c32f1437cd735b64e3f3"
+      "$oid": "d5a5377d911f14b874f5a3be"
     },
     "name": "User 1",
     "opco": "OpCo Gamma",
-    "platform": "Mobile - Android",
-    "companyTechRole": "Product Manager",
+    "platform": "Mobile - iOS",
+    "companyTechRole": "Software Engineer",
     "email": "user1@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser1",
     "interestAreas": [
       "ai",
-      "blockchain"
+      "security"
     ],
     "role": "ADMIN",
     "status": "PENDING",
-    "innovationScore": 211,
+    "innovationScore": 3,
     "upvotedChallengeList": [
       {
-        "$oid": "48de8c39447ab4717d6b60ca"
-      }
-    ],
-    "upvotedAppreciatedIdeaList": [
+        "$oid": "d0912d3a928c6d6e1791fee4"
+      },
       {
-        "$oid": "0e84b41e4e25019eb9e317bd"
+        "$oid": "3e76e13ff729e6ab67ee4ab8"
+      },
+      {
+        "$oid": "79cd1df1c63357ef8deb8d3d"
+      },
+      {
+        "$oid": "d323fe5b44ac16b346641d29"
+      },
+      {
+        "$oid": "27359552544f1faade0df82b"
       }
     ],
+    "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2025-12-10T07:40:25.258Z"
+      "$date": "2026-01-10T06:43:33.631Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "308297a4c754ce1f5200ce85"
+      "$oid": "c0c9ee155390b486fd788b52"
     },
     "name": "User 2",
-    "opco": "OpCo Alpha",
-    "platform": "Mobile - Android",
-    "companyTechRole": "Product Manager",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "companyTechRole": "Designer",
     "email": "user2@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser2",
-    "interestAreas": [
-      "ai",
-      "security"
-    ],
-    "role": "MEMBER",
-    "status": "APPROVED",
-    "innovationScore": 215,
-    "upvotedChallengeList": [
-      {
-        "$oid": "8ecb24f2256ca9a4e18cc173"
-      },
-      {
-        "$oid": "895c7b4344f49927ac824885"
-      },
-      {
-        "$oid": "c0c66e72bfa1b8fa818b6bb4"
-      },
-      {
-        "$oid": "644b9ab64cddb5ad858d260e"
-      }
-    ],
-    "upvotedAppreciatedIdeaList": [
-      {
-        "$oid": "05a72d8d66451cec8e8664f5"
-      },
-      {
-        "$oid": "5c0afe02805d5fc63f0ba68c"
-      },
-      {
-        "$oid": "925de4f4d562411401a8da08"
-      }
-    ],
-    "createdAt": {
-      "$date": "2026-01-12T21:37:26.705Z"
-    },
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "ec3672e7f3cb324cb2c22642"
-    },
-    "name": "User 3",
-    "opco": "OpCo Gamma",
-    "platform": "Web",
-    "companyTechRole": "Data Scientist",
-    "email": "user3@example.com",
-    "password": "$2b$10$dummyencryptedhashstringforuser3",
     "interestAreas": [
       "ai",
       "blockchain"
     ],
     "role": "USER",
-    "status": "PENDING",
-    "innovationScore": 980,
+    "status": "INACTIVE",
+    "innovationScore": 690,
     "upvotedChallengeList": [
       {
-        "$oid": "8d78a2e96e74fc43fbe97a07"
+        "$oid": "d0912d3a928c6d6e1791fee4"
       },
       {
-        "$oid": "8ecb24f2256ca9a4e18cc173"
+        "$oid": "132b3e740302ff1da08bc403"
       },
       {
-        "$oid": "8d78a2e96e74fc43fbe97a07"
+        "$oid": "baba8adcc583bde3245cf239"
+      },
+      {
+        "$oid": "a2224a703644cc422b4d379c"
+      },
+      {
+        "$oid": "1a066778c42b2addeca956bb"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "e78932dd8701bb0cdb207687"
+        "$oid": "b6c8b9bdf4be29b925b2722d"
       },
       {
-        "$oid": "75ba935198426b1f6aa52f7d"
+        "$oid": "147ae796bf8ab64987c266d0"
       },
       {
-        "$oid": "afb64587094b9ff1c0a8dc27"
-      },
-      {
-        "$oid": "0352a8ea5453b7cd7351687f"
+        "$oid": "7de98bd136c3e58914e1c853"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-01T04:20:16.010Z"
+      "$date": "2025-12-25T06:08:55.262Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "2e69c5f1d36087afbd354bca"
+      "$oid": "7bf8a1d76d4944fb6e48ac37"
+    },
+    "name": "User 3",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
+    "companyTechRole": "Designer",
+    "email": "user3@example.com",
+    "password": "$2b$10$dummyencryptedhashstringforuser3",
+    "interestAreas": [
+      "ai",
+      "data"
+    ],
+    "role": "MEMBER",
+    "status": "APPROVED",
+    "innovationScore": 470,
+    "upvotedChallengeList": [
+      {
+        "$oid": "44481c7116fc9dd3cfa14808"
+      },
+      {
+        "$oid": "d323fe5b44ac16b346641d29"
+      },
+      {
+        "$oid": "a35c68f5a0ff4569815285c9"
+      }
+    ],
+    "upvotedAppreciatedIdeaList": [
+      {
+        "$oid": "31438c6fdcfec154579b8b40"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-12T16:04:10.289Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.592Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6fe58f4ee50e8425f463fe02"
     },
     "name": "User 4",
-    "opco": "OpCo Beta",
-    "platform": "Mobile - Android",
-    "companyTechRole": "Product Manager",
+    "opco": "OpCo Gamma",
+    "platform": "Web",
+    "companyTechRole": "Designer",
     "email": "user4@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser4",
     "interestAreas": [
       "ai",
       "blockchain"
     ],
-    "role": "MEMBER",
+    "role": "USER",
     "status": "PENDING",
-    "innovationScore": 56,
+    "innovationScore": 317,
     "upvotedChallengeList": [
       {
-        "$oid": "8ecb24f2256ca9a4e18cc173"
+        "$oid": "d0912d3a928c6d6e1791fee4"
       },
       {
-        "$oid": "93da01dba89e41b89b6faf04"
+        "$oid": "a2224a703644cc422b4d379c"
+      },
+      {
+        "$oid": "820d88627a04f93a32685ba4"
       }
     ],
     "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2026-02-12T08:52:37.179Z"
+      "$date": "2025-11-19T01:21:13.992Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "2245086b5bc06d315ccedbdc"
+      "$oid": "dc96f600fa1b053ec422683a"
     },
     "name": "User 5",
-    "opco": "OpCo Beta",
-    "platform": "Desktop",
+    "opco": "OpCo Gamma",
+    "platform": "Mobile - Android",
     "companyTechRole": "Product Manager",
     "email": "user5@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser5",
     "interestAreas": [
       "ai",
-      "blockchain"
+      "security"
     ],
     "role": "USER",
     "status": "INACTIVE",
-    "innovationScore": 463,
+    "innovationScore": 677,
     "upvotedChallengeList": [
       {
-        "$oid": "6f9c4645be80750f9c7c837f"
+        "$oid": "0f443db4be595a34dccb4e22"
       },
       {
-        "$oid": "34a85eb889536ac0af987ed7"
-      },
-      {
-        "$oid": "345245c9f6b8e7ff7e376ac4"
-      },
-      {
-        "$oid": "ae2a841be8b323cae419de98"
-      },
-      {
-        "$oid": "644b9ab64cddb5ad858d260e"
+        "$oid": "1db5a7169d87368c2581189c"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "380dc2e2df7ff60dac511033"
+        "$oid": "12ddde2051b3cc478529f38a"
       },
       {
-        "$oid": "20f5af1764ed79fe31738b2a"
+        "$oid": "39c461e348f380f2c97fc9b5"
       },
       {
-        "$oid": "75ba935198426b1f6aa52f7d"
+        "$oid": "566e90a184f0374e0d16e105"
+      },
+      {
+        "$oid": "f2848f51e48927f8a06d9e39"
+      },
+      {
+        "$oid": "c93752e5629014003420191c"
       }
     ],
     "createdAt": {
-      "$date": "2025-12-19T17:30:59.370Z"
+      "$date": "2025-11-17T21:20:58.974Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "2bc621e1361d668aaabfbf57"
+      "$oid": "4750dd98014b39f0075fdae2"
     },
     "name": "User 6",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - iOS",
-    "companyTechRole": "Software Engineer",
+    "opco": "OpCo Beta",
+    "platform": "Desktop",
+    "companyTechRole": "Product Manager",
     "email": "user6@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser6",
     "interestAreas": [
       "ai",
-      "cloud"
+      "security"
     ],
     "role": "USER",
     "status": "APPROVED",
-    "innovationScore": 12,
-    "upvotedChallengeList": [],
-    "upvotedAppreciatedIdeaList": [
+    "innovationScore": 659,
+    "upvotedChallengeList": [
       {
-        "$oid": "22f24be0cac8a9e86c728592"
+        "$oid": "fe796a6a6cb957f2033de161"
       },
       {
-        "$oid": "20f5af1764ed79fe31738b2a"
+        "$oid": "ca77cd7cd87496641fa81ebe"
+      },
+      {
+        "$oid": "79fe63b9a09c06670add5dfa"
+      },
+      {
+        "$oid": "170263ff683d31a241b54810"
+      },
+      {
+        "$oid": "d0912d3a928c6d6e1791fee4"
       }
     ],
+    "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2025-12-27T04:41:36.745Z"
+      "$date": "2025-12-10T23:00:28.920Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "d6d689a4cf42160b67a413c6"
+      "$oid": "2774e66d55504858a6ee5cb9"
     },
     "name": "User 7",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - iOS",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
     "companyTechRole": "Product Manager",
     "email": "user7@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser7",
     "interestAreas": [
       "ai",
-      "blockchain"
+      "security"
     ],
     "role": "USER",
     "status": "INACTIVE",
-    "innovationScore": 345,
+    "innovationScore": 220,
     "upvotedChallengeList": [
       {
-        "$oid": "c0c66e72bfa1b8fa818b6bb4"
+        "$oid": "d323fe5b44ac16b346641d29"
       },
       {
-        "$oid": "894fd748050ec8a7d6df11cb"
+        "$oid": "81708930c83ba84187524333"
       },
       {
-        "$oid": "be2b7c484a293c380210965b"
-      },
-      {
-        "$oid": "50b527bafd61a0811d42e330"
-      },
-      {
-        "$oid": "93da01dba89e41b89b6faf04"
+        "$oid": "db03b06c6f5a6178e5da2b4d"
       }
     ],
-    "upvotedAppreciatedIdeaList": [
-      {
-        "$oid": "fc901a55559e1699bbfb4528"
-      }
-    ],
+    "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2026-01-05T05:30:04.368Z"
+      "$date": "2026-01-23T09:26:15.143Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "f546ff3e8b00451f67c3724d"
+      "$oid": "e8943bbd112ccdad754c0c2b"
     },
     "name": "User 8",
-    "opco": "OpCo Beta",
+    "opco": "OpCo Alpha",
     "platform": "Desktop",
-    "companyTechRole": "Designer",
+    "companyTechRole": "Data Scientist",
     "email": "user8@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser8",
     "interestAreas": [
       "ai",
-      "blockchain"
+      "cloud"
     ],
-    "role": "MEMBER",
-    "status": "INACTIVE",
-    "innovationScore": 799,
+    "role": "USER",
+    "status": "PENDING",
+    "innovationScore": 626,
     "upvotedChallengeList": [
       {
-        "$oid": "10643985c2fad7d06f436fe8"
+        "$oid": "79fe63b9a09c06670add5dfa"
       },
       {
-        "$oid": "6f9c4645be80750f9c7c837f"
+        "$oid": "820d88627a04f93a32685ba4"
       },
       {
-        "$oid": "48de8c39447ab4717d6b60ca"
-      },
-      {
-        "$oid": "345245c9f6b8e7ff7e376ac4"
+        "$oid": "1db5a7169d87368c2581189c"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "75b9127d73404b70ce0098b2"
+        "$oid": "50dbc32a8990505bfd947c8c"
       },
       {
-        "$oid": "afb64587094b9ff1c0a8dc27"
+        "$oid": "50dbc32a8990505bfd947c8c"
       },
       {
-        "$oid": "0352a8ea5453b7cd7351687f"
+        "$oid": "d244a16ace678e3fe6a34578"
       },
       {
-        "$oid": "75ba935198426b1f6aa52f7d"
+        "$oid": "df4065e78d80c6a7f14dd4e6"
+      },
+      {
+        "$oid": "50dbc32a8990505bfd947c8c"
       }
     ],
     "createdAt": {
-      "$date": "2026-01-29T06:29:21.030Z"
+      "$date": "2025-12-16T23:59:09.698Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "9c9a8f0a668ac333a1b9db88"
+      "$oid": "29c4702815d3afff92ab7f4e"
     },
     "name": "User 9",
     "opco": "OpCo Gamma",
     "platform": "Mobile - iOS",
-    "companyTechRole": "Designer",
+    "companyTechRole": "Data Scientist",
     "email": "user9@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser9",
     "interestAreas": [
@@ -363,507 +364,484 @@
     ],
     "role": "USER",
     "status": "PENDING",
-    "innovationScore": 418,
+    "innovationScore": 372,
     "upvotedChallengeList": [
       {
-        "$oid": "894fd748050ec8a7d6df11cb"
+        "$oid": "a2224a703644cc422b4d379c"
       },
       {
-        "$oid": "6f9c4645be80750f9c7c837f"
+        "$oid": "baba8adcc583bde3245cf239"
       },
       {
-        "$oid": "a26dc3f2f9154f79f612e04e"
+        "$oid": "d323fe5b44ac16b346641d29"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "2e96474c59c327aa92296db5"
+        "$oid": "42cfeffaf45e03965d98b041"
       },
       {
-        "$oid": "f2782f258dbe35429da3b635"
-      },
-      {
-        "$oid": "afb64587094b9ff1c0a8dc27"
-      },
-      {
-        "$oid": "9b1ee63a06c2683ac9bfa411"
-      },
-      {
-        "$oid": "8fc6fb7f03ce02e8ed2a1573"
+        "$oid": "0aa3a9737483a8dd1a82607b"
       }
     ],
     "createdAt": {
-      "$date": "2025-12-08T20:04:56.337Z"
+      "$date": "2025-12-31T00:53:47.514Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.592Z"
     }
   },
   {
     "_id": {
-      "$oid": "b67695827cecb99d4ead1707"
+      "$oid": "330334d531d33723cde6452c"
     },
     "name": "User 10",
     "opco": "OpCo Alpha",
-    "platform": "Mobile - iOS",
+    "platform": "Desktop",
     "companyTechRole": "Software Engineer",
     "email": "user10@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser10",
     "interestAreas": [
       "ai",
-      "data"
+      "security"
     ],
     "role": "USER",
     "status": "INACTIVE",
-    "innovationScore": 242,
-    "upvotedChallengeList": [
-      {
-        "$oid": "ec56db4a419b423b4fe5a6bb"
-      }
-    ],
+    "innovationScore": 865,
+    "upvotedChallengeList": [],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "05a72d8d66451cec8e8664f5"
+        "$oid": "39c461e348f380f2c97fc9b5"
       }
     ],
     "createdAt": {
-      "$date": "2026-01-12T10:34:25.168Z"
+      "$date": "2025-12-15T16:32:07.018Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "68f7f79898ea61b7752b68c3"
+      "$oid": "4f2edf00d100250522f8d6a1"
     },
     "name": "User 11",
     "opco": "OpCo Alpha",
-    "platform": "Mobile - Android",
+    "platform": "Desktop",
     "companyTechRole": "Product Manager",
     "email": "user11@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser11",
     "interestAreas": [
       "ai",
-      "security"
+      "data"
     ],
-    "role": "MEMBER",
-    "status": "INACTIVE",
-    "innovationScore": 14,
+    "role": "USER",
+    "status": "APPROVED",
+    "innovationScore": 244,
     "upvotedChallengeList": [
       {
-        "$oid": "644b9ab64cddb5ad858d260e"
+        "$oid": "e9dbba8e200b8963ada06f6c"
       },
       {
-        "$oid": "c0c66e72bfa1b8fa818b6bb4"
+        "$oid": "170263ff683d31a241b54810"
       },
       {
-        "$oid": "b645467965cfdde1571eda0e"
+        "$oid": "2e483c998a08b42fd9b6393f"
+      },
+      {
+        "$oid": "170263ff683d31a241b54810"
       }
     ],
-    "upvotedAppreciatedIdeaList": [
-      {
-        "$oid": "a6d1a3b0ed2dcaafc3773f9e"
-      },
-      {
-        "$oid": "0e84b41e4e25019eb9e317bd"
-      },
-      {
-        "$oid": "a6d1a3b0ed2dcaafc3773f9e"
-      },
-      {
-        "$oid": "d9ab88fc79172fc298ed7740"
-      },
-      {
-        "$oid": "f3ae21c8d9c09cd1e3573c2e"
-      }
-    ],
+    "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2026-01-14T20:58:16.463Z"
+      "$date": "2026-01-28T04:24:11.033Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "bacbb385c81efaae3612dfe0"
+      "$oid": "433b50699cd91e0b81cf370e"
     },
     "name": "User 12",
     "opco": "OpCo Gamma",
-    "platform": "Web",
-    "companyTechRole": "Designer",
+    "platform": "Mobile - Android",
+    "companyTechRole": "Product Manager",
     "email": "user12@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser12",
     "interestAreas": [
       "ai",
-      "blockchain"
+      "security"
     ],
-    "role": "USER",
-    "status": "INACTIVE",
-    "innovationScore": 17,
+    "role": "MEMBER",
+    "status": "APPROVED",
+    "innovationScore": 608,
     "upvotedChallengeList": [
       {
-        "$oid": "38d33015ec821d8b806a9f18"
+        "$oid": "fe796a6a6cb957f2033de161"
       },
       {
-        "$oid": "644b9ab64cddb5ad858d260e"
+        "$oid": "874884651f9e4b6fffc5d0c8"
+      },
+      {
+        "$oid": "1db5a7169d87368c2581189c"
+      },
+      {
+        "$oid": "2ff11c6891c2ff4c5217811a"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "ae05fb1ab580ff7d24604d70"
+        "$oid": "c0dfc62f479a2a7b56e04aa5"
+      },
+      {
+        "$oid": "c0dfc62f479a2a7b56e04aa5"
+      },
+      {
+        "$oid": "df4065e78d80c6a7f14dd4e6"
+      },
+      {
+        "$oid": "abe28af425ddea7eb2aecd42"
       }
     ],
     "createdAt": {
-      "$date": "2025-12-20T11:33:13.328Z"
+      "$date": "2026-02-14T01:48:50.629Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "7266fc2a6ba991e5e9f1a626"
+      "$oid": "1686f209190324419a11c518"
     },
     "name": "User 13",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - iOS",
-    "companyTechRole": "Software Engineer",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
+    "companyTechRole": "Product Manager",
     "email": "user13@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser13",
     "interestAreas": [
       "ai",
-      "cloud"
+      "data"
     ],
-    "role": "MEMBER",
-    "status": "APPROVED",
-    "innovationScore": 495,
+    "role": "USER",
+    "status": "INACTIVE",
+    "innovationScore": 532,
     "upvotedChallengeList": [
       {
-        "$oid": "2b6f98ab90c8304ba50abfba"
+        "$oid": "2e483c998a08b42fd9b6393f"
       },
       {
-        "$oid": "48de8c39447ab4717d6b60ca"
-      },
-      {
-        "$oid": "8d78a2e96e74fc43fbe97a07"
-      },
-      {
-        "$oid": "6f9c4645be80750f9c7c837f"
-      },
-      {
-        "$oid": "a2bb783fd06680321e007e43"
+        "$oid": "a2224a703644cc422b4d379c"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "6dac12e70626ef452d54582c"
+        "$oid": "31438c6fdcfec154579b8b40"
       },
       {
-        "$oid": "5c0afe02805d5fc63f0ba68c"
-      },
-      {
-        "$oid": "d541fbb008be437ccc1a7072"
-      },
-      {
-        "$oid": "75ba935198426b1f6aa52f7d"
-      },
-      {
-        "$oid": "380dc2e2df7ff60dac511033"
+        "$oid": "7de98bd136c3e58914e1c853"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-13T09:42:27.146Z"
+      "$date": "2025-11-22T17:59:39.823Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "404f08da5d4fd716ff80b1e4"
+      "$oid": "a0ec6594d276d8b5445f7368"
     },
     "name": "User 14",
     "opco": "OpCo Beta",
-    "platform": "Web",
-    "companyTechRole": "Software Engineer",
+    "platform": "Mobile - Android",
+    "companyTechRole": "Designer",
     "email": "user14@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser14",
+    "interestAreas": [
+      "ai",
+      "security"
+    ],
+    "role": "USER",
+    "status": "APPROVED",
+    "innovationScore": 780,
+    "upvotedChallengeList": [
+      {
+        "$oid": "2ff11c6891c2ff4c5217811a"
+      },
+      {
+        "$oid": "52f085f017789177bab44874"
+      },
+      {
+        "$oid": "874884651f9e4b6fffc5d0c8"
+      },
+      {
+        "$oid": "2ff11c6891c2ff4c5217811a"
+      },
+      {
+        "$oid": "e9dbba8e200b8963ada06f6c"
+      }
+    ],
+    "upvotedAppreciatedIdeaList": [
+      {
+        "$oid": "12ddde2051b3cc478529f38a"
+      },
+      {
+        "$oid": "316be715ce9c69e87110c84d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-12-12T02:03:55.477Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-21T15:22:54.593Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "a70e9a9a717093756f7067ee"
+    },
+    "name": "User 15",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - Android",
+    "companyTechRole": "Data Scientist",
+    "email": "user15@example.com",
+    "password": "$2b$10$dummyencryptedhashstringforuser15",
     "interestAreas": [
       "ai",
       "data"
     ],
     "role": "MEMBER",
     "status": "APPROVED",
-    "innovationScore": 146,
+    "innovationScore": 339,
     "upvotedChallengeList": [
       {
-        "$oid": "62ebcba609a8caaa79d8b344"
+        "$oid": "6c699ec299b59f9bebfb16af"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "6dac12e70626ef452d54582c"
+        "$oid": "31438c6fdcfec154579b8b40"
       },
       {
-        "$oid": "8fc6fb7f03ce02e8ed2a1573"
+        "$oid": "b6c8b9bdf4be29b925b2722d"
       },
       {
-        "$oid": "f2782f258dbe35429da3b635"
-      },
-      {
-        "$oid": "e0395a8a14b5256d6c4f137a"
-      },
-      {
-        "$oid": "f3ae21c8d9c09cd1e3573c2e"
+        "$oid": "39c461e348f380f2c97fc9b5"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-14T14:38:12.016Z"
+      "$date": "2025-11-12T01:17:16.383Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "206e353ed387b5a732cb1f0e"
-    },
-    "name": "User 15",
-    "opco": "OpCo Gamma",
-    "platform": "Web",
-    "companyTechRole": "Data Scientist",
-    "email": "user15@example.com",
-    "password": "$2b$10$dummyencryptedhashstringforuser15",
-    "interestAreas": [
-      "ai",
-      "cloud"
-    ],
-    "role": "USER",
-    "status": "APPROVED",
-    "innovationScore": 76,
-    "upvotedChallengeList": [
-      {
-        "$oid": "c0c66e72bfa1b8fa818b6bb4"
-      },
-      {
-        "$oid": "8ecb24f2256ca9a4e18cc173"
-      },
-      {
-        "$oid": "644b9ab64cddb5ad858d260e"
-      },
-      {
-        "$oid": "682f67cfbe6aeb0a319a8253"
-      }
-    ],
-    "upvotedAppreciatedIdeaList": [],
-    "createdAt": {
-      "$date": "2025-12-12T01:28:58.511Z"
-    },
-    "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "18453cdfc20c9d7e345da6bb"
+      "$oid": "cd73934ffa9ef99e1e579a1a"
     },
     "name": "User 16",
-    "opco": "OpCo Beta",
+    "opco": "OpCo Alpha",
     "platform": "Mobile - iOS",
     "companyTechRole": "Product Manager",
     "email": "user16@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser16",
     "interestAreas": [
       "ai",
-      "security"
+      "blockchain"
     ],
-    "role": "MEMBER",
-    "status": "INACTIVE",
-    "innovationScore": 667,
+    "role": "USER",
+    "status": "APPROVED",
+    "innovationScore": 215,
     "upvotedChallengeList": [
       {
-        "$oid": "cc8314f009737671b4944bc6"
+        "$oid": "820d88627a04f93a32685ba4"
       },
       {
-        "$oid": "be2b7c484a293c380210965b"
+        "$oid": "52f085f017789177bab44874"
       },
       {
-        "$oid": "2b6f98ab90c8304ba50abfba"
+        "$oid": "b7ec47492a874dd1ea63a7a8"
       },
       {
-        "$oid": "8d78a2e96e74fc43fbe97a07"
+        "$oid": "fefaa8b40fc6c83589f48b6e"
       }
     ],
-    "upvotedAppreciatedIdeaList": [
-      {
-        "$oid": "22f24be0cac8a9e86c728592"
-      },
-      {
-        "$oid": "ae05fb1ab580ff7d24604d70"
-      },
-      {
-        "$oid": "d8f53e182ca83191b631786b"
-      },
-      {
-        "$oid": "2d9d3cd387769ee53821755d"
-      }
-    ],
+    "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2025-11-07T04:18:03.347Z"
+      "$date": "2025-11-12T02:56:22.199Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "e5ad220c675a802b9d2993ef"
+      "$oid": "3c5313440ef724fcc42c8efb"
     },
     "name": "User 17",
-    "opco": "OpCo Beta",
+    "opco": "OpCo Alpha",
     "platform": "Web",
-    "companyTechRole": "Data Scientist",
+    "companyTechRole": "Product Manager",
     "email": "user17@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser17",
     "interestAreas": [
       "ai",
-      "cloud"
+      "data"
     ],
-    "role": "USER",
-    "status": "APPROVED",
-    "innovationScore": 857,
-    "upvotedChallengeList": [
-      {
-        "$oid": "ae2a841be8b323cae419de98"
-      },
-      {
-        "$oid": "be2b7c484a293c380210965b"
-      },
-      {
-        "$oid": "ae2a841be8b323cae419de98"
-      }
-    ],
-    "upvotedAppreciatedIdeaList": [
-      {
-        "$oid": "d8f53e182ca83191b631786b"
-      }
-    ],
+    "role": "MEMBER",
+    "status": "PENDING",
+    "innovationScore": 563,
+    "upvotedChallengeList": [],
+    "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2025-12-14T00:51:41.640Z"
+      "$date": "2026-01-10T01:46:49.392Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "53241fad407ef95937248331"
+      "$oid": "efd500699094d6d629928a82"
     },
     "name": "User 18",
-    "opco": "OpCo Alpha",
-    "platform": "Web",
-    "companyTechRole": "Data Scientist",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
+    "companyTechRole": "Designer",
     "email": "user18@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser18",
     "interestAreas": [
       "ai",
       "security"
     ],
-    "role": "USER",
+    "role": "MEMBER",
     "status": "APPROVED",
-    "innovationScore": 996,
-    "upvotedChallengeList": [],
-    "upvotedAppreciatedIdeaList": [
+    "innovationScore": 933,
+    "upvotedChallengeList": [
       {
-        "$oid": "fc901a55559e1699bbfb4528"
+        "$oid": "e9dbba8e200b8963ada06f6c"
       },
       {
-        "$oid": "9b1ee63a06c2683ac9bfa411"
+        "$oid": "874884651f9e4b6fffc5d0c8"
+      },
+      {
+        "$oid": "e9dbba8e200b8963ada06f6c"
+      },
+      {
+        "$oid": "27359552544f1faade0df82b"
+      },
+      {
+        "$oid": "79cd1df1c63357ef8deb8d3d"
+      }
+    ],
+    "upvotedAppreciatedIdeaList": [
+      {
+        "$oid": "50dbc32a8990505bfd947c8c"
+      },
+      {
+        "$oid": "c0dfc62f479a2a7b56e04aa5"
+      },
+      {
+        "$oid": "2b01cd9a61f71154754fbce6"
       }
     ],
     "createdAt": {
-      "$date": "2026-01-26T23:34:09.683Z"
+      "$date": "2026-01-06T10:15:11.957Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "268b8a5741b7bd1797a14026"
+      "$oid": "5d784903322d35f983642bf2"
     },
     "name": "User 19",
-    "opco": "OpCo Beta",
-    "platform": "Web",
-    "companyTechRole": "Designer",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
+    "companyTechRole": "Software Engineer",
     "email": "user19@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser19",
     "interestAreas": [
       "ai",
-      "blockchain"
+      "cloud"
     ],
-    "role": "MEMBER",
+    "role": "USER",
     "status": "APPROVED",
-    "innovationScore": 218,
+    "innovationScore": 145,
     "upvotedChallengeList": [
       {
-        "$oid": "cc8314f009737671b4944bc6"
+        "$oid": "e9dbba8e200b8963ada06f6c"
+      },
+      {
+        "$oid": "e9dbba8e200b8963ada06f6c"
+      },
+      {
+        "$oid": "1a066778c42b2addeca956bb"
       }
     ],
     "upvotedAppreciatedIdeaList": [],
     "createdAt": {
-      "$date": "2026-01-31T06:29:41.567Z"
+      "$date": "2025-11-12T11:18:47.978Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "679408078edc8d77ffd426b2"
+      "$oid": "fa84d66b34ef9d6fb56edc1c"
     },
     "name": "User 20",
-    "opco": "OpCo Beta",
-    "platform": "Mobile - Android",
-    "companyTechRole": "Designer",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
+    "companyTechRole": "Data Scientist",
     "email": "user20@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser20",
     "interestAreas": [
       "ai",
-      "data"
+      "security"
     ],
     "role": "MEMBER",
     "status": "APPROVED",
-    "innovationScore": 38,
-    "upvotedChallengeList": [],
+    "innovationScore": 49,
+    "upvotedChallengeList": [
+      {
+        "$oid": "e9dbba8e200b8963ada06f6c"
+      },
+      {
+        "$oid": "2e483c998a08b42fd9b6393f"
+      },
+      {
+        "$oid": "fe796a6a6cb957f2033de161"
+      }
+    ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "e0395a8a14b5256d6c4f137a"
-      },
-      {
-        "$oid": "2e96474c59c327aa92296db5"
-      },
-      {
-        "$oid": "05a72d8d66451cec8e8664f5"
+        "$oid": "816645b312d3e9c1e2974246"
       }
     ],
     "createdAt": {
-      "$date": "2026-01-01T05:48:53.708Z"
+      "$date": "2026-01-19T12:36:09.533Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "bef7a718d953662eebedbc13"
+      "$oid": "31358eca0576dda2193b5e59"
     },
     "name": "User 21",
-    "opco": "OpCo Beta",
-    "platform": "Web",
-    "companyTechRole": "Software Engineer",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
+    "companyTechRole": "Designer",
     "email": "user21@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser21",
     "interestAreas": [
@@ -871,225 +849,203 @@
       "security"
     ],
     "role": "MEMBER",
-    "status": "PENDING",
-    "innovationScore": 793,
-    "upvotedChallengeList": [
-      {
-        "$oid": "e26b1f8bae84e20f70427f41"
-      }
-    ],
+    "status": "INACTIVE",
+    "innovationScore": 53,
+    "upvotedChallengeList": [],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "05a72d8d66451cec8e8664f5"
+        "$oid": "316be715ce9c69e87110c84d"
       },
       {
-        "$oid": "5c0afe02805d5fc63f0ba68c"
+        "$oid": "816645b312d3e9c1e2974246"
       },
       {
-        "$oid": "6dac12e70626ef452d54582c"
+        "$oid": "b69098e89a68b9908a123362"
       },
       {
-        "$oid": "22f24be0cac8a9e86c728592"
-      },
-      {
-        "$oid": "fc901a55559e1699bbfb4528"
+        "$oid": "639859401eb3f3ca43d3ff78"
       }
     ],
     "createdAt": {
-      "$date": "2025-11-20T21:03:12.491Z"
+      "$date": "2025-12-25T03:41:37.875Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "424aa1cdf5c40c8421367aa5"
+      "$oid": "2e503bf00a7b6800810b4d2d"
     },
     "name": "User 22",
-    "opco": "OpCo Alpha",
-    "platform": "Mobile - Android",
-    "companyTechRole": "Data Scientist",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
+    "companyTechRole": "Designer",
     "email": "user22@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser22",
     "interestAreas": [
       "ai",
-      "data"
+      "blockchain"
     ],
     "role": "USER",
-    "status": "APPROVED",
-    "innovationScore": 198,
+    "status": "PENDING",
+    "innovationScore": 923,
     "upvotedChallengeList": [
       {
-        "$oid": "c0c66e72bfa1b8fa818b6bb4"
+        "$oid": "db03b06c6f5a6178e5da2b4d"
       },
       {
-        "$oid": "2b6f98ab90c8304ba50abfba"
+        "$oid": "baba8adcc583bde3245cf239"
+      },
+      {
+        "$oid": "a35c68f5a0ff4569815285c9"
+      },
+      {
+        "$oid": "b7ec47492a874dd1ea63a7a8"
+      },
+      {
+        "$oid": "78abb2ecfe0378d2da411ef9"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "6dac12e70626ef452d54582c"
-      },
-      {
-        "$oid": "e78932dd8701bb0cdb207687"
-      },
-      {
-        "$oid": "3f8f27f57eecc027c1eef5dc"
-      },
-      {
-        "$oid": "e0395a8a14b5256d6c4f137a"
-      },
-      {
-        "$oid": "2f24e72fdb2927fef3cc1317"
+        "$oid": "816645b312d3e9c1e2974246"
       }
     ],
     "createdAt": {
-      "$date": "2026-01-02T23:29:37.123Z"
+      "$date": "2025-11-24T05:57:35.549Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "6e9b6e972adf98037fb1eb13"
+      "$oid": "aa1b3dd36647dea0dd1831fc"
     },
     "name": "User 23",
-    "opco": "OpCo Alpha",
-    "platform": "Mobile - iOS",
-    "companyTechRole": "Data Scientist",
+    "opco": "OpCo Beta",
+    "platform": "Desktop",
+    "companyTechRole": "Software Engineer",
     "email": "user23@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser23",
     "interestAreas": [
       "ai",
-      "security"
+      "data"
     ],
-    "role": "USER",
-    "status": "APPROVED",
-    "innovationScore": 101,
+    "role": "MEMBER",
+    "status": "INACTIVE",
+    "innovationScore": 325,
     "upvotedChallengeList": [
       {
-        "$oid": "b596acc32c430378fa2fd413"
+        "$oid": "a2224a703644cc422b4d379c"
       },
       {
-        "$oid": "62ebcba609a8caaa79d8b344"
+        "$oid": "0f443db4be595a34dccb4e22"
       },
       {
-        "$oid": "ae2a841be8b323cae419de98"
+        "$oid": "db03b06c6f5a6178e5da2b4d"
       },
       {
-        "$oid": "48de8c39447ab4717d6b60ca"
+        "$oid": "ca77cd7cd87496641fa81ebe"
+      },
+      {
+        "$oid": "1db5a7169d87368c2581189c"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "9b1ee63a06c2683ac9bfa411"
-      },
-      {
-        "$oid": "fc901a55559e1699bbfb4528"
-      },
-      {
-        "$oid": "d8f53e182ca83191b631786b"
-      },
-      {
-        "$oid": "0e84b41e4e25019eb9e317bd"
-      },
-      {
-        "$oid": "05a72d8d66451cec8e8664f5"
+        "$oid": "2b01cd9a61f71154754fbce6"
       }
     ],
     "createdAt": {
-      "$date": "2025-12-22T21:21:31.250Z"
+      "$date": "2025-11-13T17:17:02.070Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "969bf9a0094364a075abab0b"
+      "$oid": "7dbe1b16210b53cedb4a377e"
     },
     "name": "User 24",
-    "opco": "OpCo Gamma",
-    "platform": "Mobile - Android",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
     "companyTechRole": "Product Manager",
     "email": "user24@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser24",
     "interestAreas": [
       "ai",
-      "data"
+      "blockchain"
     ],
     "role": "USER",
-    "status": "INACTIVE",
-    "innovationScore": 319,
+    "status": "APPROVED",
+    "innovationScore": 404,
     "upvotedChallengeList": [
       {
-        "$oid": "50b527bafd61a0811d42e330"
-      },
-      {
-        "$oid": "e26b1f8bae84e20f70427f41"
-      },
-      {
-        "$oid": "34a85eb889536ac0af987ed7"
+        "$oid": "1db5a7169d87368c2581189c"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "a6d1a3b0ed2dcaafc3773f9e"
+        "$oid": "4574952ca2599b7d9956b2d6"
+      },
+      {
+        "$oid": "816645b312d3e9c1e2974246"
       }
     ],
     "createdAt": {
-      "$date": "2025-12-16T04:16:58.576Z"
+      "$date": "2025-12-30T01:18:47.087Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   },
   {
     "_id": {
-      "$oid": "2b30fcf2e90897f2225edca8"
+      "$oid": "539a172580a5d1ae79c5d550"
     },
     "name": "User 25",
-    "opco": "OpCo Alpha",
-    "platform": "Mobile - iOS",
-    "companyTechRole": "Software Engineer",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
+    "companyTechRole": "Data Scientist",
     "email": "user25@example.com",
     "password": "$2b$10$dummyencryptedhashstringforuser25",
     "interestAreas": [
       "ai",
-      "data"
+      "cloud"
     ],
     "role": "USER",
-    "status": "PENDING",
-    "innovationScore": 652,
+    "status": "APPROVED",
+    "innovationScore": 600,
     "upvotedChallengeList": [
       {
-        "$oid": "895c7b4344f49927ac824885"
+        "$oid": "ca77cd7cd87496641fa81ebe"
       },
       {
-        "$oid": "cc8314f009737671b4944bc6"
+        "$oid": "44481c7116fc9dd3cfa14808"
+      },
+      {
+        "$oid": "b7ec47492a874dd1ea63a7a8"
+      },
+      {
+        "$oid": "2ff11c6891c2ff4c5217811a"
       }
     ],
     "upvotedAppreciatedIdeaList": [
       {
-        "$oid": "f57aa72ca15acb71bb9e4604"
+        "$oid": "19dd59946410de9f1739c5f5"
       },
       {
-        "$oid": "d9ab88fc79172fc298ed7740"
-      },
-      {
-        "$oid": "2f24e72fdb2927fef3cc1317"
-      },
-      {
-        "$oid": "380dc2e2df7ff60dac511033"
+        "$oid": "4574952ca2599b7d9956b2d6"
       }
     ],
     "createdAt": {
-      "$date": "2026-01-14T10:31:28.765Z"
+      "$date": "2025-11-21T14:51:39.993Z"
     },
     "updatedAt": {
-      "$date": "2026-02-21T14:39:27.634Z"
+      "$date": "2026-02-21T15:22:54.593Z"
     }
   }
 ]
