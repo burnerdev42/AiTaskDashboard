@@ -256,9 +256,17 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   color: #fff;
   border: 2px solid var(--bg-primary);
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.8), 0 0 12px rgba(244, 67, 54, 0.4);
+  animation: badge-pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes badge-pulse {
+  to {
+    box-shadow: 0 0 0 8px rgba(244, 67, 54, 0);
+  }
 }
 
 .notification-panel {
@@ -376,6 +384,12 @@ body {
 .notification-icon.status {
   background: rgba(102, 187, 106, .15);
   color: var(--accent-green);
+}
+
+.notification-icon.like,
+.notification-icon.vote {
+  background: rgba(239, 83, 80, .15);
+  color: var(--accent-red);
 }
 
 .notification-content {
@@ -639,9 +653,9 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 10px;
+  padding: 4px 10px;
   border-radius: 14px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -719,9 +733,9 @@ body {
 .swim-lane-status {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
+  padding: 4px 10px;
   border-radius: 10px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -947,18 +961,16 @@ body {
 
 /* donut placeholder */
 .donut-chart {
-  width: 60px;
-  /* Reduced from 70px */
-  height: 60px;
-  /* Reduced from 70px */
-  margin: 4px auto;
-  /* Reduced from 6px */
+  width: 90px;
+  height: 90px;
+  margin: 8px auto 12px;
   border-radius: 50%;
-  background: conic-gradient(var(--accent-green) 0% 30%,
-      var(--accent-blue) 30% 55%,
-      var(--accent-orange) 55% 75%,
-      var(--accent-purple) 75% 90%,
-      var(--text-muted) 90% 100%);
+  /* Swim-lane color proportions: Scaled(1) POC(3) Ideation(2) Submitted(4) Parking(1) = 11 total */
+  background: conic-gradient(var(--accent-gold) 0% 9%,
+      var(--accent-blue) 9% 36%,
+      var(--accent-yellow) 36% 55%,
+      var(--accent-red) 55% 91%,
+      var(--accent-grey) 91% 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -967,19 +979,17 @@ body {
 }
 
 .donut-hole {
-  width: 36px;
-  /* Reduced from 42px */
-  height: 36px;
-  /* Reduced from 42px */
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: var(--bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 14px;
-  /* Reduced from 16px */
+  font-size: 16px;
   color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .legend {
@@ -1168,6 +1178,35 @@ body {
   color: var(--accent-green);
 }
 
+.story-section .label.engagement {
+  color: var(--accent-teal);
+}
+
+.engagement-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.eng-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.eng-stat strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.eng-stat svg {
+  color: var(--accent-teal);
+  flex-shrink: 0;
+}
+
 .story-section p {
   font-size: 13px;
   color: var(--text-secondary);
@@ -1239,6 +1278,7 @@ body {
   display: flex;
   gap: 18px;
   overflow-x: auto;
+  padding-top: 6px;
   padding-bottom: 12px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -1269,8 +1309,8 @@ body {
   padding: 24px 20px;
   text-align: center;
   transition: all .25s;
-  min-width: 230px;
-  max-width: 230px;
+  min-width: 270px;
+  max-width: 270px;
   flex-shrink: 0;
   scroll-snap-align: start;
 }
@@ -1296,15 +1336,7 @@ body {
 }
 
 .team-avatar::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--accent-green);
-  border: 2px solid var(--bg-card);
+  display: none;
 }
 
 .team-card h4 {
@@ -1331,27 +1363,49 @@ body {
 
 .team-card .team-stats {
   display: flex;
-  justify-content: center;
-  gap: 16px;
-  padding-top: 12px;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 0;
+  padding-top: 14px;
   border-top: 1px solid var(--border);
 }
 
 .team-card .team-stat-item {
   text-align: center;
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  position: relative;
+}
+
+.team-card .team-stat-item+.team-stat-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--border);
+}
+
+.team-card .team-stat-item:hover .ts-value {
+  transform: scale(1.1);
 }
 
 .team-card .team-stat-item .ts-value {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  transition: transform 0.2s;
 }
 
 .team-card .team-stat-item .ts-label {
-  font-size: 9px;
+  font-size: 8px;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: .8px;
-  margin-top: 2px;
+  letter-spacing: .5px;
+  margin-top: 3px;
+  white-space: nowrap;
 }
 
 .team-join-banner {
@@ -1396,9 +1450,24 @@ body {
 }
 
 .newsletter-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 4px 12px rgba(232, 167, 88, 0.3));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+@keyframes pulse-ring {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
 }
 
 .newsletter-section h2 {
@@ -1473,6 +1542,79 @@ body {
 
 .newsletter-btn:active {
   transform: translateY(0);
+}
+
+/* ── Subscribe Toast Notification ──────────── */
+.subscribe-toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  background: rgba(20, 24, 38, 0.95);
+  border: 1px solid rgba(102, 187, 106, 0.35);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(102, 187, 106, 0.1);
+  backdrop-filter: blur(16px);
+  z-index: 9999;
+  transform: translateY(120%) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.subscribe-toast.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.subscribe-toast .toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(102, 187, 106, 0.15);
+  color: var(--accent-green);
+  flex-shrink: 0;
+}
+
+.subscribe-toast .toast-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.subscribe-toast .toast-content strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.subscribe-toast .toast-content span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.subscribe-toast .toast-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  margin-left: 8px;
+}
+
+.subscribe-toast .toast-close:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .newsletter-success {
@@ -1688,15 +1830,22 @@ body {
 }
 
 .lane-header .stage-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
-  font-size: 14px;
-  line-height: 1;
+  margin-bottom: 12px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  box-shadow: 0 2px 12px color-mix(in srgb, currentColor 15%, transparent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lane-header .stage-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px color-mix(in srgb, currentColor 25%, transparent);
 }
 
 .lane-header h3 {
@@ -1907,7 +2056,8 @@ body {
 .empty-slot {
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
-  height: 52px;
+  height: auto;
+  padding: 20px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2311,7 +2461,7 @@ body {
 }
 
 .team-card {
-  min-width: 260px;
+  min-width: 270px;
   flex-shrink: 0;
 }
 
@@ -3595,7 +3745,7 @@ body {
 
 .challenge-stage-badge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -3611,9 +3761,9 @@ body {
 }
 
 .swim-lane-status {
-  padding: 2px 8px;
+  padding: 4px 8px;
   border-radius: 8px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -3621,12 +3771,12 @@ body {
 
 .challenge-stage-badge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #0d0f1a;
-  padding: 2px 10px;
+  padding: 4px 10px;
   border-radius: 10px;
 }
 
@@ -5602,16 +5752,17 @@ aside.metrics-dashboard {
   margin-bottom: 16px;
 }
 
-/* Donut Chart */
+/* Donut Chart (Metrics page) */
 .donut-chart {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: conic-gradient(var(--accent-green) 0% 25%,
-      var(--accent-blue) 25% 45%,
-      var(--accent-orange) 45% 70%,
-      var(--accent-purple) 70% 90%,
-      var(--text-muted) 90% 100%);
+  /* Swim-lane colors with correct proportions */
+  background: conic-gradient(var(--accent-gold) 0% 9%,
+      var(--accent-blue) 9% 36%,
+      var(--accent-yellow) 36% 55%,
+      var(--accent-red) 55% 91%,
+      var(--accent-grey) 91% 100%);
   margin: 0 auto 16px;
   position: relative;
   display: flex;
@@ -5858,11 +6009,24 @@ aside.metrics-dashboard {
   flex-direction: column;
 }
 
-/* SVG Charts Commons */
-svg {
+/* SVG Charts Commons - Scoped to charts to avoid affecting UI icons */
+.donut-chart svg,
+.impact-donut-svg,
+.line-chart-svg,
+.scatter-svg,
+.radar-svg,
+.spark-bars svg {
   overflow: visible;
   width: 100%;
   height: 100%;
+}
+
+/* Ensure UI icons honor their dimensions */
+svg.icon,
+.icon svg,
+[class*="icon"] svg {
+  width: unset;
+  height: unset;
 }
 
 /* Funnel Styles */
@@ -6272,10 +6436,7 @@ svg {
   font-size: 32px;
   font-weight: 800;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, #ffffff, #f0b870);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
 }
 
 .notifications-page .page-header p {
@@ -6385,6 +6546,12 @@ svg {
   color: var(--accent-green);
 }
 
+.notif-icon.like,
+.notif-icon.vote {
+  background: rgba(239, 83, 80, .15);
+  color: var(--accent-red);
+}
+
 .notif-body {
   flex: 1;
 }
@@ -6451,6 +6618,12 @@ svg {
 .notif-badge.status {
   background: rgba(102, 187, 106, .15);
   color: var(--accent-green);
+}
+
+.notif-badge.like,
+.notif-badge.vote {
+  background: rgba(239, 83, 80, .15);
+  color: var(--accent-red);
 }
 
 .empty-state {
@@ -8573,14 +8746,6 @@ svg {
   color: #e0b0ff;
   overflow: hidden;
   animation: glowPulse 2.5s ease-in-out infinite;
-}
-
-.header-right .nav-link.whats-next-link::before {
-  content: '\1F52E';
-  margin-right: 5px;
-  font-size: 12px;
-  display: inline-block;
-  animation: floatIcon 2s ease-in-out infinite;
 }
 
 .header-right .nav-link.whats-next-link::after {

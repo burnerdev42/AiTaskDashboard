@@ -42,7 +42,7 @@ export interface Challenge {
 
 export interface Notification {
     id: string;
-    type: 'challenge' | 'idea' | 'comment' | 'status';
+    type: 'challenge' | 'idea' | 'comment' | 'status' | 'like' | 'vote';
     title: string;
     text: string;
     time: string;

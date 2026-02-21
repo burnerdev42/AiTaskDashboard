@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../services/storage';
 import { type Notification } from '../types';
+import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp } from 'lucide-react';
+import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
 export const Notifications: React.FC = () => {
     const navigate = useNavigate();
-    const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status'>('all');
+    const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status' | 'like'>('all');
+
+    // Delete Modal State
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [notificationToDelete, setNotificationToDelete] = useState<string | null>(null);
 
     // Force update state
     const [_, setTick] = useState(0);
@@ -20,6 +26,7 @@ export const Notifications: React.FC = () => {
     // Apply type filter
     const filteredNotifications = allNotifications.filter(n => {
         if (activeFilter === 'all') return true;
+        if (activeFilter === 'like') return n.type === 'like' || n.type === 'vote';
         return n.type === activeFilter;
     });
 
@@ -29,7 +36,8 @@ export const Notifications: React.FC = () => {
         challenge: allNotifications.filter(n => n.type === 'challenge').length,
         idea: allNotifications.filter(n => n.type === 'idea').length,
         comment: allNotifications.filter(n => n.type === 'comment').length,
-        status: allNotifications.filter(n => n.type === 'status').length
+        status: allNotifications.filter(n => n.type === 'status').length,
+        like: allNotifications.filter(n => n.type === 'like' || n.type === 'vote').length
     };
 
     const handleNotificationClick = (notification: Notification) => {
@@ -42,11 +50,18 @@ export const Notifications: React.FC = () => {
         forceUpdate();
     };
 
-    const handleDelete = (e: React.MouseEvent, id: string) => {
+    const handleDeleteClick = (e: React.MouseEvent, id: string) => {
         e.stopPropagation();
-        if (window.confirm('Are you sure you want to delete this notification?')) {
-            storage.deleteNotification(id);
+        setNotificationToDelete(id);
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = () => {
+        if (notificationToDelete) {
+            storage.deleteNotification(notificationToDelete);
             forceUpdate();
+            setShowDeleteConfirm(false);
+            setNotificationToDelete(null);
         }
     };
 
@@ -54,10 +69,12 @@ export const Notifications: React.FC = () => {
     const getIcon = (type: string) => {
         switch (type) {
             case 'challenge': return flagIcon;
-            case 'idea': return 'ID';
-            case 'comment': return 'CM';
-            case 'status': return 'ST';
-            default: return 'NT';
+            case 'idea': return <Lightbulb size={16} />;
+            case 'comment': return <MessageSquare size={16} />;
+            case 'status': return <TrendingUp size={16} />;
+            case 'like': return <Heart size={16} />;
+            case 'vote': return <ThumbsUp size={16} />;
+            default: return flagIcon;
         }
     };
 
@@ -110,6 +127,12 @@ export const Notifications: React.FC = () => {
                 >
                     Status <span className="count">{counts.status}</span>
                 </button>
+                <button
+                    className={`filter-tab ${activeFilter === 'like' ? 'active' : ''}`}
+                    onClick={() => setActiveFilter('like')}
+                >
+                    Reactions <span className="count">{counts.like}</span>
+                </button>
             </div>
 
             <div className="notifications-grid">
@@ -136,7 +159,7 @@ export const Notifications: React.FC = () => {
                                     </div>
                                     <button
                                         className="btn-icon delete-btn"
-                                        onClick={(e) => handleDelete(e, notification.id)}
+                                        onClick={(e) => handleDeleteClick(e, notification.id)}
                                         title="Delete notification"
                                     >
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -159,6 +182,18 @@ export const Notifications: React.FC = () => {
                     ))
                 )}
             </div>
+
+            <ConfirmationModal
+                isOpen={showDeleteConfirm}
+                onClose={() => {
+                    setShowDeleteConfirm(false);
+                    setNotificationToDelete(null);
+                }}
+                onConfirm={confirmDelete}
+                title="Delete Notification"
+                message="Are you sure you want to delete this notification? This action cannot be undone."
+                confirmText="Delete"
+            />
         </div>
     );
 };

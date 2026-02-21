@@ -177,6 +177,24 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         time: '3 days ago',
         unread: false,
         link: '/challenges/CHG-001'
+    },
+    {
+        id: '9',
+        type: 'vote',
+        title: 'Your Challenge received a vote',
+        text: 'Ananya Basu voted for "Unified Customer 360 Platform"',
+        time: 'Just now',
+        unread: true,
+        link: '/challenges/CHG-001'
+    },
+    {
+        id: '10',
+        type: 'like',
+        title: 'Your Idea received a like',
+        text: 'Siddharth Banerjee liked "Personalized Tutorial System"',
+        time: '10 minutes ago',
+        unread: true,
+        link: '/challenges/CHG-001/ideas/ID-0003'
     }
 ];
 

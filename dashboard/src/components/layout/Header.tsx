@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { storage } from '../../services/storage';
 import { type Notification } from '../../types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Bell, Lightbulb, MessageSquare, TrendingUp, Sparkles, Heart, ThumbsUp } from 'lucide-react';
 
 export const Header: React.FC = () => {
     const { user } = useAuth();
@@ -12,8 +12,25 @@ export const Header: React.FC = () => {
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const notifications: Notification[] = storage.getNotifications();
     const unreadCount = notifications.filter(n => n.unread).length;
+    const notificationRef = useRef<HTMLDivElement>(null);
 
     const closeMobileNav = () => setMobileNavOpen(false);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+                setShowNotifications(false);
+            }
+        };
+
+        if (showNotifications) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showNotifications]);
 
     return (
         <header className="header-band">
@@ -42,11 +59,11 @@ export const Header: React.FC = () => {
                 <NavLink to="/swimlanes" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Swim Lane</NavLink>
                 <NavLink to="/challenges" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Challenges</NavLink>
                 <NavLink to="/metrics" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Metrics</NavLink>
-                <NavLink to="/whats-next" className={({ isActive }) => `nav-link whats-next-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>What's Next</NavLink>
+                <NavLink to="/whats-next" className={({ isActive }) => `nav-link whats-next-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Sparkles size={16} /> What's Next</NavLink>
 
                 <div className="header-user-controls">
                     {/* Notification Bell */}
-                    <div className="notification-wrapper">
+                    <div className="notification-wrapper" ref={notificationRef}>
                         <div
                             className="notification-bell"
                             onClick={() => {
@@ -58,13 +75,13 @@ export const Header: React.FC = () => {
                                 }
                             }}
                         >
-                            🔔
+                            <Bell size={20} />
                             {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
                         </div>
 
                         <div className={`notification-panel ${showNotifications ? 'active' : ''}`}>
                             <div className="notification-header">
-                                <h3>🔔 Notifications</h3>
+                                <h3>Notifications</h3>
                                 <span
                                     className="mark-all-read"
                                     onClick={() => {
@@ -89,10 +106,14 @@ export const Header: React.FC = () => {
                                         }}
                                     >
                                         <div className={`notification-icon ${notification.type}`}>
-                                            {notification.type === 'challenge' && 'CH'}
-                                            {notification.type === 'idea' && '💡'}
-                                            {notification.type === 'comment' && '💬'}
-                                            {notification.type === 'status' && '📈'}
+                                            {notification.type === 'challenge' && (
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
+                                            )}
+                                            {notification.type === 'idea' && <Lightbulb size={16} />}
+                                            {notification.type === 'comment' && <MessageSquare size={16} />}
+                                            {notification.type === 'status' && <TrendingUp size={16} />}
+                                            {notification.type === 'like' && <Heart size={16} />}
+                                            {notification.type === 'vote' && <ThumbsUp size={16} />}
                                         </div>
                                         <div className="notification-content">
                                             <div className="notification-title">{notification.title}</div>

@@ -21,7 +21,7 @@ export const SwimLanes: React.FC = () => {
     }, []);
 
     /* ── Lane Icon SVGs – outlined, inheriting lane color via currentColor ── */
-    const S = 16;
+    const S = 22;
     const laneIcons: Record<string, React.ReactNode> = {
         'Challenge Submitted': (
             <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg>
@@ -58,7 +58,7 @@ export const SwimLanes: React.FC = () => {
             { id: 'Parking Lot', title: 'Parking<br/>Lot', max: 8, color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: 'Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
         ];
 
-    const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId);
+    const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId && c.id.toUpperCase().startsWith('CHG'));
 
     /* ── Drag & Drop Handlers ── */
     const handleDragStart = (e: React.DragEvent, cardId: string) => {
@@ -242,7 +242,7 @@ export const SwimLanes: React.FC = () => {
                                             <div className="card-meta">
                                                 <span className="card-id">
                                                     <span className="card-priority" style={{ background: priorityColor(card.priority) }}></span>
-                                                    {card.id.toUpperCase()}
+                                                    {`CH-${card.id.replace(/\D/g, '')}`}
                                                 </span>
                                                 <span className="card-owner">{card.owner}</span>
                                             </div>
