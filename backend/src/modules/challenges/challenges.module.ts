@@ -4,7 +4,7 @@
  * @responsibility Coordinates controllers, services, and repositories for Challenges.
  */
 
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChallengesController } from './challenges.controller';
 import { ChallengesService } from './challenges.service';
@@ -14,6 +14,8 @@ import {
   ChallengeSchema,
 } from '../../models/challenges/challenge.schema';
 import { CommonModule } from '../../common';
+import { IdeasModule } from '../ideas/ideas.module';
+import { UserActionsModule } from '../user-actions/user-actions.module';
 
 /**
  * Challenges Module.
@@ -24,6 +26,8 @@ import { CommonModule } from '../../common';
       { name: Challenge.name, schema: ChallengeSchema },
     ]),
     CommonModule,
+    forwardRef(() => IdeasModule),
+    UserActionsModule,
   ],
   controllers: [ChallengesController],
   providers: [ChallengesService, ChallengesRepository],

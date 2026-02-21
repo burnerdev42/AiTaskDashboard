@@ -9,6 +9,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '../../common/database/abstract.schema';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
+import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
 import { Priority } from '../../common/enums/priority.enum';
 
 /**
@@ -35,15 +36,45 @@ export class Challenge extends AbstractDocument {
   description: string;
 
   /**
-   * Current position in the innovation lifecycle.
-   * Controls visibility in the Swimlane dashboard.
+   * Short summary text for the challenge.
+   */
+  @Prop()
+  summary?: string;
+
+  /**
+   * Operating company list (dropdown selection from UI).
+   */
+  @Prop([String])
+  opco: string[];
+
+  /**
+   * Platform list (dropdown selection from UI).
+   */
+  @Prop([String])
+  platform: string[];
+
+  /**
+   * Expected outcome of the challenge (long text).
+   */
+  @Prop()
+  outcome?: string;
+
+  /**
+   * Timeline selection from UI dropdown.
+   */
+  @Prop()
+  timeline?: string;
+
+  /**
+   * Position in the innovation portfolio pipeline.
+   * Controls Swimlane view.
    */
   @Prop({
     type: String,
     enum: Object.values(ChallengeStage),
     default: ChallengeStage.IDEATION,
   })
-  stage: ChallengeStage;
+  portfolioLane: ChallengeStage;
 
   /**
    * Reference to the User who owns/manages this challenge.
@@ -52,69 +83,15 @@ export class Challenge extends AbstractDocument {
   owner?: Types.ObjectId;
 
   /**
-   * UI hint for the challenge's theme color.
-   */
-  @Prop({ default: 'teal' })
-  accentColor: string;
-
-  /**
-   * Aggregated metrics for the challenge.
+   * Current workflow status of the challenge.
+   * @default ChallengeStatus.SUBMITTED
    */
   @Prop({
-    type: {
-      appreciations: { type: Number, default: 0 },
-      comments: { type: Number, default: 0 },
-      roi: String,
-      savings: String,
-      markets: Number,
-      members: Number,
-      votes: Number,
-      accuracy: String,
-      methods: Number,
-    },
-    default: {},
+    type: String,
+    enum: Object.values(ChallengeStatus),
+    default: ChallengeStatus.SUBMITTED,
   })
-  stats: {
-    appreciations: number;
-    comments: number;
-    roi?: string;
-    savings?: string;
-    markets?: number;
-    members?: number;
-    votes?: number;
-    accuracy?: string;
-    methods?: number;
-  };
-
-  /**
-   * Contextual tags for categorization.
-   */
-  @Prop([String])
-  tags: string[];
-
-  /**
-   * The core problem being addressed.
-   */
-  @Prop()
-  problemStatement?: string;
-
-  /**
-   * Target success criteria.
-   */
-  @Prop()
-  expectedOutcome?: string;
-
-  /**
-   * The organizational unit responsible.
-   */
-  @Prop()
-  businessUnit?: string;
-
-  /**
-   * The specific department involved.
-   */
-  @Prop()
-  department?: string;
+  status: ChallengeStatus;
 
   /**
    * Level of urgency or importance.
@@ -127,36 +104,34 @@ export class Challenge extends AbstractDocument {
   priority: Priority;
 
   /**
-   * Projected value (financial or operational).
+   * Contextual tags for categorization.
+   */
+  @Prop([String])
+  tags: string[];
+
+  /**
+   * Known constraints or limitations.
    */
   @Prop()
-  estimatedImpact?: string;
+  constraint?: string;
 
   /**
-   * List of users assigned to work on this challenge.
+   * Key stakeholder(s) for this challenge.
+   */
+  @Prop()
+  stakeholder?: string;
+
+  /**
+   * Number of linked ideas. Maintained as a denormalized counter.
+   */
+  @Prop({ default: 0 })
+  ideasCount: number;
+
+  /**
+   * List of contributors (Idea owners linked to this challenge).
    */
   @Prop([{ type: SchemaTypes.ObjectId, ref: 'User' }])
-  team: Types.ObjectId[];
-
-  /**
-   * Audit trail of recent changes and comments.
-   */
-  @Prop([
-    {
-      author: String,
-      avatar: String,
-      avatarColor: String,
-      text: String,
-      time: { type: Date, default: Date.now },
-    },
-  ])
-  activity?: {
-    author: string;
-    avatar?: string;
-    avatarColor?: string;
-    text: string;
-    time: Date;
-  }[];
+  contributor: Types.ObjectId[];
 }
 
 /**

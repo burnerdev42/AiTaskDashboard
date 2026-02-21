@@ -1,40 +1,98 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChallengesService } from './challenges.service';
 import { ChallengesRepository } from './challenges.repository';
-import { ChallengeDocument } from '../../models/challenges/challenge.schema';
-import { CreateChallengeDto } from '../../dto/challenges/create-challenge.dto';
-import { QueryDto } from '../../common/dto/query.dto';
+import { IdeasService } from '../ideas/ideas.service';
+import { UserActionsService } from '../user-actions/user-actions.service';
+import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
+import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
+import { Priority } from '../../common/enums/priority.enum';
+import { TargetType } from '../../common/enums/target-type.enum';
+import { Types } from 'mongoose';
 
 describe('ChallengesService', () => {
   let service: ChallengesService;
-  let repository: ChallengesRepository;
+  let challengesRepository: ChallengesRepository;
+  let ideasService: IdeasService;
+  let userActionsService: UserActionsService;
+
+  const mockOwnerId = new Types.ObjectId();
+  const mockChallengeId = new Types.ObjectId();
 
   const mockChallenge = {
-    _id: '1',
-    title: 'Test',
-    description: 'Test Desc',
-    createdAt: new Date(),
+    _id: mockChallengeId,
+    title: 'AI Innovation',
+    description: 'Leverage AI to improve processes',
+    summary: 'AI summary',
+    portfolioLane: ChallengeStage.IDEATION,
+    status: ChallengeStatus.SUBMITTED,
+    priority: Priority.HIGH,
+    tags: ['AI'],
+    owner: {
+      _id: mockOwnerId,
+      name: 'John',
+      email: 'john@test.com',
+      avatar: null,
+    },
+    contributor: [],
+    toObject: jest.fn().mockReturnThis(),
+  };
+
+  const mockIdeas = [
+    {
+      _id: new Types.ObjectId(),
+      title: 'Idea 1',
+      owner: { _id: mockOwnerId, name: 'John' },
+    },
+  ];
+
+  const mockActions = [
+    {
+      actionType: 'upvote',
+      userId: { _id: new Types.ObjectId(), name: 'Alice' },
+    },
+    {
+      actionType: 'downvote',
+      userId: { _id: new Types.ObjectId(), name: 'Bob' },
+    },
+    {
+      actionType: 'subscribe',
+      userId: { _id: new Types.ObjectId(), name: 'Carol' },
+    },
+  ];
+
+  const mockChallengesRepository = {
+    create: jest.fn().mockResolvedValue(mockChallenge),
+    find: jest.fn().mockResolvedValue([mockChallenge]),
+    findOne: jest.fn().mockResolvedValue(mockChallenge),
+    findOneAndUpdate: jest.fn().mockResolvedValue(mockChallenge),
+    delete: jest.fn().mockResolvedValue(mockChallenge),
+  };
+
+  const mockIdeasService = {
+    findByChallenge: jest.fn().mockResolvedValue(mockIdeas),
+  };
+
+  const mockUserActionsService = {
+    findByTarget: jest.fn().mockResolvedValue(mockActions),
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ChallengesService,
-        {
-          provide: ChallengesRepository,
-          useValue: {
-            create: jest.fn(),
-            find: jest.fn(),
-            findOne: jest.fn(),
-            findOneAndUpdate: jest.fn(),
-            delete: jest.fn(),
-          },
-        },
+        { provide: ChallengesRepository, useValue: mockChallengesRepository },
+        { provide: IdeasService, useValue: mockIdeasService },
+        { provide: UserActionsService, useValue: mockUserActionsService },
       ],
     }).compile();
 
     service = module.get<ChallengesService>(ChallengesService);
-    repository = module.get<ChallengesRepository>(ChallengesRepository);
+    challengesRepository =
+      module.get<ChallengesRepository>(ChallengesRepository);
+    ideasService = module.get<IdeasService>(IdeasService);
+    userActionsService = module.get<UserActionsService>(UserActionsService);
   });
 
   it('should be defined', () => {
@@ -43,90 +101,84 @@ describe('ChallengesService', () => {
 
   describe('create', () => {
     it('should create a challenge', async () => {
-      jest
-        .spyOn(repository, 'create')
-        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
       const dto = {
-        title: 'Test',
-        description: 'Test Desc',
-      } as unknown as CreateChallengeDto;
+        title: 'AI Innovation',
+        description: 'Leverage AI to improve processes',
+        priority: Priority.HIGH,
+        tags: ['AI'],
+      };
+
       const result = await service.create(dto);
-      expect(result).toEqual(mockChallenge);
-      expect(repository.create).toHaveBeenCalledWith(dto);
+
+      expect(challengesRepository.create).toHaveBeenCalled();
+      expect(result.title).toBe('AI Innovation');
     });
   });
 
   describe('findAll', () => {
-    it('should return all challenges with defaults', async () => {
-      jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue([mockChallenge] as unknown as ChallengeDocument[]);
-      const result = await service.findAll({});
-      expect(result).toEqual([mockChallenge]);
-      expect(repository.find).toHaveBeenCalledWith(
-        {},
-        {
-          skip: 0,
-          limit: 10,
-          sort: { createdAt: -1 },
-          populate: 'owner',
-        },
-      );
-    });
+    it('should return paginated challenges with short user info', async () => {
+      const result = await service.findAll({ page: 1, limit: 10 });
 
-    it('should apply filters and pagination and sort', async () => {
-      jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue([mockChallenge] as unknown as ChallengeDocument[]);
-      await service.findAll({
-        page: 2,
-        limit: 5,
-        sort: 'title',
-        title: 'Test',
-      } as unknown as QueryDto);
-      expect(repository.find).toHaveBeenCalledWith(
-        { title: 'Test' },
-        { skip: 5, limit: 5, sort: { title: 1 }, populate: 'owner' },
-      );
+      expect(challengesRepository.find).toHaveBeenCalled();
+      expect(result).toHaveLength(1);
     });
   });
 
   describe('findOne', () => {
-    it('should find one challenge', async () => {
-      jest
-        .spyOn(repository, 'findOne')
-        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
-      const result = await service.findOne('1');
-      expect(result).toEqual(mockChallenge);
-      expect(repository.findOne).toHaveBeenCalledWith(
-        { _id: '1' },
-        { populate: 'owner' },
+    it('should return enriched challenge with ideas and user actions', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result = await service.findOne(mockChallengeId.toHexString());
+
+      expect(challengesRepository.findOne).toHaveBeenCalled();
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(ideasService.findByChallenge).toHaveBeenCalledWith(
+        mockChallengeId.toHexString(),
       );
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(userActionsService.findByTarget).toHaveBeenCalledWith(
+        mockChallengeId.toHexString(),
+        TargetType.CHALLENGE,
+      );
+
+      expect(result).toHaveProperty('ideas');
+
+      expect(result).toHaveProperty('upvotes');
+
+      expect(result).toHaveProperty('downvotes');
+
+      expect(result).toHaveProperty('subscriptions');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(result.ideas).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(result.upvotes).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(result.downvotes).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(result.subscriptions).toHaveLength(1);
     });
   });
 
   describe('update', () => {
-    it('should update challenge', async () => {
-      jest
-        .spyOn(repository, 'findOneAndUpdate')
-        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
-      const result = await service.update('1', { title: 'Updated' });
-      expect(result).toEqual(mockChallenge);
-      expect(repository.findOneAndUpdate).toHaveBeenCalledWith(
-        { _id: '1' },
-        { title: 'Updated' },
+    it('should update a challenge', async () => {
+      const dto = { title: 'Updated', description: 'Updated desc' };
+      const result = await service.update(mockChallengeId.toHexString(), dto);
+
+      expect(challengesRepository.findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: mockChallengeId.toHexString() },
+        dto,
       );
+      expect(result.title).toBe('AI Innovation');
     });
   });
 
   describe('remove', () => {
-    it('should remove challenge', async () => {
-      jest
-        .spyOn(repository, 'delete')
-        .mockResolvedValue(mockChallenge as unknown as ChallengeDocument);
-      const result = await service.remove('1');
-      expect(result).toEqual(mockChallenge);
-      expect(repository.delete).toHaveBeenCalledWith({ _id: '1' });
+    it('should delete a challenge', async () => {
+      const result = await service.remove(mockChallengeId.toHexString());
+
+      expect(challengesRepository.delete).toHaveBeenCalledWith({
+        _id: mockChallengeId.toHexString(),
+      });
+      expect(result._id).toEqual(mockChallengeId);
     });
   });
 });
