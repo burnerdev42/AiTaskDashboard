@@ -1,6 +1,6 @@
 # Data Requirements Analysis
 
-This document outlines the data requirements for the AI Task Dashboard, covering both the database schemas and derived fields necessary for the frontend and backend components.
+This document outlines the data requirements for the AI Task Dashboard, covering both the database schemas and derived fields necessary for the backend API.
 
 ## 1. Challenge
 

@@ -1,0 +1,1292 @@
+[
+  {
+    "_id": {
+      "$oid": "28fb6ae18e7d6138448fe1c7"
+    },
+    "title": "Challenge: Optimize Process 1",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 1. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 1",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 1",
+    "virtualId": "CH-001",
+    "status": "Completed",
+    "userId": {
+      "$oid": "631832c2b8af634b1e609984"
+    },
+    "createdAt": {
+      "$date": "2025-11-24T22:56:32.571Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "db7cd09112e376f9b9e4672e"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 297
+  },
+  {
+    "_id": {
+      "$oid": "0776d4aded971396eaa24f39"
+    },
+    "title": "Challenge: Optimize Process 2",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 2. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 2",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q2",
+    "portfolioLane": "Core",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 2",
+    "virtualId": "CH-002",
+    "status": "Draft",
+    "userId": {
+      "$oid": "0ff2f3f0eb0149209ea0926e"
+    },
+    "createdAt": {
+      "$date": "2026-01-09T03:06:40.966Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "5e7076ac2e4a3ca36c5651f8"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 293
+  },
+  {
+    "_id": {
+      "$oid": "b3ac0d6c996d90239875641a"
+    },
+    "title": "Challenge: Optimize Process 3",
+    "opco": "OpCo Beta",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 3. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 3",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Transformational",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 3",
+    "virtualId": "CH-003",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "d806ea9dd7fabd9eaf091d0a"
+    },
+    "createdAt": {
+      "$date": "2025-11-16T16:54:43.927Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "e48c362119a61d41d6a3c39f"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 284
+  },
+  {
+    "_id": {
+      "$oid": "209bbcb92a6abe752eaa410d"
+    },
+    "title": "Challenge: Optimize Process 4",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 4. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 4",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Transformational",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 4",
+    "virtualId": "CH-004",
+    "status": "Draft",
+    "userId": {
+      "$oid": "b27c7439168d564ae969ff42"
+    },
+    "createdAt": {
+      "$date": "2026-02-08T04:02:33.567Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "c24dc287358bd2f9abb0e7d2"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 170
+  },
+  {
+    "_id": {
+      "$oid": "6ec81d683e010a2cdd7474b1"
+    },
+    "title": "Challenge: Optimize Process 5",
+    "opco": "OpCo Gamma",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 5. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 5",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Core",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 5",
+    "virtualId": "CH-005",
+    "status": "Active Voting",
+    "userId": {
+      "$oid": "a15ba58c95f6b1625f4d9f2a"
+    },
+    "createdAt": {
+      "$date": "2025-12-09T11:50:43.230Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "7824995da40b2cad8d00b054"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 20
+  },
+  {
+    "_id": {
+      "$oid": "481e74b64b13875add45eb73"
+    },
+    "title": "Challenge: Optimize Process 6",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 6. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 6",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 6",
+    "virtualId": "CH-006",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "a15ba58c95f6b1625f4d9f2a"
+    },
+    "createdAt": {
+      "$date": "2025-11-19T05:59:53.845Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "b27c7439168d564ae969ff42"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 296
+  },
+  {
+    "_id": {
+      "$oid": "27882e3e79e37c4f0226b7d5"
+    },
+    "title": "Challenge: Optimize Process 7",
+    "opco": "OpCo Gamma",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 7. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 7",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q1",
+    "portfolioLane": "Transformational",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 7",
+    "virtualId": "CH-007",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "faf37104ced5da88a2906023"
+    },
+    "createdAt": {
+      "$date": "2025-12-11T11:21:53.895Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "faf37104ced5da88a2906023"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 294
+  },
+  {
+    "_id": {
+      "$oid": "6cb1929056657d73610e1e12"
+    },
+    "title": "Challenge: Optimize Process 8",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 8. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 8",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Core",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 8",
+    "virtualId": "CH-008",
+    "status": "Completed",
+    "userId": {
+      "$oid": "84abba6d31e45dd5b53ed0fc"
+    },
+    "createdAt": {
+      "$date": "2025-12-16T20:30:33.632Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "845111af34e325eda0ade474"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 280
+  },
+  {
+    "_id": {
+      "$oid": "39a8e72c50c8b42cbade757f"
+    },
+    "title": "Challenge: Optimize Process 9",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 9. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 9",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q2",
+    "portfolioLane": "Core",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 9",
+    "virtualId": "CH-009",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "5e7076ac2e4a3ca36c5651f8"
+    },
+    "createdAt": {
+      "$date": "2025-12-12T06:15:44.251Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "d806ea9dd7fabd9eaf091d0a"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 183
+  },
+  {
+    "_id": {
+      "$oid": "d8ef313d6e56a38870aa4b68"
+    },
+    "title": "Challenge: Optimize Process 10",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 10. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 10",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Transformational",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 10",
+    "virtualId": "CH-010",
+    "status": "Active Voting",
+    "userId": {
+      "$oid": "845111af34e325eda0ade474"
+    },
+    "createdAt": {
+      "$date": "2025-12-07T10:23:50.429Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "f3579f105d27fe9f116c9fc5"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 292
+  },
+  {
+    "_id": {
+      "$oid": "d66bec0a046605162eee0eb1"
+    },
+    "title": "Challenge: Optimize Process 11",
+    "opco": "OpCo Beta",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 11. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 11",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Transformational",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 11",
+    "virtualId": "CH-011",
+    "status": "In Pilot",
+    "userId": {
+      "$oid": "07f606676393dd57903b29c2"
+    },
+    "createdAt": {
+      "$date": "2025-12-15T05:58:26.759Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "84abba6d31e45dd5b53ed0fc"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 234
+  },
+  {
+    "_id": {
+      "$oid": "97dccf89492a602708a8a056"
+    },
+    "title": "Challenge: Optimize Process 12",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 12. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 12",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Core",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 12",
+    "virtualId": "CH-012",
+    "status": "Completed",
+    "userId": {
+      "$oid": "631832c2b8af634b1e609984"
+    },
+    "createdAt": {
+      "$date": "2025-10-31T01:58:45.607Z"
+    },
+    "month": 10,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "5322a8584a4eafc3dc1f05ef"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 192
+  },
+  {
+    "_id": {
+      "$oid": "ec85ed579f4b7b71227713da"
+    },
+    "title": "Challenge: Optimize Process 13",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 13. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 13",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q1",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 13",
+    "virtualId": "CH-013",
+    "status": "Draft",
+    "userId": {
+      "$oid": "5e7076ac2e4a3ca36c5651f8"
+    },
+    "createdAt": {
+      "$date": "2025-12-14T11:36:52.273Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "5e7076ac2e4a3ca36c5651f8"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 109
+  },
+  {
+    "_id": {
+      "$oid": "eb667d07d2f43825b00198a4"
+    },
+    "title": "Challenge: Optimize Process 14",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 14. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 14",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 14",
+    "virtualId": "CH-014",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "db7cd09112e376f9b9e4672e"
+    },
+    "createdAt": {
+      "$date": "2025-12-22T05:34:13.689Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "631832c2b8af634b1e609984"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 23
+  },
+  {
+    "_id": {
+      "$oid": "f0b53fbbe7e84bdcbdb9d33c"
+    },
+    "title": "Challenge: Optimize Process 15",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 15. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 15",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Core",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 15",
+    "virtualId": "CH-015",
+    "status": "In Pilot",
+    "userId": {
+      "$oid": "faf37104ced5da88a2906023"
+    },
+    "createdAt": {
+      "$date": "2026-02-10T18:25:51.568Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "ea3a52a585f62833ece94739"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 77
+  },
+  {
+    "_id": {
+      "$oid": "67d0acf74371e2f756af6ccd"
+    },
+    "title": "Challenge: Optimize Process 16",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 16. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 16",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q2",
+    "portfolioLane": "Adjacent",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 16",
+    "virtualId": "CH-016",
+    "status": "Active Voting",
+    "userId": {
+      "$oid": "0391455ddcdcb057ca72ba41"
+    },
+    "createdAt": {
+      "$date": "2026-02-18T14:46:53.602Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "845111af34e325eda0ade474"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 296
+  },
+  {
+    "_id": {
+      "$oid": "5b59a55439b3d80d809a8374"
+    },
+    "title": "Challenge: Optimize Process 17",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 17. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 17",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 17",
+    "virtualId": "CH-017",
+    "status": "In Pilot",
+    "userId": {
+      "$oid": "c8a66499896a7a6595b387c6"
+    },
+    "createdAt": {
+      "$date": "2025-11-17T19:51:54.563Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "a15ba58c95f6b1625f4d9f2a"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 113
+  },
+  {
+    "_id": {
+      "$oid": "f279d9d46a795aa02f955636"
+    },
+    "title": "Challenge: Optimize Process 18",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 18. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 18",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Adjacent",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 18",
+    "virtualId": "CH-018",
+    "status": "Completed",
+    "userId": {
+      "$oid": "5322a8584a4eafc3dc1f05ef"
+    },
+    "createdAt": {
+      "$date": "2026-01-06T02:41:16.016Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "db7cd09112e376f9b9e4672e"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 28
+  },
+  {
+    "_id": {
+      "$oid": "662f2558db012dba8e4bf780"
+    },
+    "title": "Challenge: Optimize Process 19",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 19. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 19",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Transformational",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 19",
+    "virtualId": "CH-019",
+    "status": "Completed",
+    "userId": {
+      "$oid": "84abba6d31e45dd5b53ed0fc"
+    },
+    "createdAt": {
+      "$date": "2025-12-27T02:56:06.630Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "9c7188bf892f43f952907c1d"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 180
+  },
+  {
+    "_id": {
+      "$oid": "bc49b1eee68086664aa02d27"
+    },
+    "title": "Challenge: Optimize Process 20",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 20. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 20",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Adjacent",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 20",
+    "virtualId": "CH-020",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "845111af34e325eda0ade474"
+    },
+    "createdAt": {
+      "$date": "2026-01-28T03:03:36.753Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "0391455ddcdcb057ca72ba41"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 291
+  },
+  {
+    "_id": {
+      "$oid": "24fc87632cb1aac8c873b425"
+    },
+    "title": "Challenge: Optimize Process 21",
+    "opco": "OpCo Alpha",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 21. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 21",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Transformational",
+    "priority": "High",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 21",
+    "virtualId": "CH-021",
+    "status": "Draft",
+    "userId": {
+      "$oid": "58d9b64ef61d293551c88ea5"
+    },
+    "createdAt": {
+      "$date": "2026-02-01T07:16:40.148Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "f3579f105d27fe9f116c9fc5"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 216
+  },
+  {
+    "_id": {
+      "$oid": "ee75cf2e6e9537fbc5b3b411"
+    },
+    "title": "Challenge: Optimize Process 22",
+    "opco": "OpCo Gamma",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 22. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 22",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Adjacent",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 22",
+    "virtualId": "CH-022",
+    "status": "In Pilot",
+    "userId": {
+      "$oid": "631832c2b8af634b1e609984"
+    },
+    "createdAt": {
+      "$date": "2026-01-20T02:58:09.842Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "7824995da40b2cad8d00b054"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 72
+  },
+  {
+    "_id": {
+      "$oid": "cafac985dd527d8351fbd426"
+    },
+    "title": "Challenge: Optimize Process 23",
+    "opco": "OpCo Gamma",
+    "platform": "Desktop",
+    "description": "This is the detailed description for challenge 23. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 23",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q1",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 23",
+    "virtualId": "CH-023",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "d8f585be6a6172a3277660de"
+    },
+    "createdAt": {
+      "$date": "2025-12-21T14:34:18.666Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "b27c7439168d564ae969ff42"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 193
+  },
+  {
+    "_id": {
+      "$oid": "153ebc5364ff35dbc16b2bf6"
+    },
+    "title": "Challenge: Optimize Process 24",
+    "opco": "OpCo Gamma",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 24. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 24",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q2",
+    "portfolioLane": "Transformational",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 24",
+    "virtualId": "CH-024",
+    "status": "Completed",
+    "userId": {
+      "$oid": "faf37104ced5da88a2906023"
+    },
+    "createdAt": {
+      "$date": "2025-12-31T18:59:49.465Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "e48c362119a61d41d6a3c39f"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 12
+  },
+  {
+    "_id": {
+      "$oid": "d8bdc8da834baa2bcb2fb902"
+    },
+    "title": "Challenge: Optimize Process 25",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 25. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 25",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q1",
+    "portfolioLane": "Transformational",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 25",
+    "virtualId": "CH-025",
+    "status": "Completed",
+    "userId": {
+      "$oid": "2009c8d2b0d82b1d2d137780"
+    },
+    "createdAt": {
+      "$date": "2026-02-07T21:15:51.974Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "9c7188bf892f43f952907c1d"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 249
+  },
+  {
+    "_id": {
+      "$oid": "94716b7ff2b7c042bcc2ad52"
+    },
+    "title": "Challenge: Optimize Process 26",
+    "opco": "OpCo Beta",
+    "platform": "Mobile - Android",
+    "description": "This is the detailed description for challenge 26. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 26",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Core",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 26",
+    "virtualId": "CH-026",
+    "status": "Draft",
+    "userId": {
+      "$oid": "faf37104ced5da88a2906023"
+    },
+    "createdAt": {
+      "$date": "2026-02-09T12:30:59.072Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "bfbc0a9d8a3a9a462bbab2bb"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 87
+  },
+  {
+    "_id": {
+      "$oid": "59a121076952b40e40ddb5f2"
+    },
+    "title": "Challenge: Optimize Process 27",
+    "opco": "OpCo Beta",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 27. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 27",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q1",
+    "portfolioLane": "Adjacent",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 27",
+    "virtualId": "CH-027",
+    "status": "Under Review",
+    "userId": {
+      "$oid": "d806ea9dd7fabd9eaf091d0a"
+    },
+    "createdAt": {
+      "$date": "2025-11-25T02:22:27.546Z"
+    },
+    "month": 11,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "a15ba58c95f6b1625f4d9f2a"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 204
+  },
+  {
+    "_id": {
+      "$oid": "1baed77c238b2e292b49c89a"
+    },
+    "title": "Challenge: Optimize Process 28",
+    "opco": "OpCo Alpha",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 28. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 28",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q1",
+    "portfolioLane": "Adjacent",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 28",
+    "virtualId": "CH-028",
+    "status": "Active Voting",
+    "userId": {
+      "$oid": "ea3a52a585f62833ece94739"
+    },
+    "createdAt": {
+      "$date": "2026-01-15T07:32:49.369Z"
+    },
+    "month": 1,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "a15ba58c95f6b1625f4d9f2a"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 115
+  },
+  {
+    "_id": {
+      "$oid": "cb69eebcca9d24392988b96e"
+    },
+    "title": "Challenge: Optimize Process 29",
+    "opco": "OpCo Gamma",
+    "platform": "Mobile - iOS",
+    "description": "This is the detailed description for challenge 29. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 29",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q4",
+    "portfolioLane": "Core",
+    "priority": "Medium",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 29",
+    "virtualId": "CH-029",
+    "status": "Draft",
+    "userId": {
+      "$oid": "c24dc287358bd2f9abb0e7d2"
+    },
+    "createdAt": {
+      "$date": "2025-12-13T18:34:04.520Z"
+    },
+    "month": 12,
+    "year": 2025,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "faf37104ced5da88a2906023"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 244
+  },
+  {
+    "_id": {
+      "$oid": "b1bc3965bf5630d3b0778abe"
+    },
+    "title": "Challenge: Optimize Process 30",
+    "opco": "OpCo Alpha",
+    "platform": "Web",
+    "description": "This is the detailed description for challenge 30. We aim to improve the existing systems and optimize current workflows using modern AI tools.",
+    "summary": "Summary of optimization challenge 30",
+    "outcome": "Expected outcome includes a 20% increase in efficiency.",
+    "timeline": "Q3",
+    "portfolioLane": "Core",
+    "priority": "Low",
+    "tags": [
+      "ai",
+      "optimization",
+      "process"
+    ],
+    "constraint": "Budget limited to $5000",
+    "stackeHolder": "Stakeholder 30",
+    "virtualId": "CH-030",
+    "status": "In Pilot",
+    "userId": {
+      "$oid": "faf37104ced5da88a2906023"
+    },
+    "createdAt": {
+      "$date": "2026-02-17T09:18:56.924Z"
+    },
+    "month": 2,
+    "year": 2026,
+    "updatedAt": {
+      "$date": "2026-02-21T12:26:03.600Z"
+    },
+    "contributors": [
+      {
+        "$oid": "0ff2f3f0eb0149209ea0926e"
+      }
+    ],
+    "upVotes": [],
+    "downVotes": [],
+    "subcriptions": [],
+    "viewCount": 184
+  }
+]
