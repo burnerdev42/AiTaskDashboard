@@ -54,3 +54,4 @@ When asked to "Update the Swagger" or "Regenerate Swagger":
 3. Check for specific new Endpoints mentioned in the rules/constraints sections.
 4. Modify `backend/requirement/api/docs/swagger.yaml` ensuring all Base, Response, and Minimal schemas perfectly mirror the text file.
 5. Notify the user of what exactly was added/modified.
+6. **LINTING**: After making changes, execute `cmd.exe /c npx @redocly/cli lint c:\CODE\AiTaskDashboard\backend\requirement\api\docs\swagger.yaml` and resolve any formatting, indentation, or structural errors that the linter points out, ensuring the final swagger file is strictly compliant.

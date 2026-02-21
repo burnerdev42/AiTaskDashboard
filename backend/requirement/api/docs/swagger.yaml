@@ -8,6 +8,7 @@ servers:
     description: Main API Server
 
 tags:
+  - name: Auth
   - name: Users
   - name: Challenges
   - name: Ideas
@@ -16,6 +17,52 @@ tags:
   - name: Notifications
 
 paths:
+  # ==============================
+  # AUTH ENDPOINTS
+  # ==============================
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      description: Creates a new user profile and securely hashes the password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBase'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '409':
+          description: Conflict - Email already exists
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate a user
+      description: Verifies user credentials and returns an auth token/session.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLoginRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string, description: "JWT Access Token" }
+                  user: { $ref: '#/components/schemas/UserResponse' }
+        '401':
+          description: Unauthorized - Invalid credentials
+
   # ==============================
   # USERS ENDPOINTS
   # ==============================
@@ -210,12 +257,14 @@ paths:
     post:
       tags: [Challenges]
       summary: Toggle upvote for a challenge
+      operationId: toggleChallengeUpvote
       parameters:
         - name: virtualId
           in: path
           required: true
           schema:
             type: string
+          description: The virtual ID of the challenge
       requestBody:
         content:
           application/json:
@@ -228,16 +277,20 @@ paths:
       responses:
         '200':
           description: Upvote toggled successfully
+        '404':
+          description: Challenge not found
   /challenges/{virtualId}/subscribe:
     post:
       tags: [Challenges]
       summary: Toggle subscription for a challenge
+      operationId: toggleChallengeSubscribe
       parameters:
         - name: virtualId
           in: path
           required: true
           schema:
             type: string
+          description: The virtual ID of the challenge
       requestBody:
         content:
           application/json:
@@ -250,6 +303,8 @@ paths:
       responses:
         '200':
           description: Subscription toggled successfully
+        '404':
+          description: Challenge not found
 
   # ==============================
   # IDEAS ENDPOINTS
@@ -338,12 +393,14 @@ paths:
     post:
       tags: [Ideas]
       summary: Toggle upvote for an idea
+      operationId: toggleIdeaUpvote
       parameters:
         - name: virtualId
           in: path
           required: true
           schema:
             type: string
+          description: The virtual/idea ID of the idea
       requestBody:
         content:
           application/json:
@@ -356,16 +413,20 @@ paths:
       responses:
         '200':
           description: Upvote toggled successfully
+        '404':
+          description: Idea not found
   /ideas/{virtualId}/subscribe:
     post:
       tags: [Ideas]
       summary: Toggle subscription for an idea
+      operationId: toggleIdeaSubscribe
       parameters:
         - name: virtualId
           in: path
           required: true
           schema:
             type: string
+          description: The virtual/idea ID of the idea
       requestBody:
         content:
           application/json:
@@ -378,6 +439,8 @@ paths:
       responses:
         '200':
           description: Subscription toggled successfully
+        '404':
+          description: Idea not found
 
   # ==============================
   # COMMENTS ENDPOINTS
@@ -689,7 +752,8 @@ components:
         opco: { type: string }
         platform: { type: string }
         companyTechRole: { type: string }
-        email: { type: string }
+        email: { type: string, format: email }
+        password: { type: string, format: password, description: "Required for registration, striped in responses." }
         interestAreas: { type: array, items: { type: string } }
         role: { type: string, enum: ['ADMIN', 'MEMBER', 'USER'] }
         status: { type: string, enum: ['PENDING', 'APPROVED', 'BLOCKED', 'INACTIVE'] }
@@ -885,3 +949,13 @@ components:
               description: "(DERIVED) Details of Challenge or Idea linked via fk_id"
             recipientDetails: { $ref: '#/components/schemas/UserMinimal' }
             initiatorDetails: { $ref: '#/components/schemas/UserMinimal', description: "(DERIVED) Details of the user who triggered the event" }
+
+    AuthLoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
