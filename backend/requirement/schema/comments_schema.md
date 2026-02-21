@@ -15,7 +15,7 @@ const commentSchema = new Schema(
     },
     type: {
       type: String,
-      enum: ['CH', 'IDX'], // CH = Challenges, IDX = Ideas
+      enum: ['CH', 'ID'], // CH = Challenges, ID = Ideas
       required: true,
     },
     typeId: {

@@ -12,7 +12,11 @@ You are an expert in specification-driven development, database design, and data
 
 ## 🏗️ Execution Pipeline
 
-Whenever the schema or requirements need to be updated, follow this exact 4-step execution pipeline in order:
+Whenever the schema or requirements need to be updated, follow this exact 5-step execution pipeline in order:
+
+### Phase 0: Pre-flight Numbering Verification
+- **Target File:** `backend/requirement/Data requirements.txt`
+- **Task:** ALWAYS check the numbering sequence of the DB fields and Derived fields inside the source document. If you notice any skipped numbers (e.g., jumping from 19 to 21) or formatting issues, fix the numbering natively inside `Data requirements.txt` so it is strictly sequential *before* you generate any markdown.
 
 ### Phase 1: Generate/Update Markdown Requirements Document
 - **Location:** `backend/requirement/`

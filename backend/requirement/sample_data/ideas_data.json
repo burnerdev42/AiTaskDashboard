@@ -1,1227 +1,1828 @@
 [
   {
     "_id": {
-      "$oid": "a371525fa50cf912942bdbc5"
+      "$oid": "bc7becce7ff91a20e09111f2"
     },
-    "ideaId": "IDX-0001",
+    "ideaId": "ID-0001",
     "title": "Idea implementation for Challenge 1",
     "description": "I propose we implement a microservices architecture for idea 1.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "209bbcb92a6abe752eaa410d"
+      "$oid": "aff1dc453ca4c03506514a9a"
     },
-    "appreciationCount": 46,
-    "viewCount": 320,
+    "appreciationCount": 103,
+    "viewCount": 237,
     "userId": {
-      "$oid": "bfbc0a9d8a3a9a462bbab2bb"
+      "$oid": "150c4ce3ce6b3ee7a983cc0b"
     },
     "subscription": [
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
-      },
-      {
-        "$oid": "d8f585be6a6172a3277660de"
+        "$oid": "2167c63c20140c2ea0ef260a"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T10:10:44.328Z"
+      "$date": "2026-02-20T21:35:00.348Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "cdcfeadbb11e397352d701c5"
+      "$oid": "5ac28d93c36ace74c2f07e37"
     },
-    "ideaId": "IDX-0002",
+    "ideaId": "ID-0002",
     "title": "Idea implementation for Challenge 2",
     "description": "I propose we implement a microservices architecture for idea 2.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "5b59a55439b3d80d809a8374"
+      "$oid": "a9c82638c593430b309361c4"
     },
-    "appreciationCount": 112,
-    "viewCount": 36,
+    "appreciationCount": 23,
+    "viewCount": 481,
     "userId": {
-      "$oid": "c8a66499896a7a6595b387c6"
+      "$oid": "dd982d28e012d4704c572bd3"
     },
     "subscription": [
       {
-        "$oid": "5e7076ac2e4a3ca36c5651f8"
+        "$oid": "03ccfe7ba2a83b7eca263679"
       },
       {
-        "$oid": "c30f649670decc9ab216ee18"
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T04:51:55.606Z"
+      "$date": "2026-02-20T17:38:34.287Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": []
   },
   {
     "_id": {
-      "$oid": "b89f266098edf94d9fef9bf4"
+      "$oid": "469f9922ab15cf2e2cd6fc6b"
     },
-    "ideaId": "IDX-0003",
+    "ideaId": "ID-0003",
     "title": "Idea implementation for Challenge 3",
     "description": "I propose we implement a microservices architecture for idea 3.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "67d0acf74371e2f756af6ccd"
+      "$oid": "aff1dc453ca4c03506514a9a"
     },
-    "appreciationCount": 89,
-    "viewCount": 210,
+    "appreciationCount": 71,
+    "viewCount": 26,
     "userId": {
-      "$oid": "c8a66499896a7a6595b387c6"
+      "$oid": "7410e6fbdf8906dd06056e9e"
     },
     "subscription": [
       {
-        "$oid": "5e7076ac2e4a3ca36c5651f8"
+        "$oid": "d359db34d4873a213ef8bd49"
       },
       {
-        "$oid": "bfbc0a9d8a3a9a462bbab2bb"
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "6dbfb3010ec8c034cca681a8"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T08:46:52.299Z"
+      "$date": "2026-02-20T22:44:06.835Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "24eeddf867757fdd7404c0ce"
+      "$oid": "e20452c4923e180788e679fb"
     },
-    "ideaId": "IDX-0004",
+    "ideaId": "ID-0004",
     "title": "Idea implementation for Challenge 4",
     "description": "I propose we implement a microservices architecture for idea 4.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "0776d4aded971396eaa24f39"
+      "$oid": "7691ed47f5b0338abeba49c7"
     },
-    "appreciationCount": 3,
-    "viewCount": 465,
+    "appreciationCount": 141,
+    "viewCount": 272,
     "userId": {
-      "$oid": "c8a66499896a7a6595b387c6"
+      "$oid": "acadfa4ea62f87f8e95c9d0c"
     },
     "subscription": [
       {
-        "$oid": "07f606676393dd57903b29c2"
+        "$oid": "6dbfb3010ec8c034cca681a8"
       },
       {
-        "$oid": "9c7188bf892f43f952907c1d"
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T23:07:38.230Z"
+      "$date": "2026-02-21T12:30:10.856Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "256404caa7acfe26d7bb055a"
+      "$oid": "03070793690f92237ba086c2"
     },
-    "ideaId": "IDX-0005",
+    "ideaId": "ID-0005",
     "title": "Idea implementation for Challenge 5",
     "description": "I propose we implement a microservices architecture for idea 5.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "b3ac0d6c996d90239875641a"
+      "$oid": "519e8be9c85659cd00a2000a"
     },
-    "appreciationCount": 23,
-    "viewCount": 491,
+    "appreciationCount": 64,
+    "viewCount": 197,
     "userId": {
-      "$oid": "9c7188bf892f43f952907c1d"
+      "$oid": "acadfa4ea62f87f8e95c9d0c"
     },
     "subscription": [
       {
-        "$oid": "845111af34e325eda0ade474"
+        "$oid": "f7c3c52501648868ea0408ea"
       },
       {
-        "$oid": "07f606676393dd57903b29c2"
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "6dbfb3010ec8c034cca681a8"
+      },
+      {
+        "$oid": "023150122254f7bde3091e6b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T14:14:58.709Z"
+      "$date": "2026-02-21T05:17:14.482Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "d359db34d4873a213ef8bd49"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "b9928a0b11e1338f97f9f1b2"
+      "$oid": "c6eacb25fc71f0931b7e1625"
     },
-    "ideaId": "IDX-0006",
+    "ideaId": "ID-0006",
     "title": "Idea implementation for Challenge 6",
     "description": "I propose we implement a microservices architecture for idea 6.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "0776d4aded971396eaa24f39"
+      "$oid": "cc2240ea74c8dfa24038bb1b"
     },
-    "appreciationCount": 118,
-    "viewCount": 198,
+    "appreciationCount": 51,
+    "viewCount": 343,
     "userId": {
-      "$oid": "e48c362119a61d41d6a3c39f"
+      "$oid": "efff247c2f53da2d9683867e"
     },
-    "subscription": [
-      {
-        "$oid": "d806ea9dd7fabd9eaf091d0a"
-      },
-      {
-        "$oid": "f3579f105d27fe9f116c9fc5"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T02:26:36.364Z"
+      "$date": "2026-02-20T23:44:43.734Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "04f6abe27caddbebd583c760"
+      "$oid": "87857504f11ba1199a1003ae"
     },
-    "ideaId": "IDX-0007",
+    "ideaId": "ID-0007",
     "title": "Idea implementation for Challenge 7",
     "description": "I propose we implement a microservices architecture for idea 7.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "6ec81d683e010a2cdd7474b1"
+      "$oid": "33aa03ba76d6b58690ec110d"
     },
-    "appreciationCount": 79,
-    "viewCount": 463,
+    "appreciationCount": 6,
+    "viewCount": 289,
     "userId": {
-      "$oid": "845111af34e325eda0ade474"
+      "$oid": "dae61077eacf5dffb98929f3"
     },
     "subscription": [
       {
-        "$oid": "5322a8584a4eafc3dc1f05ef"
+        "$oid": "efff247c2f53da2d9683867e"
       },
       {
-        "$oid": "bfbc0a9d8a3a9a462bbab2bb"
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T20:22:51.767Z"
+      "$date": "2026-02-20T18:02:10.392Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "6171b7ea1055e2d54b28cd29"
+      "$oid": "5d6c43911b1b6be91cb2314b"
     },
-    "ideaId": "IDX-0008",
+    "ideaId": "ID-0008",
     "title": "Idea implementation for Challenge 8",
     "description": "I propose we implement a microservices architecture for idea 8.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "f0b53fbbe7e84bdcbdb9d33c"
+      "$oid": "2460e08c86ec5c09e688ff1d"
     },
-    "appreciationCount": 95,
-    "viewCount": 498,
+    "appreciationCount": 105,
+    "viewCount": 142,
     "userId": {
-      "$oid": "0391455ddcdcb057ca72ba41"
+      "$oid": "2167c63c20140c2ea0ef260a"
     },
     "subscription": [
       {
-        "$oid": "d8f585be6a6172a3277660de"
+        "$oid": "efff247c2f53da2d9683867e"
       },
       {
-        "$oid": "84abba6d31e45dd5b53ed0fc"
+        "$oid": "3b5b278fe53500f702e5c60b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T13:50:48.162Z"
+      "$date": "2026-02-21T04:06:56.005Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "023150122254f7bde3091e6b"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "bccc7c613f5affe7ea66b324"
+      "$oid": "9d83cbdf2a7cd10574e922bf"
     },
-    "ideaId": "IDX-0009",
+    "ideaId": "ID-0009",
     "title": "Idea implementation for Challenge 9",
     "description": "I propose we implement a microservices architecture for idea 9.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "662f2558db012dba8e4bf780"
+      "$oid": "a9c82638c593430b309361c4"
     },
-    "appreciationCount": 115,
-    "viewCount": 302,
+    "appreciationCount": 12,
+    "viewCount": 186,
     "userId": {
-      "$oid": "bfbc0a9d8a3a9a462bbab2bb"
+      "$oid": "dc5d66d8d8b89b45b82e8df2"
     },
     "subscription": [
       {
-        "$oid": "631832c2b8af634b1e609984"
-      },
-      {
-        "$oid": "845111af34e325eda0ade474"
+        "$oid": "7410e6fbdf8906dd06056e9e"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T23:29:00.653Z"
+      "$date": "2026-02-20T17:51:22.078Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "03ccfe7ba2a83b7eca263679"
+      },
+      {
+        "$oid": "023150122254f7bde3091e6b"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "39d3d722942567a8ebe5430b"
+      "$oid": "7f990b7524c1eaae5fd60fee"
     },
-    "ideaId": "IDX-0010",
+    "ideaId": "ID-0010",
     "title": "Idea implementation for Challenge 10",
     "description": "I propose we implement a microservices architecture for idea 10.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "28fb6ae18e7d6138448fe1c7"
+      "$oid": "a0fa7ee6ad74221881363a37"
     },
-    "appreciationCount": 49,
-    "viewCount": 410,
+    "appreciationCount": 84,
+    "viewCount": 331,
     "userId": {
-      "$oid": "faf37104ced5da88a2906023"
+      "$oid": "2167c63c20140c2ea0ef260a"
     },
     "subscription": [
       {
-        "$oid": "0ff2f3f0eb0149209ea0926e"
+        "$oid": "8dd9e42484a1fce5fb487638"
       },
       {
-        "$oid": "58d9b64ef61d293551c88ea5"
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "dd982d28e012d4704c572bd3"
+      },
+      {
+        "$oid": "03ccfe7ba2a83b7eca263679"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T02:11:11.791Z"
+      "$date": "2026-02-20T21:10:27.793Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "1f49badda7dacb8f9135c239"
+      "$oid": "9912720c9ce378217c35ac4d"
     },
-    "ideaId": "IDX-0011",
+    "ideaId": "ID-0011",
     "title": "Idea implementation for Challenge 11",
     "description": "I propose we implement a microservices architecture for idea 11.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "ee75cf2e6e9537fbc5b3b411"
+      "$oid": "7691ed47f5b0338abeba49c7"
     },
-    "appreciationCount": 127,
-    "viewCount": 159,
+    "appreciationCount": 17,
+    "viewCount": 359,
     "userId": {
-      "$oid": "f3579f105d27fe9f116c9fc5"
+      "$oid": "150c4ce3ce6b3ee7a983cc0b"
     },
     "subscription": [
       {
-        "$oid": "9c7188bf892f43f952907c1d"
-      },
-      {
-        "$oid": "0391455ddcdcb057ca72ba41"
+        "$oid": "6dbfb3010ec8c034cca681a8"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T23:12:43.892Z"
+      "$date": "2026-02-20T21:38:26.907Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.979Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "4facf3c1f6ca9356d1f883bc"
+      "$oid": "35417fc7432272e89b11567d"
     },
-    "ideaId": "IDX-0012",
+    "ideaId": "ID-0012",
     "title": "Idea implementation for Challenge 12",
     "description": "I propose we implement a microservices architecture for idea 12.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "97dccf89492a602708a8a056"
+      "$oid": "fc8ba864571d20d246fb153b"
     },
-    "appreciationCount": 82,
-    "viewCount": 47,
+    "appreciationCount": 99,
+    "viewCount": 228,
     "userId": {
-      "$oid": "7824995da40b2cad8d00b054"
+      "$oid": "88a8435cfaaf3bc0a8bfe5c7"
     },
     "subscription": [
       {
-        "$oid": "f3579f105d27fe9f116c9fc5"
+        "$oid": "dd982d28e012d4704c572bd3"
       },
       {
-        "$oid": "58d9b64ef61d293551c88ea5"
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T01:38:09.308Z"
+      "$date": "2026-02-21T01:46:07.255Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "db1ab5a87f6b17750e3d9f63"
+      "$oid": "18be189710a396dd119a70e8"
     },
-    "ideaId": "IDX-0013",
+    "ideaId": "ID-0013",
     "title": "Idea implementation for Challenge 13",
     "description": "I propose we implement a microservices architecture for idea 13.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "97dccf89492a602708a8a056"
+      "$oid": "87ccacc255f2c34205c1b280"
     },
-    "appreciationCount": 2,
-    "viewCount": 144,
+    "appreciationCount": 47,
+    "viewCount": 48,
     "userId": {
-      "$oid": "faf37104ced5da88a2906023"
+      "$oid": "8dd9e42484a1fce5fb487638"
     },
     "subscription": [
       {
-        "$oid": "d806ea9dd7fabd9eaf091d0a"
-      },
-      {
-        "$oid": "84abba6d31e45dd5b53ed0fc"
+        "$oid": "f7c3c52501648868ea0408ea"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T11:26:30.957Z"
+      "$date": "2026-02-20T17:57:49.399Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      },
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      },
+      {
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "9aef5a83813d5dc61c387adb"
+      "$oid": "172d60500f83c0bbee497e25"
     },
-    "ideaId": "IDX-0014",
+    "ideaId": "ID-0014",
     "title": "Idea implementation for Challenge 14",
     "description": "I propose we implement a microservices architecture for idea 14.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "24fc87632cb1aac8c873b425"
+      "$oid": "33aa03ba76d6b58690ec110d"
     },
-    "appreciationCount": 132,
-    "viewCount": 294,
+    "appreciationCount": 91,
+    "viewCount": 471,
     "userId": {
-      "$oid": "84abba6d31e45dd5b53ed0fc"
+      "$oid": "ccf33468e120def030df5657"
     },
     "subscription": [
       {
-        "$oid": "9c7188bf892f43f952907c1d"
+        "$oid": "0a904c53d7efbb868225a2b9"
       },
       {
-        "$oid": "07f606676393dd57903b29c2"
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T17:34:11.282Z"
+      "$date": "2026-02-20T18:04:18.041Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "023150122254f7bde3091e6b"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "6dbfb3010ec8c034cca681a8"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      },
+      {
+        "$oid": "dd982d28e012d4704c572bd3"
+      },
+      {
+        "$oid": "023150122254f7bde3091e6b"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "059143f2b35439d03640a886"
+      "$oid": "fdcd9923288910fb093a5fda"
     },
-    "ideaId": "IDX-0015",
+    "ideaId": "ID-0015",
     "title": "Idea implementation for Challenge 15",
     "description": "I propose we implement a microservices architecture for idea 15.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "d8ef313d6e56a38870aa4b68"
+      "$oid": "33aa03ba76d6b58690ec110d"
     },
-    "appreciationCount": 104,
-    "viewCount": 155,
+    "appreciationCount": 143,
+    "viewCount": 430,
     "userId": {
-      "$oid": "f3579f105d27fe9f116c9fc5"
+      "$oid": "f7c3c52501648868ea0408ea"
     },
     "subscription": [
       {
-        "$oid": "d8f585be6a6172a3277660de"
-      },
-      {
-        "$oid": "07f606676393dd57903b29c2"
+        "$oid": "1b707c147202a68b759cd58d"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T04:04:14.069Z"
+      "$date": "2026-02-21T13:05:38.456Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "023150122254f7bde3091e6b"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "e1d362b1b1363e56c1b0828e"
+      "$oid": "f6cc719b107e01e8160d3c6b"
     },
-    "ideaId": "IDX-0016",
+    "ideaId": "ID-0016",
     "title": "Idea implementation for Challenge 16",
     "description": "I propose we implement a microservices architecture for idea 16.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "59a121076952b40e40ddb5f2"
+      "$oid": "2ee18df8ed87ab3614f27174"
     },
-    "appreciationCount": 57,
-    "viewCount": 127,
+    "appreciationCount": 150,
+    "viewCount": 48,
     "userId": {
-      "$oid": "84abba6d31e45dd5b53ed0fc"
+      "$oid": "88a8435cfaaf3bc0a8bfe5c7"
     },
     "subscription": [
       {
-        "$oid": "07f606676393dd57903b29c2"
-      },
-      {
-        "$oid": "b27c7439168d564ae969ff42"
+        "$oid": "1b707c147202a68b759cd58d"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T21:27:55.533Z"
+      "$date": "2026-02-20T14:35:34.618Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "48cd64f1333191715e0bd589"
+      "$oid": "943b04ff67af63730a592684"
     },
-    "ideaId": "IDX-0017",
+    "ideaId": "ID-0017",
     "title": "Idea implementation for Challenge 17",
     "description": "I propose we implement a microservices architecture for idea 17.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "662f2558db012dba8e4bf780"
+      "$oid": "9a622ff0d1fded3630464f22"
     },
     "appreciationCount": 91,
-    "viewCount": 359,
+    "viewCount": 219,
     "userId": {
-      "$oid": "2009c8d2b0d82b1d2d137780"
+      "$oid": "efff247c2f53da2d9683867e"
     },
     "subscription": [
       {
-        "$oid": "84abba6d31e45dd5b53ed0fc"
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
       },
       {
-        "$oid": "c8a66499896a7a6595b387c6"
+        "$oid": "f7c3c52501648868ea0408ea"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T23:04:06.033Z"
+      "$date": "2026-02-20T17:47:38.106Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      },
+      {
+        "$oid": "023150122254f7bde3091e6b"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "b7ad53d0949989dbfb3ae09d"
+      "$oid": "b33fbe5d46af50a5e856a18f"
     },
-    "ideaId": "IDX-0018",
+    "ideaId": "ID-0018",
     "title": "Idea implementation for Challenge 18",
     "description": "I propose we implement a microservices architecture for idea 18.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "d8ef313d6e56a38870aa4b68"
+      "$oid": "cc2240ea74c8dfa24038bb1b"
     },
-    "appreciationCount": 26,
-    "viewCount": 103,
+    "appreciationCount": 61,
+    "viewCount": 448,
     "userId": {
-      "$oid": "631832c2b8af634b1e609984"
+      "$oid": "0a904c53d7efbb868225a2b9"
     },
     "subscription": [
       {
-        "$oid": "d8f585be6a6172a3277660de"
+        "$oid": "efff247c2f53da2d9683867e"
       },
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T13:09:41.258Z"
+      "$date": "2026-02-21T12:40:19.276Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "3c3240de2e4b26187de69db6"
+      "$oid": "a774d61faccb0c0baebbae7d"
     },
-    "ideaId": "IDX-0019",
+    "ideaId": "ID-0019",
     "title": "Idea implementation for Challenge 19",
     "description": "I propose we implement a microservices architecture for idea 19.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "1baed77c238b2e292b49c89a"
+      "$oid": "0ca5ea4ec96ab227f7344713"
     },
-    "appreciationCount": 144,
-    "viewCount": 161,
+    "appreciationCount": 140,
+    "viewCount": 404,
     "userId": {
-      "$oid": "faf37104ced5da88a2906023"
+      "$oid": "7410e6fbdf8906dd06056e9e"
     },
     "subscription": [
       {
-        "$oid": "0391455ddcdcb057ca72ba41"
+        "$oid": "6dbfb3010ec8c034cca681a8"
       },
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T12:24:56.669Z"
+      "$date": "2026-02-20T12:26:57.942Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "cee8502fcc7526384e10eb00"
+      "$oid": "c07e17acaf9b6970f26e1eef"
     },
-    "ideaId": "IDX-0020",
+    "ideaId": "ID-0020",
     "title": "Idea implementation for Challenge 20",
     "description": "I propose we implement a microservices architecture for idea 20.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "94716b7ff2b7c042bcc2ad52"
+      "$oid": "6e9025b7b99b709ac06d30c7"
     },
-    "appreciationCount": 91,
-    "viewCount": 219,
+    "appreciationCount": 144,
+    "viewCount": 383,
     "userId": {
-      "$oid": "2009c8d2b0d82b1d2d137780"
+      "$oid": "6dbfb3010ec8c034cca681a8"
     },
-    "subscription": [
-      {
-        "$oid": "e48c362119a61d41d6a3c39f"
-      },
-      {
-        "$oid": "5e7076ac2e4a3ca36c5651f8"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-20T13:45:37.306Z"
+      "$date": "2026-02-21T00:44:01.363Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "6dbfb3010ec8c034cca681a8"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "226b43c32367db4f2ba9ba17"
+      "$oid": "8e4e54575925bcd16ceed763"
     },
-    "ideaId": "IDX-0021",
+    "ideaId": "ID-0021",
     "title": "Idea implementation for Challenge 21",
     "description": "I propose we implement a microservices architecture for idea 21.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "6cb1929056657d73610e1e12"
+      "$oid": "aff1dc453ca4c03506514a9a"
     },
-    "appreciationCount": 78,
-    "viewCount": 224,
+    "appreciationCount": 6,
+    "viewCount": 323,
     "userId": {
-      "$oid": "58d9b64ef61d293551c88ea5"
+      "$oid": "1b707c147202a68b759cd58d"
     },
-    "subscription": [
-      {
-        "$oid": "c30f649670decc9ab216ee18"
-      },
-      {
-        "$oid": "9c7188bf892f43f952907c1d"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T10:26:18.525Z"
+      "$date": "2026-02-21T08:34:57.081Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "dd982d28e012d4704c572bd3"
+      },
+      {
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      },
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "dd982d28e012d4704c572bd3"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "929547e9a96d190b76edcbd8"
+      "$oid": "61ad6a50b1fe87a160f514ac"
     },
-    "ideaId": "IDX-0022",
+    "ideaId": "ID-0022",
     "title": "Idea implementation for Challenge 22",
     "description": "I propose we implement a microservices architecture for idea 22.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "cb69eebcca9d24392988b96e"
+      "$oid": "2460e08c86ec5c09e688ff1d"
     },
-    "appreciationCount": 74,
-    "viewCount": 212,
+    "appreciationCount": 14,
+    "viewCount": 281,
     "userId": {
-      "$oid": "2009c8d2b0d82b1d2d137780"
+      "$oid": "dae61077eacf5dffb98929f3"
     },
     "subscription": [
       {
-        "$oid": "d806ea9dd7fabd9eaf091d0a"
+        "$oid": "03ccfe7ba2a83b7eca263679"
       },
       {
-        "$oid": "845111af34e325eda0ade474"
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "dae61077eacf5dffb98929f3"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T20:14:22.394Z"
+      "$date": "2026-02-20T22:46:25.442Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "45f703f5a65dd5b186d862c2"
+      "$oid": "e8fa8890364b1d65146b47ee"
     },
-    "ideaId": "IDX-0023",
+    "ideaId": "ID-0023",
     "title": "Idea implementation for Challenge 23",
     "description": "I propose we implement a microservices architecture for idea 23.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "b1bc3965bf5630d3b0778abe"
+      "$oid": "fc8ba864571d20d246fb153b"
     },
-    "appreciationCount": 4,
-    "viewCount": 150,
+    "appreciationCount": 122,
+    "viewCount": 44,
     "userId": {
-      "$oid": "5322a8584a4eafc3dc1f05ef"
+      "$oid": "9cb2bba2c311c8d894a30f0f"
     },
     "subscription": [
       {
-        "$oid": "bfbc0a9d8a3a9a462bbab2bb"
+        "$oid": "8dd9e42484a1fce5fb487638"
       },
       {
-        "$oid": "9c7188bf892f43f952907c1d"
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T19:09:29.954Z"
+      "$date": "2026-02-21T13:23:03.735Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "55eb6647ffe8a869103c517d"
+      "$oid": "9e0ca96dcb06cd8a634665fd"
     },
-    "ideaId": "IDX-0024",
+    "ideaId": "ID-0024",
     "title": "Idea implementation for Challenge 24",
     "description": "I propose we implement a microservices architecture for idea 24.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "6cb1929056657d73610e1e12"
+      "$oid": "8616a0d98b82c6295bc9ceb6"
     },
-    "appreciationCount": 73,
-    "viewCount": 426,
+    "appreciationCount": 105,
+    "viewCount": 483,
     "userId": {
-      "$oid": "d8f585be6a6172a3277660de"
+      "$oid": "1b707c147202a68b759cd58d"
     },
     "subscription": [
       {
-        "$oid": "c30f649670decc9ab216ee18"
+        "$oid": "8dd9e42484a1fce5fb487638"
       },
       {
-        "$oid": "5e7076ac2e4a3ca36c5651f8"
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T13:52:44.097Z"
+      "$date": "2026-02-21T09:22:46.778Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "1b707c147202a68b759cd58d"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "16141b3c52ddf02d2c4f05ea"
+      "$oid": "8c3876f2acbaba1cc67c52ee"
     },
-    "ideaId": "IDX-0025",
+    "ideaId": "ID-0025",
     "title": "Idea implementation for Challenge 25",
     "description": "I propose we implement a microservices architecture for idea 25.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "cafac985dd527d8351fbd426"
+      "$oid": "ef2286a7422b760553e11ac6"
     },
     "appreciationCount": 99,
-    "viewCount": 310,
+    "viewCount": 116,
     "userId": {
-      "$oid": "e48c362119a61d41d6a3c39f"
+      "$oid": "6dbfb3010ec8c034cca681a8"
     },
-    "subscription": [
-      {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
-      },
-      {
-        "$oid": "d806ea9dd7fabd9eaf091d0a"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-21T10:32:39.238Z"
+      "$date": "2026-02-20T18:57:27.349Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "439cdb3fc677d002898e62e9"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "cfc2f3518c572e10c3d24f19"
+      "$oid": "9b77d87c29bd8a31cbc87b66"
     },
-    "ideaId": "IDX-0026",
+    "ideaId": "ID-0026",
     "title": "Idea implementation for Challenge 26",
     "description": "I propose we implement a microservices architecture for idea 26.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "b3ac0d6c996d90239875641a"
+      "$oid": "0ca5ea4ec96ab227f7344713"
     },
-    "appreciationCount": 47,
-    "viewCount": 117,
+    "appreciationCount": 143,
+    "viewCount": 472,
     "userId": {
-      "$oid": "58d9b64ef61d293551c88ea5"
+      "$oid": "3b5b278fe53500f702e5c60b"
     },
     "subscription": [
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
+        "$oid": "dd982d28e012d4704c572bd3"
       },
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T03:51:28.506Z"
+      "$date": "2026-02-20T13:12:15.478Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      },
+      {
+        "$oid": "03ccfe7ba2a83b7eca263679"
+      },
+      {
+        "$oid": "03ccfe7ba2a83b7eca263679"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "16fd5d1f7f3ead314fdbb75d"
+      "$oid": "e30dcc6acfc6cfb60c472817"
     },
-    "ideaId": "IDX-0027",
+    "ideaId": "ID-0027",
     "title": "Idea implementation for Challenge 27",
     "description": "I propose we implement a microservices architecture for idea 27.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "59a121076952b40e40ddb5f2"
+      "$oid": "aff1dc453ca4c03506514a9a"
     },
-    "appreciationCount": 96,
-    "viewCount": 470,
+    "appreciationCount": 26,
+    "viewCount": 185,
     "userId": {
-      "$oid": "d806ea9dd7fabd9eaf091d0a"
+      "$oid": "6dbfb3010ec8c034cca681a8"
     },
     "subscription": [
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
-      },
-      {
-        "$oid": "f3579f105d27fe9f116c9fc5"
+        "$oid": "3b5b278fe53500f702e5c60b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T00:26:14.607Z"
+      "$date": "2026-02-20T19:57:24.337Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "7be984f295f903cb0aed7658"
+      "$oid": "0a0df1defe95d46d5fb2b9a8"
     },
-    "ideaId": "IDX-0028",
+    "ideaId": "ID-0028",
     "title": "Idea implementation for Challenge 28",
     "description": "I propose we implement a microservices architecture for idea 28.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "f0b53fbbe7e84bdcbdb9d33c"
+      "$oid": "9a622ff0d1fded3630464f22"
     },
-    "appreciationCount": 111,
-    "viewCount": 28,
+    "appreciationCount": 60,
+    "viewCount": 379,
     "userId": {
-      "$oid": "07f606676393dd57903b29c2"
+      "$oid": "c5c3cfc0903ba2d661e41e5d"
     },
-    "subscription": [
-      {
-        "$oid": "faf37104ced5da88a2906023"
-      },
-      {
-        "$oid": "c30f649670decc9ab216ee18"
-      }
-    ],
+    "subscription": [],
     "createdAt": {
-      "$date": "2026-02-20T12:31:47.398Z"
+      "$date": "2026-02-21T12:15:24.902Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "03ccfe7ba2a83b7eca263679"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "9d42dae4bde81309b57f520c"
+      "$oid": "10136a3211d77cb3ff06b6bd"
     },
-    "ideaId": "IDX-0029",
+    "ideaId": "ID-0029",
     "title": "Idea implementation for Challenge 29",
     "description": "I propose we implement a microservices architecture for idea 29.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "f279d9d46a795aa02f955636"
+      "$oid": "53e493a2c367bf0edf7a08e2"
     },
-    "appreciationCount": 43,
-    "viewCount": 326,
+    "appreciationCount": 58,
+    "viewCount": 81,
     "userId": {
-      "$oid": "9c7188bf892f43f952907c1d"
+      "$oid": "195be17693e221f7f3db7bff"
     },
     "subscription": [
       {
-        "$oid": "5e7076ac2e4a3ca36c5651f8"
+        "$oid": "dd982d28e012d4704c572bd3"
       },
       {
-        "$oid": "631832c2b8af634b1e609984"
+        "$oid": "88a8435cfaaf3bc0a8bfe5c7"
+      },
+      {
+        "$oid": "6dbfb3010ec8c034cca681a8"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T22:37:54.520Z"
+      "$date": "2026-02-20T19:44:26.348Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "f7bb0a7827888e63529587ca"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "2167c63c20140c2ea0ef260a"
+      },
+      {
+        "$oid": "7410e6fbdf8906dd06056e9e"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      },
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "c07f4244051ec662587e6733"
+      "$oid": "76c15823eb2366389067e093"
     },
-    "ideaId": "IDX-0030",
+    "ideaId": "ID-0030",
     "title": "Idea implementation for Challenge 30",
     "description": "I propose we implement a microservices architecture for idea 30.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "cb69eebcca9d24392988b96e"
+      "$oid": "a9c82638c593430b309361c4"
     },
-    "appreciationCount": 96,
-    "viewCount": 94,
+    "appreciationCount": 23,
+    "viewCount": 82,
     "userId": {
-      "$oid": "f3579f105d27fe9f116c9fc5"
+      "$oid": "2167c63c20140c2ea0ef260a"
     },
     "subscription": [
       {
-        "$oid": "d806ea9dd7fabd9eaf091d0a"
-      },
-      {
-        "$oid": "07f606676393dd57903b29c2"
+        "$oid": "8dd9e42484a1fce5fb487638"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T22:08:19.542Z"
+      "$date": "2026-02-20T10:23:15.019Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "f7c3c52501648868ea0408ea"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "6dbfb3010ec8c034cca681a8"
+      },
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "300c32463a999f8e06d19a47"
+      "$oid": "6fcf80d3f69359126b2e3760"
     },
-    "ideaId": "IDX-0031",
+    "ideaId": "ID-0031",
     "title": "Idea implementation for Challenge 31",
     "description": "I propose we implement a microservices architecture for idea 31.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "662f2558db012dba8e4bf780"
+      "$oid": "aff1dc453ca4c03506514a9a"
     },
-    "appreciationCount": 125,
-    "viewCount": 92,
+    "appreciationCount": 22,
+    "viewCount": 175,
     "userId": {
-      "$oid": "faf37104ced5da88a2906023"
+      "$oid": "9cb2bba2c311c8d894a30f0f"
     },
     "subscription": [
       {
-        "$oid": "faf37104ced5da88a2906023"
-      },
-      {
-        "$oid": "db7cd09112e376f9b9e4672e"
+        "$oid": "7410e6fbdf8906dd06056e9e"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T23:36:55.904Z"
+      "$date": "2026-02-20T16:32:54.346Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "9cb2bba2c311c8d894a30f0f"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "3b5b278fe53500f702e5c60b"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "4afcb94b5980a0227131a801"
+      "$oid": "d220ebc9b371ab501e25161e"
     },
-    "ideaId": "IDX-0032",
+    "ideaId": "ID-0032",
     "title": "Idea implementation for Challenge 32",
     "description": "I propose we implement a microservices architecture for idea 32.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "59a121076952b40e40ddb5f2"
+      "$oid": "ef2286a7422b760553e11ac6"
     },
-    "appreciationCount": 111,
-    "viewCount": 443,
+    "appreciationCount": 42,
+    "viewCount": 400,
     "userId": {
-      "$oid": "c8a66499896a7a6595b387c6"
+      "$oid": "0a904c53d7efbb868225a2b9"
     },
     "subscription": [
       {
-        "$oid": "5322a8584a4eafc3dc1f05ef"
+        "$oid": "ccf33468e120def030df5657"
       },
       {
-        "$oid": "f3579f105d27fe9f116c9fc5"
+        "$oid": "3b5b278fe53500f702e5c60b"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T19:56:33.821Z"
+      "$date": "2026-02-21T08:38:11.801Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "5bd0fb004c2dac709699ffb9"
+      "$oid": "c5e2262ac01c592f87e581e9"
     },
-    "ideaId": "IDX-0033",
+    "ideaId": "ID-0033",
     "title": "Idea implementation for Challenge 33",
     "description": "I propose we implement a microservices architecture for idea 33.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "b3ac0d6c996d90239875641a"
+      "$oid": "55b308d4f75ac095374d46c8"
     },
-    "appreciationCount": 96,
-    "viewCount": 150,
+    "appreciationCount": 27,
+    "viewCount": 351,
     "userId": {
-      "$oid": "a15ba58c95f6b1625f4d9f2a"
+      "$oid": "03ccfe7ba2a83b7eca263679"
     },
     "subscription": [
       {
-        "$oid": "2009c8d2b0d82b1d2d137780"
+        "$oid": "0a904c53d7efbb868225a2b9"
       },
       {
-        "$oid": "2009c8d2b0d82b1d2d137780"
+        "$oid": "dd982d28e012d4704c572bd3"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      },
+      {
+        "$oid": "03ccfe7ba2a83b7eca263679"
+      },
+      {
+        "$oid": "acadfa4ea62f87f8e95c9d0c"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T12:17:49.340Z"
+      "$date": "2026-02-21T02:38:20.941Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "00d1453e5299f601c71ff78c"
+      },
+      {
+        "$oid": "195be17693e221f7f3db7bff"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "c68fd1b577ca97c9371ad52b"
+      "$oid": "92d6e82ef8de5a7bd1260518"
     },
-    "ideaId": "IDX-0034",
+    "ideaId": "ID-0034",
     "title": "Idea implementation for Challenge 34",
     "description": "I propose we implement a microservices architecture for idea 34.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "d8bdc8da834baa2bcb2fb902"
+      "$oid": "aa9db019c8504c4f5169b44c"
     },
-    "appreciationCount": 24,
-    "viewCount": 59,
+    "appreciationCount": 126,
+    "viewCount": 365,
     "userId": {
-      "$oid": "db7cd09112e376f9b9e4672e"
+      "$oid": "0a904c53d7efbb868225a2b9"
     },
     "subscription": [
       {
-        "$oid": "0ff2f3f0eb0149209ea0926e"
+        "$oid": "0a904c53d7efbb868225a2b9"
       },
       {
-        "$oid": "e48c362119a61d41d6a3c39f"
+        "$oid": "1b707c147202a68b759cd58d"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-21T00:13:02.110Z"
+      "$date": "2026-02-21T11:53:22.875Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "150c4ce3ce6b3ee7a983cc0b"
+      },
+      {
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
+      },
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "0a904c53d7efbb868225a2b9"
+      },
+      {
+        "$oid": "dc5d66d8d8b89b45b82e8df2"
+      }
+    ]
   },
   {
     "_id": {
-      "$oid": "a290acc2cc0fd53588d34445"
+      "$oid": "31e110ae3d3305279df02842"
     },
-    "ideaId": "IDX-0035",
+    "ideaId": "ID-0035",
     "title": "Idea implementation for Challenge 35",
     "description": "I propose we implement a microservices architecture for idea 35.",
     "proposedSolution": "Use Docker and Kubernetes for implementation.",
     "expectedImpact": "High scalability and reduced downtime.",
     "challengeId": {
-      "$oid": "67d0acf74371e2f756af6ccd"
+      "$oid": "4bcc4d295bc204e54775e1cf"
     },
-    "appreciationCount": 44,
-    "viewCount": 282,
+    "appreciationCount": 102,
+    "viewCount": 30,
     "userId": {
-      "$oid": "631832c2b8af634b1e609984"
+      "$oid": "f7c3c52501648868ea0408ea"
     },
     "subscription": [
       {
-        "$oid": "c24dc287358bd2f9abb0e7d2"
+        "$oid": "dae61077eacf5dffb98929f3"
       },
       {
-        "$oid": "e48c362119a61d41d6a3c39f"
+        "$oid": "c5c3cfc0903ba2d661e41e5d"
       }
     ],
     "createdAt": {
-      "$date": "2026-02-20T11:04:53.713Z"
+      "$date": "2026-02-21T07:06:49.988Z"
     },
     "month": 2,
     "year": 2026,
     "updatedAt": {
-      "$date": "2026-02-21T12:26:03.600Z"
+      "$date": "2026-02-21T14:03:53.980Z"
     },
-    "status": true
+    "status": true,
+    "upVotes": [
+      {
+        "$oid": "ccf33468e120def030df5657"
+      },
+      {
+        "$oid": "efff247c2f53da2d9683867e"
+      },
+      {
+        "$oid": "8dd9e42484a1fce5fb487638"
+      }
+    ]
   }
 ]

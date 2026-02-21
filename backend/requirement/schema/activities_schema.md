@@ -13,7 +13,6 @@ const activitySchema = new Schema(
         'challenge_edited',
         'idea_edited',
         'challenge_upvoted',
-        'challenge_downvoted',
         'idea_upvoted',
         'challenge_commented',
         'idea_commented',

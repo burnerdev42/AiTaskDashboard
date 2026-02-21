@@ -71,19 +71,7 @@ const challengeSchema = new Schema(
     year: {
       type: Number,
     },
-    contributors: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
     upVotes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-    downVotes: [
       {
         type: Schema.Types.ObjectId,
         ref: 'User',

@@ -20,7 +20,6 @@ This specification is designed to be fed to an LLM for generating a MongoDB (Mon
 - `Status`: String (Enum: `PENDING`, `APPROVED`, `BLOCKED`, `INACTIVE`)
 - `Innovation Score`: Number (Integer between 1 and 999)
 - `Upvoted Challenge List`: List of Strings or ObjectIds (References to Challenge IDs). Default: `[]`
-- `Downvoted Challenge List`: List of Strings or ObjectIds (References to Challenge IDs). Default: `[]`
 - `Upvoted/Appreciated Idea List`: List of Strings or ObjectIds (References to Idea IDs). Default: `[]`
 
 ## Generating the Schema

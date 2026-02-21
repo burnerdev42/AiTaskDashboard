@@ -27,9 +27,7 @@ This specification is designed to be fed to an LLM for generating a MongoDB (Mon
 - `month`: Number (Integer)
 - `year`: Number (Integer)
 - `updatedAt`: DateTime (Initially same as `CreatedAt`, should map to `updatedAt` timestamp)
-- `contributors`: List of MongoDB ObjectIds (References to User collection). Default: `[]`
 - `UpVotes`: List of MongoDB ObjectIds (userId list). Default: `[]`
-- `DownVotes`: List of MongoDB ObjectIds (userId list). Default: `[]`
 - `Subcriptions`: List of MongoDB ObjectIds (userId list). Default: `[]`
 - `View count`: Number (Long/Integer)
 - `timestamp of status changed to pilot (z1)`: DateTime

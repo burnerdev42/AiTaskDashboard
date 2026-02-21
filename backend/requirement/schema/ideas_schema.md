@@ -7,7 +7,7 @@ const ideaSchema = new Schema(
     ideaId: {
       type: String,
       required: true,
-      unique: true, // Format: IDX-0001
+      unique: true, // Format: ID-0001
     },
     title: {
       type: String,
@@ -58,6 +58,12 @@ const ideaSchema = new Schema(
       type: Boolean,
       default: true, // Representing Accepted/Declined (true = Accepted)
     },
+    upVotes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     timestamps: true, // Automatically manages createdAt and updatedAt

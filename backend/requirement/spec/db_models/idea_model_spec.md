@@ -8,7 +8,7 @@ This specification is designed to be fed to an LLM for generating a MongoDB (Mon
 ## Database Fields
 
 - `_id`: MongoDB ObjectId (Hex String PK). Use the default Mongoose `_id`.
-- `Idea Id`: String. Format: `IDX-0001` (Programmatic 0001-9999)
+- `Idea Id`: String. Format: `ID-0001` (Programmatic 0001-9999)
 - `Title`: String
 - `Description/Idea Summary`: String
 - `Proposed Solution`: String
@@ -23,6 +23,7 @@ This specification is designed to be fed to an LLM for generating a MongoDB (Mon
 - `Year`: Number (Integer, extracted from Created At time)
 - `Updated At`: DateTime (Initially same as Created At, map to Mongoose's `updatedAt` timestamp)
 - `Status`: Boolean (Represents Accepted/Declined). Default: `true` (Accepted)
+- `UpVotes`: List of MongoDB ObjectIds (userId list). Default: `[]`
 
 ## Generating the Schema
 Please generate a Mongoose schema based on the spec above. Convert field names to standard camelCase. Ensure proper relationships (`Schema.Types.ObjectId` with `ref`) if suitable. Use the `timestamps: true` configuration for generating timestamps.

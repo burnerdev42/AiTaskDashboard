@@ -54,12 +54,6 @@ const userSchema = new Schema(
         ref: 'Challenge',
       },
     ],
-    downvotedChallengeList: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Challenge',
-      },
-    ],
     upvotedAppreciatedIdeaList: [
       {
         type: Schema.Types.ObjectId,

@@ -25,9 +25,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `month`: Number (Int)
 - `year`: Number (Int)
 - `updatedAt`: DateTime (Initially same as `CreatedAt`)
-- `contributors`: List of strings (MongoDB hex IDs, Default: `[]`)
 - `UpVotes`: userId list (Default: `[]`)
-- `DownVotes`: userId list (Default: `[]`)
 - `Subcriptions`: userId list (Default: `[]`)
 - `View count`: Number (Long)
 - `timestamp of status changed to pilot (z1)`: DateTime
@@ -40,6 +38,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `comment count`: From Comment collection
 - `Idea list`: From Idea collection by challenge ID
 - `comments`: From Comment collection
+- `contributors`: owner details of all ideas under challenge - default []
 
 ### Additional Functional Requirements
 - An API endpoint is required to change challenge status **only** for SWIM LANES.
@@ -55,9 +54,9 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
-- `Idea Id`: String (Format: IDX-0001, programmatic 0001-9999)
+- `Idea Id`: String (Format: ID-0001, programmatic 0001-9999)
 - `Title`: String
-- `Description/Idea Summary`: String
+- `Description / Idea Summary`: String
 - `Proposed Solution`: String
 - `Expected Impact`: String
 - `Challenge Id`: String (Link to Challenge collection)
@@ -70,6 +69,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `Year`: Number (Int, from `Created At`)
 - `Updated At`: DateTime (Initially same as `Created At`)
 - `Status`: Boolean (Accepted/Declined - Default: `true`/Accepted)
+- `UpVotes`: userId list (Default: `[]`)
 
 ### Derived Fields
 - `Challenge Details`: Object (Fetched from Challenge DB by Challenge Id)
@@ -89,7 +89,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `_id`: MongoDB ObjectId (Hex String PK)
 - `UserId`: Mongo hex ID
 - `Comment`: Text
-- `Type`: Challenges (CH) | Ideas (IDX) - Any one from the option (String)
+- `Type`: Challenges (CH) | Ideas (ID) - Any one from the option (String)
 - `Createdat`: DateTime
 - `TypeId`: Either challenge or idea ID (String)
 
@@ -114,7 +114,6 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `Status`: String (PENDING | APPROVED | BLOCKED | INACTIVE)
 - `Innovation Score`: Number (Int, 1-999)
 - `Upvoted Challenge List`: List of Strings (Challenge IDs, Default: `[]`)
-- `Downvoted Challenge List`: List of Strings (Challenge IDs, Default: `[]`)
 - `Upvoted/Appreciated Idea List`: List of Strings (Idea IDs, Default: `[]`)
 
 ### Derived Fields
@@ -132,7 +131,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
-- `Type`: String (ENUM: `challenge_created`, `idea_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `challenge_downvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`, `log_in`, `log_out`)
+- `Type`: String (ENUM: `challenge_created`, `idea_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`, `log_in`, `log_out`)
 - `fk_id`: String (Nullable: ID of related Challenge, Idea, or Comment; null for login/logout)
 - `userId`: String (User hex ID)
 - `CreatedAt`: DateTime
@@ -150,7 +149,7 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 
 ### Database Fields
 - `_id`: MongoDB ObjectId (Hex String PK)
-- `Type`: String (ENUM: `challenge_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `challenge_downvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`)
+- `Type`: String (ENUM: `challenge_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`)
 - `fk_id`: String (Nullable: ID of the linked Challenge, Idea, or Comment)
 - `userId`: String (The recipient's Mongo hex ID - Not the initiator)
 - `CreatedAt`: DateTime
@@ -161,12 +160,19 @@ This document outlines the data requirements for the AI Task Dashboard, covering
 - `Linked Entity Details`: Object (Details of the Challenge/Idea fetched via `fk_id`)
 - `Recipient Details`: Object (User details fetched via `userId`)
 
-### Recipient Logic (Backend Implementation Guide)
+### Notification Recipient Logic For Subscribers (Backend Implementation Guide)
 - `challenge_created`: All users (Except initiator)
 - `challenge_status_update` / `edited`: All challenge subscribers (Except initiator)
 - `idea_edited`: All idea subscribers + Challenge owner + Challenge subscribers (Except initiator)
-- `challenge_upvoted` / `downvoted` / `commented` / `subscribed` / `deleted`: All challenge subscribers + Challenge owner (Except initiator)
+- `challenge_upvoted` / `commented` / `subscribed` / `deleted`: All challenge subscribers + Challenge owner (Except initiator)
 - `idea_upvoted` / `commented` / `subscribed` / `deleted`: All idea subscribers + Challenge owner + Challenge subscribers (Except initiator)
+
+### Additional Functional Requirement
+- Creator of challenge automatically becomes subscriber
+- Any user giving idea already becomes subscriber of challenge
+- Any user upvoting or commenting on challenge automatically subscribers to that challenge
+- Creator of idea subscribes to that idea and also to parent challenge
+- Any user upvoting or commenting on idea automatically subscribers to that idea and parent challenge
 
 ---
 
