@@ -1,8 +1,33 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { challengeDetails } from '../data/challengeData';
 import type { ChallengeDetailData } from '../types';
+import { storage } from '../services/storage';
+import { ConfirmationModal } from '../components/ui/ConfirmationModal';
+
+const STAGE_BRANDING: Record<string, { color: string, bg: string, icon: React.ReactNode }> = {
+    'Challenge Submitted': {
+        color: 'var(--accent-red)', bg: 'rgba(239,83,80,.15)',
+        icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg>
+    },
+    'Ideation & Evaluation': {
+        color: 'var(--accent-yellow)', bg: 'rgba(255,238,88,.12)',
+        icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+    },
+    'POC & Pilot': {
+        color: 'var(--accent-blue)', bg: 'rgba(240,184,112,.15)',
+        icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+    },
+    'Scaled & Deployed': {
+        color: 'var(--accent-gold)', bg: 'rgba(255,213,79,.12)',
+        icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
+    },
+    'Parking Lot': {
+        color: 'var(--accent-grey)', bg: 'rgba(120,144,156,.15)',
+        icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="10" y1="15" x2="10" y2="9" /><line x1="14" y1="15" x2="14" y2="9" /></svg>
+    }
+};
 
 export const ChallengeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -19,15 +44,27 @@ export const ChallengeDetail: React.FC = () => {
     const [editOutcome, setEditOutcome] = useState('');
     const [comment, setComment] = useState('');
 
+    // Idea Modal States
+    const [ideaTitle, setIdeaTitle] = useState('');
+    const [ideaDescription, setIdeaDescription] = useState('');
+    const [ideaDetail, setIdeaDetail] = useState('');
+    const [ideaErrors, setIdeaErrors] = useState<{ title?: string; description?: string; detail?: string }>({});
+
+    // Quick Action States
+    const [hasVoted, setHasVoted] = useState(false);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
     useEffect(() => {
-        // Find by id or default to first
-        const found = challengeDetails.find(c => c.id === id) || challengeDetails[0];
+        const details = storage.getChallengeDetails();
+        const found = details.find(c => c.id === id) || details[0];
         setChallenge(found);
-        setEditTitle(found.title);
-        setEditSubtitle(found.description);
-        setEditProblem(found.problemStatement);
-        setEditOutcome(found.expectedOutcome);
-        // Auto-enable edit mode if ?edit=true
+        if (found) {
+            setEditTitle(found.title);
+            setEditSubtitle(found.description);
+            setEditProblem(found.problemStatement);
+            setEditOutcome(found.expectedOutcome);
+        }
         if (searchParams.get('edit') === 'true') {
             setEditMode(true);
         }
@@ -57,7 +94,106 @@ export const ChallengeDetail: React.FC = () => {
         setEditMode(false);
     };
 
-    const getStatusClass = (status: string) => status.toLowerCase().replace(/\s+/g, '-');
+    const handleVote = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+        setChallenge(prev => prev ? {
+            ...prev,
+            stats: { ...prev.stats, appreciations: prev.stats.appreciations + (hasVoted ? -1 : 1) }
+        } : prev);
+        setHasVoted(!hasVoted);
+    };
+
+    const handleSubscribe = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+        setIsSubscribed(!isSubscribed);
+    };
+
+    const handleDelete = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = () => {
+        if (challenge) {
+            storage.deleteChallenge(challenge.id);
+            navigate('/challenges');
+        }
+    };
+
+    const resetIdeaForm = () => {
+        setIdeaTitle('');
+        setIdeaDescription('');
+        setIdeaDetail('');
+        setIdeaErrors({});
+    };
+
+    const handleIdeaSubmit = () => {
+        const errors: { title?: string; description?: string; detail?: string } = {};
+        if (!ideaTitle.trim()) errors.title = 'Title is required';
+        if (!ideaDescription.trim()) errors.description = 'Proposed solution is required';
+        if (!ideaDetail.trim()) errors.detail = 'Idea detail is required';
+
+        if (Object.keys(errors).length > 0) {
+            setIdeaErrors(errors);
+            return;
+        }
+
+        // In a real app, post API call goes here
+        console.log('Submitting idea:', {
+            title: ideaTitle,
+            description: ideaDescription,
+            detail: ideaDetail
+        });
+
+        setShowIdeaModal(false);
+        resetIdeaForm();
+    };
+    const handlePostComment = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+        if (!comment.trim()) return;
+
+        const newComment = {
+            author: 'Current User', // In a real app, this would be the logged-in user
+            avatar: 'CU',
+            avatarColor: 'var(--accent-purple)',
+            text: comment.trim(),
+            time: 'Just now'
+        };
+
+        setChallenge(prev => prev ? {
+            ...prev,
+            stats: { ...prev.stats, comments: prev.stats.comments + 1 },
+            activity: [newComment, ...prev.activity]
+        } : prev);
+
+        setComment('');
+    };
+
+    // Calculate top contributors for the sidebar
+    const contributorsMap: Record<string, { totalAppreciations: number, initial: string, color: string }> = {};
+    challenge.ideas.forEach(idea => {
+        if (!contributorsMap[idea.author]) {
+            const parts = idea.author.split(' ');
+            const initial = parts.length > 1 ? `${parts[0].charAt(0)}${parts[1].charAt(0)}` : idea.author.substring(0, 2).toUpperCase();
+            const colors = ['var(--accent-teal)', 'var(--accent-blue)', 'var(--accent-green)', 'var(--accent-purple)', 'var(--accent-orange)'];
+            const color = colors[idea.author.charCodeAt(0) % colors.length];
+            contributorsMap[idea.author] = { totalAppreciations: 0, initial, color };
+        }
+        contributorsMap[idea.author].totalAppreciations += idea.appreciations;
+    });
+
+    const topContributors = Object.entries(contributorsMap)
+        .map(([name, data]) => ({ name, ...data }))
+        .sort((a, b) => b.totalAppreciations - a.totalAppreciations)
+        .slice(0, 5);
 
     return (
         <div className="detail-page-container">
@@ -76,7 +212,9 @@ export const ChallengeDetail: React.FC = () => {
                 <div className="detail-page-header-top">
                     <div className="detail-page-header-left">
                         <div className="detail-challenge-id">
-                            <span className="priority-dot"></span>
+                            <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', color: challenge.accentColor ? `var(--accent-${challenge.accentColor})` : 'var(--accent-teal)' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
+                            </span>
                             <span>{challenge.id}</span>
                         </div>
                         {editMode ? (
@@ -91,33 +229,46 @@ export const ChallengeDetail: React.FC = () => {
                             </>
                         )}
                     </div>
-                    <div className="detail-page-header-right">
-                        {editMode ? (
-                            <>
-                                <button className="btn btn-primary" onClick={toggleEdit}>💾 Save</button>
-                                <button className="btn btn-secondary" onClick={cancelEdit}>✖️ Cancel</button>
-                            </>
-                        ) : (
-                            <button className="btn btn-secondary" onClick={toggleEdit}>✏️ Edit</button>
-                        )}
-                    </div>
+                    {isAuthenticated && challenge.owner.name === 'Current User' && (
+                        <div className="detail-page-header-right">
+                            {editMode ? (
+                                <>
+                                    <button className="btn btn-primary" onClick={toggleEdit}>Save</button>
+                                    <button className="btn btn-secondary" onClick={cancelEdit}>Cancel</button>
+                                </>
+                            ) : (
+                                <button className="btn btn-secondary" onClick={toggleEdit}>Edit</button>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <div className="detail-meta-row">
-                    <div className="detail-meta-item">
-                        <span className="icon">👤</span>
-                        <span>Owner: <strong>{challenge.owner.name}</strong></span>
+                    <div className="detail-meta-item" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }} title="View Profile">
+                        <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></span>
+                        <span>Author: <strong style={{ color: 'var(--accent-blue)' }}>{challenge.owner.name}</strong></span>
                     </div>
                     <div className="detail-meta-item">
-                        <span className="icon">📅</span>
+                        <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></span>
                         <span>Created: <strong>{challenge.createdDate}</strong></span>
                     </div>
                     <div className="detail-meta-item">
-                        <span className="icon">🔄</span>
+                        <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" /></svg></span>
                         <span>Updated: <strong>{challenge.updatedDate}</strong></span>
                     </div>
                     <div className="detail-meta-item">
-                        <span className="icon">🏷️</span>
-                        <span className={`status-badge ${getStatusClass('Challenge Submitted')}`}>⚫ Challenge Submitted</span>
+                        {(() => {
+                            const brand = STAGE_BRANDING[challenge.stage] || STAGE_BRANDING['Challenge Submitted'];
+                            return (
+                                <>
+                                    <span className="icon" style={{ color: brand.color }}>
+                                        {brand.icon}
+                                    </span>
+                                    <span className="status-badge" style={{ background: brand.bg, color: brand.color }}>
+                                        {challenge.stage}
+                                    </span>
+                                </>
+                            );
+                        })()}
                     </div>
                 </div>
             </div>
@@ -131,7 +282,7 @@ export const ChallengeDetail: React.FC = () => {
                     <div className="detail-content-section">
                         <div className="detail-section-header">
                             <div className="detail-section-title">
-                                <span className="icon">❗</span>
+                                <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg></span>
                                 <span>Problem Statement</span>
                             </div>
                         </div>
@@ -146,7 +297,7 @@ export const ChallengeDetail: React.FC = () => {
                     <div className="detail-content-section">
                         <div className="detail-section-header">
                             <div className="detail-section-title">
-                                <span className="icon">🎯</span>
+                                <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></svg></span>
                                 <span>Expected Outcome</span>
                             </div>
                         </div>
@@ -158,41 +309,88 @@ export const ChallengeDetail: React.FC = () => {
                     </div>
 
                     {/* Additional Details */}
-                    <div className="detail-content-section">
-                        <div className="detail-section-header">
-                            <div className="detail-section-title">
-                                <span className="icon">📋</span>
-                                <span>Additional Details</span>
+                    <div className="sc-form-section" style={{ marginBottom: '24px' }}>
+                        <h2 className="sc-section-title">
+                            <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg></span>
+                            Additional Details
+                        </h2>
+                        <div className="sc-section-divider"></div>
+
+                        <div className="sc-form-grid" style={{ marginTop: '16px' }}>
+                            {/* OpCo & Platform */}
+                            <div className="sc-form-group">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>OpCo</label>
+                                <div style={{ fontWeight: 500 }}>{challenge.businessUnit || 'Albert Heijn'}</div>
+                            </div>
+                            <div className="sc-form-group">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Platform</label>
+                                <div style={{ fontWeight: 500 }}>{challenge.department || 'STP'}</div>
+                            </div>
+
+                            {/* Impact & Priority */}
+                            <div className="sc-form-group">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Business Impact Level</label>
+                                <div style={{ fontWeight: 500 }}>
+                                    {editMode ? (
+                                        <select className="sc-form-select" value={challenge.priority}>
+                                            <option value="Critical">Critical</option>
+                                            <option value="High">High</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="Low">Low</option>
+                                        </select>
+                                    ) : (
+                                        <span className={`status-badge ${(challenge.priority as string) === 'High' || (challenge.priority as string) === 'Critical' ? 'high' : challenge.priority === 'Medium' ? 'medium' : 'low'}`} style={{ display: 'inline-block', marginTop: '4px' }}>
+                                            {challenge.priority}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="sc-form-group">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Expected Timeline</label>
+                                <div style={{ fontWeight: 500 }}>{challenge.timeline || 'Not specified'}</div>
+                            </div>
+
+                            {/* Portfolio Option */}
+                            <div className="sc-form-group" style={{ gridColumn: '1 / -1' }}>
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Portfolio Option</label>
+                                <div style={{ fontWeight: 500 }}>{challenge.portfolioOption || 'Not specified'}</div>
                             </div>
                         </div>
-                        <div className="detail-form-grid">
-                            <div className="detail-form-group">
-                                <label className="detail-form-label">Business Unit</label>
-                                <input type="text" className="detail-form-input" value={challenge.businessUnit} readOnly={!editMode} />
-                            </div>
-                            <div className="detail-form-group">
-                                <label className="detail-form-label">Department</label>
-                                <input type="text" className="detail-form-input" value={challenge.department} readOnly={!editMode} />
-                            </div>
-                            <div className="detail-form-group">
-                                <label className="detail-form-label">Priority</label>
-                                <select className="detail-form-select" disabled={!editMode} value={challenge.priority}>
-                                    <option value="High">High</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Low">Low</option>
-                                </select>
-                            </div>
-                            <div className="detail-form-group">
-                                <label className="detail-form-label">Estimated Impact</label>
-                                <input type="text" className="detail-form-input" value={challenge.estimatedImpact} readOnly={!editMode} />
-                            </div>
-                            <div className="detail-form-group full-width">
-                                <label className="detail-form-label">Tags</label>
-                                <div className="detail-tags-list">
-                                    {challenge.challengeTags.map(tag => (
-                                        <span key={tag} className="detail-tag">{tag}</span>
-                                    ))}
+                    </div>
+
+                    {/* Additional Context */}
+                    <div className="sc-form-section" style={{ marginBottom: '24px' }}>
+                        <h2 className="sc-section-title">
+                            <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><rect x="8" y="2" width="8" height="4" rx="1" ry="1" /></svg></span>
+                            Additional Context
+                        </h2>
+                        <div className="sc-section-divider"></div>
+
+                        <div className="sc-form-grid" style={{ marginTop: '16px' }}>
+                            {/* Tags */}
+                            <div className="sc-form-group sc-full-width">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Tags</label>
+                                <div className="detail-tags-list" style={{ marginTop: '8px' }}>
+                                    {challenge.challengeTags && challenge.challengeTags.length > 0 ? (
+                                        challenge.challengeTags.map(tag => (
+                                            <span key={tag} className="detail-tag">{tag}</span>
+                                        ))
+                                    ) : (
+                                        <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>No tags specified</span>
+                                    )}
                                 </div>
+                            </div>
+
+                            {/* Workarounds or Constraints */}
+                            <div className="sc-form-group sc-full-width">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Current Workarounds or Constraints</label>
+                                <div style={{ marginTop: '8px', lineHeight: '1.6' }}>{challenge.constraints || 'None specified'}</div>
+                            </div>
+
+                            {/* Stakeholders */}
+                            <div className="sc-form-group sc-full-width">
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Stakeholders or Teams Involved</label>
+                                <div style={{ marginTop: '8px', fontWeight: 500 }}>{challenge.stakeholders || 'None specified'}</div>
                             </div>
                         </div>
                     </div>
@@ -201,18 +399,18 @@ export const ChallengeDetail: React.FC = () => {
                     <div className="detail-content-section">
                         <div className="detail-section-header">
                             <div className="detail-section-title">
-                                <span className="icon">💬</span>
-                                <span>Activity & Comments</span>
+                                <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg></span>
+                                <span>Comments</span>
                             </div>
                         </div>
 
                         <div className="detail-activity-feed">
                             {challenge.activity.map((act, i) => (
                                 <div key={i} className="detail-activity-item">
-                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor }}>{act.avatar}</div>
+                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
                                     <div className="detail-activity-content">
                                         <div className="detail-activity-header">
-                                            <span className="detail-activity-author">{act.author}</span>
+                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
                                             <span className="detail-activity-time">{act.time}</span>
                                         </div>
                                         <div className="detail-activity-text">{act.text}</div>
@@ -222,8 +420,30 @@ export const ChallengeDetail: React.FC = () => {
                         </div>
 
                         <div className="detail-comment-box">
-                            <textarea className="detail-comment-input" placeholder="Add a comment..." value={comment} onChange={e => setComment(e.target.value)} />
-                            <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } /* post comment logic */ }}>💬 Post Comment</button>
+                            <textarea
+                                className="detail-comment-input"
+                                placeholder="Add a comment..."
+                                value={comment}
+                                onChange={e => setComment(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handlePostComment();
+                                    }
+                                }}
+                            />
+                            <button
+                                className="btn btn-primary"
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    opacity: !comment.trim() ? 0.5 : 1,
+                                    cursor: !comment.trim() ? 'not-allowed' : 'pointer'
+                                }}
+                                onClick={handlePostComment}
+                                disabled={!comment.trim()}
+                            >
+                                Post Comment
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -232,7 +452,12 @@ export const ChallengeDetail: React.FC = () => {
                 <aside>
                     {/* Engagement Stats */}
                     <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title">📊 Engagement Stats</div>
+                        <div className="detail-sidebar-title" style={{ justifyContent: 'flex-start' }}>
+                            <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-4"></path></svg>
+                            </span>
+                            Engagement Stats
+                        </div>
                         <div className="detail-stat-row">
                             <span className="detail-stat-label">Views</span>
                             <span className="detail-stat-value blue">247</span>
@@ -253,100 +478,262 @@ export const ChallengeDetail: React.FC = () => {
 
                     {/* Related Ideas */}
                     <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title">
-                            <span>💡 Solution Ideas</span>
-                            <button className="add-idea-btn" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>✨ Add Idea</button>
+                        <div className="detail-sidebar-title" style={{ justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 11.5c.76.76 1.23 1.52 1.41 2.5Z"></path></svg>
+                                </span>
+                                <span>Solution Ideas</span>
+                            </div>
+                            <button className="add-idea-btn" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>Add Idea</button>
                         </div>
                         <div className="detail-ideas-list">
-                            {challenge.ideas.map(idea => (
-                                <div key={idea.id} className="detail-idea-item" onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)}>
-                                    <div className="detail-idea-title">{idea.title}</div>
-                                    <div className="detail-idea-meta">
-                                        <span>by {idea.author}</span>
-                                        <span className={`detail-idea-badge ${idea.status.toLowerCase()}`}>{idea.status}</span>
+                            {challenge.ideas.filter(idea => idea.status === 'Accepted').map(idea => (
+                                <a key={idea.id} className="detail-linked-challenge" onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)} style={{ marginBottom: '8px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <div className="challenge-id-text">{idea.id}</div>
+                                        </div>
+                                        <div style={{ fontSize: '11px', color: 'var(--accent-green)', fontWeight: '600', background: 'rgba(76, 175, 80, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
+                                            {idea.appreciations} <span style={{ fontSize: '10px' }}>likes</span>
+                                        </div>
                                     </div>
-                                    <div className="detail-idea-stats">
-                                        <span>👍 {idea.appreciations}</span>
-                                        <span>💬 {idea.comments}</span>
-                                        <span>👁️ {idea.views}</span>
+                                    <div style={{ width: '100%' }}>
+                                        <div className="challenge-title-text" style={{ whiteSpace: 'normal', lineHeight: '1.4' }}>{idea.title}</div>
+                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>by {idea.author}</div>
                                     </div>
-                                </div>
+                                </a>
                             ))}
                         </div>
                     </div>
 
-                    {/* Team Members */}
+                    {/* Top Contributors */}
                     <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title">👥 Team Members</div>
-                        <div className="detail-team-members">
-                            {challenge.team.map(member => (
-                                <div key={member.name} className="detail-team-member">
-                                    <div className="detail-team-member-avatar" style={{ background: member.avatarColor }}>{member.avatar}</div>
-                                    <div>
-                                        <div className="detail-team-member-name">{member.name}</div>
-                                        <div className="detail-team-member-role">{member.role}</div>
-                                    </div>
+                        <div className="detail-sidebar-title" style={{ justifyContent: 'flex-start' }}>
+                            <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </span>
+                            Top Contributors
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: '8px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                {(() => {
+                                    const allContributorNames = Object.keys(contributorsMap);
+                                    const totalContributorsCount = allContributorNames.length;
+                                    const displayCount = 5;
+                                    const extraCount = totalContributorsCount > displayCount ? totalContributorsCount - displayCount : 0;
+
+                                    if (totalContributorsCount === 0) return <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>No contributors yet</div>;
+
+                                    return (
+                                        <>
+                                            {/* Extra count indicator */}
+                                            {extraCount > 0 && (
+                                                <div style={{
+                                                    width: '34px',
+                                                    height: '34px',
+                                                    borderRadius: '50%',
+                                                    background: 'var(--bg-card-light)',
+                                                    border: '2px solid var(--bg-card)',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '10px',
+                                                    fontWeight: '700',
+                                                    color: 'var(--text-muted)',
+                                                    marginLeft: '-10px',
+                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                                                    zIndex: 0,
+                                                    position: 'relative'
+                                                }}>
+                                                    +{extraCount}
+                                                </div>
+                                            )}
+
+                                            {/* Top contributors avatars */}
+                                            {topContributors.slice(0, displayCount).reverse().map((contributor, i) => (
+                                                <div
+                                                    key={contributor.name}
+                                                    onClick={() => navigate('/profile')}
+                                                    style={{
+                                                        width: '36px',
+                                                        height: '36px',
+                                                        borderRadius: '50%',
+                                                        background: contributor.color,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontWeight: '700',
+                                                        fontSize: '13px',
+                                                        color: '#0d0f1a',
+                                                        border: '2px solid var(--bg-card)',
+                                                        boxShadow: '0 3px 10px rgba(0,0,0,0.2)',
+                                                        cursor: 'pointer',
+                                                        marginLeft: i === topContributors.length - 1 ? '0' : '-10px',
+                                                        transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                        zIndex: i + 1,
+                                                        position: 'relative'
+                                                    }}
+                                                    title={`${contributor.name} (${contributor.totalAppreciations} likes)`}
+                                                    onMouseOver={e => {
+                                                        e.currentTarget.style.transform = 'translateY(-5px) scale(1.1)';
+                                                        e.currentTarget.style.zIndex = '50';
+                                                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.4)';
+                                                    }}
+                                                    onMouseOut={e => {
+                                                        e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                                                        e.currentTarget.style.zIndex = (i + 1).toString();
+                                                        e.currentTarget.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+                                                    }}
+                                                >
+                                                    {contributor.initial}
+                                                </div>
+                                            ))}
+                                        </>
+                                    );
+                                })()}
+                            </div>
+                            {Object.keys(contributorsMap).length > 0 && (
+                                <div style={{
+                                    fontSize: '11px',
+                                    color: '#ffffff',
+                                    fontWeight: '700',
+                                    background: 'linear-gradient(135deg, #a855f7, #6366f1)',
+                                    padding: '5px 12px',
+                                    borderRadius: '20px',
+                                    boxShadow: '0 4px 12px rgba(168, 85, 247, 0.4)',
+                                    textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                                    letterSpacing: '0.3px',
+                                    textTransform: 'uppercase'
+                                }}>
+                                    {Object.keys(contributorsMap).length} {Object.keys(contributorsMap).length === 1 ? 'contributor' : 'contributors'}
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
-
-                    {/* Quick Actions */}
+                    {/* Actions */}
                     <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title">⚡ Quick Actions</div>
-                        <div className="detail-quick-actions">
-                            <button className="btn btn-secondary">👍 Vote for This</button>
-                            <button className="btn btn-secondary" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>💡 Submit Idea</button>
-                            <button className="btn btn-secondary">🔔 Subscribe</button>
-                            <button className="btn btn-danger">🗑️ Delete</button>
+                        <div className="detail-sidebar-title" style={{ justifyContent: 'flex-start' }}>
+                            <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            </span>
+                            Quick Actions
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <button
+                                className={`btn btn-secondary ${hasVoted ? 'animate-pop' : ''}`}
+                                onClick={handleVote}
+                                key={`vote-${hasVoted}`}
+                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: hasVoted ? 'var(--accent-blue)' : 'inherit', borderColor: hasVoted ? 'var(--accent-blue)' : 'var(--border)' }}>
+                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                    {hasVoted ? (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                                    ) : (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                                    )}
+                                </span>
+                                {hasVoted ? 'Voted' : 'Vote for This'}
+                            </button>
+                            <button
+                                className={`btn btn-secondary ${isSubscribed ? 'animate-pop' : ''}`}
+                                onClick={handleSubscribe}
+                                key={`sub-${isSubscribed}`}
+                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: isSubscribed ? 'var(--accent-green)' : 'inherit', borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)' }}>
+                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                    {isSubscribed ? (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
+                                    ) : (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                    )}
+                                </span>
+                                {isSubscribed ? 'Subscribed' : 'Subscribe'}
+                            </button>
+                            <button
+                                className="btn btn-danger animate-pop"
+                                onClick={handleDelete}
+                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <span style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></span>
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </aside>
             </div>
 
             {/* Add Idea Modal */}
-            {showIdeaModal && (
-                <div className="detail-modal-overlay" onClick={() => setShowIdeaModal(false)}>
-                    <div className="detail-modal-dialog" onClick={e => e.stopPropagation()}>
-                        <div className="detail-modal-header">
-                            <h2>💡 Submit New Idea</h2>
-                            <button className="detail-modal-close" onClick={() => setShowIdeaModal(false)}>✕</button>
+            {
+                showIdeaModal && createPortal(
+                    <div className="detail-modal-overlay" onClick={() => setShowIdeaModal(false)}>
+                        <div className="detail-modal-dialog" onClick={e => e.stopPropagation()}>
+                            <div className="detail-modal-header">
+                                <h2>Submit New Idea</h2>
+                                <button className="detail-modal-close" onClick={() => setShowIdeaModal(false)}>✕</button>
+                            </div>
+                            <div className="detail-modal-body">
+                                <div className="submit-form-field">
+                                    <label>Idea Title <span className="required">*</span></label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter a descriptive title for your idea..."
+                                        value={ideaTitle}
+                                        onChange={(e) => {
+                                            setIdeaTitle(e.target.value);
+                                            if (ideaErrors.title) setIdeaErrors(prev => ({ ...prev, title: undefined }));
+                                        }}
+                                        style={{ borderColor: ideaErrors.title ? 'var(--accent-red)' : 'var(--border)' }}
+                                    />
+                                    {ideaErrors.title && <span style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{ideaErrors.title}</span>}
+                                    <span className="hint">Keep it concise and descriptive (max 100 characters)</span>
+                                </div>
+                                <div className="submit-form-field">
+                                    <label>Idea Detail <span className="required">*</span></label>
+                                    <textarea
+                                        placeholder="Describe your idea in detail. How would it work? What are the specific components?"
+                                        value={ideaDetail}
+                                        onChange={(e) => {
+                                            setIdeaDetail(e.target.value);
+                                            if (ideaErrors.detail) setIdeaErrors(prev => ({ ...prev, detail: undefined }));
+                                        }}
+                                        style={{ borderColor: ideaErrors.detail ? 'var(--accent-red)' : 'var(--border)' }}
+                                        rows={4}
+                                    />
+                                    {ideaErrors.detail && <span style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{ideaErrors.detail}</span>}
+                                    <span className="hint">Include technical details and specific features</span>
+                                </div>
+                                <div className="submit-form-field">
+                                    <label>Proposed Solution <span className="required">*</span></label>
+                                    <textarea
+                                        placeholder="Describe your proposed solution at a high level. What is the core idea?"
+                                        value={ideaDescription}
+                                        onChange={(e) => {
+                                            setIdeaDescription(e.target.value);
+                                            if (ideaErrors.description) setIdeaErrors(prev => ({ ...prev, description: undefined }));
+                                        }}
+                                        style={{ borderColor: ideaErrors.description ? 'var(--accent-red)' : 'var(--border)' }}
+                                    />
+                                    {ideaErrors.description && <span style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{ideaErrors.description}</span>}
+                                    <span className="hint">Focus on the value proposition and core concept</span>
+                                </div>
+                                <div className="submit-form-actions" style={{ padding: '16px 0 0', borderTop: '1px solid var(--border)' }}>
+                                    <button className="btn btn-secondary" onClick={() => { setShowIdeaModal(false); resetIdeaForm(); }}>Cancel</button>
+                                    <button className="btn btn-primary" onClick={handleIdeaSubmit}>Submit Idea</button>
+                                </div>
+                            </div>
                         </div>
-                        <div className="detail-modal-body">
-                            <div className="submit-form-field">
-                                <label>Idea Title <span className="required">*</span></label>
-                                <input type="text" placeholder="Enter a descriptive title for your idea..." />
-                                <span className="hint">Keep it concise and descriptive (max 100 characters)</span>
-                            </div>
-                            <div className="submit-form-field">
-                                <label>Solution Description <span className="required">*</span></label>
-                                <textarea placeholder="Describe your solution in detail. What problem does it solve? How would it work?" />
-                                <span className="hint">Include technical details, benefits, and expected outcomes</span>
-                            </div>
-                            <div className="submit-form-field">
-                                <label>Category</label>
-                                <select>
-                                    <option value="">Select a category</option>
-                                    <option value="technology">Technology/Automation</option>
-                                    <option value="process">Process Improvement</option>
-                                    <option value="customer">Customer Experience</option>
-                                    <option value="data">Data & Analytics</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            <div className="submit-form-field">
-                                <label>Expected Impact</label>
-                                <input type="text" placeholder="e.g., 20% efficiency gain, €500K annual savings" />
-                                <span className="hint">Quantify the potential business impact if possible</span>
-                            </div>
-                            <div className="submit-form-actions" style={{ padding: '16px 0 0', borderTop: '1px solid var(--border)' }}>
-                                <button className="btn btn-secondary" onClick={() => setShowIdeaModal(false)}>✖️ Cancel</button>
-                                <button className="btn btn-primary" onClick={() => setShowIdeaModal(false)}>🚀 Submit Idea</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                    </div>,
+                    document.body
+                )
+            }
+
+            {/* Delete Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={showDeleteConfirm}
+                onClose={() => setShowDeleteConfirm(false)}
+                onConfirm={confirmDelete}
+                title="Delete Challenge"
+                message="Are you sure you want to delete this challenge? This action cannot be undone and will remove it from all views."
+                confirmText="Delete Challenge"
+            />
         </div>
     );
 };

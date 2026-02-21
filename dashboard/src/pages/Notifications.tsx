@@ -50,13 +50,14 @@ export const Notifications: React.FC = () => {
         }
     };
 
+    const flagIcon = <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>;
     const getIcon = (type: string) => {
         switch (type) {
-            case 'challenge': return '🎯';
-            case 'idea': return '💡';
-            case 'comment': return '💬';
-            case 'status': return '📈';
-            default: return '🔔';
+            case 'challenge': return flagIcon;
+            case 'idea': return 'ID';
+            case 'comment': return 'CM';
+            case 'status': return 'ST';
+            default: return 'NT';
         }
     };
 
@@ -72,7 +73,7 @@ export const Notifications: React.FC = () => {
         <div className="container notifications-page">
             <div className="page-header">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h1>🔔 All Notifications</h1>
+                    <h1>All Notifications</h1>
                     <button className="btn btn-secondary" onClick={handleMarkAllRead}>Mark all read</button>
                 </div>
                 <p>Stay updated on challenges, ideas, comments, and status changes across the innovation pipeline.</p>
@@ -114,7 +115,7 @@ export const Notifications: React.FC = () => {
             <div className="notifications-grid">
                 {filteredNotifications.length === 0 ? (
                     <div className="empty-state">
-                        <div className="icon">🔕</div>
+                        <div className="icon">—</div>
                         <h3>No notifications found</h3>
                     </div>
                 ) : (

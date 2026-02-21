@@ -14,8 +14,8 @@ export const Layout: React.FC = () => {
                 </div>
             </main>
             <footer className="footer">
-                Copyright © 2026, <a href="#">www.ananta.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
-                <strong> Ananta</strong>, Kolkata ODC.
+                Copyright © 2026, <a href="https://ananta.azurewebsites.net">https://ananta.azurewebsites.net</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+                <strong> Ananta Lab</strong>, Kolkata ODC.
             </footer>
         </>
     );

@@ -11,17 +11,17 @@ const FUNNEL_STAGES = [
 ];
 
 const TOP_SOLUTIONS = [
-    { rank: '🥇', name: 'Auto-replenish', value: '€340K', type: 'money' as const },
-    { rank: '🥈', name: 'AI Quality Check', value: '35%↑', type: 'percent' as const },
-    { rank: '🥉', name: 'Customer Insights', value: '12%↑', type: 'percent' as const },
+    { rank: '1st', name: 'Auto-replenish', value: '€340K', type: 'money' as const },
+    { rank: '2nd', name: 'AI Quality Check', value: '35%↑', type: 'percent' as const },
+    { rank: '3rd', name: 'Customer Insights', value: '12%↑', type: 'percent' as const },
 ];
 
 const LEADERBOARD = [
-    { medal: '🥇', name: 'App Dev', count: 22, pct: 100, gradient: 'linear-gradient(90deg, #ffa726, #ffd54f)', color: '#ffa726' },
-    { medal: '🥈', name: 'QE', count: 18, pct: 82, gradient: 'linear-gradient(90deg, #42a5f5, var(--accent-teal))', color: '#42a5f5' },
-    { medal: '🥉', name: 'Infra', count: 14, pct: 64, gradient: 'linear-gradient(90deg, #ab47bc, #ec407a)', color: '#ab47bc' },
-    { medal: '4', name: 'Data & AI', count: 11, pct: 50, gradient: 'linear-gradient(90deg, #66bb6a, var(--accent-teal))', color: '#66bb6a', plain: true },
-    { medal: '5', name: 'DevOps', count: 8, pct: 36, gradient: 'linear-gradient(90deg, var(--accent-teal), #42a5f5)', color: 'var(--accent-teal)', plain: true },
+    { medal: '1st', name: 'App Dev', count: 22, pct: 100, gradient: 'linear-gradient(90deg, #ffa726, #ffd54f)', color: '#ffa726' },
+    { medal: '2nd', name: 'QE', count: 18, pct: 82, gradient: 'linear-gradient(90deg, #42a5f5, var(--accent-teal))', color: '#42a5f5' },
+    { medal: '3rd', name: 'Infra', count: 14, pct: 64, gradient: 'linear-gradient(90deg, #ab47bc, #ec407a)', color: '#ab47bc' },
+    { medal: '4th', name: 'Data & AI', count: 11, pct: 50, gradient: 'linear-gradient(90deg, #66bb6a, var(--accent-teal))', color: '#66bb6a', plain: true },
+    { medal: '5th', name: 'DevOps', count: 8, pct: 36, gradient: 'linear-gradient(90deg, var(--accent-teal), #42a5f5)', color: 'var(--accent-teal)', plain: true },
 ];
 
 const HEATMAP_ROWS = [
@@ -52,12 +52,12 @@ const RADAR_AXIS = ['AI/ML', 'Cloud', 'IoT', 'Mobile', 'Web', 'DevOps'];
 const RADAR_DATA = [80, 90, 60, 40, 85, 75]; // % values
 
 const KPI_CARDS = [
-    { label: 'Total Challenges', value: '47', icon: '🎯', delta: '+8', deltaType: 'up' as const },
-    { label: 'Ideas Generated', value: '82', icon: '💡', delta: '+14', deltaType: 'up' as const },
-    { label: 'Conversion Rate', value: '6.4%', icon: '📈', delta: '+0.8%', deltaType: 'up' as const },
-    { label: 'Avg. Time to Pilot', value: '67d', icon: '⏱️', delta: '-5d', deltaType: 'down' as const },
-    { label: 'Active Contributors', value: '64', icon: '👥', delta: '+12', deltaType: 'up' as const },
-    { label: 'Pipeline Value', value: '€2.8M', icon: '💰', delta: '+€400K', deltaType: 'up' as const },
+    { label: 'Total Challenges', value: '47', icon: 'CH', delta: '+8', deltaType: 'up' as const },
+    { label: 'Ideas Generated', value: '82', icon: 'ID', delta: '+14', deltaType: 'up' as const },
+    { label: 'Conversion Rate', value: '6.4%', icon: 'CR', delta: '+0.8%', deltaType: 'up' as const },
+    { label: 'Avg. Time to Pilot', value: '67d', icon: 'TP', delta: '-5d', deltaType: 'down' as const },
+    { label: 'Active Contributors', value: '64', icon: 'AC', delta: '+12', deltaType: 'up' as const },
+    { label: 'Pipeline Value', value: '€2.8M', icon: 'PV', delta: '+€400K', deltaType: 'up' as const },
 ];
 
 export const Metrics: React.FC = () => {
@@ -90,7 +90,7 @@ export const Metrics: React.FC = () => {
                 {/* Panel 1: Innovation Funnel */}
                 <div className="m-panel funnel-panel">
                     <div className="m-panel-header">
-                        <div className="m-panel-icon" style={{ background: 'rgba(232,167,88,.15)', color: 'var(--accent-teal)' }}>🔬</div>
+                        <div className="m-panel-icon" style={{ background: 'rgba(232,167,88,.15)', color: 'var(--accent-teal)' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="14.31" y1="8" x2="20.05" y2="17.94" /><line x1="9.69" y1="8" x2="21.17" y2="8" /><line x1="7.38" y1="12" x2="13.12" y2="2.06" /><line x1="9.69" y1="16" x2="3.95" y2="6.06" /><line x1="14.31" y1="16" x2="2.83" y2="16" /><line x1="16.62" y1="12" x2="10.88" y2="21.94" /></svg></div>
                         <div>
                             <h2>Innovation Funnel</h2>
                             <p>Pipeline stage progression</p>
@@ -138,7 +138,7 @@ export const Metrics: React.FC = () => {
                 {/* Panel 2: Business Value Impact */}
                 <div className="m-panel value-panel">
                     <div className="m-panel-header">
-                        <div className="m-panel-icon" style={{ background: 'rgba(102,187,106,.15)', color: '#66bb6a' }}>💰</div>
+                        <div className="m-panel-icon" style={{ background: 'rgba(102,187,106,.15)', color: '#66bb6a' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg></div>
                         <div>
                             <h2>Business Value</h2>
                             <p>Financial impact & ROI</p>
@@ -183,7 +183,7 @@ export const Metrics: React.FC = () => {
                 {/* Panel 3: Team Engagement */}
                 <div className="m-panel engagement-panel">
                     <div className="m-panel-header">
-                        <div className="m-panel-icon" style={{ background: 'rgba(255,167,38,.15)', color: '#ffa726' }}>👥</div>
+                        <div className="m-panel-icon" style={{ background: 'rgba(255,167,38,.15)', color: '#ffa726' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></div>
                         <div>
                             <h2>Team Engagement</h2>
                             <p>Participation & activity</p>

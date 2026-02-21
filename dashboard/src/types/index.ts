@@ -1,4 +1,4 @@
-export type ChallengeStage = 'Scale' | 'Pilot' | 'Prototype' | 'Ideation';
+export type ChallengeStage = 'Scaled & Deployed' | 'POC & Pilot' | 'Ideation & Evaluation' | 'Challenge Submitted' | 'Parking Lot';
 
 export interface User {
     id: string;
@@ -36,6 +36,8 @@ export interface Challenge {
         [key: string]: string | number | undefined;
     };
     tags?: string[]; // e.g., ["Highlighted", "Most Appreciated"]
+    team?: { name: string; avatar: string; avatarColor: string }[];
+    impact?: 'Critical' | 'High' | 'Medium' | 'Low';
 }
 
 export interface Notification {
@@ -73,7 +75,7 @@ export interface Idea {
     id: string;
     title: string;
     description: string;
-    status: 'Ideation' | 'Evaluation' | 'POC' | 'Pilot' | 'Scale';
+    status: 'Accepted' | 'Declined' | 'In Review' | 'Pending';
     owner: {
         name: string;
         avatar: string;
@@ -94,7 +96,6 @@ export interface Idea {
     problemStatement?: string;
     proposedSolution?: string;
     expectedImpact?: string;
-    implementationPlan?: string;
     expectedSavings?: string;
     impactLevel?: 'High' | 'Medium' | 'Low';
     submittedDate?: string;
@@ -124,6 +125,10 @@ export interface ChallengeDetailData extends Challenge {
     priority: 'High' | 'Medium' | 'Low';
     estimatedImpact: string;
     challengeTags: string[];
+    timeline: string;
+    portfolioOption: string;
+    constraints: string;
+    stakeholders: string;
     ideas: { id: string; title: string; author: string; status: string; appreciations: number; comments: number; views: number }[];
     team: { name: string; avatar: string; avatarColor: string; role: string }[];
     activity: ActivityItem[];

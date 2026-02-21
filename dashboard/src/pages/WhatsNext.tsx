@@ -37,7 +37,7 @@ export const WhatsNext: React.FC = () => {
         <div className="whats-next-page">
             {/* ═══ HERO BANNER ═══ */}
             <section className="hero-banner">
-                <div className="hero-eyebrow">🔮 The Road Ahead</div>
+                <div className="hero-eyebrow">The Road Ahead</div>
                 <h2>What's Next in Ananta</h2>
                 <p className="hero-subtitle">
                     A glimpse into the upcoming features, products, and innovations being brewed at Ananta.
@@ -49,7 +49,7 @@ export const WhatsNext: React.FC = () => {
                 {/* ═══ ROADMAP TIMELINE ═══ */}
                 <section className="timeline-section">
                     <div className="section-header">
-                        <span className="icon">🗺️</span>
+                        <span className="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" /><line x1="8" y1="2" x2="8" y2="18" /><line x1="16" y1="6" x2="16" y2="22" /></svg></span>
                         <h2>Feature Roadmap — 2026</h2>
                         <span className="section-line"></span>
                     </div>
@@ -369,7 +369,7 @@ export const WhatsNext: React.FC = () => {
                 {/* ═══ UPCOMING PRODUCTS ═══ */}
                 <section className="products-section">
                     <div className="section-header">
-                        <span className="icon">🚀</span>
+                        <span className="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></span>
                         <h2>Upcoming Products from Ananta</h2>
                         <span className="section-line"></span>
                     </div>
@@ -394,7 +394,7 @@ export const WhatsNext: React.FC = () => {
                                 <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Integrates with Confluence, SharePoint, Git</li>
                             </ul>
                             <div className="product-footer">
-                                <span className="product-status alpha">⚗️ Alpha</span>
+                                <span className="product-status alpha">Alpha</span>
                                 <span className="product-eta">ETA: Q2 2026</span>
                             </div>
                         </div>
@@ -418,7 +418,7 @@ export const WhatsNext: React.FC = () => {
                                 <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> One-click cloud deployment</li>
                             </ul>
                             <div className="product-footer">
-                                <span className="product-status in-dev">🔧 In Development</span>
+                                <span className="product-status in-dev">In Development</span>
                                 <span className="product-eta">ETA: Q3 2026</span>
                             </div>
                         </div>
@@ -442,7 +442,7 @@ export const WhatsNext: React.FC = () => {
                                 <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> Custom rule engine</li>
                             </ul>
                             <div className="product-footer">
-                                <span className="product-status coming-soon">🔜 Coming Soon</span>
+                                <span className="product-status coming-soon">Coming Soon</span>
                                 <span className="product-eta">ETA: Q3 2026</span>
                             </div>
                         </div>
@@ -466,7 +466,7 @@ export const WhatsNext: React.FC = () => {
                                 <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Integration with HR systems</li>
                             </ul>
                             <div className="product-footer">
-                                <span className="product-status planned">📋 Planned</span>
+                                <span className="product-status planned">Planned</span>
                                 <span className="product-eta">ETA: Q4 2026</span>
                             </div>
                         </div>
@@ -490,7 +490,7 @@ export const WhatsNext: React.FC = () => {
                                 <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Simulation &amp; what-if analysis</li>
                             </ul>
                             <div className="product-footer">
-                                <span className="product-status planned">📋 Planned</span>
+                                <span className="product-status planned">Planned</span>
                                 <span className="product-eta">ETA: Q1 2027</span>
                             </div>
                         </div>
@@ -514,7 +514,7 @@ export const WhatsNext: React.FC = () => {
                                 <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Peer mentorship matching</li>
                             </ul>
                             <div className="product-footer">
-                                <span className="product-status planned">📋 Planned</span>
+                                <span className="product-status planned">Planned</span>
                                 <span className="product-eta">ETA: Q1 2027</span>
                             </div>
                         </div>
@@ -524,38 +524,38 @@ export const WhatsNext: React.FC = () => {
                 {/* ═══ IDEA PIPELINE FUNNEL ═══ */}
                 <section className="funnel-section">
                     <div className="section-header">
-                        <span className="icon">🔬</span>
+                        <span className="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="14.31" y1="8" x2="20.05" y2="17.94" /><line x1="9.69" y1="8" x2="21.17" y2="8" /><line x1="7.38" y1="12" x2="13.12" y2="2.06" /><line x1="9.69" y1="16" x2="3.95" y2="6.06" /><line x1="14.31" y1="16" x2="2.83" y2="16" /><line x1="16.62" y1="12" x2="10.88" y2="21.94" /></svg></span>
                         <h2>Innovation Pipeline Status</h2>
                         <span className="section-line"></span>
                     </div>
 
                     <div className="funnel-pipeline">
                         <div className="funnel-stage">
-                            <div className="funnel-icon">💡</div>
+                            <div className="funnel-icon">ID</div>
                             <h4>Ideation</h4>
                             <div className="funnel-count" style={{ color: 'var(--accent-teal)' }}>42</div>
                             <div className="funnel-label">Ideas Submitted</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">🔍</div>
+                            <div className="funnel-icon">EV</div>
                             <h4>Evaluation</h4>
                             <div className="funnel-count" style={{ color: 'var(--accent-blue)' }}>28</div>
                             <div className="funnel-label">Under Review</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">🧪</div>
+                            <div className="funnel-icon">PT</div>
                             <h4>Prototyping</h4>
                             <div className="funnel-count" style={{ color: 'var(--accent-purple)' }}>12</div>
                             <div className="funnel-label">Being Built</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">🚀</div>
+                            <div className="funnel-icon">PL</div>
                             <h4>Piloting</h4>
                             <div className="funnel-count" style={{ color: 'var(--accent-orange)' }}>5</div>
                             <div className="funnel-label">In Pilot</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">🏆</div>
+                            <div className="funnel-icon">SC</div>
                             <h4>Scaled</h4>
                             <div className="funnel-count" style={{ color: 'var(--accent-green)' }}>3</div>
                             <div className="funnel-label">In Production</div>
@@ -565,16 +565,16 @@ export const WhatsNext: React.FC = () => {
 
                 {/* ═══ CTA BANNER ═══ */}
                 <section className="cta-banner">
-                    <div className="cta-icon">💡</div>
+                    <div className="cta-icon">?</div>
                     <h2>Got an Idea That Could Shape the Future?</h2>
                     <p>
                         The best innovations start with a single spark. Submit your idea, join a challenge, or collaborate
                         with fellow innovators — the pipeline is waiting for you.
                     </p>
                     <div className="cta-buttons">
-                        <button className="cta-btn primary" onClick={() => navigate('/challenges/submit')}>🚀 Submit a Challenge</button>
+                        <button className="cta-btn primary" onClick={() => navigate('/challenges/submit')}>Submit a Challenge</button>
                         {!user && (
-                            <button className="cta-btn secondary" onClick={() => navigate('/register')}>✨ Join Ananta</button>
+                            <button className="cta-btn secondary" onClick={() => navigate('/register')}>Join Ananta</button>
                         )}
                     </div>
                 </section>

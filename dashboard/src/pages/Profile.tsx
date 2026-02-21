@@ -73,7 +73,7 @@ export const Profile: React.FC = () => {
     if (!user) {
         return (
             <div className="login-prompt" id="loginPrompt" style={{ display: 'flex' }}>
-                <div className="icon-circle">🔒</div>
+                <div className="icon-circle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg></div>
                 <h2>Sign in to view your profile</h2>
                 <p>Access your submissions, track your ideas, and see your impact.</p>
                 <div className="btn-group">
@@ -126,7 +126,7 @@ export const Profile: React.FC = () => {
                             </div>
                             <div className="meta-item">
                                 <span className="label">Innovation Score</span>
-                                <span className="value" style={{ color: 'var(--accent-gold)' }}>⭐ 847</span>
+                                <span className="value" style={{ color: 'var(--accent-gold)' }}>847</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">Rank</span>
@@ -146,8 +146,8 @@ export const Profile: React.FC = () => {
                         </div>
 
                         <div className="profile-actions">
-                            <button className="btn-sm btn-edit" onClick={() => setIsEditing(true)}>✏️ Edit Profile</button>
-                            <button className="btn-sm btn-logout" onClick={handleLogout}>🚪 Sign Out</button>
+                            <button className="btn-sm btn-edit" onClick={() => setIsEditing(true)}>Edit Profile</button>
+                            <button className="btn-sm btn-logout" onClick={handleLogout}>Sign Out</button>
                         </div>
                     </div>
                 )}
@@ -234,8 +234,8 @@ export const Profile: React.FC = () => {
                             </div>
 
                             <div className="profile-actions">
-                                <button type="submit" className="btn-sm btn-save">💾 Save Changes</button>
-                                <button type="button" className="btn-sm btn-cancel" onClick={handleCancel}>✖️ Cancel</button>
+                                <button type="submit" className="btn-sm btn-save">Save Changes</button>
+                                <button type="button" className="btn-sm btn-cancel" onClick={handleCancel}>Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -248,22 +248,22 @@ export const Profile: React.FC = () => {
                 {/* ── Stats Row ──────────────────────── */}
                 <div className="stats-row">
                     <div className="stat-card">
-                        <div className="stat-icon">🔥</div>
+                        <div className="stat-icon" style={{ color: 'var(--accent-red)' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg></div>
                         <div className="stat-value">12</div>
                         <div className="stat-label">Streak Days</div>
                     </div>
                     <div className="stat-card">
-                        <div className="stat-icon">💡</div>
+                        <div className="stat-icon" style={{ color: 'var(--accent-yellow)' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg></div>
                         <div className="stat-value">8</div>
                         <div className="stat-label">Total Ideas</div>
                     </div>
                     <div className="stat-card">
-                        <div className="stat-icon">🚀</div>
+                        <div className="stat-icon" style={{ color: 'var(--accent-blue)' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg></div>
                         <div className="stat-value">3</div>
                         <div className="stat-label">Challenges</div>
                     </div>
                     <div className="stat-card">
-                        <div className="stat-icon">🏆</div>
+                        <div className="stat-icon" style={{ color: 'var(--accent-gold)' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></svg></div>
                         <div className="stat-value">Top 5%</div>
                         <div className="stat-label">Contributor</div>
                     </div>
@@ -272,7 +272,7 @@ export const Profile: React.FC = () => {
                 {/* ── Activity Feed ──────────────────── */}
                 <div className="section-card">
                     <div className="section-title">
-                        <span className="icon">⚡</span> Recent Activity
+                        <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></span> Recent Activity
                     </div>
                     <ul className="activity-feed">
                         <li className="activity-item" onClick={() => navigate('/challenges/c1/ideas/i1')} style={{ cursor: 'pointer' }}>
@@ -308,7 +308,7 @@ export const Profile: React.FC = () => {
                 {/* ── Recent Submissions ──────────────── */}
                 <div className="section-card">
                     <div className="section-title">
-                        <span className="icon">📂</span> Recent Submissions
+                        <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg></span> Recent Submissions
                     </div>
                     <table className="submissions-table">
                         <thead>
@@ -326,20 +326,20 @@ export const Profile: React.FC = () => {
                                 <td>Feb 18, 2026</td>
                                 <td><span className="status-pill status-active">Active</span></td>
                             </tr>
-                            <tr onClick={() => navigate('/challenges/c1/ideas/i204')} style={{ cursor: 'pointer' }}>
-                                <td className="id-col">ID-204</td>
+                            <tr onClick={() => navigate('/challenges/c1/ideas/ID-0204')} style={{ cursor: 'pointer' }}>
+                                <td className="id-col">ID-0204</td>
                                 <td>AI-based Lead Scoring</td>
                                 <td>Feb 16, 2026</td>
                                 <td><span className="status-pill status-eval">Evaluation</span></td>
                             </tr>
-                            <tr onClick={() => navigate('/challenges/c1/ideas/i198')} style={{ cursor: 'pointer' }}>
-                                <td className="id-col">ID-198</td>
+                            <tr onClick={() => navigate('/challenges/c1/ideas/ID-0198')} style={{ cursor: 'pointer' }}>
+                                <td className="id-col">ID-0198</td>
                                 <td>Voice Command Dashboard</td>
                                 <td>Feb 10, 2026</td>
                                 <td><span className="status-pill status-pilot">Pilot</span></td>
                             </tr>
-                            <tr onClick={() => navigate('/challenges/c1/ideas/i185')} style={{ cursor: 'pointer' }}>
-                                <td className="id-col">ID-185</td>
+                            <tr onClick={() => navigate('/challenges/c1/ideas/ID-0185')} style={{ cursor: 'pointer' }}>
+                                <td className="id-col">ID-0185</td>
                                 <td>Legacy System Migration Bot</td>
                                 <td>Jan 28, 2026</td>
                                 <td><span className="status-pill status-parked">Parked</span></td>
@@ -351,7 +351,7 @@ export const Profile: React.FC = () => {
                 {/* ── Contribution Graph ──────────────── */}
                 <div className="section-card">
                     <div className="section-title">
-                        <span className="icon">📊</span> Contribution Graph
+                        <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg></span> Contribution Graph
                     </div>
                     <div className="contrib-chart">
                         {/* Mock data bars */}

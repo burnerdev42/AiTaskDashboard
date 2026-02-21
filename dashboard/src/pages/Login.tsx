@@ -20,7 +20,7 @@ export const Login: React.FC = () => {
         if (success) {
             navigate(from, { replace: true });
         } else {
-            setError('User not found. Try admin@ananta.com');
+            setError('User not found. Try admin@ananta.azurewebsites.net');
         }
     };
 
@@ -42,7 +42,7 @@ export const Login: React.FC = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="admin@ananta.com"
+                            placeholder="admin@ananta.azurewebsites.net"
                             required
                         />
                     </div>
@@ -75,7 +75,7 @@ export const Login: React.FC = () => {
                     </div>
 
                     <div style={{ marginTop: 20, padding: 12, background: 'rgba(232,167,88,.08)', borderRadius: 'var(--radius-sm)', fontSize: 12, color: 'var(--text-muted)', textAlign: 'center' }}>
-                        For demo: Use <strong style={{ color: 'var(--text-primary)' }}>admin@ananta.com</strong>
+                        For demo: Use <strong style={{ color: 'var(--text-primary)' }}>admin@ananta.azurewebsites.net</strong>
                     </div>
                 </form>
             </div>

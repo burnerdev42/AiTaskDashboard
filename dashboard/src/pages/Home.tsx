@@ -21,10 +21,12 @@ export const Home: React.FC = () => {
     }, []);
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % (challenges.length || 1));
+        if (challenges.length === 0) return;
+        setCurrentSlide((prev) => (prev + 1) % challenges.length);
     };
 
     const prevSlide = () => {
+        if (challenges.length === 0) return;
         setCurrentSlide((prev) => (prev - 1 + challenges.length) % challenges.length);
     };
 
