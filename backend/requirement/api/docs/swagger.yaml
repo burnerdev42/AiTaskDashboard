@@ -206,6 +206,50 @@ paths:
       responses:
         '204':
           description: Challenge deleted
+  /challenges/{virtualId}/upvote:
+    post:
+      tags: [Challenges]
+      summary: Toggle upvote for a challenge
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId]
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Upvote toggled successfully
+  /challenges/{virtualId}/subscribe:
+    post:
+      tags: [Challenges]
+      summary: Toggle subscription for a challenge
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId]
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Subscription toggled successfully
 
   # ==============================
   # IDEAS ENDPOINTS
@@ -290,6 +334,50 @@ paths:
       responses:
         '204':
           description: Idea deleted
+  /ideas/{virtualId}/upvote:
+    post:
+      tags: [Ideas]
+      summary: Toggle upvote for an idea
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId]
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Upvote toggled successfully
+  /ideas/{virtualId}/subscribe:
+    post:
+      tags: [Ideas]
+      summary: Toggle subscription for an idea
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId]
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Subscription toggled successfully
 
   # ==============================
   # COMMENTS ENDPOINTS
@@ -500,6 +588,24 @@ paths:
       responses:
         '200':
           description: Notification updated
+    patch:
+      tags: [Notifications]
+      summary: Update notification status (isSeen)
+      parameters:
+        - $ref: '#/components/parameters/MongoIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [isSeen]
+              properties:
+                isSeen:
+                  type: boolean
+                  description: Mark notification as seen or unseen
+      responses:
+        '200':
+          description: Notification status updated successfully
     delete:
       tags: [Notifications]
       summary: Delete a notification
@@ -675,6 +781,7 @@ components:
           ]
         fk_id: { type: string, nullable: true }
         userId: { type: string }
+        initiatorId: { type: string, description: "Mongo hex ID of the user who triggered the notification" }
         isSeen: { type: boolean, default: false }
         createdAt: { type: string, format: date-time }
 
@@ -777,3 +884,4 @@ components:
                 - $ref: '#/components/schemas/IdeaMinimal'
               description: "(DERIVED) Details of Challenge or Idea linked via fk_id"
             recipientDetails: { $ref: '#/components/schemas/UserMinimal' }
+            initiatorDetails: { $ref: '#/components/schemas/UserMinimal', description: "(DERIVED) Details of the user who triggered the event" }

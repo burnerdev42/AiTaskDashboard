@@ -8,6 +8,7 @@ const notificationSchema = new Schema(
       type: String,
       enum: [
         'challenge_created',
+        'idea_created',
         'challenge_status_update',
         'challenge_edited',
         'idea_edited',
@@ -22,9 +23,14 @@ const notificationSchema = new Schema(
       ],
       required: true,
     },
-    fkId: {
-      type: Schema.Types.ObjectId, // Link to Challenge, Idea, or Comment
+    fk_id: {
+      type: String, // Link to Challenge, Idea, or Comment virtualId
       default: null,
+    },
+    initiatorId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User', // The user who triggered the event
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
