@@ -58,6 +58,7 @@ export const ChallengeDetail: React.FC = () => {
     const [editProblem, setEditProblem] = useState('');
     const [editOutcome, setEditOutcome] = useState('');
     const [comment, setComment] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     // Idea Modal States
     const [ideaTitle, setIdeaTitle] = useState('');
@@ -72,20 +73,146 @@ export const ChallengeDetail: React.FC = () => {
 
     useEffect(() => {
         const details = storage.getChallengeDetails();
-        const found = details.find(c => c.id === id) || details[0];
-        setChallenge(found);
-        if (found) {
-            setEditTitle(found.title);
-            setEditSubtitle(found.description);
-            setEditProblem(found.problemStatement);
-            setEditOutcome(found.expectedOutcome);
+        let found = details.find(c => c.id === id);
+
+        if (!found) {
+            // If the challenge is not in the detailed mock array, try to find it in the basic challenges array
+            const basicChallenge = storage.getChallenges().find(c => c.id === id);
+
+            if (basicChallenge) {
+                // Dynamically construct a ChallengeDetailData object
+                found = {
+                    ...basicChallenge,
+                    problemStatement: basicChallenge.description,
+                    expectedOutcome: 'Pending detailed assessment',
+                    businessUnit: 'Global',
+                    department: 'Cross-functional',
+                    priority: basicChallenge.impact || 'Medium',
+                    estimatedImpact: 'TBD',
+                    challengeTags: basicChallenge.tags || [],
+                    timeline: 'TBD',
+                    portfolioOption: 'TBD',
+                    constraints: 'None specified yet',
+                    stakeholders: 'TBD',
+                    ideas: [],
+                    team: basicChallenge.team?.map(t => ({ ...t, role: 'Member', avatar: t.avatar || '', avatarColor: t.avatarColor || 'var(--accent-blue)' })) || [],
+                    activity: [],
+                    createdDate: 'Recently',
+                    updatedDate: 'Just now'
+                } as ChallengeDetailData;
+            }
         }
+
+        // Simulate API loading
+        const timer = setTimeout(() => {
+            setChallenge(found || null);
+            if (found) {
+                setEditTitle(found.title);
+                setEditSubtitle(found.description);
+                setEditProblem(found.problemStatement);
+                setEditOutcome(found.expectedOutcome);
+            }
+            setIsLoading(false);
+        }, 1000);
+
         if (searchParams.get('edit') === 'true') {
             setEditMode(true);
         }
+
+        return () => clearTimeout(timer);
     }, [id, searchParams]);
 
-    if (!challenge) return <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>;
+    if (isLoading) {
+        return (
+            <div className="detail-page-container fade-in">
+                <div className="breadcrumb">
+                    <div className="skeleton" style={{ width: '200px', height: '16px' }}></div>
+                </div>
+                <div className="detail-skeleton-header">
+                    <div className="skeleton-text" style={{ width: '40%', height: '32px', borderRadius: '4px' }}></div>
+                    <div className="skeleton-text" style={{ width: '80%', height: '16px', borderRadius: '4px', marginTop: '8px' }}></div>
+                </div>
+                <div className="detail-skeleton-meta">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="skeleton-text" style={{ width: '150px', height: '24px', borderRadius: '12px' }}></div>
+                    ))}
+                </div>
+                <div className="detail-skeleton-main">
+                    <div>
+                        <div className="detail-skeleton-section">
+                            <div className="skeleton-text" style={{ width: '30%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '80%', height: '14px', borderRadius: '4px' }}></div>
+                        </div>
+                        <div className="detail-skeleton-section">
+                            <div className="skeleton-text" style={{ width: '40%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '90%', height: '14px', borderRadius: '4px' }}></div>
+                        </div>
+                        <div className="detail-skeleton-section">
+                            <div className="skeleton-text" style={{ width: '25%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '60%', height: '14px', borderRadius: '4px' }}></div>
+                        </div>
+                    </div>
+                    <aside>
+                        <div className="detail-skeleton-sidebar-item">
+                            <div className="skeleton-text" style={{ width: '50%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            {[...Array(4)].map((_, i) => (
+                                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                                    <div className="skeleton-text" style={{ width: '40%', height: '14px', borderRadius: '4px' }}></div>
+                                    <div className="skeleton-text" style={{ width: '20%', height: '14px', borderRadius: '4px' }}></div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="detail-skeleton-sidebar-item">
+                            <div className="skeleton-text" style={{ width: '50%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} style={{ marginBottom: '16px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                        <div className="skeleton-text" style={{ width: '30%', height: '14px', borderRadius: '4px' }}></div>
+                                        <div className="skeleton-text" style={{ width: '15%', height: '14px', borderRadius: '8px' }}></div>
+                                    </div>
+                                    <div className="skeleton-text" style={{ width: '80%', height: '12px', borderRadius: '4px' }}></div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="detail-skeleton-sidebar-item">
+                            <div className="skeleton-text" style={{ width: '60%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '36px', borderRadius: '8px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '36px', borderRadius: '8px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '36px', borderRadius: '8px' }}></div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        );
+    }
+
+    if (!challenge) {
+        return (
+            <div className="detail-page-container fade-in">
+                <div className="breadcrumb">
+                    <a onClick={() => navigate('/')}>Home</a>
+                    <span className="sep">/</span>
+                    <a onClick={() => navigate('/challenges')}>Challenges</a>
+                </div>
+                <div style={{ padding: '40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px' }}>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px' }}>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <h2 style={{ marginBottom: '8px' }}>Challenge Not Found</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>The challenge you are looking for does not exist or has been deleted.</p>
+                    <button className="btn-primary" onClick={() => navigate('/challenges')}>Back to Challenges</button>
+                </div>
+            </div>
+        );
+    }
 
     const toggleEdit = () => {
         if (editMode) {
@@ -194,7 +321,8 @@ export const ChallengeDetail: React.FC = () => {
 
     // Calculate top contributors for the sidebar
     const contributorsMap: Record<string, { totalAppreciations: number, initial: string, color: string }> = {};
-    challenge.ideas.forEach(idea => {
+    const validIdeas = challenge.ideas || [];
+    validIdeas.forEach(idea => {
         if (!contributorsMap[idea.author]) {
             const parts = idea.author.split(' ');
             const initial = parts.length > 1 ? `${parts[0].charAt(0)}${parts[1].charAt(0)}` : idea.author.substring(0, 2).toUpperCase();
@@ -211,7 +339,7 @@ export const ChallengeDetail: React.FC = () => {
         .slice(0, 5);
 
     return (
-        <div className="detail-page-container">
+        <div className={`detail-page-container fade-in`}>
 
             {/* Breadcrumb */}
             <div className="breadcrumb">
@@ -533,7 +661,7 @@ export const ChallengeDetail: React.FC = () => {
                         </div>
                         <div className="detail-stat-row">
                             <span className="detail-stat-label">Ideas Submitted</span>
-                            <span className="detail-stat-value green">{challenge.ideas.length}</span>
+                            <span className="detail-stat-value green">{validIdeas.length}</span>
                         </div>
                     </div>
 
@@ -549,7 +677,7 @@ export const ChallengeDetail: React.FC = () => {
                             <button className="add-idea-btn" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>Add Idea</button>
                         </div>
                         <div className="detail-ideas-list">
-                            {challenge.ideas.filter(idea => idea.status === 'Accepted').map(idea => (
+                            {validIdeas.filter(idea => idea.status === 'Accepted').map(idea => (
                                 <a key={idea.id} className="detail-linked-challenge" onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)} style={{ marginBottom: '8px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -709,13 +837,15 @@ export const ChallengeDetail: React.FC = () => {
                                 </span>
                                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
                             </button>
-                            <button
-                                className="btn btn-danger animate-pop"
-                                onClick={handleDelete}
-                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></span>
-                                Delete
-                            </button>
+                            {isAuthenticated && user?.name === challenge.owner.name && (
+                                <button
+                                    className="btn btn-danger animate-pop"
+                                    onClick={handleDelete}
+                                    style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <span style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></span>
+                                    Delete
+                                </button>
+                            )}
                         </div>
                     </div>
                 </aside>

@@ -2,16 +2,38 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../services/storage';
 import { type Notification } from '../types';
-import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp } from 'lucide-react';
+import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp, CheckCircle } from 'lucide-react';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
 export const Notifications: React.FC = () => {
     const navigate = useNavigate();
     const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status' | 'like'>('all');
+    const [isLoading, setIsLoading] = useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Delete Modal State
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [notificationToDelete, setNotificationToDelete] = useState<string | null>(null);
+    const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
+
+    // Toast State
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+    // Auto-hide inline toast
+    React.useEffect(() => {
+        if (toastMessage) {
+            const timer = setTimeout(() => {
+                setToastMessage(null);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toastMessage]);
 
     // Force update state
     const [_, setTick] = useState(0);
@@ -58,10 +80,22 @@ export const Notifications: React.FC = () => {
 
     const confirmDelete = () => {
         if (notificationToDelete) {
-            storage.deleteNotification(notificationToDelete);
-            forceUpdate();
+            const idToDelete = notificationToDelete;
+            setAnimatingIds(prev => new Set(prev).add(idToDelete));
             setShowDeleteConfirm(false);
             setNotificationToDelete(null);
+
+            // Wait for exit CSS animation (300ms) before deleting from storage
+            setTimeout(() => {
+                storage.deleteNotification(idToDelete);
+                forceUpdate();
+                setAnimatingIds(prev => {
+                    const next = new Set(prev);
+                    next.delete(idToDelete);
+                    return next;
+                });
+                setToastMessage('Notification deleted successfully');
+            }, 300);
         }
     };
 
@@ -96,47 +130,87 @@ export const Notifications: React.FC = () => {
                 <p>Stay updated on challenges, ideas, comments, and status changes across the innovation pipeline.</p>
             </div>
 
-            <div className="filter-tabs">
+            {toastMessage && (
+                <div className="inline-success-banner animate-pop" style={{
+                    background: 'rgba(16, 185, 129, 0.1)',
+                    border: '1px solid var(--accent-green)',
+                    color: 'var(--accent-green)',
+                    padding: '12px 16px',
+                    borderRadius: '8px',
+                    marginBottom: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontWeight: 500
+                }}>
+                    <CheckCircle size={18} />
+                    {toastMessage}
+                </div>
+            )}
+
+            <div className={`filter-tabs ${isLoading ? 'fade-in' : ''}`}>
                 <button
                     className={`filter-tab ${activeFilter === 'all' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('all')}
                 >
-                    All <span className="count">{counts.all}</span>
+                    All {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.all}</span>}
                 </button>
                 <button
                     className={`filter-tab ${activeFilter === 'challenge' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('challenge')}
                 >
-                    Challenges <span className="count">{counts.challenge}</span>
+                    Challenges {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.challenge}</span>}
                 </button>
                 <button
                     className={`filter-tab ${activeFilter === 'idea' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('idea')}
                 >
-                    Ideas <span className="count">{counts.idea}</span>
+                    Ideas {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.idea}</span>}
                 </button>
                 <button
                     className={`filter-tab ${activeFilter === 'comment' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('comment')}
                 >
-                    Comments <span className="count">{counts.comment}</span>
+                    Comments {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.comment}</span>}
                 </button>
                 <button
                     className={`filter-tab ${activeFilter === 'status' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('status')}
                 >
-                    Status <span className="count">{counts.status}</span>
+                    Status {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.status}</span>}
                 </button>
                 <button
                     className={`filter-tab ${activeFilter === 'like' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('like')}
                 >
-                    Reactions <span className="count">{counts.like}</span>
+                    Reactions {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.like}</span>}
                 </button>
             </div>
 
-            <div className="notifications-grid">
-                {filteredNotifications.length === 0 ? (
+            <div className={`notifications-grid ${!isLoading ? 'fade-in' : ''}`}>
+                {isLoading ? (
+                    [...Array(6)].map((_, i) => (
+                        <div key={i} className="notif-card" style={{ pointerEvents: 'none' }}>
+                            <div className="skeleton" style={{ width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0 }}></div>
+                            <div className="notif-body" style={{ width: '100%' }}>
+                                <div className="notif-header" style={{ marginBottom: '12px' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <div className="skeleton-text" style={{ width: '70%', height: '16px', borderRadius: '4px', marginBottom: '6px' }}></div>
+                                        <div className="skeleton-text" style={{ width: '30%', height: '12px', borderRadius: '4px' }}></div>
+                                    </div>
+                                    <div className="skeleton" style={{ width: '24px', height: '24px', borderRadius: '4px' }}></div>
+                                </div>
+                                <div className="notif-desc" style={{ marginBottom: '16px' }}>
+                                    <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '6px' }}></div>
+                                    <div className="skeleton-text" style={{ width: '80%', height: '14px', borderRadius: '4px' }}></div>
+                                </div>
+                                <div className="notif-meta">
+                                    <div className="skeleton" style={{ width: '60px', height: '22px', borderRadius: '12px' }}></div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : filteredNotifications.length === 0 ? (
                     <div className="empty-state">
                         <div className="icon">—</div>
                         <h3>No notifications found</h3>
@@ -145,7 +219,7 @@ export const Notifications: React.FC = () => {
                     filteredNotifications.map(notification => (
                         <div
                             key={notification.id}
-                            className={`notif-card ${notification.unread ? 'unread' : ''}`}
+                            className={`notif-card ${notification.unread ? 'unread' : ''} ${animatingIds.has(notification.id) ? 'notif-exit' : ''}`}
                             onClick={() => handleNotificationClick(notification)}
                         >
                             <div className={`notif-icon ${notification.type}`}>
