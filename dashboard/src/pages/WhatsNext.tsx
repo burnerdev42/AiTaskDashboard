@@ -1,13 +1,110 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
+const PIPELINE_STAGES = [
+    {
+        id: 'submitted',
+        label: 'Challenge Submitted',
+        count: 42,
+        sub: 'Challenges submitted',
+        color: 'var(--accent-red)',
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg>
+    },
+    {
+        id: 'ideation',
+        label: 'Ideation & Evaluation',
+        count: 28,
+        sub: 'To be Evaluated',
+        color: 'var(--accent-yellow)',
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+    },
+    {
+        id: 'poc',
+        label: 'POC & Pilot',
+        count: 12,
+        sub: 'Prototypes running',
+        color: 'var(--accent-blue)',
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+    },
+    {
+        id: 'scaled',
+        label: 'Scaled & Deployed',
+        count: 5,
+        sub: 'In production',
+        color: 'var(--accent-gold)',
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
+    },
+    {
+        id: 'parked',
+        label: 'Parking Lot',
+        count: 3,
+        sub: 'Items parked',
+        color: 'var(--accent-grey)',
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="10" y1="15" x2="10" y2="9" /><line x1="14" y1="15" x2="14" y2="9" /></svg>
+    }
+];
+
+const ROADMAP_DATA = [
+    {
+        q: 'Q1',
+        label: 'Q1 · 2026',
+        dates: 'January – March 2026',
+        color: 'var(--accent-teal)',
+        delay: '.1s',
+        features: [
+            { id: 'f1', title: 'Agentic AI Co-Pilot', team: 'AI & Platform Team', accent: 'teal', progress: '75%', desc: 'An intelligent AI assistant embedded into the pipeline — auto-suggests solutions for challenges, drafts idea proposals, and connects innovators with relevant past solutions.', badges: [{ label: 'AI', type: 'ai' }, { label: 'New', type: 'new' }] },
+            { id: 'f2', title: 'Advanced Analytics Dashboard v2', team: 'Data & Visualization Team', accent: 'green', progress: '60%', desc: 'Revamped metrics dashboard with real-time KPIs, drill-down charts, innovation health scores, and predictive trend analysis for leadership visibility.', badges: [{ label: 'Upgrade', type: 'upgrade' }] },
+            { id: 'f3', title: 'Smart Notification Engine', team: 'Platform Engineering', accent: 'orange', progress: '85%', desc: 'Context-aware notifications powered by ML — get notified only about what matters. Includes digest mode, priority scoring, and Slack/Teams integration.', badges: [{ label: 'Upgrade', type: 'upgrade' }, { label: 'AI', type: 'ai' }] }
+        ]
+    },
+    {
+        q: 'Q2',
+        label: 'Q2 · 2026',
+        dates: 'April – June 2026',
+        color: 'var(--accent-blue)',
+        delay: '.3s',
+        features: [
+            { id: 'f4', title: 'Gamification & Rewards System', team: 'Product & UX Team', accent: 'blue', progress: '35%', desc: 'Earn XP, badges, and leaderboard rankings for submitting ideas, mentoring, reviewing, and prototyping. Integrated with the Ananta badge system and redeemable rewards.', badges: [{ label: 'New', type: 'new' }] },
+            { id: 'f5', title: 'Cross-Team Collaboration Hub', team: 'Collaboration Squad', accent: 'purple', progress: '20%', desc: 'Break down silos with a shared workspace — cross-ODC ideation boards, joint challenge ownership, and real-time co-authoring on innovation proposals.', badges: [{ label: 'New', type: 'new' }, { label: 'Beta', type: 'beta' }] },
+            { id: 'f6', title: 'Ananta Mobile App', team: 'Mobile Engineering', accent: 'pink', progress: '10%', desc: 'Submit ideas on-the-go, vote, get real-time updates, and attend virtual innovation sprints — all from a native mobile experience on iOS and Android.', badges: [{ label: 'New', type: 'new' }, { label: 'Product', type: 'product' }] }
+        ]
+    },
+    {
+        q: 'Q3',
+        label: 'Q3 · 2026',
+        dates: 'July – September 2026',
+        color: 'var(--accent-purple)',
+        delay: '.5s',
+        features: [
+            { id: 'f7', title: 'Innovation Sandbox / Playground', team: 'DevOps & Infra', accent: 'purple', progress: '5%', desc: 'On-demand cloud sandboxes to prototype and demo ideas — pre-configured with AI frameworks, databases, and CI/CD. Spin up, build, present, done.', badges: [{ label: 'New', type: 'new' }, { label: 'Infra', type: 'infra' }] },
+            { id: 'f8', title: 'Challenge Auto-Matcher', team: 'AI & Platform Team', accent: 'teal', progress: 'Planned', desc: 'AI-driven matching engine that recommends relevant challenges to individuals based on their skills, past contributions, interests, and team context.', badges: [{ label: 'AI', type: 'ai' }, { label: 'Beta', type: 'beta' }] }
+        ]
+    },
+    {
+        q: 'Q4',
+        label: 'Q4 · 2026',
+        dates: 'October – December 2026',
+        color: 'var(--accent-green)',
+        delay: '.7s',
+        features: [
+            { id: 'f9', title: 'Multi-ODC Global Rollout', team: 'Platform & Leadership', accent: 'green', progress: 'Planned', desc: 'Bring Ananta to every ODC worldwide — multi-tenant architecture, localised dashboards, region-specific challenges, and unified global leaderboard.', badges: [{ label: 'New', type: 'new' }, { label: 'Infra', type: 'infra' }] },
+            { id: 'f10', title: 'Innovation ROI Tracker', team: 'Analytics & Strategy', accent: 'red', progress: 'Planned', desc: 'Measure the real business impact of every implemented idea — cost savings, revenue uplift, efficiency gains — with automated data collection and executive reporting.', badges: [{ label: 'New', type: 'new' }] }
+        ]
+    }
+];
 
 export const WhatsNext: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
     const observerRef = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 800);
+
         observerRef.current = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -29,12 +126,13 @@ export const WhatsNext: React.FC = () => {
         });
 
         return () => {
+            clearTimeout(timer);
             observerRef.current?.disconnect();
         };
-    }, []);
+    }, [isLoading]);
 
     return (
-        <div className="whats-next-page">
+        <div className={`whats-next-page ${!isLoading ? 'fade-in' : ''}`}>
             {/* ═══ HERO BANNER ═══ */}
             <section className="hero-banner">
                 <div className="hero-eyebrow">The Road Ahead</div>
@@ -55,314 +153,55 @@ export const WhatsNext: React.FC = () => {
                     </div>
 
                     <div className="roadmap-timeline">
-                        {/* ── Q1 2026 ── */}
-                        <div className="timeline-quarter animate-in" style={{ animationDelay: '.1s' }}>
-                            <div className="quarter-marker q1">Q1</div>
-                            <div className="quarter-label" style={{ color: 'var(--accent-teal)' }}>Q1 · 2026</div>
-                            <div className="quarter-dates">January – March 2026</div>
-                            <div className="quarter-cards">
-                                <div className="feature-card" data-accent="teal">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Agentic AI Co-Pilot</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge ai">AI</span>
-                                                <span className="feature-badge new">New</span>
+                        {ROADMAP_DATA.map((quarter) => (
+                            <div key={quarter.q} className={`timeline-quarter ${!isLoading ? 'animate-in' : ''}`} style={{ animationDelay: quarter.delay }}>
+                                <div className={`quarter-marker ${quarter.q.toLowerCase()}`}>{quarter.q}</div>
+                                <div className="quarter-label" style={{ color: quarter.color }}>{quarter.label}</div>
+                                <div className="quarter-dates">{quarter.dates}</div>
+                                <div className="quarter-cards">
+                                    {isLoading ? (
+                                        [1, 2].map((i) => (
+                                            <div key={i} className="roadmap-card-skeleton skeleton-shimmer">
+                                                <div className="skeleton-text" style={{ width: '60%', height: '24px' }}></div>
+                                                <div className="skeleton-text" style={{ width: '90%', height: '16px' }}></div>
+                                                <div className="skeleton-text" style={{ width: '80%', height: '16px' }}></div>
+                                                <div className="feature-meta" style={{ marginTop: 'auto' }}>
+                                                    <div className="skeleton-text" style={{ width: '40%', height: '14px' }}></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        An intelligent AI assistant embedded into the pipeline — auto-suggests solutions for challenges,
-                                        drafts idea proposals, and connects innovators with relevant past solutions.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-teal)' }}></span>
-                                            AI &amp; Platform Team
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '75%', background: 'var(--accent-teal)' }}></div>
+                                        ))
+                                    ) : (
+                                        quarter.features.map((feature) => (
+                                            <div key={feature.id} className="feature-card" data-accent={feature.accent}>
+                                                <div className="feature-top">
+                                                    <div className="feature-info">
+                                                        <h4>{feature.title}</h4>
+                                                        <div className="feature-badges">
+                                                            {feature.badges.map((badge, idx) => (
+                                                                <span key={idx} className={`feature-badge ${badge.type}`}>{badge.label}</span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p className="feature-desc">{feature.desc}</p>
+                                                <div className="feature-meta">
+                                                    <div className="feature-team">
+                                                        <span className="feature-team-dot" style={{ background: `var(--accent-${feature.accent})` }}></span>
+                                                        {feature.team}
+                                                    </div>
+                                                    <div className="feature-progress">
+                                                        <div className="progress-bar-sm">
+                                                            <div className="progress-fill-sm" style={{ width: feature.progress === 'Planned' ? '0%' : feature.progress, background: `var(--accent-${feature.accent})` }}></div>
+                                                        </div>
+                                                        {feature.progress}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            75%
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="feature-card" data-accent="green">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Advanced Analytics Dashboard v2</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge upgrade">Upgrade</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Revamped metrics dashboard with real-time KPIs, drill-down charts, innovation health scores,
-                                        and predictive trend analysis for leadership visibility.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-green)' }}></span>
-                                            Data &amp; Visualization Team
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '60%', background: 'var(--accent-green)' }}></div>
-                                            </div>
-                                            60%
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="feature-card" data-accent="orange">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Smart Notification Engine</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge upgrade">Upgrade</span>
-                                                <span className="feature-badge ai">AI</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Context-aware notifications powered by ML — get notified only about what matters. Includes
-                                        digest mode, priority scoring, and Slack/Teams integration.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-orange)' }}></span>
-                                            Platform Engineering
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '85%', background: 'var(--accent-orange)' }}></div>
-                                            </div>
-                                            85%
-                                        </div>
-                                    </div>
+                                        ))
+                                    )}
                                 </div>
                             </div>
-                        </div>
-
-                        {/* ── Q2 2026 ── */}
-                        <div className="timeline-quarter animate-in" style={{ animationDelay: '.3s' }}>
-                            <div className="quarter-marker q2">Q2</div>
-                            <div className="quarter-label" style={{ color: 'var(--accent-blue)' }}>Q2 · 2026</div>
-                            <div className="quarter-dates">April – June 2026</div>
-                            <div className="quarter-cards">
-                                <div className="feature-card" data-accent="blue">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Gamification &amp; Rewards System</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge new">New</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Earn XP, badges, and leaderboard rankings for submitting ideas, mentoring, reviewing, and
-                                        prototyping. Integrated with the Ananta badge system and redeemable rewards.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-blue)' }}></span>
-                                            Product &amp; UX Team
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '35%', background: 'var(--accent-blue)' }}></div>
-                                            </div>
-                                            35%
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="feature-card" data-accent="purple">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Cross-Team Collaboration Hub</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge new">New</span>
-                                                <span className="feature-badge beta">Beta</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Break down silos with a shared workspace — cross-ODC ideation boards, joint challenge ownership,
-                                        and real-time co-authoring on innovation proposals.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-purple)' }}></span>
-                                            Collaboration Squad
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '20%', background: 'var(--accent-purple)' }}></div>
-                                            </div>
-                                            20%
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="feature-card" data-accent="pink">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Ananta Mobile App</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge new">New</span>
-                                                <span className="feature-badge product">Product</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Submit ideas on-the-go, vote, get real-time updates, and attend virtual innovation sprints —
-                                        all from a native mobile experience on iOS and Android.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-pink)' }}></span>
-                                            Mobile Engineering
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '10%', background: 'var(--accent-pink)' }}></div>
-                                            </div>
-                                            10%
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ── Q3 2026 ── */}
-                        <div className="timeline-quarter animate-in" style={{ animationDelay: '.5s' }}>
-                            <div className="quarter-marker q3">Q3</div>
-                            <div className="quarter-label" style={{ color: 'var(--accent-purple)' }}>Q3 · 2026</div>
-                            <div className="quarter-dates">July – September 2026</div>
-                            <div className="quarter-cards">
-                                <div className="feature-card" data-accent="purple">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Innovation Sandbox / Playground</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge new">New</span>
-                                                <span className="feature-badge infra">Infra</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        On-demand cloud sandboxes to prototype and demo ideas — pre-configured with AI frameworks,
-                                        databases, and CI/CD. Spin up, build, present, done.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-purple)' }}></span>
-                                            DevOps &amp; Infra
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '5%', background: 'var(--accent-purple)' }}></div>
-                                            </div>
-                                            5%
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="feature-card" data-accent="teal">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Challenge Auto-Matcher</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge ai">AI</span>
-                                                <span className="feature-badge beta">Beta</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        AI-driven matching engine that recommends relevant challenges to individuals based on their
-                                        skills, past contributions, interests, and team context.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-teal)' }}></span>
-                                            AI &amp; Platform Team
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '0%', background: 'var(--accent-teal)' }}></div>
-                                            </div>
-                                            Planned
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ── Q4 2026 ── */}
-                        <div className="timeline-quarter animate-in" style={{ animationDelay: '.7s' }}>
-                            <div className="quarter-marker q4">Q4</div>
-                            <div className="quarter-label" style={{ color: 'var(--accent-green)' }}>Q4 · 2026</div>
-                            <div className="quarter-dates">October – December 2026</div>
-                            <div className="quarter-cards">
-                                <div className="feature-card" data-accent="green">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Multi-ODC Global Rollout</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge new">New</span>
-                                                <span className="feature-badge infra">Infra</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Bring Ananta to every ODC worldwide — multi-tenant architecture, localised dashboards,
-                                        region-specific challenges, and unified global leaderboard.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-green)' }}></span>
-                                            Platform &amp; Leadership
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '0%', background: 'var(--accent-green)' }}></div>
-                                            </div>
-                                            Planned
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="feature-card" data-accent="red">
-                                    <div className="feature-top">
-                                        <div className="feature-info">
-                                            <h4>Innovation ROI Tracker</h4>
-                                            <div className="feature-badges">
-                                                <span className="feature-badge new">New</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="feature-desc">
-                                        Measure the real business impact of every implemented idea — cost savings, revenue uplift,
-                                        efficiency gains — with automated data collection and executive reporting.
-                                    </p>
-                                    <div className="feature-meta">
-                                        <div className="feature-team">
-                                            <span className="feature-team-dot" style={{ background: 'var(--accent-red)' }}></span>
-                                            Analytics &amp; Strategy
-                                        </div>
-                                        <div className="feature-progress">
-                                            <div className="progress-bar-sm">
-                                                <div className="progress-fill-sm" style={{ width: '0%', background: 'var(--accent-red)' }}></div>
-                                            </div>
-                                            Planned
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </section>
 
@@ -375,149 +214,170 @@ export const WhatsNext: React.FC = () => {
                     </div>
 
                     <div className="products-grid">
-                        {/* Product 1 — Cortex */}
-                        <div className="product-card" data-accent="purple">
-                            <div className="product-header">
-                                <div className="product-title-area">
-                                    <h3>Ananta Cortex</h3>
-                                    <div className="product-tagline">Enterprise Knowledge Intelligence</div>
+                        {isLoading ? (
+                            [1, 2, 3, 4, 5, 6].map((i) => (
+                                <div key={i} className="product-card-skeleton skeleton-shimmer">
+                                    <div className="skeleton-text" style={{ width: '50%', height: '28px', marginBottom: '8px' }}></div>
+                                    <div className="skeleton-text" style={{ width: '80%', height: '16px', marginBottom: '20px' }}></div>
+                                    <div className="skeleton-text" style={{ width: '100%', height: '60px', marginBottom: '20px' }}></div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        {[1, 2, 3, 4].map(j => (
+                                            <div key={j} className="skeleton-text" style={{ width: '70%', height: '14px' }}></div>
+                                        ))}
+                                    </div>
+                                    <div className="product-footer" style={{ marginTop: 'auto' }}>
+                                        <div className="skeleton-text" style={{ width: '30%', height: '18px' }}></div>
+                                        <div className="skeleton-text" style={{ width: '40%', height: '18px' }}></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="product-desc">
-                                An AI-powered knowledge management platform that ingests documents, wikis, and code repositories
-                                to create a searchable organizational brain. Ask questions in natural language, get answers with citations.
-                            </p>
-                            <ul className="product-highlights">
-                                <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> RAG-based document Q&amp;A</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Multi-source knowledge graph</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Role-based access control</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Integrates with Confluence, SharePoint, Git</li>
-                            </ul>
-                            <div className="product-footer">
-                                <span className="product-status alpha">Alpha</span>
-                                <span className="product-eta">ETA: Q2 2026</span>
-                            </div>
-                        </div>
+                            ))
+                        ) : (
+                            <>
+                                {/* Product 1 — Cortex */}
+                                <div className="product-card" data-accent="purple">
+                                    <div className="product-header">
+                                        <div className="product-title-area">
+                                            <h3>Ananta Cortex</h3>
+                                            <div className="product-tagline">Enterprise Knowledge Intelligence</div>
+                                        </div>
+                                    </div>
+                                    <p className="product-desc">
+                                        An AI-powered knowledge management platform that ingests documents, wikis, and code repositories
+                                        to create a searchable organizational brain. Ask questions in natural language, get answers with citations.
+                                    </p>
+                                    <ul className="product-highlights">
+                                        <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> RAG-based document Q&amp;A</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Multi-source knowledge graph</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Role-based access control</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-purple)' }}></span> Integrates with Confluence, SharePoint, Git</li>
+                                    </ul>
+                                    <div className="product-footer">
+                                        <span className="product-status alpha">Alpha</span>
+                                        <span className="product-eta">ETA: Q2 2026</span>
+                                    </div>
+                                </div>
 
-                        {/* Product 2 — Forge */}
-                        <div className="product-card" data-accent="teal">
-                            <div className="product-header">
-                                <div className="product-title-area">
-                                    <h3>Ananta Forge</h3>
-                                    <div className="product-tagline">Rapid Prototype Builder</div>
+                                {/* Product 2 — Forge */}
+                                <div className="product-card" data-accent="teal">
+                                    <div className="product-header">
+                                        <div className="product-title-area">
+                                            <h3>Ananta Forge</h3>
+                                            <div className="product-tagline">Rapid Prototype Builder</div>
+                                        </div>
+                                    </div>
+                                    <p className="product-desc">
+                                        A low-code/no-code platform for quickly building functional prototypes of innovation ideas.
+                                        Drag-and-drop UI, pre-built API connectors, and one-click deployment for demos.
+                                    </p>
+                                    <ul className="product-highlights">
+                                        <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> Visual workflow designer</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> 50+ pre-built connectors</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> Auto-generate REST APIs</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> One-click cloud deployment</li>
+                                    </ul>
+                                    <div className="product-footer">
+                                        <span className="product-status in-dev">In Development</span>
+                                        <span className="product-eta">ETA: Q3 2026</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="product-desc">
-                                A low-code/no-code platform for quickly building functional prototypes of innovation ideas.
-                                Drag-and-drop UI, pre-built API connectors, and one-click deployment for demos.
-                            </p>
-                            <ul className="product-highlights">
-                                <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> Visual workflow designer</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> 50+ pre-built connectors</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> Auto-generate REST APIs</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-teal)' }}></span> One-click cloud deployment</li>
-                            </ul>
-                            <div className="product-footer">
-                                <span className="product-status in-dev">In Development</span>
-                                <span className="product-eta">ETA: Q3 2026</span>
-                            </div>
-                        </div>
 
-                        {/* Product 3 — Shield */}
-                        <div className="product-card" data-accent="green">
-                            <div className="product-header">
-                                <div className="product-title-area">
-                                    <h3>Ananta Shield</h3>
-                                    <div className="product-tagline">AI-Powered Code Quality Gate</div>
+                                {/* Product 3 — Shield */}
+                                <div className="product-card" data-accent="green">
+                                    <div className="product-header">
+                                        <div className="product-title-area">
+                                            <h3>Ananta Shield</h3>
+                                            <div className="product-tagline">AI-Powered Code Quality Gate</div>
+                                        </div>
+                                    </div>
+                                    <p className="product-desc">
+                                        Automated code review and security scanning tool that leverages AI to detect vulnerabilities,
+                                        enforce best practices, and provide actionable fix suggestions before merge.
+                                    </p>
+                                    <ul className="product-highlights">
+                                        <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> Real-time vulnerability scanning</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> AI-suggested code fixes</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> CI/CD pipeline integration</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> Custom rule engine</li>
+                                    </ul>
+                                    <div className="product-footer">
+                                        <span className="product-status coming-soon">Coming Soon</span>
+                                        <span className="product-eta">ETA: Q3 2026</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="product-desc">
-                                Automated code review and security scanning tool that leverages AI to detect vulnerabilities,
-                                enforce best practices, and provide actionable fix suggestions before merge.
-                            </p>
-                            <ul className="product-highlights">
-                                <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> Real-time vulnerability scanning</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> AI-suggested code fixes</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> CI/CD pipeline integration</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-green)' }}></span> Custom rule engine</li>
-                            </ul>
-                            <div className="product-footer">
-                                <span className="product-status coming-soon">Coming Soon</span>
-                                <span className="product-eta">ETA: Q3 2026</span>
-                            </div>
-                        </div>
 
-                        {/* Product 4 — Pulse */}
-                        <div className="product-card" data-accent="pink">
-                            <div className="product-header">
-                                <div className="product-title-area">
-                                    <h3>Ananta Pulse</h3>
-                                    <div className="product-tagline">Team Sentiment &amp; Innovation Health</div>
+                                {/* Product 4 — Pulse */}
+                                <div className="product-card" data-accent="pink">
+                                    <div className="product-header">
+                                        <div className="product-title-area">
+                                            <h3>Ananta Pulse</h3>
+                                            <div className="product-tagline">Team Sentiment &amp; Innovation Health</div>
+                                        </div>
+                                    </div>
+                                    <p className="product-desc">
+                                        Lightweight surveys and sentiment analysis engine that measures innovation culture health,
+                                        team morale, and engagement. Generates actionable insights for people managers.
+                                    </p>
+                                    <ul className="product-highlights">
+                                        <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Anonymous micro-surveys</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> NLP-powered sentiment analysis</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Trend dashboards for managers</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Integration with HR systems</li>
+                                    </ul>
+                                    <div className="product-footer">
+                                        <span className="product-status planned">Planned</span>
+                                        <span className="product-eta">ETA: Q4 2026</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="product-desc">
-                                Lightweight surveys and sentiment analysis engine that measures innovation culture health,
-                                team morale, and engagement. Generates actionable insights for people managers.
-                            </p>
-                            <ul className="product-highlights">
-                                <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Anonymous micro-surveys</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> NLP-powered sentiment analysis</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Trend dashboards for managers</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-pink)' }}></span> Integration with HR systems</li>
-                            </ul>
-                            <div className="product-footer">
-                                <span className="product-status planned">Planned</span>
-                                <span className="product-eta">ETA: Q4 2026</span>
-                            </div>
-                        </div>
 
-                        {/* Product 5 — Lens */}
-                        <div className="product-card" data-accent="orange">
-                            <div className="product-header">
-                                <div className="product-title-area">
-                                    <h3>Ananta Lens</h3>
-                                    <div className="product-tagline">Visual Process Mining</div>
+                                {/* Product 5 — Lens */}
+                                <div className="product-card" data-accent="orange">
+                                    <div className="product-header">
+                                        <div className="product-title-area">
+                                            <h3>Ananta Lens</h3>
+                                            <div className="product-tagline">Visual Process Mining</div>
+                                        </div>
+                                    </div>
+                                    <p className="product-desc">
+                                        Process discovery and mining tool that visualizes how work actually flows through teams —
+                                        identifies bottlenecks, redundancies, and automation opportunities using event logs.
+                                    </p>
+                                    <ul className="product-highlights">
+                                        <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Automated process discovery</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Bottleneck heat maps</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Conformance checking</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Simulation &amp; what-if analysis</li>
+                                    </ul>
+                                    <div className="product-footer">
+                                        <span className="product-status planned">Planned</span>
+                                        <span className="product-eta">ETA: Q1 2027</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="product-desc">
-                                Process discovery and mining tool that visualizes how work actually flows through teams —
-                                identifies bottlenecks, redundancies, and automation opportunities using event logs.
-                            </p>
-                            <ul className="product-highlights">
-                                <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Automated process discovery</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Bottleneck heat maps</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Conformance checking</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-orange)' }}></span> Simulation &amp; what-if analysis</li>
-                            </ul>
-                            <div className="product-footer">
-                                <span className="product-status planned">Planned</span>
-                                <span className="product-eta">ETA: Q1 2027</span>
-                            </div>
-                        </div>
 
-                        {/* Product 6 — Academy */}
-                        <div className="product-card" data-accent="blue">
-                            <div className="product-header">
-                                <div className="product-title-area">
-                                    <h3>Ananta Academy</h3>
-                                    <div className="product-tagline">Innovation Skill-Building Platform</div>
+                                {/* Product 6 — Academy */}
+                                <div className="product-card" data-accent="blue">
+                                    <div className="product-header">
+                                        <div className="product-title-area">
+                                            <h3>Ananta Academy</h3>
+                                            <div className="product-tagline">Innovation Skill-Building Platform</div>
+                                        </div>
+                                    </div>
+                                    <p className="product-desc">
+                                        A curated learning platform with micro-courses on design thinking, AI/ML, rapid prototyping,
+                                        and intrapreneurship — powered by AI-personalized learning paths.
+                                    </p>
+                                    <ul className="product-highlights">
+                                        <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> AI-personalized learning paths</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Hands-on project challenges</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Certificate &amp; badge system</li>
+                                        <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Peer mentorship matching</li>
+                                    </ul>
+                                    <div className="product-footer">
+                                        <span className="product-status planned">Planned</span>
+                                        <span className="product-eta">ETA: Q1 2027</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="product-desc">
-                                A curated learning platform with micro-courses on design thinking, AI/ML, rapid prototyping,
-                                and intrapreneurship — powered by AI-personalized learning paths.
-                            </p>
-                            <ul className="product-highlights">
-                                <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> AI-personalized learning paths</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Hands-on project challenges</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Certificate &amp; badge system</li>
-                                <li><span className="dot" style={{ background: 'var(--accent-blue)' }}></span> Peer mentorship matching</li>
-                            </ul>
-                            <div className="product-footer">
-                                <span className="product-status planned">Planned</span>
-                                <span className="product-eta">ETA: Q1 2027</span>
-                            </div>
-                        </div>
+                            </>
+                        )}
                     </div>
                 </section>
 
@@ -530,36 +390,20 @@ export const WhatsNext: React.FC = () => {
                     </div>
 
                     <div className="funnel-pipeline">
-                        <div className="funnel-stage">
-                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg></div>
-                            <h4>Challenge Submitted</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-red)' }}>42</div>
-                            <div className="funnel-label">Challenges submitted</div>
-                        </div>
-                        <div className="funnel-stage">
-                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg></div>
-                            <h4>Ideation & Evaluation</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-yellow)' }}>28</div>
-                            <div className="funnel-label">To be Evaluated</div>
-                        </div>
-                        <div className="funnel-stage">
-                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></div>
-                            <h4>POC & Pilot</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-blue)' }}>12</div>
-                            <div className="funnel-label">Prototypes running</div>
-                        </div>
-                        <div className="funnel-stage">
-                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg></div>
-                            <h4>Scaled & Deployed</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-gold)' }}>5</div>
-                            <div className="funnel-label">In production</div>
-                        </div>
-                        <div className="funnel-stage">
-                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="10" y1="15" x2="10" y2="9" /><line x1="14" y1="15" x2="14" y2="9" /></svg></div>
-                            <h4>Parking Lot</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-grey)' }}>3</div>
-                            <div className="funnel-label">Items parked</div>
-                        </div>
+                        {PIPELINE_STAGES.map((stage) => (
+                            <div key={stage.id} className="funnel-stage">
+                                <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    {stage.icon}
+                                </div>
+                                <h4>{stage.label}</h4>
+                                {isLoading ? (
+                                    <div className="skeleton-text" style={{ width: '50px', height: '28px', borderRadius: '4px', margin: '8px auto' }}></div>
+                                ) : (
+                                    <div className="funnel-count" style={{ color: stage.color }}>{stage.count}</div>
+                                )}
+                                <div className="funnel-label">{stage.sub}</div>
+                            </div>
+                        ))}
                     </div>
                 </section>
 

@@ -9,14 +9,17 @@ export const SwimLanes: React.FC = () => {
     const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
     const [dragOverLaneId, setDragOverLaneId] = useState<string | null>(null);
     const [dropIndex, setDropIndex] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     const draggedRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
+        // Simulate API loading
         const timer = setTimeout(() => {
             setCards(storage.getSwimLanes());
-        }, 0);
+            setIsLoading(false);
+        }, 1000);
         return () => clearTimeout(timer);
     }, []);
 
@@ -58,7 +61,7 @@ export const SwimLanes: React.FC = () => {
             { id: 'Parking Lot', title: 'Parking<br/>Lot', max: 8, color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: 'Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
         ];
 
-    const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId && c.id.toUpperCase().startsWith('CHG'));
+    const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId);
 
     /* ── Drag & Drop Handlers ── */
     const handleDragStart = (e: React.DragEvent, cardId: string) => {
@@ -221,34 +224,49 @@ export const SwimLanes: React.FC = () => {
                             </div>
 
                             {/* ── Lane Body ── */}
-                            <div className={`lane-body ${isDragOver ? 'drag-over' : ''}`}>
-                                {laneCards.map((card, cardIndex) => (
-                                    <React.Fragment key={card.id}>
-                                        {/* Show placeholder BEFORE this card if dropIndex matches */}
-                                        {isDragOver && dropIndex === cardIndex && (
-                                            <div className="card drag-preview"></div>
-                                        )}
-                                        <div
-                                            className="card"
-                                            draggable
-                                            onDragStart={(e) => handleDragStart(e, card.id)}
-                                            onDragEnd={handleDragEnd}
-                                            onDragOver={(e) => handleCardDragOver(e, lane.id, cardIndex)}
-                                            onClick={() => navigate(`/challenges/${card.id}`)}
-                                        >
-                                            <span className="card-drag-handle">⠿</span>
-                                            <div className="card-title">{card.title}</div>
-                                            <div className="card-desc">{card.description || `Innovation project ${card.id}`}</div>
-                                            <div className="card-meta">
-                                                <span className="card-id">
-                                                    <span className="card-priority" style={{ background: priorityColor(card.priority) }}></span>
-                                                    {`CH-${card.id.replace(/\D/g, '')}`}
-                                                </span>
-                                                <span className="card-owner">{card.owner}</span>
+                            <div className={`lane-body ${isDragOver ? 'drag-over' : ''} ${!isLoading ? 'fade-in' : ''}`}>
+                                {isLoading ? (
+                                    // Show 3 skeletons per lane while loading
+                                    [...Array(3)].map((_, i) => (
+                                        <div key={i} className="lane-card-skeleton">
+                                            <div className="skeleton lane-card-skeleton-title"></div>
+                                            <div className="skeleton lane-card-skeleton-desc"></div>
+                                            <div className="skeleton lane-card-skeleton-desc" style={{ width: '60%' }}></div>
+                                            <div className="lane-card-skeleton-meta">
+                                                <div className="skeleton" style={{ width: '60px', height: '12px' }}></div>
+                                                <div className="skeleton" style={{ width: '40px', height: '12px' }}></div>
                                             </div>
                                         </div>
-                                    </React.Fragment>
-                                ))}
+                                    ))
+                                ) : (
+                                    laneCards.map((card, cardIndex) => (
+                                        <React.Fragment key={card.id}>
+                                            {/* Show placeholder BEFORE this card if dropIndex matches */}
+                                            {isDragOver && dropIndex === cardIndex && (
+                                                <div className="card drag-preview"></div>
+                                            )}
+                                            <div
+                                                className="card"
+                                                draggable
+                                                onDragStart={(e) => handleDragStart(e, card.id)}
+                                                onDragEnd={handleDragEnd}
+                                                onDragOver={(e) => handleCardDragOver(e, lane.id, cardIndex)}
+                                                onClick={() => navigate(`/challenges/${card.id}`)}
+                                            >
+                                                <span className="card-drag-handle">⠿</span>
+                                                <div className="card-title">{card.title}</div>
+                                                <div className="card-desc">{card.description || `Innovation project ${card.id}`}</div>
+                                                <div className="card-meta">
+                                                    <span className="card-id">
+                                                        <span className="card-priority" style={{ background: priorityColor(card.priority) }}></span>
+                                                        {`CH-${card.id.replace(/\D/g, '')}`}
+                                                    </span>
+                                                    <span className="card-owner">{card.owner}</span>
+                                                </div>
+                                            </div>
+                                        </React.Fragment>
+                                    ))
+                                )}
 
                                 {/* Show placeholder at BOTTOM if dropIndex equals total card count */}
                                 {isDragOver && dropIndex >= laneCards.length && (

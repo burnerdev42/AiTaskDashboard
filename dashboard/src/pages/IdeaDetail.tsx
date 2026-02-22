@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
 import type { Idea } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -7,7 +8,9 @@ import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
 export const IdeaDetail: React.FC = () => {
     const { challengeId, ideaId } = useParams<{ challengeId: string; ideaId: string }>();
+    const { showToast } = useToast();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isAuthenticated } = useAuth();
     const [searchParams] = useSearchParams();
     const [idea, setIdea] = useState<Idea | null>(null);
@@ -20,26 +23,114 @@ export const IdeaDetail: React.FC = () => {
     const [hasLiked, setHasLiked] = useState(false);
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Get the parent challenge title for breadcrumb
     const parentChallenge = storage.getChallengeDetails().find(c => c.id === challengeId);
 
     useEffect(() => {
         const ideas = storage.getIdeaDetails();
-        const found = ideas.find(i => i.id === ideaId) || ideas[0];
-        setIdea(found);
-        if (found) {
-            setEditTitle(found.title);
-            setEditDescription(found.description);
-            setEditProblem(found.problemStatement || '');
-            setEditSolution(found.proposedSolution || '');
-        }
+        const found = ideas.find(i => i.id === ideaId) || null;
+
+        // Simulate API loading
+        const timer = setTimeout(() => {
+            setIdea(found);
+            if (found) {
+                setEditTitle(found.title);
+                setEditDescription(found.description);
+                setEditProblem(found.problemStatement || '');
+                setEditSolution(found.proposedSolution || '');
+            }
+            setIsLoading(false);
+        }, 800);
+
         if (searchParams.get('edit') === 'true') {
             setEditMode(true);
         }
+
+        return () => clearTimeout(timer);
     }, [ideaId, searchParams]);
 
-    if (!idea) return <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>;
+    if (isLoading) {
+        return (
+            <div className="detail-page-container">
+                <div className="breadcrumb">
+                    <div className="skeleton" style={{ width: '250px', height: '16px' }}></div>
+                </div>
+                <div className="detail-skeleton-header">
+                    <div className="skeleton-text" style={{ width: '40%', height: '32px', borderRadius: '4px' }}></div>
+                    <div className="skeleton-text" style={{ width: '80%', height: '16px', borderRadius: '4px', marginTop: '8px' }}></div>
+                </div>
+                <div className="detail-skeleton-meta">
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="skeleton-text" style={{ width: '140px', height: '24px', borderRadius: '12px' }}></div>
+                    ))}
+                </div>
+                <div className="detail-skeleton-main">
+                    <div>
+                        <div className="detail-skeleton-section">
+                            <div className="skeleton-text" style={{ width: '30%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '80%', height: '14px', borderRadius: '4px' }}></div>
+                        </div>
+                        <div className="detail-skeleton-section">
+                            <div className="skeleton-text" style={{ width: '40%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
+                            <div className="skeleton-text" style={{ width: '90%', height: '14px', borderRadius: '4px' }}></div>
+                        </div>
+                    </div>
+                    <aside>
+                        <div className="detail-skeleton-sidebar-item">
+                            <div className="skeleton-text" style={{ width: '50%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
+                            <div className="skeleton-text" style={{ width: '100%', height: '48px', borderRadius: '8px' }}></div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        );
+    }
+
+    if (!idea) {
+        return (
+            <div className="detail-page-container fade-in">
+                <div className="breadcrumb">
+                    <a onClick={() => navigate('/')}>Home</a>
+                    <span className="sep">/</span>
+                    <a onClick={() => navigate('/challenges')}>Challenges</a>
+                    {challengeId && (
+                        <>
+                            <span className="sep">/</span>
+                            <a onClick={() => navigate(`/challenges/${challengeId}`)}>{challengeId}</a>
+                        </>
+                    )}
+                </div>
+                <div style={{ padding: '60px 40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px', boxShadow: 'var(--shadow-lg)' }}>
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '24px', opacity: 0.8 }}>
+                        <path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" />
+                    </svg>
+                    <h2 style={{ marginBottom: '12px', fontSize: '24px', fontWeight: '700' }}>Idea Not Found</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '400px', marginInline: 'auto' }}>The idea you are looking for does not exist or has been removed. It may have been deleted along with its parent challenge.</p>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => challengeId ? navigate(`/challenges/${challengeId}`) : navigate('/challenges')}
+                        style={{
+                            minWidth: '200px',
+                            height: '42px',
+                            padding: '0 24px',
+                            borderRadius: '12px',
+                            fontWeight: 700,
+                            fontSize: '14px'
+                        }}
+                    >
+                        {challengeId ? 'Back to Challenge' : 'Back to Challenges'}
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     const toggleEdit = () => {
         if (editMode) {
@@ -63,14 +154,28 @@ export const IdeaDetail: React.FC = () => {
     };
 
     const handleLike = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
         setHasLiked(!hasLiked);
+        showToast(hasLiked ? 'Like removed' : 'Thanks for liking this idea!');
     };
 
     const handleSubscribe = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
         setIsSubscribed(!isSubscribed);
+        showToast(isSubscribed ? 'Unsubscribed from idea' : 'Subscribed to idea updates!');
     };
 
     const handlePostComment = () => {
+        if (!isAuthenticated) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
         if (!comment.trim()) return;
 
         const newComment = {
@@ -96,13 +201,18 @@ export const IdeaDetail: React.FC = () => {
 
     const confirmDelete = () => {
         if (idea && challengeId) {
-            storage.deleteIdea(challengeId, idea.id);
-            navigate(`/challenges/${challengeId}`);
+            try {
+                storage.deleteIdea(challengeId, idea.id);
+                showToast('Idea deleted successfully');
+                navigate(`/challenges/${challengeId}`);
+            } catch {
+                showToast('Failed to delete idea. Please try again.', 'error');
+            }
         }
     };
 
     return (
-        <div className="detail-page-container">
+        <div className="detail-page-container fade-in">
 
             {/* Breadcrumb */}
             <div className="breadcrumb">
@@ -363,16 +473,18 @@ export const IdeaDetail: React.FC = () => {
                                 </span>
                                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
                             </button>
-                            <button
-                                className="btn btn-danger btn-sm animate-pop"
-                                onClick={handleDelete}
-                                style={{ width: '100%' }}
-                            >
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                </span>
-                                Delete Idea
-                            </button>
+                            {isAuthenticated && idea.owner.name === 'Current User' && (
+                                <button
+                                    className="btn btn-danger btn-sm animate-pop"
+                                    onClick={handleDelete}
+                                    style={{ width: '100%' }}
+                                >
+                                    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                    </span>
+                                    Delete Idea
+                                </button>
+                            )}
                         </div>
                     </div>
                 </aside>
