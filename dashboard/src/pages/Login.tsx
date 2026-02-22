@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Eye, EyeOff, Lock } from 'lucide-react';
 
 export const Login: React.FC = () => {
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -13,24 +16,52 @@ export const Login: React.FC = () => {
     // @ts-ignore
     const from = location.state?.from?.pathname || '/';
 
+    // Standard Password Policy:
+    // At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+    const isPasswordValid = useMemo(() => {
+        if (!password) return false;
+        if (password.length < 8) return false;
+        if (!/[A-Z]/.test(password)) return false;
+        if (!/[a-z]/.test(password)) return false;
+        if (!/[0-9]/.test(password)) return false;
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
+        return true;
+    }, [password]);
+
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isFormValid = isEmailValid && isPasswordValid;
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+
+        if (!isFormValid) {
+            setError('Please enter a valid email and a valid password.');
+            return;
+        }
+
         const success = await login(email);
         if (success) {
             navigate(from, { replace: true });
         } else {
-            setError('User not found. Try admin@ananta.azurewebsites.net');
+            setError('Login failed. Please check your credentials or register.');
         }
     };
 
     return (
         <div className="register-page-container">
             <div className="form-card">
-                <div className="form-header">
-                    <div className="icon-circle">∞</div>
-                    <h2>Welcome Back</h2>
-                    <p>Sign in to continue to Innovation Pipeline</p>
+                <div className="form-header" style={{ marginBottom: 24 }}>
+                    <div className="icon-circle" style={{
+                        width: 80, height: 80, fontSize: 40, marginBottom: 28,
+                        background: 'linear-gradient(135deg, rgba(240,184,112,0.15), rgba(94,234,212,0.15))',
+                        border: '1px solid rgba(255,255,255,0.05)', borderRadius: '50%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: 'var(--accent-teal)', boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+                        margin: '0 auto 28px auto'
+                    }}>∞</div>
+                    <h2 style={{ fontSize: 24, marginBottom: 4 }}>Welcome Back</h2>
+                    <p style={{ fontSize: 14 }}>Sign in to continue</p>
                 </div>
 
                 {error && <div style={{ color: 'var(--accent-red)', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>{error}</div>}
@@ -42,40 +73,91 @@ export const Login: React.FC = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="admin@ananta.azurewebsites.net"
+                            placeholder="user@example.com"
                             required
                         />
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+                            Enter the email address associated with your account.
+                        </div>
                     </div>
 
                     <div className="form-group">
                         <label>Password <span className="req">*</span></label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                        />
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: 12,
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    color: 'var(--text-muted)',
+                                    cursor: 'pointer',
+                                    padding: 0,
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
+                        {password && !isPasswordValid ? (
+                            <div style={{ fontSize: 11, color: 'var(--accent-red)', marginTop: 6 }}>
+                                Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character.
+                            </div>
+                        ) : (
+                            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+                                Must be at least 8 characters, including uppercase, lowercase, number, and special character.
+                            </div>
+                        )}
                     </div>
 
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+                    <button
+                        type="submit"
+                        className="btn btn-primary btn-sm"
+                        style={{
+                            width: '100%',
+                            height: '42px',
+                            opacity: isFormValid ? 1 : 0.6,
+                            cursor: isFormValid ? 'pointer' : 'not-allowed',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        disabled={!isFormValid}
+                    >
                         Sign In
                     </button>
 
                     <div className="divider">or</div>
 
-                    <button
-                        type="button"
-                        className="btn btn-secondary"
-                        style={{ width: '100%', marginBottom: 8 }}
-                        onClick={() => alert('SSO integration placeholder')}
-                    >
-                        🔐&nbsp;&nbsp;Sign in with Corporate SSO
-                    </button>
+                    <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '8px' }}>
+                        <button
+                            type="button"
+                            className="btn sso-btn"
+                            style={{ marginBottom: 0 }}
+                            disabled
+                        >
+                            <Lock size={16} />
+                            Sign in with Corporate SSO
+                        </button>
+                        <div className="coming-soon-badge">
+                            Soon
+                        </div>
+                    </div>
 
                     <div className="form-footer">
                         Don't have an account? <Link to="/register">Register here</Link>
-                    </div>
-
-                    <div style={{ marginTop: 20, padding: 12, background: 'rgba(232,167,88,.08)', borderRadius: 'var(--radius-sm)', fontSize: 12, color: 'var(--text-muted)', textAlign: 'center' }}>
-                        For demo: Use <strong style={{ color: 'var(--text-primary)' }}>admin@ananta.azurewebsites.net</strong>
                     </div>
                 </form>
             </div>

@@ -29,6 +29,21 @@ const STAGE_BRANDING: Record<string, { color: string, bg: string, icon: React.Re
     }
 };
 
+const PRIORITY_BRANDING: Record<string, { color: string, bg: string, border: string }> = {
+    'Critical': {
+        color: '#ef5350', bg: 'rgba(239, 83, 80, .12)', border: 'rgba(239, 83, 80, .25)'
+    },
+    'High': {
+        color: '#ffa726', bg: 'rgba(255, 167, 38, .12)', border: 'rgba(255, 167, 38, .25)'
+    },
+    'Medium': {
+        color: '#ffee58', bg: 'rgba(255, 238, 88, .12)', border: 'rgba(255, 238, 88, .25)'
+    },
+    'Low': {
+        color: '#66bb6a', bg: 'rgba(102, 187, 106, .12)', border: 'rgba(102, 187, 106, .25)'
+    }
+};
+
 export const ChallengeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -233,11 +248,11 @@ export const ChallengeDetail: React.FC = () => {
                         <div className="detail-page-header-right">
                             {editMode ? (
                                 <>
-                                    <button className="btn btn-primary" onClick={toggleEdit}>Save</button>
-                                    <button className="btn btn-secondary" onClick={cancelEdit}>Cancel</button>
+                                    <button className="btn-save btn-sm" onClick={toggleEdit}>Save</button>
+                                    <button className="btn-cancel btn-sm" onClick={cancelEdit}>Cancel</button>
                                 </>
                             ) : (
-                                <button className="btn btn-secondary" onClick={toggleEdit}>Edit</button>
+                                <button className="btn-secondary btn-sm" onClick={toggleEdit}>Edit</button>
                             )}
                         </div>
                     )}
@@ -267,6 +282,29 @@ export const ChallengeDetail: React.FC = () => {
                                         {challenge.stage}
                                     </span>
                                 </>
+                            );
+                        })()}
+                    </div>
+                    <div className="detail-meta-item">
+                        {(() => {
+                            const priority = (challenge.priority as string) || 'Medium';
+                            const brand = PRIORITY_BRANDING[priority] || PRIORITY_BRANDING['Medium'];
+                            return (
+                                <div className="stage-badge" style={{
+                                    background: brand.bg,
+                                    color: brand.color,
+                                    border: `1px solid ${brand.border}`,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '4px 10px',
+                                    borderRadius: '12px',
+                                    fontWeight: '600',
+                                    fontSize: '10px'
+                                }}>
+                                    <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: brand.color }} />
+                                    {priority} Impact
+                                </div>
                             );
                         })()}
                     </div>
@@ -329,19 +367,42 @@ export const ChallengeDetail: React.FC = () => {
 
                             {/* Impact & Priority */}
                             <div className="sc-form-group">
-                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Business Impact Level</label>
+                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Priority</label>
                                 <div style={{ fontWeight: 500 }}>
                                     {editMode ? (
-                                        <select className="sc-form-select" value={challenge.priority}>
+                                        <select
+                                            className="sc-form-select"
+                                            value={challenge.priority}
+                                            onChange={e => setChallenge(prev => prev ? { ...prev, priority: e.target.value as any } : prev)}
+                                        >
                                             <option value="Critical">Critical</option>
                                             <option value="High">High</option>
                                             <option value="Medium">Medium</option>
                                             <option value="Low">Low</option>
                                         </select>
                                     ) : (
-                                        <span className={`status-badge ${(challenge.priority as string) === 'High' || (challenge.priority as string) === 'Critical' ? 'high' : challenge.priority === 'Medium' ? 'medium' : 'low'}`} style={{ display: 'inline-block', marginTop: '4px' }}>
-                                            {challenge.priority}
-                                        </span>
+                                        (() => {
+                                            const currentPriority = (challenge.priority as string) || 'Medium';
+                                            const brand = PRIORITY_BRANDING[currentPriority] || PRIORITY_BRANDING['Medium'];
+                                            return (
+                                                <div className="stage-badge" style={{
+                                                    background: brand.bg,
+                                                    color: brand.color,
+                                                    border: `1px solid ${brand.border}`,
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '6px',
+                                                    padding: '4px 10px',
+                                                    borderRadius: '12px',
+                                                    fontWeight: '600',
+                                                    fontSize: '10px',
+                                                    marginTop: '4px'
+                                                }}>
+                                                    <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: brand.color }} />
+                                                    {currentPriority} Impact
+                                                </div>
+                                            );
+                                        })()
                                     )}
                                 </div>
                             </div>
@@ -714,9 +775,9 @@ export const ChallengeDetail: React.FC = () => {
                                     {ideaErrors.description && <span style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{ideaErrors.description}</span>}
                                     <span className="hint">Focus on the value proposition and core concept</span>
                                 </div>
-                                <div className="submit-form-actions" style={{ padding: '16px 0 0', borderTop: '1px solid var(--border)' }}>
-                                    <button className="btn btn-secondary" onClick={() => { setShowIdeaModal(false); resetIdeaForm(); }}>Cancel</button>
-                                    <button className="btn btn-primary" onClick={handleIdeaSubmit}>Submit Idea</button>
+                                <div className="submit-form-actions" style={{ padding: '16px 0 0', borderTop: '1px solid var(--border)', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                    <button className="btn-cancel" onClick={() => { setShowIdeaModal(false); resetIdeaForm(); }}>Cancel</button>
+                                    <button className="btn-save" onClick={handleIdeaSubmit}>Submit Idea</button>
                                 </div>
                             </div>
                         </div>
@@ -734,6 +795,6 @@ export const ChallengeDetail: React.FC = () => {
                 message="Are you sure you want to delete this challenge? This action cannot be undone and will remove it from all views."
                 confirmText="Delete Challenge"
             />
-        </div>
+        </div >
     );
 };

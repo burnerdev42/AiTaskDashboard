@@ -75,30 +75,33 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                             {message}
                         </p>
                     </div>
-                    <div className="submit-form-actions" style={{
-                        padding: '20px 0 0',
+                    <div className="modal-actions" style={{
+                        padding: '16px 24px',
                         borderTop: '1px solid var(--border)',
                         display: 'flex',
                         gap: '12px',
                         justifyContent: 'flex-end'
                     }}>
                         <button
-                            className="btn btn-secondary"
+                            className="btn-cancel btn-sm"
                             onClick={onClose}
-                            style={{ padding: '10px 20px', borderRadius: '8px' }}
                         >
                             {cancelText}
                         </button>
                         <button
-                            className={`btn ${type === 'danger' ? 'btn-danger' : 'btn-primary'}`}
+                            className={`btn-sm ${type === 'danger' ? 'btn-danger' : 'btn-primary'}`}
                             onClick={() => {
                                 onConfirm();
                                 onClose();
                             }}
                             style={{
-                                padding: '10px 24px',
-                                borderRadius: '8px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: '42px',
+                                borderRadius: 'var(--radius-sm)',
                                 fontWeight: '600',
+                                border: '1px solid transparent',
                                 boxShadow: type === 'danger' ? '0 4px 12px rgba(255, 82, 82, 0.3)' : '0 4px 12px rgba(0, 150, 136, 0.3)'
                             }}
                         >

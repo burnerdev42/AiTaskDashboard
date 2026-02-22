@@ -17,8 +17,8 @@ export const TeamMember: React.FC<TeamMemberProps> = ({ avatar, name, role, bio,
         <div className="team-card" onClick={() => navigate('/profile', { state: { name, role, avatar, bio, stats, color } })} style={{ cursor: 'pointer' }}>
             <div className="team-avatar" style={{ background: `var(--accent-${color})` }}>{avatar}</div>
             <h4>{name}</h4>
-            <div className="team-role">{role}</div>
-            <p className="team-bio">{bio}</p>
+            {role && <div className="team-role">{role}</div>}
+            {bio && <p className="team-bio">{bio}</p>}
             <div className="team-stats">
                 {Object.entries(stats).map(([k, v]) => (
                     <div className="team-stat-item" key={k}>
