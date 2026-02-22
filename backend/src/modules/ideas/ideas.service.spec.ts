@@ -4,6 +4,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Idea } from '../../models/ideas/idea.schema';
 import { ActivitiesService } from '../activities/activities.service';
 import { Types, Model } from 'mongoose';
+import { ChallengesService } from '../challenges/challenges.service';
 
 describe('IdeasService', () => {
   let service: IdeasService;
@@ -44,6 +45,10 @@ describe('IdeasService', () => {
     deleteByFkId: jest.fn().mockResolvedValue(undefined),
   };
 
+  const mockChallengesService = {
+    subscribeUser: jest.fn().mockResolvedValue(undefined),
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -57,6 +62,10 @@ describe('IdeasService', () => {
         {
           provide: ActivitiesService,
           useValue: mockActivitiesService,
+        },
+        {
+          provide: ChallengesService,
+          useValue: mockChallengesService,
         }
       ],
     }).compile();

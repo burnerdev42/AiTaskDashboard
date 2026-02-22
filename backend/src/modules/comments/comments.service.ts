@@ -4,12 +4,14 @@
  * @responsibility Orchestrates data operations for the Comment collection.
  */
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject, forwardRef } from '@nestjs/common';
 import { CommentsRepository } from './comments.repository';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
 import { AbstractService } from '../../common';
 import { CommentDocument } from '../../models/comments/comment.schema';
 import { Types } from 'mongoose';
+import { ChallengesService } from '../challenges/challenges.service';
+import { IdeasService } from '../ideas/ideas.service';
 
 /**
  * Service for Comments.
@@ -18,7 +20,13 @@ import { Types } from 'mongoose';
 export class CommentsService extends AbstractService {
   protected readonly logger = new Logger(CommentsService.name);
 
-  constructor(private readonly commentsRepository: CommentsRepository) {
+  constructor(
+    private readonly commentsRepository: CommentsRepository,
+    @Inject(forwardRef(() => ChallengesService))
+    private readonly challengesService: ChallengesService,
+    @Inject(forwardRef(() => IdeasService))
+    private readonly ideasService: IdeasService,
+  ) {
     super();
   }
 
@@ -33,9 +41,25 @@ export class CommentsService extends AbstractService {
       userId: new Types.ObjectId(createCommentDto.userId),
       parentId: new Types.ObjectId(createCommentDto.parentId),
     };
-    return this.commentsRepository.create(
+    const savedComment = await this.commentsRepository.create(
       document as unknown as Partial<CommentDocument>,
     );
+
+    if (createCommentDto.type === 'CH') {
+      await this.challengesService.subscribeUser(createCommentDto.parentId, createCommentDto.userId);
+    } else if (createCommentDto.type === 'ID') {
+      await this.ideasService.subscribeUser(createCommentDto.parentId, createCommentDto.userId);
+      try {
+        const idea = await this.ideasService.findByIdeaId(createCommentDto.parentId);
+        if (idea && idea.challengeId) {
+          await this.challengesService.subscribeUser(idea.challengeId, createCommentDto.userId);
+        }
+      } catch (err) {
+        this.logger.error(`Could not find idea ${createCommentDto.parentId} for comment subscription`);
+      }
+    }
+
+    return savedComment;
   }
 
   /**

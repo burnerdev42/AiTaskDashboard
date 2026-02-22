@@ -8,12 +8,15 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AbstractService } from '../../common';
 import { Idea, IdeaDocument } from '../../models/ideas/idea.schema';
 import { ActivitiesService } from '../activities/activities.service';
+import { ChallengesService } from '../challenges/challenges.service';
 
 @Injectable()
 export class IdeasService extends AbstractService {
@@ -23,6 +26,8 @@ export class IdeasService extends AbstractService {
     @InjectModel(Idea.name)
     private readonly ideaModel: Model<IdeaDocument>,
     private readonly activitiesService: ActivitiesService,
+    @Inject(forwardRef(() => ChallengesService))
+    private readonly challengesService: ChallengesService,
   ) {
     super();
   }
@@ -59,6 +64,9 @@ export class IdeasService extends AbstractService {
       fk_id: saved._id.toString(),
       userId: saved.userId,
     });
+
+    // Subscribes creator to the parent challenge
+    await this.challengesService.subscribeUser(dto.challengeId, saved.userId);
 
     return saved;
   }
@@ -133,6 +141,9 @@ export class IdeasService extends AbstractService {
       userId,
     });
 
+    // Subscribes upvoter to the parent challenge
+    await this.challengesService.subscribeUser(idea.challengeId, userId);
+
     return { upVotes: idea.upVotes };
   }
 
@@ -156,6 +167,23 @@ export class IdeasService extends AbstractService {
     });
 
     return { subscription: idea.subscription };
+  }
+
+  /** Add user to idea subscriptions (without toggling off). */
+  async subscribeUser(ideaId: string, userId: string): Promise<void> {
+    const idea = await this.ideaModel.findOne({ ideaId }).exec();
+    if (!idea) return;
+
+    if (!idea.subscription.includes(userId)) {
+      idea.subscription.push(userId);
+      await idea.save();
+
+      await this.activitiesService.create({
+        type: 'idea_subscribed',
+        fk_id: idea._id.toString(),
+        userId,
+      });
+    }
   }
 
   /** Delete idea by ideaId. */

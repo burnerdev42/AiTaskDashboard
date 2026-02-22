@@ -210,6 +210,26 @@ export class ChallengesService extends AbstractService {
     return { subcriptions: challenge.subcriptions };
   }
 
+  /** Add user to challenge subscriptions (without toggling off). */
+  async subscribeUser(
+    virtualId: string,
+    userId: string,
+  ): Promise<void> {
+    const challenge = await this.challengeModel.findOne({ virtualId }).exec();
+    if (!challenge) return;
+
+    if (!challenge.subcriptions.includes(userId)) {
+      challenge.subcriptions.push(userId);
+      await challenge.save();
+
+      await this.activitiesService.create({
+        type: 'challenge_subscribed',
+        fk_id: challenge._id.toString(),
+        userId,
+      });
+    }
+  }
+
   /** Deletes a challenge by virtualId and cascades. */
   async removeByVirtualId(virtualId: string): Promise<void> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();

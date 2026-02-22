@@ -5,6 +5,8 @@ import { CommentDocument } from '../../models/comments/comment.schema';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
 
 import { Types } from 'mongoose';
+import { ChallengesService } from '../challenges/challenges.service';
+import { IdeasService } from '../ideas/ideas.service';
 
 describe('CommentsService', () => {
   let service: CommentsService;
@@ -19,6 +21,15 @@ describe('CommentsService', () => {
     createdAt: new Date(),
   };
 
+  const mockChallengesService = {
+    subscribeUser: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockIdeasService = {
+    subscribeUser: jest.fn().mockResolvedValue(undefined),
+    findByIdeaId: jest.fn().mockResolvedValue({ challengeId: 'CH-001' }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -30,6 +41,14 @@ describe('CommentsService', () => {
             find: jest.fn(),
             delete: jest.fn(),
           },
+        },
+        {
+          provide: ChallengesService,
+          useValue: mockChallengesService,
+        },
+        {
+          provide: IdeasService,
+          useValue: mockIdeasService,
         },
       ],
     }).compile();

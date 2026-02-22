@@ -50,7 +50,7 @@
 1. Find idea by `ideaId`. 404 if not found.
 2. Toggle `userId` in `upVotes` array.
 3. Update `appreciationCount` to match `upVotes.length`.
-4. Auto-subscribe user to the idea and its parent challenge.
+4. Auto-subscribe user to the idea (add userId to idea's `subscription`) AND to its parent challenge.
 5. Create Activity: `{ type: 'idea_upvoted', fk_id, userId }`.
 6. Create Notification for idea subscribers + challenge owner + challenge subscribers (except voter): `{ type: 'idea_upvoted' }`.
 7. Return 200.
