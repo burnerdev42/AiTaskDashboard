@@ -80,7 +80,16 @@ export const storage = {
     },
 
     getSwimLanes: (): SwimLaneCard[] => {
-        return JSON.parse(localStorage.getItem(STORAGE_KEYS.SWIMLANES) || '[]');
+        const challenges = storage.getChallenges();
+        return challenges.map(c => ({
+            id: c.id,
+            title: c.title,
+            description: c.description,
+            owner: c.owner.name,
+            priority: (c.impact === 'Critical' ? 'High' : c.impact || 'Medium') as 'High' | 'Medium' | 'Low',
+            stage: c.stage as SwimLaneCard['stage'],
+            type: 'standard' as const,
+        }));
     },
 
     getNotifications: (): Notification[] => {
@@ -163,11 +172,11 @@ export const storage = {
     },
 
     updateSwimLaneCardStage: (cardId: string, newStage: string) => {
-        const cards = storage.getSwimLanes();
-        const index = cards.findIndex(c => c.id === cardId);
+        const challenges = storage.getChallenges();
+        const index = challenges.findIndex(c => c.id === cardId);
         if (index !== -1) {
-            cards[index].stage = newStage as ChallengeStage | 'Parking Lot';
-            localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(cards));
+            challenges[index].stage = newStage as ChallengeStage;
+            localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
             return true;
         }
         return false;

@@ -32,7 +32,7 @@ export const Home: React.FC = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setChallenges(storage.getChallenges());
+            setChallenges(storage.getChallenges().slice(0, 5));
             setIsLoading(false);
         }, 800); // Small delay for smooth entry
         return () => clearTimeout(timer);
