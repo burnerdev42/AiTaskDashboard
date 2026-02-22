@@ -7,8 +7,9 @@ interface AuthContextType {
     user: User | null;
     login: (email: string) => Promise<boolean>;
     logout: () => void;
-    register: (name: string, email: string) => Promise<boolean>;
+    register: (userData: Partial<User> & { name: string; email: string }) => Promise<boolean>;
     updateUser: (data: Partial<User>) => Promise<boolean>;
+    deleteAccount: () => Promise<boolean>;
     isAuthenticated: boolean;
 }
 
@@ -44,19 +45,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         storage.setCurrentUser(null);
     };
 
-    const register = async (name: string, email: string): Promise<boolean> => {
+    const register = async (userData: Partial<User> & { name: string; email: string }): Promise<boolean> => {
         // Check if user exists
         const users = storage.getUsers();
-        if (users.find(u => u.email === email)) {
+        if (users.find(u => u.email === userData.email)) {
             return false;
         }
 
         const newUser: User = {
             id: Date.now().toString(),
-            name,
-            email,
-            role: 'Contributor',
-            avatar: name.substring(0, 2).toUpperCase(),
+            name: userData.name,
+            email: userData.email,
+            role: userData.role || 'Contributor',
+            avatar: userData.name.substring(0, 2).toUpperCase(),
+            opco: userData.opco,
+            platform: userData.platform,
+            about: userData.about,
+            interests: userData.interests,
         };
         storage.addUser(newUser);
         setUser(newUser);
@@ -75,8 +80,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
     };
 
+    const deleteAccount = async (): Promise<boolean> => {
+        if (!user) return false;
+        if (storage.deleteUser(user.email)) {
+            setUser(null);
+            return true;
+        }
+        return false;
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, register, updateUser, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, login, logout, register, updateUser, deleteAccount, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );

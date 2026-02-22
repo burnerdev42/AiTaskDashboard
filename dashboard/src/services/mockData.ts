@@ -26,7 +26,7 @@ export const MOCK_USERS: User[] = [
 
 export const MOCK_CHALLENGES: Challenge[] = [
     {
-        id: 'CHG-001',
+        id: 'CH-001',
         title: 'Unified Customer 360 Platform',
         description: 'Consolidated customer view across CRM, billing, and support — deployed globally in 12 markets. Recognized for transforming customer experience at scale.',
         stage: 'Scaled & Deployed',
@@ -42,7 +42,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         impact: 'Critical'
     },
     {
-        id: 'CHG-002',
+        id: 'CH-002',
         title: 'Conversational Commerce Bot',
         description: 'GenAI assistant handling product queries, order tracking, and returns for e-commerce. Praised for driving self-service adoption up by 65%.',
         stage: 'POC & Pilot',
@@ -57,7 +57,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         impact: 'High'
     },
     {
-        id: 'CHG-003',
+        id: 'CH-003',
         title: 'Smart Warehouse Routing',
         description: 'IoT-driven warehouse navigation for autonomous forklifts, reducing pick-time by 40%. Voted best innovation challenge of Q4 2025.',
         stage: 'Ideation & Evaluation',
@@ -73,7 +73,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         impact: 'High'
     },
     {
-        id: 'CHG-004',
+        id: 'CH-004',
         title: 'AI-Powered Demand Forecasting',
         description: 'Use machine learning to predict regional demand patterns and optimize inventory allocation. Highlighted for its potential to save $12M annually.',
         stage: 'Challenge Submitted',
@@ -88,7 +88,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         impact: 'Medium'
     },
     {
-        id: 'CHG-005',
+        id: 'CH-005',
         title: 'Digital Twin – Factory Floor',
         description: 'Real-time 3D simulation of production lines for throughput optimization. Appreciated by leadership for cutting simulation costs by 70%.',
         stage: 'POC & Pilot',
@@ -113,16 +113,16 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Ravi Patel submitted "Optimize Cloud Infrastructure Costs"',
         time: '5 minutes ago',
         unread: true,
-        link: '/challenges/CHG-001'
+        link: '/challenges/CH-001'
     },
     {
         id: '2',
         type: 'idea',
         title: 'New Idea Submitted',
-        text: 'Meera Singh proposed "Gamified Onboarding Flow" on CHG-001',
+        text: 'Meera Singh proposed "Gamified Onboarding Flow" on CH-001',
         time: '22 minutes ago',
         unread: true,
-        link: '/challenges/CHG-001/ideas/ID-0003'
+        link: '/challenges/CH-001/ideas/ID-0003'
     },
     {
         id: '3',
@@ -131,7 +131,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Siddharth Banerjee commented on "AI-powered document verification"',
         time: '1 hour ago',
         unread: true,
-        link: '/challenges/CHG-001/ideas/ID-0003'
+        link: '/challenges/CH-001/ideas/ID-0003'
     },
     {
         id: '4',
@@ -140,16 +140,16 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: '"Reduce Customer Churn" moved to Ideation stage',
         time: '3 hours ago',
         unread: true,
-        link: '/challenges/CHG-001'
+        link: '/challenges/CH-001'
     },
     {
         id: '5',
         type: 'idea',
         title: 'New Idea Submitted',
-        text: 'Ananya Basu proposed "Personalized Tutorial System" on CHG-001',
+        text: 'Ananya Basu proposed "Personalized Tutorial System" on CH-001',
         time: '5 hours ago',
         unread: true,
-        link: '/challenges/CHG-001/ideas/ID-0003'
+        link: '/challenges/CH-001/ideas/ID-0003'
     },
     {
         id: '6',
@@ -158,7 +158,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Priya Desai submitted "Optimize Warehouse Slot Allocation"',
         time: 'Yesterday',
         unread: false,
-        link: '/challenges/CHG-001'
+        link: '/challenges/CH-001'
     },
     {
         id: '7',
@@ -167,7 +167,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Rohan Patel commented on "Customer Health Dashboard"',
         time: '2 days ago',
         unread: false,
-        link: '/challenges/CHG-001/ideas/ID-0003'
+        link: '/challenges/CH-001/ideas/ID-0003'
     },
     {
         id: '8',
@@ -176,7 +176,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: '"Voice-Driven Order Entry" moved to Ideation',
         time: '3 days ago',
         unread: false,
-        link: '/challenges/CHG-001'
+        link: '/challenges/CH-001'
     },
     {
         id: '9',
@@ -185,7 +185,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Ananya Basu voted for "Unified Customer 360 Platform"',
         time: 'Just now',
         unread: true,
-        link: '/challenges/CHG-001'
+        link: '/challenges/CH-001'
     },
     {
         id: '10',
@@ -194,18 +194,18 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Siddharth Banerjee liked "Personalized Tutorial System"',
         time: '10 minutes ago',
         unread: true,
-        link: '/challenges/CHG-001/ideas/ID-0003'
+        link: '/challenges/CH-001/ideas/ID-0003'
     }
 ];
 
 /* ══ Swim-Lane Cards — 5, 8, 6, 4, 4 distribution ══ */
 export const MOCK_SWIMLANES: SwimLaneCard[] = [
     // ── 1. Challenge Submitted  (5 cards) ──
-    { id: 'CHG-001', title: 'Reduce Customer Churn', description: 'High-value B2B segment losing 8% quarter-over-quarter. Root cause analysis points to delayed support response and lack of proactive engagement.', owner: 'R. Patel', priority: 'High', stage: 'Challenge Submitted', type: 'standard' },
-    { id: 'CHG-002', title: 'Automate Invoice Reconciliation', description: 'Finance team spends 200+ person-hours monthly on manual three-way matching between POs, GRNs, and invoices across 14 vendor systems.', owner: 'M. Singh', priority: 'Medium', stage: 'Challenge Submitted', type: 'standard' },
-    { id: 'CHG-003', title: 'Improve Warehouse Throughput', description: 'Dock gate bottleneck causing 6-hour average shipping delays. Peak season amplifies the problem with 40% capacity overflow.', owner: 'A. Basu', priority: 'High', stage: 'Challenge Submitted', type: 'standard' },
-    { id: 'CHG-004', title: 'Optimize Cloud Infra Costs', description: 'Cloud spend grew 35% YoY while compute utilisation sits at only 42%. Idle resources and over-provisioned instances need right-sizing.', owner: 'S. Banerjee', priority: 'Medium', stage: 'Challenge Submitted', type: 'standard' },
-    { id: 'CHG-005', title: 'Reduce Employee Attrition', description: 'Tech talent turnover reached 22% annually. Exit interviews highlight limited growth paths and outdated tooling as top reasons.', owner: 'D. Ghosh', priority: 'High', stage: 'Challenge Submitted', type: 'standard' },
+    { id: 'CH-001', title: 'Reduce Customer Churn', description: 'High-value B2B segment losing 8% quarter-over-quarter. Root cause analysis points to delayed support response and lack of proactive engagement.', owner: 'R. Patel', priority: 'High', stage: 'Scaled & Deployed', type: 'standard' },
+    { id: 'CH-002', title: 'Automate Invoice Reconciliation', description: 'Finance team spends 200+ person-hours monthly on manual three-way matching between POs, GRNs, and invoices across 14 vendor systems.', owner: 'M. Singh', priority: 'Medium', stage: 'POC & Pilot', type: 'standard' },
+    { id: 'CH-003', title: 'Improve Warehouse Throughput', description: 'Dock gate bottleneck causing 6-hour average shipping delays. Peak season amplifies the problem with 40% capacity overflow.', owner: 'A. Basu', priority: 'High', stage: 'Ideation & Evaluation', type: 'standard' },
+    { id: 'CH-004', title: 'Optimize Cloud Infra Costs', description: 'Cloud spend grew 35% YoY while compute utilisation sits at only 42%. Idle resources and over-provisioned instances need right-sizing.', owner: 'S. Banerjee', priority: 'Medium', stage: 'Challenge Submitted', type: 'standard' },
+    { id: 'CH-005', title: 'Reduce Employee Attrition', description: 'Tech talent turnover reached 22% annually. Exit interviews highlight limited growth paths and outdated tooling as top reasons.', owner: 'D. Ghosh', priority: 'High', stage: 'POC & Pilot', type: 'standard' },
 
     // ── 2. Ideation & Evaluation  (8 cards) ──
     { id: 'ID-0001', title: 'AI Churn Prediction Model', description: 'Gradient-boosted ML model leveraging 40+ behavioural signals — login frequency, ticket sentiment, usage drop-off — to flag at-risk accounts 30 days early.', owner: 'S. Banerjee', priority: 'Medium', stage: 'Ideation & Evaluation', type: 'standard' },
