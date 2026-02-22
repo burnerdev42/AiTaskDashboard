@@ -7,6 +7,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
 import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
 import { Priority } from '../../common/enums/priority.enum';
+export { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
+
 
 /**
  * Short user info included in challenge responses.
@@ -138,6 +140,22 @@ export class ChallengeResponseDto extends ChallengeListItemDto {
 }
 
 /**
+ * Domain-keyed data payload for single challenge responses.
+ */
+export class ChallengeDataDto {
+  @ApiProperty({ type: ChallengeResponseDto })
+  challenge: ChallengeResponseDto;
+}
+
+/**
+ * Domain-keyed data payload for challenge list responses.
+ */
+export class ChallengeListDataDto {
+  @ApiProperty({ type: [ChallengeListItemDto] })
+  challenges: ChallengeListItemDto[];
+}
+
+/**
  * Standard API wrapper for single challenge.
  */
 export class ChallengeApiResponse {
@@ -147,8 +165,8 @@ export class ChallengeApiResponse {
   @ApiProperty({ example: 'Challenge retrieved successfully' })
   message: string;
 
-  @ApiProperty({ type: ChallengeResponseDto })
-  data: ChallengeResponseDto;
+  @ApiProperty({ type: ChallengeDataDto })
+  data: ChallengeDataDto;
 
   @ApiProperty({ example: '2026-02-18T00:00:00.000Z' })
   timestamp: string;
@@ -164,9 +182,10 @@ export class ChallengeListApiResponse {
   @ApiProperty({ example: 'Challenges retrieved successfully' })
   message: string;
 
-  @ApiProperty({ type: [ChallengeListItemDto] })
-  data: ChallengeListItemDto[];
+  @ApiProperty({ type: ChallengeListDataDto })
+  data: ChallengeListDataDto;
 
   @ApiProperty({ example: '2026-02-18T00:00:00.000Z' })
   timestamp: string;
 }
+

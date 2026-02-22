@@ -70,3 +70,41 @@ export class ErrorResponseDto extends BaseApiResponseDto {
   })
   path?: string;
 }
+
+/**
+ * Data payload for count endpoints.
+ * Using a concrete class (not inline type) so Swagger can introspect it.
+ */
+export class CountDataDto {
+  @ApiProperty({ description: 'Numeric count', example: 42, type: Number })
+  count: number;
+}
+
+/**
+ * Standard API response wrapper for count endpoints.
+ * Use this instead of domain-specific count DTOs to ensure consistent Swagger output.
+ */
+export class CountApiResponseDto {
+  @ApiProperty({
+    description: 'Response status',
+    enum: ApiStatus,
+    example: ApiStatus.SUCCESS,
+  })
+  status: ApiStatus;
+
+  @ApiPropertyOptional({
+    description: 'Human-readable response message',
+    example: 'Operation completed successfully',
+  })
+  message?: string;
+
+  @ApiProperty({ type: CountDataDto, description: 'Count payload' })
+  data: CountDataDto;
+
+  @ApiProperty({
+    description: 'Response timestamp in ISO format',
+    example: '2026-02-18T10:00:00.000Z',
+  })
+  timestamp: string;
+}
+

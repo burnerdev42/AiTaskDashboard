@@ -65,7 +65,7 @@ describe('ChallengesController', () => {
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.create).toHaveBeenCalledWith(dto);
-      expect(result.data).toEqual(mockChallenge);
+      expect(result.data).toEqual({ challenge: mockChallenge });
     });
   });
 
@@ -75,7 +75,7 @@ describe('ChallengesController', () => {
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.findAll).toHaveBeenCalledWith(10, 1);
-      expect(result.data).toHaveLength(1);
+      expect(result.data.challenges).toHaveLength(1);
     });
   });
 
@@ -87,8 +87,8 @@ describe('ChallengesController', () => {
       expect(service.findByVirtualId).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
       );
-      expect(result.data).toHaveProperty('ideas');
-      expect(result.data).toHaveProperty('upvotes');
+      expect(result.data.challenge).toHaveProperty('ideas');
+      expect(result.data.challenge).toHaveProperty('upvotes');
     });
   });
 
@@ -105,7 +105,7 @@ describe('ChallengesController', () => {
         mockChallengeId.toHexString(),
         dto,
       );
-      expect(result.data).toEqual(mockChallenge);
+      expect(result.data).toEqual({ challenge: mockChallenge });
     });
   });
 

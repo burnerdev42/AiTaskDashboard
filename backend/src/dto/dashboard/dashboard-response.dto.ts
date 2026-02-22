@@ -64,6 +64,14 @@ export class SwimLaneCardDto {
 }
 
 /**
+ * Domain-keyed data payload for swimlanes responses.
+ */
+export class SwimLanesDataDto {
+  @ApiProperty({ type: [SwimLaneCardDto] })
+  swimlanes: SwimLaneCardDto[];
+}
+
+/**
  * API response for swimlanes endpoint.
  */
 export class SwimLanesApiResponseDto {
@@ -75,8 +83,8 @@ export class SwimLanesApiResponseDto {
   })
   message?: string;
 
-  @ApiProperty({ type: [SwimLaneCardDto] })
-  data: SwimLaneCardDto[];
+  @ApiProperty({ type: SwimLanesDataDto })
+  data: SwimLanesDataDto;
 
   @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
   requestId?: string;

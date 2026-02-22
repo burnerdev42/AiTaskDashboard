@@ -119,7 +119,10 @@ export class IdeasService extends AbstractService {
   }
 
   /** Toggle upvote for an idea. */
-  async toggleUpvote(ideaId: string, userId: string): Promise<{ upVotes: string[] }> {
+  async toggleUpvote(
+    ideaId: string,
+    userId: string,
+  ): Promise<{ upVotes: string[] }> {
     const idea = await this.ideaModel.findOne({ ideaId }).exec();
     if (!idea) throw new NotFoundException(`Idea ${ideaId} not found`);
 
@@ -148,7 +151,10 @@ export class IdeasService extends AbstractService {
   }
 
   /** Toggle subscription for an idea. */
-  async toggleSubscribe(ideaId: string, userId: string): Promise<{ subscription: string[] }> {
+  async toggleSubscribe(
+    ideaId: string,
+    userId: string,
+  ): Promise<{ subscription: string[] }> {
     const idea = await this.ideaModel.findOne({ ideaId }).exec();
     if (!idea) throw new NotFoundException(`Idea ${ideaId} not found`);
 

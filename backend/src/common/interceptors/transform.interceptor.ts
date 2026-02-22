@@ -67,7 +67,7 @@ export class TransformInterceptor<T> implements NestInterceptor<
       typeof obj === 'object' &&
       obj !== null &&
       'status' in obj &&
-      (obj.status === ApiStatus.SUCCESS || obj.status === ApiStatus.ERROR) &&
+      (obj.status === ApiStatus.SUCCESS || obj.status === ApiStatus.FAILED) &&
       'timestamp' in obj
     );
   }

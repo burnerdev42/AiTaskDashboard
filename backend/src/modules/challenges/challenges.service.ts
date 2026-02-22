@@ -11,6 +11,7 @@ import {
   Inject,
   forwardRef,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -123,7 +124,7 @@ export class ChallengesService extends AbstractService {
     return updated as unknown as ChallengeDocument;
   }
 
-  /** PATCH: Update challenge status (swim lane). */
+  /** PATCH: Update challenge status (swim lane). Enforces pilot-lock constraint. */
   async updateStatus(
     virtualId: string,
     status: string,
@@ -134,11 +135,18 @@ export class ChallengesService extends AbstractService {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
     }
 
+    // Pilot-lock: once in 'pilot', cannot move back to 'submitted'
+    if (challenge.status === 'pilot' && status === 'submitted') {
+      throw new BadRequestException(
+        "Transition from 'pilot' back to 'submitted' is not allowed.",
+      );
+    }
+
     challenge.status = status;
-    if (status === 'In Pilot') {
+    if (status === 'pilot') {
       challenge.timestampOfStatusChangedToPilot = new Date();
     }
-    if (status === 'Completed') {
+    if (status === 'completed') {
       challenge.timestampOfCompleted = new Date();
     }
     const saved = await challenge.save();
@@ -211,10 +219,7 @@ export class ChallengesService extends AbstractService {
   }
 
   /** Add user to challenge subscriptions (without toggling off). */
-  async subscribeUser(
-    virtualId: string,
-    userId: string,
-  ): Promise<void> {
+  async subscribeUser(virtualId: string, userId: string): Promise<void> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();
     if (!challenge) return;
 

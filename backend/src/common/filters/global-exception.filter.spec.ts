@@ -37,7 +37,7 @@ describe('GlobalExceptionFilter', () => {
     expect(mockStatus).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(mockJson).toHaveBeenCalledWith(
       expect.objectContaining({
-        status: 'error',
+        status: 'failed',
         message: 'Test error',
       }),
     );

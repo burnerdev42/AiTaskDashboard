@@ -78,7 +78,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     );
 
     const errorResponse: ErrorResponse = {
-      status: ApiStatus.ERROR,
+      status: ApiStatus.FAILED,
       message: Array.isArray(message) ? message.join(', ') : message,
       data: null,
       errors,

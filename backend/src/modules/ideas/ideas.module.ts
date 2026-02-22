@@ -24,4 +24,4 @@ import { ChallengesModule } from '../challenges/challenges.module';
   providers: [IdeasService, IdeasRepository],
   exports: [IdeasService],
 })
-export class IdeasModule { }
+export class IdeasModule {}

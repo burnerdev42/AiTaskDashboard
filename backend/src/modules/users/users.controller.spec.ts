@@ -26,12 +26,12 @@ describe('UsersController', () => {
   it('should return all users', async () => {
     mockService.findAll.mockResolvedValue(['user1'] as unknown as any);
     const result = await controller.findAll();
-    expect(result.data).toEqual(['user1']);
+    expect(result.data).toEqual({ users: ['user1'] });
   });
 
   it('should return a user by id', async () => {
     mockService.findOne.mockResolvedValue('user1' as unknown as any);
     const result = await controller.findOne('1');
-    expect(result.data).toEqual('user1');
+    expect(result.data).toEqual({ user: 'user1' });
   });
 });

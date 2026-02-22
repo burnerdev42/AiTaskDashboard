@@ -43,7 +43,10 @@ export class NotificationsService extends AbstractService {
 
   /** Get a single notification by _id. */
   async findById(id: string): Promise<NotificationDocument> {
-    const notification = await this.notificationModel.findById(id).lean().exec();
+    const notification = await this.notificationModel
+      .findById(id)
+      .lean()
+      .exec();
     if (!notification) {
       throw new NotFoundException(`Notification ${id} not found`);
     }
@@ -63,7 +66,10 @@ export class NotificationsService extends AbstractService {
   }
 
   /** PATCH: Update isSeen status only. */
-  async updateIsSeen(id: string, isSeen: boolean): Promise<NotificationDocument> {
+  async updateIsSeen(
+    id: string,
+    isSeen: boolean,
+  ): Promise<NotificationDocument> {
     const updated = await this.notificationModel
       .findByIdAndUpdate(id, { isSeen }, { new: true })
       .lean()
@@ -88,7 +94,11 @@ export class NotificationsService extends AbstractService {
   }
 
   /** Get notifications by userId. */
-  async findByUserId(userId: string, limit = 20, offset = 0): Promise<NotificationDocument[]> {
+  async findByUserId(
+    userId: string,
+    limit = 20,
+    offset = 0,
+  ): Promise<NotificationDocument[]> {
     return this.notificationModel
       .find({ userId })
       .sort({ createdAt: -1 })
@@ -100,7 +110,21 @@ export class NotificationsService extends AbstractService {
 
   /** Get unseen notification count for a user. */
   async getUnseenCount(userId: string): Promise<number> {
-    return this.notificationModel.countDocuments({ userId, isSeen: false }).exec();
+    return this.notificationModel
+      .countDocuments({ userId, isSeen: false })
+      .exec();
+  }
+
+  /**
+   * Get notification count for a user, optionally filtered by isSeen.
+   * If isSeen is undefined, returns the total count for the user.
+   */
+  async countByUserId(userId: string, isSeen?: boolean): Promise<number> {
+    const filter: Record<string, unknown> = { userId };
+    if (isSeen !== undefined) {
+      filter.isSeen = isSeen;
+    }
+    return this.notificationModel.countDocuments(filter).exec();
   }
 
   /** Delete all notifications linked to a specific entity. */

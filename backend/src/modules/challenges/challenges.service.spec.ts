@@ -58,7 +58,11 @@ describe('ChallengesService', () => {
 
   const mockChallengesRepository: any = jest.fn().mockImplementation((dto) => ({
     ...dto,
-    save: jest.fn().mockResolvedValue({ ...dto, _id: mockChallengeId, userId: dto.userId || '1' }),
+    save: jest.fn().mockResolvedValue({
+      ...dto,
+      _id: mockChallengeId,
+      userId: dto.userId || '1',
+    }),
   }));
   Object.assign(mockChallengesRepository, {
     find: jest.fn().mockReturnThis(),
@@ -88,7 +92,10 @@ describe('ChallengesService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ChallengesService,
-        { provide: getModelToken(Challenge.name), useValue: mockChallengesRepository },
+        {
+          provide: getModelToken(Challenge.name),
+          useValue: mockChallengesRepository,
+        },
         { provide: IdeasService, useValue: mockIdeasService },
         { provide: ActivitiesService, useValue: mockActivitiesService },
       ],
@@ -132,9 +139,13 @@ describe('ChallengesService', () => {
   describe('findOne', () => {
     it('should return challenge', async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const result = await service.findByVirtualId(mockChallengeId.toHexString());
+      const result = await service.findByVirtualId(
+        mockChallengeId.toHexString(),
+      );
 
-      expect(challengeModel.findOne).toHaveBeenCalledWith({ virtualId: mockChallengeId.toHexString() });
+      expect(challengeModel.findOne).toHaveBeenCalledWith({
+        virtualId: mockChallengeId.toHexString(),
+      });
     });
   });
 
@@ -142,12 +153,15 @@ describe('ChallengesService', () => {
     it('should update a challenge', async () => {
       const dto = { title: 'Updated', description: 'Updated desc' };
       mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge); // for findOneAndUpdate
-      const result = await service.updateByVirtualId(mockChallengeId.toHexString(), dto);
+      const result = await service.updateByVirtualId(
+        mockChallengeId.toHexString(),
+        dto,
+      );
 
       expect(challengeModel.findOneAndUpdate).toHaveBeenCalledWith(
         { virtualId: mockChallengeId.toHexString() },
         dto,
-        { new: true }
+        { new: true },
       );
       expect(result.title).toBe('AI Innovation');
     });
@@ -157,7 +171,9 @@ describe('ChallengesService', () => {
     it('should delete a challenge', async () => {
       mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge); // for findByIdAndDelete (assuming logic uses _id)
       mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge); // for fallback
-      const result = await service.removeByVirtualId(mockChallengeId.toHexString());
+      const result = await service.removeByVirtualId(
+        mockChallengeId.toHexString(),
+      );
 
       expect(challengeModel.deleteOne).toHaveBeenCalledWith({
         _id: mockChallenge._id,

@@ -1,8 +1,10 @@
 openapi: 3.0.0
 info:
   title: AI Task Dashboard API
-  description: Automatically derived CRUD API documentation based on `Data requirements.md`. Includes standard endpoints for collections with specific ID fetching rules (virtual vs Mongo _id) and derived fields dynamically included in GET responses.
-  version: 1.0.0
+  description: >
+    Automatically derived CRUD API documentation based on `Data requirements.md`.
+    All responses follow the standardized API response envelope.
+  version: 1.1.0
 servers:
   - url: /api/v1
     description: Main API Server
@@ -36,9 +38,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserResponse'
         '409':
           description: Conflict - Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   /auth/login:
     post:
@@ -56,12 +70,24 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token: { type: string, description: "JWT Access Token" }
-                  user: { $ref: '#/components/schemas/UserResponse' }
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+                            description: JWT Access Token
+                          user:
+                            $ref: '#/components/schemas/UserResponse'
         '401':
           description: Unauthorized - Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   # ==============================
   # USERS ENDPOINTS
@@ -79,9 +105,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          users:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/UserResponse'
     post:
       tags: [Users]
       summary: Create a user
@@ -93,6 +127,19 @@ paths:
       responses:
         '201':
           description: User created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserResponse'
+
   /users/count:
     get:
       tags: [Users]
@@ -103,9 +150,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count: { type: integer }
+                $ref: '#/components/schemas/CountApiResponse'
+
   /users/{id}:
     get:
       tags: [Users]
@@ -118,7 +164,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserResponse'
     put:
       tags: [Users]
       summary: Update a user
@@ -132,6 +186,18 @@ paths:
       responses:
         '200':
           description: User updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserResponse'
     delete:
       tags: [Users]
       summary: Delete a user
@@ -157,9 +223,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ChallengeResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenges:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/ChallengeResponse'
     post:
       tags: [Challenges]
       summary: Create a challenge
@@ -171,6 +245,19 @@ paths:
       responses:
         '201':
           description: Challenge created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
+
   /challenges/count:
     get:
       tags: [Challenges]
@@ -181,9 +268,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count: { type: integer }
+                $ref: '#/components/schemas/CountApiResponse'
+
   /challenges/{virtualId}:
     get:
       tags: [Challenges]
@@ -201,7 +287,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChallengeResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
     put:
       tags: [Challenges]
       summary: Update a challenge
@@ -219,6 +313,18 @@ paths:
       responses:
         '200':
           description: Challenge updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
     patch:
       tags: [Challenges]
       summary: Update challenge status (Swim Lane)
@@ -228,6 +334,9 @@ paths:
           required: true
           schema:
             type: string
+      description: >
+        Update the swim lane status of a challenge.
+        **Constraint:** Once a challenge is in `pilot` status it cannot be moved back to `submitted`.
       requestBody:
         content:
           application/json:
@@ -237,10 +346,29 @@ paths:
               properties:
                 status:
                   type: string
-                  description: New swim lane status
+                  enum: [submitted, ideation, pilot, completed, archive]
+                  description: New swim lane status. Transition from 'pilot' back to 'submitted' is forbidden.
       responses:
         '200':
           description: Challenge status updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
+        '400':
+          description: Bad Request - Invalid status transition (e.g., pilot to submitted is not allowed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
     delete:
       tags: [Challenges]
       summary: Delete a challenge
@@ -253,6 +381,7 @@ paths:
       responses:
         '204':
           description: Challenge deleted
+
   /challenges/{virtualId}/upvote:
     post:
       tags: [Challenges]
@@ -277,8 +406,25 @@ paths:
       responses:
         '200':
           description: Upvote toggled successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
         '404':
           description: Challenge not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
   /challenges/{virtualId}/subscribe:
     post:
       tags: [Challenges]
@@ -303,8 +449,24 @@ paths:
       responses:
         '200':
           description: Subscription toggled successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
         '404':
           description: Challenge not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   # ==============================
   # IDEAS ENDPOINTS
@@ -322,9 +484,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/IdeaResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          ideas:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/IdeaResponse'
     post:
       tags: [Ideas]
       summary: Create an idea
@@ -336,6 +506,19 @@ paths:
       responses:
         '201':
           description: Idea created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          idea:
+                            $ref: '#/components/schemas/IdeaResponse'
+
   /ideas/count:
     get:
       tags: [Ideas]
@@ -343,6 +526,11 @@ paths:
       responses:
         '200':
           description: Total count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+
   /ideas/{virtualId}:
     get:
       tags: [Ideas]
@@ -359,7 +547,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdeaResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          idea:
+                            $ref: '#/components/schemas/IdeaResponse'
     put:
       tags: [Ideas]
       summary: Update an idea
@@ -377,6 +573,18 @@ paths:
       responses:
         '200':
           description: Idea updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          idea:
+                            $ref: '#/components/schemas/IdeaResponse'
     delete:
       tags: [Ideas]
       summary: Delete an idea
@@ -389,6 +597,7 @@ paths:
       responses:
         '204':
           description: Idea deleted
+
   /ideas/{virtualId}/upvote:
     post:
       tags: [Ideas]
@@ -413,8 +622,25 @@ paths:
       responses:
         '200':
           description: Upvote toggled successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          idea:
+                            $ref: '#/components/schemas/IdeaResponse'
         '404':
           description: Idea not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
   /ideas/{virtualId}/subscribe:
     post:
       tags: [Ideas]
@@ -439,8 +665,24 @@ paths:
       responses:
         '200':
           description: Subscription toggled successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          idea:
+                            $ref: '#/components/schemas/IdeaResponse'
         '404':
           description: Idea not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   # ==============================
   # COMMENTS ENDPOINTS
@@ -458,12 +700,24 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CommentResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comments:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/CommentResponse'
     post:
       tags: [Comments]
       summary: Create a comment
+      description: >
+        Creates a new comment. The `type` field is derived from the virtualId prefix
+        (CH- = Challenge, ID- = Idea) and maps to Comment Types ["CH", "ID"].
+        Auto-subscribes the commenter to the parent entity.
       requestBody:
         content:
           application/json:
@@ -472,13 +726,31 @@ paths:
       responses:
         '201':
           description: Comment created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comment:
+                            $ref: '#/components/schemas/CommentResponse'
+
   /comments/count:
     get:
       tags: [Comments]
-      summary: Get comments count
+      summary: Get total comments count
       responses:
         '200':
-          description: Total count
+          description: Total comment count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+
   /comments/{id}:
     get:
       tags: [Comments]
@@ -491,7 +763,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommentResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comment:
+                            $ref: '#/components/schemas/CommentResponse'
     put:
       tags: [Comments]
       summary: Update a comment
@@ -505,6 +785,18 @@ paths:
       responses:
         '200':
           description: Comment updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comment:
+                            $ref: '#/components/schemas/CommentResponse'
     delete:
       tags: [Comments]
       summary: Delete a comment
@@ -513,6 +805,202 @@ paths:
       responses:
         '204':
           description: Comment deleted
+
+  /comments/challenge/{virtualId}:
+    get:
+      tags: [Comments]
+      summary: Get comments for a challenge by virtualId
+      operationId: getCommentsByChallengeVirtualId
+      description: >
+        Fetches all comments for a challenge. The virtualId prefix (CH-) maps to
+        Comment Type "CH". Internally resolves the challenge by virtualId and
+        queries comments where type="CH" and typeId matches.
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual ID of the challenge (e.g., CH-001)
+      responses:
+        '200':
+          description: List of comments for the challenge
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comments:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Challenge not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /comments/challenge/{virtualId}/count:
+    get:
+      tags: [Comments]
+      summary: Get comment count for a challenge by virtualId
+      operationId: getCommentCountByChallengeVirtualId
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual ID of the challenge (e.g., CH-001)
+      responses:
+        '200':
+          description: Comment count for the challenge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+        '404':
+          description: Challenge not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /comments/idea/{virtualId}:
+    get:
+      tags: [Comments]
+      summary: Get comments for an idea by virtualId
+      operationId: getCommentsByIdeaVirtualId
+      description: >
+        Fetches all comments for an idea. The virtualId prefix (ID-) maps to
+        Comment Type "ID". Internally resolves the idea by virtualId and
+        queries comments where type="ID" and typeId matches.
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual ID of the idea (e.g., ID-0001)
+      responses:
+        '200':
+          description: List of comments for the idea
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comments:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Idea not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /comments/idea/{virtualId}/count:
+    get:
+      tags: [Comments]
+      summary: Get comment count for an idea by virtualId
+      operationId: getCommentCountByIdeaVirtualId
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual ID of the idea (e.g., ID-0001)
+      responses:
+        '200':
+          description: Comment count for the idea
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+        '404':
+          description: Idea not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /comments/user/{userId}:
+    get:
+      tags: [Comments]
+      summary: Get comments by user ID
+      operationId: getCommentsByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 24-character hexadecimal MongoDB User ID
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: List of comments by the specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comments:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /comments/user/{userId}/count:
+    get:
+      tags: [Comments]
+      summary: Get comment count for a user
+      operationId: getCommentCountByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 24-character hexadecimal MongoDB User ID
+      responses:
+        '200':
+          description: Comment count for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   # ==============================
   # ACTIVITIES ENDPOINTS
@@ -531,9 +1019,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ActivityResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          activities:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/ActivityResponse'
     post:
       tags: [Activities]
       summary: Create an activity
@@ -545,6 +1041,19 @@ paths:
       responses:
         '201':
           description: Activity created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          activity:
+                            $ref: '#/components/schemas/ActivityResponse'
+
   /activities/count:
     get:
       tags: [Activities]
@@ -552,6 +1061,11 @@ paths:
       responses:
         '200':
           description: Total count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+
   /activities/{id}:
     get:
       tags: [Activities]
@@ -564,7 +1078,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActivityResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          activity:
+                            $ref: '#/components/schemas/ActivityResponse'
     put:
       tags: [Activities]
       summary: Update an activity
@@ -578,6 +1100,18 @@ paths:
       responses:
         '200':
           description: Activity updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          activity:
+                            $ref: '#/components/schemas/ActivityResponse'
     delete:
       tags: [Activities]
       summary: Delete an activity
@@ -586,6 +1120,70 @@ paths:
       responses:
         '204':
           description: Activity deleted
+
+  /activities/user/{userId}:
+    get:
+      tags: [Activities]
+      summary: Get activities by user ID
+      operationId: getActivitiesByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 24-character hexadecimal MongoDB User ID
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: A list of activities for the specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          activities:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/ActivityResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /activities/user/{userId}/count:
+    get:
+      tags: [Activities]
+      summary: Get total activity count for a user
+      operationId: getActivityCountByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 24-character hexadecimal MongoDB User ID
+      responses:
+        '200':
+          description: Total activity count for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   # ==============================
   # NOTIFICATIONS ENDPOINTS
@@ -604,9 +1202,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/NotificationResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          notifications:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/NotificationResponse'
     post:
       tags: [Notifications]
       summary: Create a notification
@@ -618,6 +1224,19 @@ paths:
       responses:
         '201':
           description: Notification created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          notification:
+                            $ref: '#/components/schemas/NotificationResponse'
+
   /notifications/count:
     get:
       tags: [Notifications]
@@ -625,6 +1244,11 @@ paths:
       responses:
         '200':
           description: Total count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+
   /notifications/{id}:
     get:
       tags: [Notifications]
@@ -637,7 +1261,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationResponse'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          notification:
+                            $ref: '#/components/schemas/NotificationResponse'
     put:
       tags: [Notifications]
       summary: Update a notification (e.g., mark as read/isSeen)
@@ -651,6 +1283,18 @@ paths:
       responses:
         '200':
           description: Notification updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          notification:
+                            $ref: '#/components/schemas/NotificationResponse'
     patch:
       tags: [Notifications]
       summary: Update notification status (isSeen)
@@ -669,6 +1313,18 @@ paths:
       responses:
         '200':
           description: Notification status updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          notification:
+                            $ref: '#/components/schemas/NotificationResponse'
     delete:
       tags: [Notifications]
       summary: Delete a notification
@@ -677,6 +1333,76 @@ paths:
       responses:
         '204':
           description: Notification deleted
+
+  /notifications/user/{userId}:
+    get:
+      tags: [Notifications]
+      summary: Get notifications by user ID
+      operationId: getNotificationsByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 24-character hexadecimal MongoDB User ID (recipient)
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: A list of notifications for the specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          notifications:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/NotificationResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /notifications/user/{userId}/count:
+    get:
+      tags: [Notifications]
+      summary: Get notification count for a user
+      operationId: getNotificationCountByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 24-character hexadecimal MongoDB User ID (recipient)
+        - name: isSeen
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filter by seen status. If omitted, returns count of all notifications.
+      responses:
+        '200':
+          description: Notification count (filtered or total)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountApiResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
 components:
   parameters:
@@ -706,41 +1432,99 @@ components:
 
   schemas:
     # ------------------
+    # GLOBAL RESPONSE ENVELOPE
+    # ------------------
+    ApiResponseEnvelope:
+      type: object
+      required: [status, message, timestamp]
+      properties:
+        status:
+          type: string
+          enum: [success, failed]
+          description: Indicates whether the request was successful or failed
+        message:
+          type: string
+          description: Human-readable success or failure message
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 date-time of the response
+        data:
+          type: object
+          nullable: true
+          description: Domain-specific payload. May be null on failure.
+
+    CountApiResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponseEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                count:
+                  type: integer
+                  description: The total count
+
+    # ------------------
     # MINIMAL SCHEMAS (FOR REUSE)
     # ------------------
     UserMinimal:
       type: object
       required: [_id, name]
       properties:
-        _id: { type: string, description: "MongoDB hex ID" }
-        name: { type: string }
-        email: { type: string }
-        companyTechRole: { type: string }
-        role: { type: string, enum: ['ADMIN', 'MEMBER', 'USER'] }
+        _id:
+          type: string
+          description: MongoDB hex ID
+        name:
+          type: string
+        email:
+          type: string
+        companyTechRole:
+          type: string
+        role:
+          type: string
+          enum: ['ADMIN', 'MEMBER', 'USER']
 
     ChallengeMinimal:
       type: object
       required: [_id, title]
       properties:
-        _id: { type: string, description: "MongoDB hex ID" }
-        virtualId: { type: string, description: "CH-XXX format" }
-        title: { type: string }
+        _id:
+          type: string
+          description: MongoDB hex ID
+        virtualId:
+          type: string
+          description: CH-XXX format
+        title:
+          type: string
 
     IdeaMinimal:
       type: object
       required: [_id, title]
       properties:
-        _id: { type: string, description: "MongoDB hex ID" }
-        ideaId: { type: string, description: "ID-XXXX format" }
-        title: { type: string }
+        _id:
+          type: string
+          description: MongoDB hex ID
+        ideaId:
+          type: string
+          description: ID-XXXX format
+        title:
+          type: string
 
     CommentMinimal:
       type: object
       properties:
-        _id: { type: string, description: "MongoDB hex ID" }
-        comment: { type: string }
-        userId: { type: string }
-        createdat: { type: string, format: date-time }
+        _id:
+          type: string
+          description: MongoDB hex ID
+        comment:
+          type: string
+        userId:
+          type: string
+        createdat:
+          type: string
+          format: date-time
 
     # ------------------
     # BASE DB SCHEMAS mapping to input DB fields
@@ -748,105 +1532,219 @@ components:
     UserBase:
       type: object
       properties:
-        name: { type: string }
-        opco: { type: string }
-        platform: { type: string }
-        companyTechRole: { type: string }
-        email: { type: string, format: email }
-        password: { type: string, format: password, description: "Required for registration, striped in responses." }
-        interestAreas: { type: array, items: { type: string } }
-        role: { type: string, enum: ['ADMIN', 'MEMBER', 'USER'] }
-        status: { type: string, enum: ['PENDING', 'APPROVED', 'BLOCKED', 'INACTIVE'] }
-        innovationScore: { type: integer, minimum: 1, maximum: 999 }
-        upvotedChallengeList: { type: array, items: { type: string } }
-        upvotedAppreciatedIdeaList: { type: array, items: { type: string } }
+        name:
+          type: string
+        opco:
+          type: string
+        platform:
+          type: string
+        companyTechRole:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          description: Required for registration, stripped in responses.
+        interestAreas:
+          type: array
+          items:
+            type: string
+        role:
+          type: string
+          enum: ['ADMIN', 'MEMBER', 'USER']
+        status:
+          type: string
+          enum: ['PENDING', 'APPROVED', 'BLOCKED', 'INACTIVE']
+        innovationScore:
+          type: integer
+          minimum: 1
+          maximum: 999
+        upvotedChallengeList:
+          type: array
+          items:
+            type: string
+        upvotedAppreciatedIdeaList:
+          type: array
+          items:
+            type: string
 
     ChallengeBase:
       type: object
       properties:
-        title: { type: string }
-        opco: { type: string }
-        platform: { type: string }
-        description: { type: string }
-        summary: { type: string }
-        outcome: { type: string }
-        timeline: { type: string }
-        portfolioLane: { type: string }
-        priority: { type: string }
-        tags: { type: array, items: { type: string }, default: ["ai"] }
-        constraint: { type: string }
-        stakeHolder: { type: string }
-        virtualId: { type: string }
-        status: { type: string }
-        userId: { type: string }
-        month: { type: integer }
-        year: { type: integer }
-        upVotes: { type: array, items: { type: string } }
-        subcriptions: { type: array, items: { type: string } }
-        viewCount: { type: integer }
-        timestampOfStatusChangedToPilot: { type: string, format: date-time, nullable: true }
-        timestampOfCompleted: { type: string, format: date-time, nullable: true }
+        title:
+          type: string
+        opco:
+          type: string
+        platform:
+          type: string
+        description:
+          type: string
+        summary:
+          type: string
+        outcome:
+          type: string
+        timeline:
+          type: string
+        portfolioLane:
+          type: string
+        priority:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+          default: ["ai"]
+        constraint:
+          type: string
+        stakeHolder:
+          type: string
+        virtualId:
+          type: string
+        status:
+          type: string
+        userId:
+          type: string
+        month:
+          type: integer
+        year:
+          type: integer
+        upVotes:
+          type: array
+          items:
+            type: string
+        subcriptions:
+          type: array
+          items:
+            type: string
+        viewCount:
+          type: integer
+        timestampOfStatusChangedToPilot:
+          type: string
+          format: date-time
+          nullable: true
+        timestampOfCompleted:
+          type: string
+          format: date-time
+          nullable: true
 
     IdeaBase:
       type: object
       properties:
-        ideaId: { type: string }
-        title: { type: string }
-        description: { type: string }
-        proposedSolution: { type: string }
-        challengeId: { type: string }
-        appreciationCount: { type: integer }
-        viewCount: { type: integer }
-        userId: { type: string }
-        subscription: { type: array, items: { type: string } }
-        month: { type: integer }
-        year: { type: integer }
-        status: { type: boolean }
-        upVotes: { type: array, items: { type: string } }
+        ideaId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        proposedSolution:
+          type: string
+        challengeId:
+          type: string
+        appreciationCount:
+          type: integer
+        viewCount:
+          type: integer
+        userId:
+          type: string
+        subscription:
+          type: array
+          items:
+            type: string
+        month:
+          type: integer
+        year:
+          type: integer
+        status:
+          type: boolean
+        upVotes:
+          type: array
+          items:
+            type: string
 
     CommentBase:
       type: object
       properties:
-        userId: { type: string }
-        comment: { type: string }
-        type: { type: string, enum: ['CH', 'ID'] }
-        typeId: { type: string }
-        createdat: { type: string, format: date-time }
+        userId:
+          type: string
+        comment:
+          type: string
+        type:
+          type: string
+          enum: ['CH', 'ID']
+        typeId:
+          type: string
+        createdat:
+          type: string
+          format: date-time
 
     ActivityBase:
       type: object
       properties:
         type:
           type: string
-          enum: [
-            'challenge_created', 'idea_created', 'challenge_status_update',
-            'challenge_edited', 'idea_edited', 'challenge_upvoted',
-            'idea_upvoted', 'challenge_commented', 'idea_commented',
-            'challenge_subscribed', 'idea_subscribed', 'challenge_deleted',
-            'idea_deleted', 'log_in', 'log_out'
-          ]
-        fk_id: { type: string, nullable: true }
-        userId: { type: string }
-        month: { type: integer }
-        year: { type: integer }
-        createdAt: { type: string, format: date-time }
+          enum:
+            - challenge_created
+            - idea_created
+            - challenge_status_update
+            - challenge_edited
+            - idea_edited
+            - challenge_upvoted
+            - idea_upvoted
+            - challenge_commented
+            - idea_commented
+            - challenge_subscribed
+            - idea_subscribed
+            - challenge_deleted
+            - idea_deleted
+            - log_in
+            - log_out
+        fk_id:
+          type: string
+          nullable: true
+        userId:
+          type: string
+        month:
+          type: integer
+        year:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
 
     NotificationBase:
       type: object
       properties:
         type:
           type: string
-          enum: [
-            'challenge_created', 'challenge_status_update', 'challenge_edited',
-            'idea_edited', 'challenge_upvoted', 'idea_upvoted',
-            'challenge_commented', 'idea_commented', 'challenge_subscribed',
-            'idea_subscribed', 'challenge_deleted', 'idea_deleted'
-          ]
-        fk_id: { type: string, nullable: true }
-        userId: { type: string }
-        initiatorId: { type: string, description: "Mongo hex ID of the user who triggered the notification" }
-        isSeen: { type: boolean, default: false }
-        createdAt: { type: string, format: date-time }
+          enum:
+            - challenge_created
+            - challenge_status_update
+            - challenge_edited
+            - idea_edited
+            - challenge_upvoted
+            - idea_upvoted
+            - challenge_commented
+            - idea_commented
+            - challenge_subscribed
+            - idea_subscribed
+            - challenge_deleted
+            - idea_deleted
+        fk_id:
+          type: string
+          nullable: true
+        userId:
+          type: string
+        initiatorId:
+          type: string
+          description: Mongo hex ID of the user who triggered the notification
+        isSeen:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+          format: date-time
 
     # ------------------
     # RESPONSE SCHEMAS combining Base + Derived Fields
@@ -856,10 +1754,17 @@ components:
         - $ref: '#/components/schemas/UserBase'
         - type: object
           properties:
-            _id: { type: string }
-            createdAt: { type: string, format: date-time }
-            updatedAt: { type: string, format: date-time }
-            upvoteCount: { type: integer, description: "(DERIVED) Sum of upvotes on challenges and ideas" }
+            _id:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            upvoteCount:
+              type: integer
+              description: "(DERIVED) Sum of upvotes on challenges and ideas"
             recentActivity:
               type: array
               description: "(DERIVED) Top 3 from Activity DB"
@@ -876,78 +1781,136 @@ components:
               additionalProperties:
                 type: integer
                 format: int64
-            commentCount: { type: integer, description: "(DERIVED) Total comments" }
-            challengeCount: { type: integer, description: "(DERIVED) Total challenges" }
-            totalIdeaCount: { type: integer, description: "(DERIVED) Total ideas" }
+            commentCount:
+              type: integer
+              description: "(DERIVED) Total comments"
+            challengeCount:
+              type: integer
+              description: "(DERIVED) Total challenges"
+            totalIdeaCount:
+              type: integer
+              description: "(DERIVED) Total ideas"
 
     ChallengeResponse:
       allOf:
         - $ref: '#/components/schemas/ChallengeBase'
         - type: object
           properties:
-            _id: { type: string }
-            createdAt: { type: string, format: date-time }
-            updatedAt: { type: string, format: date-time }
-            countOfIdeas: { type: integer, description: "(DERIVED) Total active ideas linked" }
-            ownerDetails: { $ref: '#/components/schemas/UserMinimal' }
-            contributorsDetails: { type: array, items: { $ref: '#/components/schemas/UserMinimal' }, description: "(DERIVED) Populated contributors users details" }
-            commentCount: { type: integer, description: "(DERIVED) Calculated from Comments table" }
-            ideaList: { type: array, items: { $ref: '#/components/schemas/IdeaMinimal' }, description: "(DERIVED) Full list from Idea collection" }
-            comments: { type: array, items: { $ref: '#/components/schemas/CommentMinimal' }, description: "(DERIVED) Full list from Comment collection" }
-            contributors: { type: array, items: { $ref: '#/components/schemas/UserMinimal' }, description: "(DERIVED) Owner details of all ideas under challenge" }
+            _id:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            countOfIdeas:
+              type: integer
+              description: "(DERIVED) Total active ideas linked"
+            ownerDetails:
+              $ref: '#/components/schemas/UserMinimal'
+            contributorsDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserMinimal'
+              description: "(DERIVED) Populated contributors users details"
+            commentCount:
+              type: integer
+              description: "(DERIVED) Calculated from Comments table"
+            ideaList:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdeaMinimal'
+              description: "(DERIVED) Full list from Idea collection"
+            comments:
+              type: array
+              items:
+                $ref: '#/components/schemas/CommentMinimal'
+              description: "(DERIVED) Full list from Comment collection"
+            contributors:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserMinimal'
+              description: "(DERIVED) Owner details of all ideas under challenge"
 
     IdeaResponse:
       allOf:
         - $ref: '#/components/schemas/IdeaBase'
         - type: object
           properties:
-            _id: { type: string }
-            createdAt: { type: string, format: date-time }
-            updatedAt: { type: string, format: date-time }
-            challengeDetails: { $ref: '#/components/schemas/ChallengeMinimal' }
-            problemStatement: { type: string, description: "(DERIVED) The description from the parent Challenge" }
-            commentCount: { type: integer, description: "(DERIVED) Count calculated from Comments DB" }
-            comments: { type: array, items: { $ref: '#/components/schemas/CommentMinimal' }, description: "(DERIVED) Populated list of comments" }
-            ownerDetails: { $ref: '#/components/schemas/UserMinimal' }
+            _id:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            challengeDetails:
+              $ref: '#/components/schemas/ChallengeMinimal'
+            problemStatement:
+              type: string
+              description: "(DERIVED) The description from the parent Challenge"
+            commentCount:
+              type: integer
+              description: "(DERIVED) Count calculated from Comments DB"
+            comments:
+              type: array
+              items:
+                $ref: '#/components/schemas/CommentMinimal'
+              description: "(DERIVED) Populated list of comments"
+            ownerDetails:
+              $ref: '#/components/schemas/UserMinimal'
 
     CommentResponse:
       allOf:
         - $ref: '#/components/schemas/CommentBase'
         - type: object
           properties:
-            _id: { type: string }
-            userDetails: { $ref: '#/components/schemas/UserMinimal' }
+            _id:
+              type: string
+            userDetails:
+              $ref: '#/components/schemas/UserMinimal'
 
     ActivityResponse:
       allOf:
         - $ref: '#/components/schemas/ActivityBase'
         - type: object
           properties:
-            _id: { type: string }
-            userDetails: { $ref: '#/components/schemas/UserMinimal' }
+            _id:
+              type: string
+            userDetails:
+              $ref: '#/components/schemas/UserMinimal'
             entityDetails:
               type: object
               oneOf:
                 - $ref: '#/components/schemas/ChallengeMinimal'
                 - $ref: '#/components/schemas/IdeaMinimal'
               description: "(DERIVED) What was acted upon (Challenge or Idea)"
-            activitySummary: { type: string, description: "(DERIVED) Human readable string generated dynamically" }
+            activitySummary:
+              type: string
+              description: "(DERIVED) Human readable string generated dynamically"
 
     NotificationResponse:
       allOf:
         - $ref: '#/components/schemas/NotificationBase'
         - type: object
           properties:
-            _id: { type: string }
-            description: { type: string, description: "(DERIVED) Dynamically generated based on Type and initiator" }
+            _id:
+              type: string
+            description:
+              type: string
+              description: "(DERIVED) Dynamically generated based on Type and initiator"
             linkedEntityDetails:
               type: object
               oneOf:
                 - $ref: '#/components/schemas/ChallengeMinimal'
                 - $ref: '#/components/schemas/IdeaMinimal'
               description: "(DERIVED) Details of Challenge or Idea linked via fk_id"
-            recipientDetails: { $ref: '#/components/schemas/UserMinimal' }
-            initiatorDetails: { $ref: '#/components/schemas/UserMinimal', description: "(DERIVED) Details of the user who triggered the event" }
+            recipientDetails:
+              $ref: '#/components/schemas/UserMinimal'
+            initiatorDetails:
+              $ref: '#/components/schemas/UserMinimal'
 
     AuthLoginRequest:
       type: object

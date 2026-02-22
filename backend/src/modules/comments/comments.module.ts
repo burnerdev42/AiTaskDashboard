@@ -28,4 +28,4 @@ import { IdeasModule } from '../ideas/ideas.module';
   providers: [CommentsService, CommentsRepository],
   exports: [CommentsService],
 })
-export class CommentsModule { }
+export class CommentsModule {}

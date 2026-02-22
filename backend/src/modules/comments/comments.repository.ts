@@ -23,4 +23,14 @@ export class CommentsRepository extends AbstractRepository<CommentDocument> {
   ) {
     super(commentModel, connection);
   }
+
+  /**
+   * Counts the number of comments matching a filter.
+   * @param filterQuery Filter criteria.
+   * @returns The count of documents.
+   */
+  async count(filterQuery: Record<string, any> = {}): Promise<number> {
+    return this.model.countDocuments(filterQuery).exec();
+  }
 }
+

@@ -167,7 +167,7 @@ Assigns a unique trace ID (`traceId`) to every incoming request for distributed 
 **Error Response (400 Bad Request / 500 Internal)**
 ```json
 {
-  "status": "error",
+  "status": "failed",
   "message": "User-friendly error message",
   "errors": [ ... ],
   "requestId": "uuid-v4",
@@ -293,7 +293,7 @@ Copy `.env.example` to `.env` and configure the following:
 2.  **Auth**: Send JWT in the header: `Authorization: Bearer <token>`.
 3.  **Standard Response**: Expect the `data` object for the actual payload.
 4.  **Traceability**: Every response includes `requestId` and `traceId` for debugging.
-5.  **Errors**: Check for `status: "error"` and the `message` field for user feedback.
+5.  **Errors**: Check for `status: "failed"` and the `message` field for user feedback.
 6.  **Swagger UI**: Visit `/api/docs` for the interactive playground and model definitions.
 
 
@@ -359,32 +359,21 @@ Copy `.env.example` to `.env` and configure the following:
 |--------|----------|-------------|---------------|
 | `POST` | `/challenges` | Create a new challenge | ✅ |
 | `GET` | `/challenges` | List all challenges (supports pagination) | ✅ |
-| `GET` | `/challenges/:id` | Get challenge by ID (enriched with ideas, votes) | ✅ |
-| `PUT` | `/challenges/:id` | Update challenge | ✅ |
-| `DELETE` | `/challenges/:id` | Delete challenge | ✅ |
+| `GET` | `/challenges/count` | Get total challenge count | ✅ |
+| `GET` | `/challenges/:virtualId` | Get challenge by virtual ID (e.g., CH-001) | ✅ |
+| `PUT` | `/challenges/:virtualId` | Update challenge | ✅ |
+| `PATCH` | `/challenges/:virtualId/status` | Update swim lane status | ✅ |
+| `POST` | `/challenges/:virtualId/upvote` | Toggle upvote (auto-subscribes) | ✅ |
+| `POST` | `/challenges/:virtualId/subscribe` | Toggle subscription | ✅ |
+| `DELETE` | `/challenges/:virtualId` | Delete challenge | ✅ |
 
-**Create / Update Challenge Request Body (ChallengeDto):**
-```json
-{
-  "title": "AI-Powered Customer Support",
-  "description": "Implement conversational AI for customer queries",
-  "portfolioLane": "Customer Value Driver",
-  "status": "submitted",
-  "priority": "High",
-  "tags": ["AI", "Customer Experience"],
-  "opco": "Albert Heijn",
-  "platform": "STP",
-  "outcome": "30% reduction in support tickets",
-  "timeline": "6-12 months"
-}
-```
+> **⚠️ Pilot-lock constraint:** Once a challenge is in `pilot` status, it **cannot** be moved back to `submitted`. Any such attempt returns `HTTP 400`.
 
-**Challenge Status Code:** `submitted` | `ideation` | `pilot` | `completed` | `archive`
+**Challenge Status Codes:** `submitted` | `ideation` | `pilot` | `completed` | `archive`  
 **Portfolio Lanes:** `Customer Value Driver` | `Non Strategic Product Management` | `Tech Enabler` | `Maintenance`
 
-> **GET /challenges/:id enriched response** includes: linked `ideas`, `upvotes` (userId list), `subscriptions` (userId list), and short `owner`/`contributor` details (`_id, name, email, avatar`).
-
 ---
+
 
 ### Comments (`/api/v1/comments`)
 
@@ -392,9 +381,18 @@ Copy `.env.example` to `.env` and configure the following:
 |--------|----------|-------------|---------------|
 | `POST` | `/comments` | Create a comment on a Challenge or Idea | ✅ |
 | `GET` | `/comments?parentId=&type=` | List comments for a specific entity | ✅ |
+| `GET` | `/comments/count` | Get total comments count | ✅ |
+| `GET` | `/comments/challenge/:virtualId` | Get comments for a challenge by virtualId | ✅ |
+| `GET` | `/comments/challenge/:virtualId/count` | Get comment count for a challenge by virtualId | ✅ |
+| `GET` | `/comments/idea/:virtualId` | Get comments for an idea by virtualId | ✅ |
+| `GET` | `/comments/idea/:virtualId/count` | Get comment count for an idea by virtualId | ✅ |
+| `GET` | `/comments/user/:userId` | Get comments by user (paginated) | ✅ |
+| `GET` | `/comments/user/:userId/count` | Get comment count for a user | ✅ |
 | `DELETE` | `/comments/:id` | Delete a comment | ✅ |
 
-**Why a separate Comment collection?** Comments are shared between Challenges and Ideas using a polymorphic `type` field (`Challenge` or `Idea`) and a `parentId` reference. This avoids duplicating comment logic across modules and ensures a consistent commenting experience.
+> **Virtual ID Prefix Routing:** The virtualId prefix (`CH-` or `ID-`) determines the comment type to query, mapping directly to Comment Types `["CH", "ID"]`. E.g., `CH-001` → type `"CH"` (Challenge); `ID-0001` → type `"ID"` (Idea).
+
+**Why a separate Comment collection?** Comments are shared between Challenges and Ideas using a polymorphic `type` field (`CH` or `ID`) and a `typeId` reference. This avoids duplicating comment logic across modules and ensures a consistent commenting experience.
 
 ---
 
@@ -434,59 +432,44 @@ Copy `.env.example` to `.env` and configure the following:
 
 ---
 
-### Tasks (`/api/v1/tasks`)
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `POST` | `/tasks` | Create a new task | ✅ |
-| `GET` | `/tasks` | List all tasks (supports pagination) | ✅ |
-| `GET` | `/tasks/:id` | Get task by ID | ✅ |
-| `PUT` | `/tasks/:id` | Update task | ✅ |
-| `DELETE` | `/tasks/:id` | Delete task | ✅ |
-
-**Create Task Request Body:**
-```json
-{
-  "title": "Review prototype feedback",
-  "description": "Analyze user feedback from prototype testing",
-  "stage": "Prototype",
-  "owner": "60d21b4667d0d8992e610c85",
-  "priority": "High",
-  "status": "pending"
-}
-```
-
-**Task Priorities:** `High` | `Medium` | `Low`  
-**Task Statuses:** `pending` | `in_progress` | `completed` | `cancelled`
-
----
 
 ### Notifications (`/api/v1/notifications`)
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `POST` | `/notifications` | Create a notification | ✅ |
-| `GET` | `/notifications/user/:userId` | Get notifications for a user | ✅ |
-| `GET` | `/notifications/user/:userId/unread-count` | Get unread notification count | ✅ |
-| `POST` | `/notifications/user/:userId/mark-read` | Mark all notifications as read | ✅ |
+| `POST` | `/notifications` | Create a notification (admin/test only) | ✅ |
+| `GET` | `/notifications` | List all notifications (paginated) | ✅ |
+| `GET` | `/notifications/count` | Get total notification count | ✅ |
+| `GET` | `/notifications/user/:userId` | Get notifications for a specific user (paginated) | ✅ |
+| `GET` | `/notifications/user/:userId/count` | Get notification count for a user. Optional `?isSeen=true/false` to filter by seen status; omit for total | ✅ |
 | `GET` | `/notifications/:id` | Get notification by ID | ✅ |
 | `PUT` | `/notifications/:id` | Update notification | ✅ |
-| `DELETE` | `/notifications/:id` | Soft delete notification | ✅ |
+| `PATCH` | `/notifications/:id/status` | Mark notification as seen (`{ "isSeen": true }`) | ✅ |
+| `DELETE` | `/notifications/:id` | Delete notification | ✅ |
 
-**Create Notification Request Body:**
-```json
-{
-  "userId": "60d21b4667d0d8992e610c85",
-  "type": "challenge",
-  "title": "New Challenge Submitted",
-  "message": "Ravi Patel submitted 'Optimize Cloud Infrastructure'",
-  "link": "/challenges/CH-001"
-}
-```
-
-**Notification Types:** `challenge` | `idea` | `comment` | `mention` | `status` | `system`
+**Notification Types:** `challenge_created` \| `challenge_status_update` \| `challenge_edited` \| `idea_edited` \| `challenge_upvoted` \| `idea_upvoted` \| `challenge_commented` \| `idea_commented` \| `challenge_subscribed` \| `idea_subscribed` \| `challenge_deleted` \| `idea_deleted`
 
 ---
+
+### Activities (`/api/v1/activities`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/activities` | List all activities (paginated) | ✅ |
+| `GET` | `/activities/count` | Get total activity count | ✅ |
+| `GET` | `/activities/user/:userId` | Get activities for a specific user (paginated) | ✅ |
+| `GET` | `/activities/user/:userId/count` | Get total activity count for a specific user | ✅ |
+| `GET` | `/activities/:id` | Get activity by ID | ✅ |
+| `POST` | `/activities` | Create an activity (admin/test only) | ✅ |
+| `PUT` | `/activities/:id` | Update an activity | ✅ |
+| `DELETE` | `/activities/:id` | Delete an activity | ✅ |
+
+> **Note:** Activities are created internally by the system when users perform actions (create, upvote, comment, subscribe, login, logout). Direct POST is for admin/testing only.
+
+**Activity Types:** `challenge_created` \| `idea_created` \| `challenge_status_update` \| `challenge_edited` \| `idea_edited` \| `challenge_upvoted` \| `idea_upvoted` \| `challenge_commented` \| `idea_commented` \| `challenge_subscribed` \| `idea_subscribed` \| `challenge_deleted` \| `idea_deleted` \| `log_in` \| `log_out`
+
+---
+
 
 ### Newsletter (`/api/v1/newsletter`)
 
@@ -634,23 +617,6 @@ Copy `.env.example` to `.env` and configure the following:
 }
 ```
 
-### Task Schema
-
-```typescript
-{
-  _id: ObjectId,
-  title: string,           // Required
-  description: string,     // Required
-  stage: ChallengeStage,   // Related challenge stage
-  owner: ObjectId,         // Reference to User
-  priority: Priority,      // 'High' | 'Medium' | 'Low'
-  status: TaskStatus,      // 'pending' | 'in_progress' | 'completed' | 'cancelled'
-  progress?: number,       // 0-100
-  dueDate?: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
 
 ### Notification Schema
 

@@ -34,6 +34,6 @@ export class DashboardController extends AbstractController {
   })
   async getSwimLanes() {
     const result = await this.dashboardService.getSwimLanes();
-    return this.success(result, 'Dashboard swimlanes retrieved successfully');
+    return this.success({ swimlanes: result }, 'Dashboard swimlanes retrieved successfully');
   }
 }

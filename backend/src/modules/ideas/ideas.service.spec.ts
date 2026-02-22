@@ -23,7 +23,11 @@ describe('IdeasService', () => {
 
   const mockIdeaModel: any = jest.fn().mockImplementation((dto) => ({
     ...dto,
-    save: jest.fn().mockResolvedValue({ ...dto, _id: mockIdeaId, userId: dto.userId || '1' }),
+    save: jest.fn().mockResolvedValue({
+      ...dto,
+      _id: mockIdeaId,
+      userId: dto.userId || '1',
+    }),
   }));
   Object.assign(mockIdeaModel, {
     find: jest.fn().mockReturnThis(),
@@ -66,7 +70,7 @@ describe('IdeasService', () => {
         {
           provide: ChallengesService,
           useValue: mockChallengesService,
-        }
+        },
       ],
     }).compile();
 
@@ -107,7 +111,9 @@ describe('IdeasService', () => {
   describe('updateByIdeaId', () => {
     it('should update an idea', async () => {
       mockIdeaModel.exec.mockResolvedValueOnce(mockIdea);
-      const result = await service.updateByIdeaId('ID-0001', { title: 'Updated' });
+      const result = await service.updateByIdeaId('ID-0001', {
+        title: 'Updated',
+      });
       expect(result).toEqual(mockIdea);
       expect(activitiesService.create).toHaveBeenCalled();
     });

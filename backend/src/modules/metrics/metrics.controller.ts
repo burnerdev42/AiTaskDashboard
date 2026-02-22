@@ -34,7 +34,7 @@ export class MetricsController extends AbstractController {
   })
   async getSummary() {
     const result = await this.metricsService.getSummary();
-    return this.success(result, 'Metrics summary retrieved successfully');
+    return this.success({ summary: result }, 'Metrics summary retrieved successfully');
   }
 
   @Get('throughput')
@@ -46,6 +46,6 @@ export class MetricsController extends AbstractController {
   })
   async getThroughput() {
     const result = await this.metricsService.getThroughput();
-    return this.success(result, 'Monthly throughput retrieved successfully');
+    return this.success({ throughput: result }, 'Monthly throughput retrieved successfully');
   }
 }

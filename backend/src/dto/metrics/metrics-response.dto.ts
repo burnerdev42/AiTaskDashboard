@@ -39,6 +39,22 @@ export class ThroughputDataPointDto {
 }
 
 /**
+ * Domain-keyed data payload for metrics summary.
+ */
+export class MetricsSummaryDataDto {
+  @ApiProperty({ type: MetricsSummaryDto })
+  summary: MetricsSummaryDto;
+}
+
+/**
+ * Domain-keyed data payload for throughput data.
+ */
+export class ThroughputDataDto {
+  @ApiProperty({ type: [ThroughputDataPointDto] })
+  throughput: ThroughputDataPointDto[];
+}
+
+/**
  * API response for metrics summary.
  */
 export class MetricsSummaryApiResponseDto {
@@ -48,8 +64,8 @@ export class MetricsSummaryApiResponseDto {
   @ApiPropertyOptional({ example: 'Metrics summary retrieved successfully' })
   message?: string;
 
-  @ApiProperty({ type: MetricsSummaryDto })
-  data: MetricsSummaryDto;
+  @ApiProperty({ type: MetricsSummaryDataDto })
+  data: MetricsSummaryDataDto;
 
   @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
   requestId?: string;
@@ -68,8 +84,8 @@ export class ThroughputApiResponseDto {
   @ApiPropertyOptional({ example: 'Monthly throughput retrieved successfully' })
   message?: string;
 
-  @ApiProperty({ type: [ThroughputDataPointDto] })
-  data: ThroughputDataPointDto[];
+  @ApiProperty({ type: ThroughputDataDto })
+  data: ThroughputDataDto;
 
   @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
   requestId?: string;

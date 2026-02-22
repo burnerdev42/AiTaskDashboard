@@ -22,6 +22,11 @@ import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { ChallengesService } from './challenges.service';
 import { ChallengeDto } from '../../dto/challenges/challenge.dto';
 import { AbstractController } from '../../common';
+import {
+  ChallengeListApiResponse,
+  ChallengeApiResponse,
+  CountApiResponseDto,
+} from '../../dto/challenges/challenge-response.dto';
 
 @ApiTags('Challenges')
 @Controller('challenges')
@@ -34,17 +39,25 @@ export class ChallengesController extends AbstractController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new challenge' })
-  @ApiResponse({ status: 201, description: 'Challenge created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'Challenge created.',
+    type: ChallengeApiResponse,
+  })
   async create(@Body() dto: ChallengeDto) {
     const result = await this.challengesService.create(dto);
-    return this.success(result, 'Challenge successfully created');
+    return this.success({ challenge: result }, 'Challenge successfully created');
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all challenges' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'offset', required: false, type: Number })
-  @ApiResponse({ status: 200, description: 'List of challenges.' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of challenges.',
+    type: ChallengeListApiResponse,
+  })
   async findAll(
     @Query('limit') limit?: number,
     @Query('offset') offset?: number,
@@ -53,12 +66,16 @@ export class ChallengesController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success(result, 'Challenges retrieved successfully');
+    return this.success({ challenges: result }, 'Challenges retrieved successfully');
   }
 
   @Get('count')
   @ApiOperation({ summary: 'Get challenge count' })
-  @ApiResponse({ status: 200, description: 'Total count.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Total count.',
+    type: CountApiResponseDto,
+  })
   async count() {
     const count = await this.challengesService.count();
     return this.success({ count }, 'Challenge count retrieved');
@@ -66,16 +83,24 @@ export class ChallengesController extends AbstractController {
 
   @Get(':virtualId')
   @ApiOperation({ summary: 'Get challenge by Virtual ID (e.g., CH-001)' })
-  @ApiResponse({ status: 200, description: 'Challenge object.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Challenge object.',
+    type: ChallengeApiResponse,
+  })
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
   async findOne(@Param('virtualId') virtualId: string) {
     const result = await this.challengesService.findByVirtualId(virtualId);
-    return this.success(result, 'Challenge retrieved successfully');
+    return this.success({ challenge: result }, 'Challenge retrieved successfully');
   }
 
   @Put(':virtualId')
   @ApiOperation({ summary: 'Update a challenge' })
-  @ApiResponse({ status: 200, description: 'Challenge updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Challenge updated.',
+    type: ChallengeApiResponse,
+  })
   async update(
     @Param('virtualId') virtualId: string,
     @Body() dto: ChallengeDto,
@@ -84,12 +109,16 @@ export class ChallengesController extends AbstractController {
       virtualId,
       dto,
     );
-    return this.success(result, 'Challenge updated successfully');
+    return this.success({ challenge: result }, 'Challenge updated successfully');
   }
 
   @Patch(':virtualId/status')
   @ApiOperation({ summary: 'Update challenge status (Swim Lane)' })
-  @ApiResponse({ status: 200, description: 'Challenge status updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Challenge status updated.',
+    type: ChallengeApiResponse,
+  })
   async updateStatus(
     @Param('virtualId') virtualId: string,
     @Body() body: { status: string; userId: string },
@@ -99,12 +128,16 @@ export class ChallengesController extends AbstractController {
       body.status,
       body.userId,
     );
-    return this.success(result, 'Challenge status updated successfully');
+    return this.success({ challenge: result }, 'Challenge status updated successfully');
   }
 
   @Post(':virtualId/upvote')
   @ApiOperation({ summary: 'Toggle upvote for a challenge' })
-  @ApiResponse({ status: 200, description: 'Upvote toggled.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Upvote toggled.',
+    type: ChallengeApiResponse,
+  })
   async toggleUpvote(
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
@@ -113,12 +146,16 @@ export class ChallengesController extends AbstractController {
       virtualId,
       body.userId,
     );
-    return this.success(result, 'Upvote toggled successfully');
+    return this.success({ challenge: result }, 'Upvote toggled successfully');
   }
 
   @Post(':virtualId/subscribe')
   @ApiOperation({ summary: 'Toggle subscription for a challenge' })
-  @ApiResponse({ status: 200, description: 'Subscription toggled.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Subscription toggled.',
+    type: ChallengeApiResponse,
+  })
   async toggleSubscribe(
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
@@ -127,7 +164,7 @@ export class ChallengesController extends AbstractController {
       virtualId,
       body.userId,
     );
-    return this.success(result, 'Subscription toggled successfully');
+    return this.success({ challenge: result }, 'Subscription toggled successfully');
   }
 
   @Delete(':virtualId')

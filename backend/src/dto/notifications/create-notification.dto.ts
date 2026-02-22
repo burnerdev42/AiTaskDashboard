@@ -23,7 +23,9 @@ export class CreateNotificationDto {
   @IsNotEmpty()
   type: string;
 
-  @ApiPropertyOptional({ description: 'Foreign key ID (challenge or idea _id)' })
+  @ApiPropertyOptional({
+    description: 'Foreign key ID (challenge or idea _id)',
+  })
   @IsString()
   @IsOptional()
   fk_id?: string;
@@ -38,7 +40,10 @@ export class CreateNotificationDto {
   @IsNotEmpty()
   initiatorId: string;
 
-  @ApiPropertyOptional({ description: 'Whether notification has been seen', default: false })
+  @ApiPropertyOptional({
+    description: 'Whether notification has been seen',
+    default: false,
+  })
   @IsBoolean()
   @IsOptional()
   isSeen?: boolean;

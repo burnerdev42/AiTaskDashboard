@@ -21,6 +21,12 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { AbstractController } from '../../common/controllers/abstract.controller';
 import { NotificationsService } from './notifications.service';
+import {
+  NotificationListApiResponseDto,
+  NotificationApiResponseDto,
+  CountApiResponseDto,
+} from '../../dto/notifications/notification-response.dto';
+
 
 @ApiTags('Notifications')
 @Controller('notifications')
@@ -33,17 +39,25 @@ export class NotificationsController extends AbstractController {
 
   @Post()
   @ApiOperation({ summary: 'Create a notification' })
-  @ApiResponse({ status: 201, description: 'Notification created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'Notification created.',
+    type: NotificationApiResponseDto,
+  })
   async create(@Body() dto: any) {
     const notification = await this.notificationsService.create(dto);
-    return this.success(notification, 'Notification created successfully');
+    return this.success({ notification }, 'Notification created successfully');
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all notifications' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'offset', required: false, type: Number })
-  @ApiResponse({ status: 200, description: 'List of notifications.' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of notifications.',
+    type: NotificationListApiResponseDto,
+  })
   async findAll(
     @Query('limit') limit?: number,
     @Query('offset') offset?: number,
@@ -52,37 +66,101 @@ export class NotificationsController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success(notifications, 'Notifications retrieved successfully');
+    return this.success({ notifications }, 'Notifications retrieved successfully');
   }
 
   @Get('count')
   @ApiOperation({ summary: 'Get notifications count' })
-  @ApiResponse({ status: 200, description: 'Total count.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Total count.',
+    type: CountApiResponseDto,
+  })
   async count() {
     const count = await this.notificationsService.count();
     return this.success({ count }, 'Notification count retrieved');
   }
 
+  @Get('user/:userId')
+  @ApiOperation({ summary: 'Get notifications by user ID' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'offset', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'List of notifications for the user.',
+    type: NotificationListApiResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async findByUserId(
+    @Param('userId') userId: string,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ) {
+    const notifications = await this.notificationsService.findByUserId(
+      userId,
+      limit ? +limit : 20,
+      offset ? +offset : 0,
+    );
+    return this.success(
+      { notifications },
+      'User notifications retrieved successfully',
+    );
+  }
+
+  @Get('user/:userId/count')
+  @ApiOperation({ summary: 'Get notification count for a user' })
+  @ApiQuery({
+    name: 'isSeen',
+    required: false,
+    type: Boolean,
+    description: 'Filter by seen status. Omit to count all.',
+  })
+  @ApiResponse({ status: 200, description: 'Notification count.', type: CountApiResponseDto })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async countByUserId(
+    @Param('userId') userId: string,
+    @Query('isSeen') isSeen?: string,
+  ) {
+    const isSeenBool = isSeen === undefined ? undefined : isSeen === 'true';
+    const count = await this.notificationsService.countByUserId(
+      userId,
+      isSeenBool,
+    );
+    return this.success({ count }, 'Notification count retrieved');
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get notification by MongoDB _id' })
-  @ApiResponse({ status: 200, description: 'Notification object.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Notification object.',
+    type: NotificationApiResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'Notification not found.' })
   async findOne(@Param('id') id: string) {
     const notification = await this.notificationsService.findById(id);
-    return this.success(notification, 'Notification retrieved successfully');
+    return this.success({ notification }, 'Notification retrieved successfully');
   }
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a notification' })
-  @ApiResponse({ status: 200, description: 'Notification updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Notification updated.',
+    type: NotificationApiResponseDto,
+  })
   async update(@Param('id') id: string, @Body() dto: any) {
     const notification = await this.notificationsService.update(id, dto);
-    return this.success(notification, 'Notification updated successfully');
+    return this.success({ notification }, 'Notification updated successfully');
   }
 
   @Patch(':id/status')
   @ApiOperation({ summary: 'Update notification isSeen status' })
-  @ApiResponse({ status: 200, description: 'Notification status updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Notification status updated.',
+    type: NotificationApiResponseDto,
+  })
   async updateIsSeen(
     @Param('id') id: string,
     @Body() body: { isSeen: boolean },
@@ -91,7 +169,10 @@ export class NotificationsController extends AbstractController {
       id,
       body.isSeen,
     );
-    return this.success(notification, 'Notification status updated successfully');
+    return this.success(
+      { notification },
+      'Notification status updated successfully',
+    );
   }
 
   @Delete(':id')

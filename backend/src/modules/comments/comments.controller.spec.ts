@@ -43,7 +43,7 @@ describe('CommentsController', () => {
       };
       const result = { comment: 'Test comment' } as unknown as CommentDocument;
       jest.spyOn(service, 'create').mockResolvedValue(result);
-      expect((await controller.create(dto)).data).toEqual(result);
+      expect((await controller.create(dto)).data).toEqual({ comment: result });
     });
   });
 
@@ -52,9 +52,9 @@ describe('CommentsController', () => {
       const result = [] as CommentDocument[];
       jest.spyOn(service, 'findByParent').mockResolvedValue(result);
       const parentId = new Types.ObjectId().toHexString();
-      expect(
-        (await controller.findByParent(parentId, 'CH')).data,
-      ).toEqual(result);
+      expect((await controller.findByParent(parentId, 'CH')).data).toEqual(
+        { comments: result },
+      );
     });
   });
 
@@ -62,7 +62,7 @@ describe('CommentsController', () => {
     it('should remove a comment', async () => {
       const result = { _id: '1' } as unknown as CommentDocument;
       jest.spyOn(service, 'remove').mockResolvedValue(result);
-      expect((await controller.remove('1')).data).toEqual(result);
+      expect((await controller.remove('1')).data).toEqual({ comment: result });
     });
   });
 });

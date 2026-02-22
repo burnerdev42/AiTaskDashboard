@@ -20,7 +20,12 @@ describe('NotificationsService', () => {
   };
 
   const mockNotificationModel = {
-    create: jest.fn().mockImplementation((dto) => Promise.resolve({ ...dto, save: () => Promise.resolve({ ...dto, _id: new Types.ObjectId() }) })),
+    create: jest.fn().mockImplementation((dto) =>
+      Promise.resolve({
+        ...dto,
+        save: () => Promise.resolve({ ...dto, _id: new Types.ObjectId() }),
+      }),
+    ),
     find: jest.fn().mockReturnThis(),
     findById: jest.fn().mockReturnThis(),
     findByIdAndUpdate: jest.fn().mockReturnThis(),
@@ -66,7 +71,10 @@ describe('NotificationsService', () => {
     it('should return unseen count', async () => {
       mockNotificationModel.exec.mockResolvedValueOnce(5); // For countDocuments
       const result = await service.getUnseenCount('user123');
-      expect(model.countDocuments).toHaveBeenCalledWith({ userId: 'user123', isSeen: false });
+      expect(model.countDocuments).toHaveBeenCalledWith({
+        userId: 'user123',
+        isSeen: false,
+      });
       expect(result).toBe(5);
     });
   });
@@ -75,17 +83,38 @@ describe('NotificationsService', () => {
     it('should update isSeen status', async () => {
       mockNotificationModel.exec.mockResolvedValueOnce(mockNotification);
       const result = await service.updateIsSeen('notif123', true);
-      expect(model.findByIdAndUpdate).toHaveBeenCalledWith('notif123', { isSeen: true }, { new: true });
+      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
+        'notif123',
+        { isSeen: true },
+        { new: true },
+      );
       expect(result).toEqual(mockNotification);
     });
   });
 
   describe('dispatchToMany', () => {
     it('should insert many notifications, excluding the initiator', async () => {
-      await service.dispatchToMany(['user1', 'user2', 'initiator456'], 'idea_created', 'idea123', 'initiator456');
+      await service.dispatchToMany(
+        ['user1', 'user2', 'initiator456'],
+        'idea_created',
+        'idea123',
+        'initiator456',
+      );
       expect(model.insertMany).toHaveBeenCalledWith([
-        { type: 'idea_created', fk_id: 'idea123', userId: 'user1', initiatorId: 'initiator456', isSeen: false },
-        { type: 'idea_created', fk_id: 'idea123', userId: 'user2', initiatorId: 'initiator456', isSeen: false },
+        {
+          type: 'idea_created',
+          fk_id: 'idea123',
+          userId: 'user1',
+          initiatorId: 'initiator456',
+          isSeen: false,
+        },
+        {
+          type: 'idea_created',
+          fk_id: 'idea123',
+          userId: 'user2',
+          initiatorId: 'initiator456',
+          isSeen: false,
+        },
       ]);
     });
   });

@@ -10,20 +10,20 @@ import { ActivitiesController } from './activities.controller';
 import { ActivitiesService } from './activities.service';
 import { ActivitiesRepository } from './activities.repository';
 import {
-    Activity,
-    ActivitySchema,
+  Activity,
+  ActivitySchema,
 } from '../../models/activities/activity.schema';
 import { CommonModule } from '../../common';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([
-            { name: Activity.name, schema: ActivitySchema },
-        ]),
-        CommonModule,
-    ],
-    controllers: [ActivitiesController],
-    providers: [ActivitiesService, ActivitiesRepository],
-    exports: [ActivitiesService],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Activity.name, schema: ActivitySchema },
+    ]),
+    CommonModule,
+  ],
+  controllers: [ActivitiesController],
+  providers: [ActivitiesService, ActivitiesRepository],
+  exports: [ActivitiesService],
 })
-export class ActivitiesModule { }
+export class ActivitiesModule {}

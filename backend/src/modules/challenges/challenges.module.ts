@@ -34,4 +34,4 @@ import { CommentsModule } from '../comments/comments.module';
   providers: [ChallengesService, ChallengesRepository],
   exports: [ChallengesService],
 })
-export class ChallengesModule { }
+export class ChallengesModule {}

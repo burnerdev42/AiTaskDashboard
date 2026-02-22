@@ -10,7 +10,6 @@ import { LoggerModule } from 'nestjs-pino';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ChallengesModule } from './modules/challenges/challenges.module';
 import { IdeasModule } from './modules/ideas/ideas.module';
-import { TasksModule } from './modules/tasks/tasks.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './common';
 import { DatabaseModule } from './database/database.module';
@@ -59,7 +58,6 @@ import { CorrelationMiddleware } from './common/middleware/correlation.middlewar
     NotificationsModule,
     ChallengesModule,
     IdeasModule,
-    TasksModule,
     AuthModule,
     DashboardModule,
     MetricsModule,

@@ -20,6 +20,11 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { IdeasService } from './ideas.service';
 import { AbstractController } from '../../common';
+import {
+  IdeaListApiResponseDto,
+  IdeaApiResponseDto,
+  IdeaCountApiResponseDto,
+} from '../../dto/ideas/idea-response.dto';
 
 @ApiTags('Ideas')
 @Controller('ideas')
@@ -32,17 +37,25 @@ export class IdeasController extends AbstractController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new idea' })
-  @ApiResponse({ status: 201, description: 'Idea created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'Idea created.',
+    type: IdeaApiResponseDto,
+  })
   async create(@Body() dto: any) {
     const result = await this.ideasService.create(dto);
-    return this.success(result, 'Idea successfully created');
+    return this.success({ idea: result }, 'Idea successfully created');
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all ideas' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'offset', required: false, type: Number })
-  @ApiResponse({ status: 200, description: 'List of ideas.' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of ideas.',
+    type: IdeaListApiResponseDto,
+  })
   async findAll(
     @Query('limit') limit?: number,
     @Query('offset') offset?: number,
@@ -51,12 +64,16 @@ export class IdeasController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success(result, 'Ideas retrieved successfully');
+    return this.success({ ideas: result }, 'Ideas retrieved successfully');
   }
 
   @Get('count')
   @ApiOperation({ summary: 'Get ideas count' })
-  @ApiResponse({ status: 200, description: 'Total count.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Total count.',
+    type: IdeaCountApiResponseDto,
+  })
   async count() {
     const count = await this.ideasService.count();
     return this.success({ count }, 'Idea count retrieved');
@@ -64,41 +81,60 @@ export class IdeasController extends AbstractController {
 
   @Get(':virtualId')
   @ApiOperation({ summary: 'Get idea by Virtual ID (e.g., ID-0001)' })
-  @ApiResponse({ status: 200, description: 'Idea object.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Idea object.',
+    type: IdeaApiResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'Idea not found.' })
   async findOne(@Param('virtualId') virtualId: string) {
     const result = await this.ideasService.findByIdeaId(virtualId);
-    return this.success(result, 'Idea retrieved successfully');
+    return this.success({ idea: result }, 'Idea retrieved successfully');
   }
 
   @Put(':virtualId')
   @ApiOperation({ summary: 'Update an idea' })
-  @ApiResponse({ status: 200, description: 'Idea updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Idea updated.',
+    type: IdeaApiResponseDto,
+  })
   async update(@Param('virtualId') virtualId: string, @Body() dto: any) {
     const result = await this.ideasService.updateByIdeaId(virtualId, dto);
-    return this.success(result, 'Idea updated successfully');
+    return this.success({ idea: result }, 'Idea updated successfully');
   }
 
   @Post(':virtualId/upvote')
   @ApiOperation({ summary: 'Toggle upvote for an idea' })
-  @ApiResponse({ status: 200, description: 'Upvote toggled.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Upvote toggled.',
+    type: IdeaApiResponseDto,
+  })
   async toggleUpvote(
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
   ) {
     const result = await this.ideasService.toggleUpvote(virtualId, body.userId);
-    return this.success(result, 'Upvote toggled successfully');
+    return this.success({ idea: result }, 'Upvote toggled successfully');
   }
 
   @Post(':virtualId/subscribe')
   @ApiOperation({ summary: 'Toggle subscription for an idea' })
-  @ApiResponse({ status: 200, description: 'Subscription toggled.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Subscription toggled.',
+    type: IdeaApiResponseDto,
+  })
   async toggleSubscribe(
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
   ) {
-    const result = await this.ideasService.toggleSubscribe(virtualId, body.userId);
-    return this.success(result, 'Subscription toggled successfully');
+    const result = await this.ideasService.toggleSubscribe(
+      virtualId,
+      body.userId,
+    );
+    return this.success({ idea: result }, 'Subscription toggled successfully');
   }
 
   @Delete(':virtualId')

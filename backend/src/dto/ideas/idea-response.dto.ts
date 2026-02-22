@@ -9,6 +9,8 @@ import { ApiStatus } from '../../common/enums/api-status.enum';
 import { IdeaStatus } from '../../common/enums/idea-status.enum';
 import { Priority } from '../../common/enums/priority.enum';
 import { PaginationMetaDto } from '../../common/dto/responses/pagination.dto';
+export { CountApiResponseDto as IdeaCountApiResponseDto } from '../../common/dto/responses/api-response.dto';
+
 
 /**
  * Short owner reference for idea responses.
@@ -142,6 +144,22 @@ export class IdeaDto {
 }
 
 /**
+ * Domain-keyed data payload for single idea responses.
+ */
+export class IdeaDataDto {
+  @ApiProperty({ type: IdeaDto })
+  idea: IdeaDto;
+}
+
+/**
+ * Domain-keyed data payload for idea list responses.
+ */
+export class IdeaListDataDto {
+  @ApiProperty({ type: [IdeaDto] })
+  ideas: IdeaDto[];
+}
+
+/**
  * API response for single idea.
  */
 export class IdeaApiResponseDto {
@@ -151,8 +169,8 @@ export class IdeaApiResponseDto {
   @ApiPropertyOptional({ example: 'Idea retrieved successfully' })
   message?: string;
 
-  @ApiProperty({ type: IdeaDto })
-  data: IdeaDto;
+  @ApiProperty({ type: IdeaDataDto })
+  data: IdeaDataDto;
 
   @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
   requestId?: string;
@@ -171,8 +189,8 @@ export class IdeaListApiResponseDto {
   @ApiPropertyOptional({ example: 'Ideas retrieved successfully' })
   message?: string;
 
-  @ApiProperty({ type: [IdeaDto] })
-  data: IdeaDto[];
+  @ApiProperty({ type: IdeaListDataDto })
+  data: IdeaListDataDto;
 
   @ApiPropertyOptional({ type: PaginationMetaDto })
   pagination?: PaginationMetaDto;

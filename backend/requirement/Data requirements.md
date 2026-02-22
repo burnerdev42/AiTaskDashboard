@@ -162,6 +162,33 @@ Short codes are stored in DB; long codes are display labels.
 
 ---
 
+## Global API Constraints
+
+All API responses **MUST** follow a standardized response envelope structure. This applies to every endpoint across all domains.
+
+### Standard Response Envelope
+
+```json
+{
+  "status":    "success" | "failed",
+  "message":   "<human-readable success or failure message>",
+  "timestamp": "<ISO 8601 date-time of response>",
+  "data":      { /* domain-specific payload */ }
+}
+```
+
+### Payload Rules
+
+| Scenario | `data` Contents | Example |
+|----------|-----------------|---------|
+| Single entity | Domain model keyed by singular name | `{ "challenge": { ... } }` |
+| List of entities | Domain model keyed by plural name | `{ "challenges": [ ... ] }` |
+| Count | Object with `count` key | `{ "count": 42 }` |
+| Auth / Token | Relevant auth payload (user profile, token) | `{ "user": { ... }, "token": "..." }` |
+| Failure | May be `null` or omitted | — |
+
+---
+
 ## 1. Challenge
 
 ### Database Fields
@@ -211,6 +238,7 @@ Short codes are stored in DB; long codes are display labels.
 - Timeline, portfolio, platform list, opco list are hardcoded. Later manageable by admin.
 - Priority is always hardcoded.
 - `PATCH /challenges/{virtualId}/status` — Requires `{ "status": "..." }` — Swim lane status change only.
+- Once a challenge is in `pilot` status, it cannot be moved back to `submitted`.
 - `POST /challenges/{virtualId}/upvote` — Requires `{ "userId": "..." }` — Toggle upvote.
 - `POST /challenges/{virtualId}/subscribe` — Requires `{ "userId": "..." }` — Toggle subscription.
 - Creator automatically becomes a subscriber.
@@ -280,6 +308,18 @@ Short codes are stored in DB; long codes are display labels.
 |---|-------|------|--------|
 | 1 | `userDetails` | Object | Fetched from User DB via `userId` |
 
+### Constraints & Requirements
+
+- **Virtual ID Prefix Routing:** The prefix of the `virtualId` (`CH-` or `ID-`) determines the comment type to query, mapping directly to Comment Types `["CH", "ID"]`. E.g., `CH-001` → type `"CH"` (Challenge); `ID-0001` → type `"ID"` (Idea).
+- `GET /comments/challenge/{virtualId}` — Fetch all comments for a challenge by its virtualId.
+- `GET /comments/idea/{virtualId}` — Fetch all comments for an idea by its virtualId (ideaId).
+- `GET /comments/user/{userId}` — Fetch all comments by a specific user (MongoDB Hex ID).
+- `GET /comments/challenge/{virtualId}/count` — Fetch comment count for a challenge by its virtualId.
+- `GET /comments/idea/{virtualId}/count` — Fetch comment count for an idea by its virtualId.
+- `GET /comments/user/{userId}/count` — Fetch comment count for a specific user.
+- Any user commenting on a challenge automatically subscribes to that challenge.
+- Any user commenting on an idea automatically subscribes to that idea and its parent challenge.
+
 ---
 
 ## 4. User
@@ -340,6 +380,10 @@ Short codes are stored in DB; long codes are display labels.
 | 2 | `entityDetails` | Object | Fetched via `fk_id` based on Type (Challenge or Idea) |
 | 3 | `activitySummary` | String | Human-readable string combining Type + Entity Details |
 
+### Constraints & Requirements
+- `GET /activities/user/{userId}` — Fetch activities for a specific user.
+- `GET /activities/user/{userId}/count` — Fetch total activity count for a specific user.
+
 ---
 
 ## 6. Notification
@@ -367,6 +411,8 @@ Short codes are stored in DB; long codes are display labels.
 
 ### Constraints & Requirements
 - `PATCH /notifications/{id}/status` — Requires `{ "isSeen": true }` — Update isSeen.
+- `GET /notifications/user/{userId}` — Fetch notifications for a specific user.
+- `GET /notifications/user/{userId}/count` — Fetch notification count. Accepts optional query parameter `isSeen` (true/false) to filter; if absent, fetches all.
 
 ### Notification Recipient Logic
 - `challenge_created`: All users (except initiator)

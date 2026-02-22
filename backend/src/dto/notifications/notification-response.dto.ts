@@ -6,6 +6,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiStatus } from '../../common/enums/api-status.enum';
 import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
+import { CountDataDto } from '../../common/dto/responses/api-response.dto';
+export { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
+
 
 export class NotificationDto {
   @ApiProperty({ description: 'Notification ID' })
@@ -23,7 +26,10 @@ export class NotificationDto {
   @ApiProperty({ description: 'Initiator user ID' })
   initiatorId: string;
 
-  @ApiProperty({ description: 'Whether notification has been seen', example: false })
+  @ApiProperty({
+    description: 'Whether notification has been seen',
+    example: false,
+  })
   isSeen: boolean;
 
   @ApiProperty({ description: 'Creation timestamp' })
@@ -33,6 +39,22 @@ export class NotificationDto {
   updatedAt: string;
 }
 
+/**
+ * Domain-keyed data payload for single notification responses.
+ */
+export class NotificationDataDto {
+  @ApiProperty({ type: NotificationDto })
+  notification: NotificationDto;
+}
+
+/**
+ * Domain-keyed data payload for notification list responses.
+ */
+export class NotificationListDataDto {
+  @ApiProperty({ type: [NotificationDto] })
+  notifications: NotificationDto[];
+}
+
 export class NotificationApiResponseDto {
   @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
   status: ApiStatus;
@@ -40,8 +62,8 @@ export class NotificationApiResponseDto {
   @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty({ type: NotificationDto })
-  data: NotificationDto;
+  @ApiProperty({ type: NotificationDataDto })
+  data: NotificationDataDto;
 
   @ApiProperty()
   timestamp: string;
@@ -54,8 +76,8 @@ export class NotificationListApiResponseDto {
   @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty({ type: [NotificationDto] })
-  data: NotificationDto[];
+  @ApiProperty({ type: NotificationListDataDto })
+  data: NotificationListDataDto;
 
   @ApiProperty()
   timestamp: string;
@@ -68,8 +90,8 @@ export class UnreadCountApiResponseDto {
   @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty()
-  data: { count: number };
+  @ApiProperty({ type: CountDataDto })
+  data: CountDataDto;
 
   @ApiProperty()
   timestamp: string;

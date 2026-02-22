@@ -39,7 +39,7 @@ describe('IdeasController', () => {
       const dto = { title: 'Test' } as unknown as CreateIdeaDto;
       const result = { title: 'Test' } as unknown as IdeaDocument;
       jest.spyOn(service, 'create').mockResolvedValue(result);
-      expect((await controller.create(dto)).data).toEqual(result);
+      expect((await controller.create(dto)).data).toEqual({ idea: result });
     });
   });
 
@@ -47,7 +47,7 @@ describe('IdeasController', () => {
     it('should return all ideas', async () => {
       const result = [];
       jest.spyOn(service, 'findAll').mockResolvedValue(result);
-      expect((await controller.findAll(10, 0)).data).toEqual(result);
+      expect((await controller.findAll(10, 0)).data).toEqual({ ideas: result });
     });
   });
 
@@ -55,7 +55,7 @@ describe('IdeasController', () => {
     it('should return one idea', async () => {
       const result = { title: 'Test' } as unknown as IdeaDocument;
       jest.spyOn(service, 'findByIdeaId').mockResolvedValue(result);
-      expect((await controller.findOne('1')).data).toEqual(result);
+      expect((await controller.findOne('1')).data).toEqual({ idea: result });
     });
   });
 
@@ -64,7 +64,7 @@ describe('IdeasController', () => {
       const dto = { title: 'Updated' } as unknown as UpdateIdeaDto;
       const result = { title: 'Updated' } as unknown as IdeaDocument;
       jest.spyOn(service, 'updateByIdeaId').mockResolvedValue(result);
-      expect((await controller.update('1', dto)).data).toEqual(result);
+      expect((await controller.update('1', dto)).data).toEqual({ idea: result });
     });
   });
 
