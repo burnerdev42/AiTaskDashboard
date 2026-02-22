@@ -18,9 +18,9 @@ describe('IdeasController', () => {
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
-            findOne: jest.fn(),
-            update: jest.fn(),
-            remove: jest.fn(),
+            findByIdeaId: jest.fn(),
+            updateByIdeaId: jest.fn(),
+            removeByIdeaId: jest.fn(),
           },
         },
       ],
@@ -39,23 +39,23 @@ describe('IdeasController', () => {
       const dto = { title: 'Test' } as unknown as CreateIdeaDto;
       const result = { title: 'Test' } as unknown as IdeaDocument;
       jest.spyOn(service, 'create').mockResolvedValue(result);
-      expect((await controller.create(dto)).data).toEqual(result);
+      expect((await controller.create(dto)).data).toEqual({ idea: result });
     });
   });
 
-  describe('getIdeas', () => {
+  describe('findAll', () => {
     it('should return all ideas', async () => {
       const result = [];
       jest.spyOn(service, 'findAll').mockResolvedValue(result);
-      expect((await controller.getIdeas({})).data).toEqual(result);
+      expect((await controller.findAll(10, 0)).data).toEqual({ ideas: result });
     });
   });
 
   describe('findOne', () => {
     it('should return one idea', async () => {
       const result = { title: 'Test' } as unknown as IdeaDocument;
-      jest.spyOn(service, 'findOne').mockResolvedValue(result);
-      expect((await controller.findOne('1')).data).toEqual(result);
+      jest.spyOn(service, 'findByIdeaId').mockResolvedValue(result);
+      expect((await controller.findOne('1')).data).toEqual({ idea: result });
     });
   });
 
@@ -63,16 +63,18 @@ describe('IdeasController', () => {
     it('should update an idea', async () => {
       const dto = { title: 'Updated' } as unknown as UpdateIdeaDto;
       const result = { title: 'Updated' } as unknown as IdeaDocument;
-      jest.spyOn(service, 'update').mockResolvedValue(result);
-      expect((await controller.update('1', dto)).data).toEqual(result);
+      jest.spyOn(service, 'updateByIdeaId').mockResolvedValue(result);
+      expect((await controller.update('1', dto)).data).toEqual({
+        idea: result,
+      });
     });
   });
 
   describe('remove', () => {
     it('should remove an idea', async () => {
-      const result = { _id: '1' } as unknown as IdeaDocument;
-      jest.spyOn(service, 'remove').mockResolvedValue(result);
-      expect((await controller.remove('1')).data).toEqual(result);
+      jest.spyOn(service, 'removeByIdeaId').mockResolvedValue(undefined as any);
+      await controller.remove('1');
+      expect(service.removeByIdeaId).toHaveBeenCalledWith('1');
     });
   });
 });

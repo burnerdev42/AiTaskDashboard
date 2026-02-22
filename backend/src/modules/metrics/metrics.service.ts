@@ -24,8 +24,8 @@ export class MetricsService extends AbstractService {
   }
 
   async getSummary() {
-    const challenges = await this.challengesService.findAll({});
-    const ideas = await this.ideasService.findAll({});
+    const challenges = await this.challengesService.findAll(10000, 0);
+    const ideas = await this.ideasService.findAll(10000, 0);
 
     // Calculate generic metrics
     const totalChallenges = challenges.length;

@@ -1,7 +1,7 @@
 /**
  * @file notifications.controller.ts
  * @description Controller for notification management.
- * @responsibility Handles HTTP requests for notification CRUD operations.
+ * @responsibility Handles HTTP requests for notification CRUD and PATCH isSeen.
  */
 
 import {
@@ -9,31 +9,25 @@ import {
   Get,
   Post,
   Put,
+  Patch,
   Delete,
   Body,
   Param,
   Query,
   Logger,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { AbstractController } from '../../common/controllers/abstract.controller';
 import { NotificationsService } from './notifications.service';
-import { CreateNotificationDto } from '../../dto/notifications/create-notification.dto';
-import { UpdateNotificationDto } from '../../dto/notifications/update-notification.dto';
 import {
-  NotificationApiResponseDto,
   NotificationListApiResponseDto,
-  UnreadCountApiResponseDto,
-  MarkReadApiResponseDto,
+  NotificationApiResponseDto,
+  CountApiResponseDto,
 } from '../../dto/notifications/notification-response.dto';
-import { ErrorResponseDto } from '../../common/dto/responses/api-response.dto';
-import { ApiResponse as ApiResponseType } from '../../common/interfaces/api-response.interface';
-import { NotificationDocument } from '../../models/notifications/notification.schema';
+import { CreateNotificationDto } from '../../dto/notifications/create-notification.dto';
 
-/**
- * Controller for Notification endpoints.
- * Provides CRUD operations and user-specific notification queries.
- */
 @ApiTags('Notifications')
 @Controller('notifications')
 export class NotificationsController extends AbstractController {
@@ -43,177 +37,162 @@ export class NotificationsController extends AbstractController {
     super();
   }
 
-  /**
-   * Creates a new notification.
-   * @param createDto - Notification creation data
-   * @returns Created notification
-   */
   @Post()
-  @ApiOperation({ summary: 'Create a new notification' })
+  @ApiOperation({ summary: 'Create a notification' })
   @ApiResponse({
     status: 201,
-    description: 'Notification created successfully',
+    description: 'Notification created.',
     type: NotificationApiResponseDto,
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
-    type: ErrorResponseDto,
-  })
-  async create(
-    @Body() createDto: CreateNotificationDto,
-  ): Promise<ApiResponseType<NotificationDocument>> {
-    const notification = await this.notificationsService.create(createDto);
-    return this.success(notification, 'Notification created successfully');
+  async create(@Body() dto: CreateNotificationDto) {
+    const notification = await this.notificationsService.create(dto);
+    return this.success({ notification }, 'Notification created successfully');
   }
 
-  /**
-   * Retrieves notifications for a specific user.
-   * @param userId - User ID
-   * @param skip - Number of records to skip (pagination)
-   * @param limit - Maximum number of records to return
-   * @param unreadOnly - Filter to only unread notifications
-   * @returns Array of notifications
-   */
-  @Get('user/:userId')
-  @ApiOperation({ summary: 'Get notifications for a user' })
-  @ApiQuery({ name: 'skip', required: false, type: Number })
+  @Get()
+  @ApiOperation({ summary: 'Get all notifications' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiQuery({ name: 'unreadOnly', required: false, type: Boolean })
+  @ApiQuery({ name: 'offset', required: false, type: Number })
   @ApiResponse({
     status: 200,
-    description: 'Notifications retrieved successfully',
+    description: 'List of notifications.',
     type: NotificationListApiResponseDto,
   })
-  async findByUser(
-    @Param('userId') userId: string,
-    @Query('skip') skip?: number,
+  async findAll(
     @Query('limit') limit?: number,
-    @Query('unreadOnly') unreadOnly?: boolean,
-  ): Promise<ApiResponseType<NotificationDocument[]>> {
-    const notifications = await this.notificationsService.findByUserId(userId, {
-      skip: skip ? Number(skip) : undefined,
-      limit: limit ? Number(limit) : undefined,
-      unreadOnly:
-        unreadOnly === true || unreadOnly === ('true' as unknown as boolean),
-    });
-    return this.success(notifications);
-  }
-
-  /**
-   * Gets unread notification count for a user.
-   * @param userId - User ID
-   * @returns Unread count
-   */
-  @Get('user/:userId/unread-count')
-  @ApiOperation({ summary: 'Get unread notification count for a user' })
-  @ApiResponse({
-    status: 200,
-    description: 'Unread count retrieved successfully',
-    type: UnreadCountApiResponseDto,
-  })
-  async getUnreadCount(
-    @Param('userId') userId: string,
-  ): Promise<ApiResponseType<{ count: number }>> {
-    const count = await this.notificationsService.getUnreadCount(userId);
-    return this.success({ count });
-  }
-
-  /**
-   * Marks notifications as read for a user.
-   * @param userId - User ID
-   * @param notificationIds - Optional specific notification IDs to mark
-   * @returns Number of notifications marked as read
-   */
-  @Post('user/:userId/mark-read')
-  @ApiOperation({ summary: 'Mark notifications as read' })
-  @ApiResponse({
-    status: 200,
-    description: 'Notifications marked as read',
-    type: MarkReadApiResponseDto,
-  })
-  async markAsRead(
-    @Param('userId') userId: string,
-    @Body() body: { notificationIds?: string[] },
-  ): Promise<ApiResponseType<{ modifiedCount: number }>> {
-    const result = await this.notificationsService.markAsRead(
-      userId,
-      body.notificationIds,
+    @Query('offset') offset?: number,
+  ) {
+    const notifications = await this.notificationsService.findAll(
+      limit ? +limit : 20,
+      offset ? +offset : 0,
     );
-    return this.success(result, 'Notifications marked as read');
+    return this.success(
+      { notifications },
+      'Notifications retrieved successfully',
+    );
   }
 
-  /**
-   * Retrieves a single notification by ID.
-   * @param id - Notification ID
-   * @returns Notification document
-   */
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a notification by ID' })
+  @Get('count')
+  @ApiOperation({ summary: 'Get notifications count' })
   @ApiResponse({
     status: 200,
-    description: 'Notification retrieved successfully',
+    description: 'Total count.',
+    type: CountApiResponseDto,
+  })
+  async count() {
+    const count = await this.notificationsService.count();
+    return this.success({ count }, 'Notification count retrieved');
+  }
+
+  @Get('user/:userId')
+  @ApiOperation({ summary: 'Get notifications by user ID' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'offset', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'List of notifications for the user.',
+    type: NotificationListApiResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async findByUserId(
+    @Param('userId') userId: string,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ) {
+    const notifications = await this.notificationsService.findByUserId(
+      userId,
+      limit ? +limit : 20,
+      offset ? +offset : 0,
+    );
+    return this.success(
+      { notifications },
+      'User notifications retrieved successfully',
+    );
+  }
+
+  @Get('user/:userId/count')
+  @ApiOperation({ summary: 'Get notification count for a user' })
+  @ApiQuery({
+    name: 'isSeen',
+    required: false,
+    type: Boolean,
+    description: 'Filter by seen status. Omit to count all.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Notification count.',
+    type: CountApiResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async countByUserId(
+    @Param('userId') userId: string,
+    @Query('isSeen') isSeen?: string,
+  ) {
+    const isSeenBool = isSeen === undefined ? undefined : isSeen === 'true';
+    const count = await this.notificationsService.countByUserId(
+      userId,
+      isSeenBool,
+    );
+    return this.success({ count }, 'Notification count retrieved');
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get notification by MongoDB _id' })
+  @ApiResponse({
+    status: 200,
+    description: 'Notification object.',
     type: NotificationApiResponseDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Notification not found',
-    type: ErrorResponseDto,
-  })
-  async findOne(
-    @Param('id') id: string,
-  ): Promise<ApiResponseType<NotificationDocument>> {
-    const notification = await this.notificationsService.findOne(id);
-    return this.success(notification);
+  @ApiResponse({ status: 404, description: 'Notification not found.' })
+  async findOne(@Param('id') id: string) {
+    const notification = await this.notificationsService.findById(id);
+    return this.success(
+      { notification },
+      'Notification retrieved successfully',
+    );
   }
 
-  /**
-   * Updates a notification.
-   * @param id - Notification ID
-   * @param updateDto - Update data
-   * @returns Updated notification
-   */
   @Put(':id')
   @ApiOperation({ summary: 'Update a notification' })
   @ApiResponse({
     status: 200,
-    description: 'Notification updated successfully',
+    description: 'Notification updated.',
     type: NotificationApiResponseDto,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Notification not found',
-    type: ErrorResponseDto,
   })
   async update(
     @Param('id') id: string,
-    @Body() updateDto: UpdateNotificationDto,
-  ): Promise<ApiResponseType<NotificationDocument>> {
-    const notification = await this.notificationsService.update(id, updateDto);
-    return this.success(notification, 'Notification updated successfully');
+    @Body() dto: Partial<CreateNotificationDto>,
+  ) {
+    const notification = await this.notificationsService.update(id, dto);
+    return this.success({ notification }, 'Notification updated successfully');
   }
 
-  /**
-   * Deletes a notification.
-   * @param id - Notification ID
-   * @returns Deleted notification
-   */
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a notification' })
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Update notification isSeen status' })
   @ApiResponse({
     status: 200,
-    description: 'Notification deleted successfully',
+    description: 'Notification status updated.',
     type: NotificationApiResponseDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Notification not found',
-    type: ErrorResponseDto,
-  })
-  async delete(
+  async updateIsSeen(
     @Param('id') id: string,
-  ): Promise<ApiResponseType<NotificationDocument>> {
-    const notification = await this.notificationsService.delete(id);
-    return this.success(notification, 'Notification deleted successfully');
+    @Body() body: { isSeen: boolean },
+  ) {
+    const notification = await this.notificationsService.updateIsSeen(
+      id,
+      body.isSeen,
+    );
+    return this.success(
+      { notification },
+      'Notification status updated successfully',
+    );
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a notification' })
+  @ApiResponse({ status: 204, description: 'Notification deleted.' })
+  async remove(@Param('id') id: string) {
+    await this.notificationsService.remove(id);
   }
 }

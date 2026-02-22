@@ -3,7 +3,7 @@ import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 import { CommentDocument } from '../../models/comments/comment.schema';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
-import { TargetType } from '../../common/enums/target-type.enum';
+
 import { Types } from 'mongoose';
 
 describe('CommentsController', () => {
@@ -37,13 +37,13 @@ describe('CommentsController', () => {
     it('should create a comment', async () => {
       const dto: CreateCommentDto = {
         comment: 'Test comment',
-        type: TargetType.CHALLENGE,
+        type: 'CH',
         parentId: new Types.ObjectId().toHexString(),
         userId: new Types.ObjectId().toHexString(),
       };
       const result = { comment: 'Test comment' } as unknown as CommentDocument;
       jest.spyOn(service, 'create').mockResolvedValue(result);
-      expect((await controller.create(dto)).data).toEqual(result);
+      expect((await controller.create(dto)).data).toEqual({ comment: result });
     });
   });
 
@@ -52,9 +52,9 @@ describe('CommentsController', () => {
       const result = [] as CommentDocument[];
       jest.spyOn(service, 'findByParent').mockResolvedValue(result);
       const parentId = new Types.ObjectId().toHexString();
-      expect(
-        (await controller.findByParent(parentId, TargetType.CHALLENGE)).data,
-      ).toEqual(result);
+      expect((await controller.findByParent(parentId, 'CH')).data).toEqual({
+        comments: result,
+      });
     });
   });
 
@@ -62,7 +62,7 @@ describe('CommentsController', () => {
     it('should remove a comment', async () => {
       const result = { _id: '1' } as unknown as CommentDocument;
       jest.spyOn(service, 'remove').mockResolvedValue(result);
-      expect((await controller.remove('1')).data).toEqual(result);
+      expect((await controller.remove('1')).data).toEqual({ comment: result });
     });
   });
 });

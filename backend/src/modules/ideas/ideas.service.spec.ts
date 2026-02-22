@@ -1,40 +1,89 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IdeasService } from './ideas.service';
-import { IdeasRepository } from './ideas.repository';
-import { IdeaDocument } from '../../models/ideas/idea.schema';
-import { CreateIdeaDto } from '../../dto/ideas/create-idea.dto';
-import { QueryDto } from '../../common/dto/query.dto';
+import { getModelToken } from '@nestjs/mongoose';
+import { Idea } from '../../models/ideas/idea.schema';
+import { ActivitiesService } from '../activities/activities.service';
+import { Types, Model } from 'mongoose';
+import { ChallengesService } from '../challenges/challenges.service';
 
 describe('IdeasService', () => {
   let service: IdeasService;
-  let repository: IdeasRepository;
+  let model: Model<any>;
+  let activitiesService: ActivitiesService;
+
+  const mockIdeaId = new Types.ObjectId();
 
   const mockIdea = {
-    _id: '1',
+    _id: mockIdeaId,
+    ideaId: 'ID-0001',
     title: 'Test Idea',
     description: 'Description',
-    category: 'Test',
+    userId: new Types.ObjectId().toHexString(),
+  };
+
+  const mockIdeaModel: any = jest.fn().mockImplementation((dto) => ({
+    ...dto,
+    save: jest.fn().mockResolvedValue({
+      ...dto,
+      _id: mockIdeaId,
+      userId: dto.userId || '1',
+    }),
+  }));
+  Object.assign(mockIdeaModel, {
+    find: jest.fn().mockReturnThis(),
+    findOne: jest.fn().mockReturnThis(),
+    findOneAndUpdate: jest.fn().mockReturnThis(),
+    findByIdAndDelete: jest.fn().mockReturnThis(),
+    deleteOne: jest.fn().mockReturnThis(), // Added deleteOne as idea.service uses it now
+    countDocuments: jest.fn().mockReturnThis(),
+    sort: jest.fn().mockReturnThis(),
+    select: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    lean: jest.fn().mockReturnThis(),
+    exec: jest.fn().mockResolvedValue([mockIdea]),
+    db: {
+      collection: jest.fn().mockReturnValue({
+        find: jest.fn().mockReturnThis(),
+        project: jest.fn().mockReturnThis(),
+        toArray: jest.fn().mockResolvedValue([]),
+      }),
+    },
+  });
+
+  const mockActivitiesService = {
+    create: jest.fn().mockResolvedValue({}),
+    deleteByFkId: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockChallengesService = {
+    subscribeUser: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         IdeasService,
         {
-          provide: IdeasRepository,
-          useValue: {
-            create: jest.fn(),
-            find: jest.fn(),
-            findOne: jest.fn(),
-            findOneAndUpdate: jest.fn(),
-            delete: jest.fn(),
-          },
+          provide: getModelToken(Idea.name),
+          useValue: mockIdeaModel,
+        },
+        {
+          provide: ActivitiesService,
+          useValue: mockActivitiesService,
+        },
+        {
+          provide: ChallengesService,
+          useValue: mockChallengesService,
         },
       ],
     }).compile();
 
     service = module.get<IdeasService>(IdeasService);
-    repository = module.get<IdeasRepository>(IdeasRepository);
+    model = module.get<Model<any>>(getModelToken(Idea.name));
+    activitiesService = module.get<ActivitiesService>(ActivitiesService);
   });
 
   it('should be defined', () => {
@@ -43,99 +92,56 @@ describe('IdeasService', () => {
 
   describe('create', () => {
     it('should create a new idea', async () => {
-      const createIdeaDto = {
-        title: 'Test Idea',
-        description: 'Description',
-        category: 'Test',
-      } as unknown as CreateIdeaDto;
-      jest
-        .spyOn(repository, 'create')
-        .mockResolvedValue(mockIdea as unknown as IdeaDocument);
-
-      const result = await service.create(createIdeaDto);
-      expect(result).toEqual(mockIdea);
-      expect(repository.create).toHaveBeenCalledWith(createIdeaDto);
+      mockIdeaModel.exec.mockResolvedValueOnce(null); // For generateIdeaId findOne
+      const result = await service.create({ title: 'Test Idea' });
+      expect(result.title).toBe('Test Idea');
+      expect(activitiesService.create).toHaveBeenCalled();
     });
   });
 
   describe('findAll', () => {
-    it('should return an array of ideas with defaults', async () => {
-      jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue([mockIdea] as unknown as IdeaDocument[]);
-
-      const result = await service.findAll({});
-      expect(result).toEqual([mockIdea]);
-      expect(repository.find).toHaveBeenCalledWith(
-        {},
-        {
-          skip: 0,
-          limit: 10,
-          sort: { createdAt: -1 },
-          populate: ['owner', 'linkedChallenge'],
-        },
-      );
-    });
-
-    it('should return sorted ideas', async () => {
-      jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue([mockIdea] as unknown as IdeaDocument[]);
-
-      const result = await service.findAll({
-        sort: 'title',
-        page: 2,
-        limit: 5,
-      } as unknown as QueryDto);
-      expect(result).toEqual([mockIdea]);
-      expect(repository.find).toHaveBeenCalledWith(
-        {},
-        {
-          skip: 5,
-          limit: 5,
-          sort: { title: 1 },
-          populate: ['owner', 'linkedChallenge'],
-        },
-      );
+    it('should return an array of ideas', async () => {
+      mockIdeaModel.exec.mockResolvedValueOnce([mockIdea]);
+      const result = await service.findAll(10, 0);
+      expect(result.length).toBe(1);
+      expect(result[0]).toMatchObject({
+        ...mockIdea,
+        _id: mockIdea._id.toHexString(),
+      });
     });
   });
 
-  describe('findOne', () => {
+  describe('findByIdeaId', () => {
     it('should return a single idea', async () => {
-      jest
-        .spyOn(repository, 'findOne')
-        .mockResolvedValue(mockIdea as unknown as IdeaDocument);
-
-      const result = await service.findOne('1');
-      expect(result).toEqual(mockIdea);
-      expect(repository.findOne).toHaveBeenCalledWith(
-        { _id: '1' },
-        { populate: ['owner', 'linkedChallenge'] },
-      );
+      mockIdeaModel.exec.mockResolvedValueOnce(mockIdea);
+      const result = await service.findByIdeaId('ID-0001');
+      expect(result).toMatchObject({
+        ...mockIdea,
+        _id: mockIdea._id.toHexString(),
+      });
     });
   });
 
-  describe('update', () => {
+  describe('updateByIdeaId', () => {
     it('should update an idea', async () => {
-      const updateIdeaDto = { title: 'Updated' };
-      const expectedIdea = { ...mockIdea, title: 'Updated' };
-      jest
-        .spyOn(repository, 'findOneAndUpdate')
-        .mockResolvedValue(expectedIdea as unknown as IdeaDocument);
-
-      const result = await service.update('1', updateIdeaDto);
-      expect(result).toEqual(expectedIdea);
+      mockIdeaModel.exec.mockResolvedValueOnce(mockIdea);
+      const result = await service.updateByIdeaId('ID-0001', {
+        title: 'Updated',
+      });
+      expect(result).toMatchObject({
+        ...mockIdea,
+        _id: mockIdea._id.toHexString(),
+      });
+      expect(activitiesService.create).toHaveBeenCalled();
     });
   });
 
-  describe('remove', () => {
+  describe('removeByIdeaId', () => {
     it('should remove an idea', async () => {
-      jest
-        .spyOn(repository, 'delete')
-        .mockResolvedValue(mockIdea as unknown as IdeaDocument);
-
-      await service.remove('1');
-      expect(repository.delete).toHaveBeenCalledWith({ _id: '1' });
+      mockIdeaModel.exec.mockResolvedValueOnce(mockIdea); // for findOne to get the _id
+      mockIdeaModel.exec.mockResolvedValueOnce(mockIdea); // for deleteOne
+      await service.removeByIdeaId('ID-0001');
+      expect(model.deleteOne).toHaveBeenCalledWith({ _id: mockIdea._id });
     });
   });
 });

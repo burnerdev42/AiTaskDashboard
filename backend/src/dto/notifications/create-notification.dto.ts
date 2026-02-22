@@ -1,106 +1,50 @@
 /**
  * @file create-notification.dto.ts
- * @description DTO for creating notifications.
- * @responsibility Validates notification creation input.
+ * @description DTO for creating notifications (event-driven model).
  */
 
 import {
   IsString,
   IsNotEmpty,
   IsEnum,
-  IsMongoId,
   IsOptional,
-  MaxLength,
   IsBoolean,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { NotificationType } from '../../models/notifications/notification.schema';
+import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
 
-/**
- * DTO for creating a new notification.
- */
 export class CreateNotificationDto {
-  /**
-   * User ID to send notification to.
-   */
   @ApiProperty({
-    description: 'User ID to send notification to',
-    example: '507f1f77bcf86cd799439011',
+    description: 'Event type',
+    enum: NOTIFICATION_TYPES,
+    example: 'challenge_created',
   })
-  @IsMongoId()
+  @IsEnum(NOTIFICATION_TYPES)
   @IsNotEmpty()
-  userId!: string;
+  type: string;
 
-  /**
-   * Type of notification.
-   */
-  @ApiProperty({
-    description: 'Type of notification',
-    enum: NotificationType,
-    example: NotificationType.CHALLENGE,
-  })
-  @IsEnum(NotificationType)
-  @IsNotEmpty()
-  type!: NotificationType;
-
-  /**
-   * Notification title.
-   */
-  @ApiProperty({
-    description: 'Short notification title',
-    example: 'New Challenge Submitted',
-    maxLength: 200,
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(200)
-  title!: string;
-
-  /**
-   * Notification text/message.
-   */
-  @ApiProperty({
-    description: 'Full notification text',
-    example: 'Ravi Patel submitted "Optimize Cloud Infrastructure Costs"',
-    maxLength: 1000,
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(1000)
-  text!: string;
-
-  /**
-   * Optional link for the notification action.
-   */
   @ApiPropertyOptional({
-    description: 'Link for notification action',
-    example: '/challenges/CH-01',
-    maxLength: 500,
+    description: 'Foreign key ID (challenge or idea _id)',
   })
   @IsString()
   @IsOptional()
-  @MaxLength(500)
-  link?: string;
+  fk_id?: string;
 
-  /**
-   * Optional related entity ID.
-   */
-  @ApiPropertyOptional({
-    description: 'Related entity ID (challenge, idea, etc.)',
-    example: '507f1f77bcf86cd799439011',
-  })
-  @IsMongoId()
-  @IsOptional()
-  relatedEntityId?: string;
+  @ApiProperty({ description: 'Recipient user ID' })
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 
-  /**
-   * Whether notification starts as unread.
-   */
+  @ApiProperty({ description: 'Initiator user ID' })
+  @IsString()
+  @IsNotEmpty()
+  initiatorId: string;
+
   @ApiPropertyOptional({
-    description: 'Whether notification is unread',
-    default: true,
+    description: 'Whether notification has been seen',
+    default: false,
   })
   @IsBoolean()
   @IsOptional()
-  unread?: boolean;
+  isSeen?: boolean;
 }

@@ -1,3 +1,5 @@
+# Comment Mongoose Schema
+
 ```javascript
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
@@ -5,8 +7,7 @@ const { Schema } = mongoose;
 const commentSchema = new Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
       required: true,
     },
     comment: {
@@ -15,24 +16,24 @@ const commentSchema = new Schema(
     },
     type: {
       type: String,
-      enum: ['CH', 'ID'], // CH = Challenges, ID = Ideas
       required: true,
+      enum: ['CH', 'ID'],
+    },
+    createdat: {
+      type: Date,
+      default: Date.now,
     },
     typeId: {
-      type: Schema.Types.ObjectId, // Will ref either Challenge or Idea depends on 'type'
+      type: String,
       required: true,
-      refPath: 'refModel',
     },
   },
   {
-    timestamps: { createdAt: 'createdat', updatedAt: false }, // Specific matching for "Createdat" capitalization or mapping
+    timestamps: false,
   }
 );
 
-// Virtual for dynamic refPath based on Type
-commentSchema.virtual('refModel').get(function () {
-  return this.type === 'CH' ? 'Challenge' : 'Idea';
-});
+commentSchema.index({ typeId: 1, type: 1 });
 
 module.exports = mongoose.model('Comment', commentSchema);
 ```

@@ -10,17 +10,20 @@ import { LoggerModule } from 'nestjs-pino';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ChallengesModule } from './modules/challenges/challenges.module';
 import { IdeasModule } from './modules/ideas/ideas.module';
-import { TasksModule } from './modules/tasks/tasks.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './common';
 import { DatabaseModule } from './database/database.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
 import { UsersModule } from './modules/users/users.module';
 import { CommentsModule } from './modules/comments/comments.module';
-import { UserActionsModule } from './modules/user-actions/user-actions.module';
+import { ActivitiesModule } from './modules/activities/activities.module';
 import { CorrelationMiddleware } from './common/middleware/correlation.middleware';
+import { MetricModule } from './modules/metric/metric.module';
+import { HomeModule } from './modules/home/home.module';
+import { join } from 'path';
+import { SeedModule } from './modules/seed/seed.module';
+
 
 @Module({
   imports: [
@@ -59,13 +62,14 @@ import { CorrelationMiddleware } from './common/middleware/correlation.middlewar
     NotificationsModule,
     ChallengesModule,
     IdeasModule,
-    TasksModule,
     AuthModule,
-    DashboardModule,
     MetricsModule,
     UsersModule,
     CommentsModule,
-    UserActionsModule,
+    ActivitiesModule,
+    MetricModule,
+    HomeModule,
+    SeedModule,
   ],
   controllers: [],
   providers: [],

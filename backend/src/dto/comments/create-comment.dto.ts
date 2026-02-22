@@ -4,9 +4,8 @@
  * @responsibility Defines validation rules and API documentation for comment creation.
  */
 
-import { IsString, IsNotEmpty, IsEnum, IsMongoId } from 'class-validator';
+import { IsString, IsNotEmpty, IsIn, IsMongoId } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { TargetType } from '../../common/enums/target-type.enum';
 
 /**
  * DTO for Comment Creation.
@@ -24,12 +23,12 @@ export class CreateCommentDto {
    * Target entity type (Challenge or Idea).
    */
   @ApiProperty({
-    enum: TargetType,
-    description: 'Target entity type',
-    example: TargetType.CHALLENGE,
+    enum: ['CH', 'ID'],
+    description: 'Target entity type (CH=Challenge, ID=Idea)',
+    example: 'CH',
   })
-  @IsEnum(TargetType)
-  type: TargetType;
+  @IsIn(['CH', 'ID'])
+  type: string;
 
   /**
    * ID of the parent entity (Challenge or Idea).

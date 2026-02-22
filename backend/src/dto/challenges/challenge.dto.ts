@@ -1,30 +1,19 @@
 /**
  * @file challenge.dto.ts
  * @description Data Transfer Object for creating and updating Challenges.
- * @responsibility Defines validation rules and API documentation for challenge operations.
  */
 
 import {
   IsString,
   IsNotEmpty,
-  IsEnum,
   IsOptional,
   IsArray,
+  IsNumber,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
-import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
-import { Priority } from '../../common/enums/priority.enum';
 
-/**
- * Unified DTO for Challenge Create and Update operations.
- * All fields optional except title and description (for creation).
- */
 export class ChallengeDto {
-  @ApiProperty({
-    description: 'The title of the challenge',
-    example: 'Next-Gen AI Bot',
-  })
+  @ApiProperty({ description: 'The title of the challenge' })
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -34,89 +23,74 @@ export class ChallengeDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiPropertyOptional({ description: 'Short summary of the challenge' })
+  @ApiPropertyOptional({ description: 'Operating company' })
+  @IsString()
+  @IsOptional()
+  opco?: string;
+
+  @ApiPropertyOptional({ description: 'Platform' })
+  @IsString()
+  @IsOptional()
+  platform?: string;
+
+  @ApiPropertyOptional({ description: 'Short summary' })
   @IsString()
   @IsOptional()
   summary?: string;
 
-  @ApiPropertyOptional({
-    description: 'List of operating companies',
-    type: [String],
-  })
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  opco?: string[];
-
-  @ApiPropertyOptional({
-    description: 'List of platforms',
-    type: [String],
-  })
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  platform?: string[];
-
-  @ApiPropertyOptional({ description: 'Expected outcome of the challenge' })
+  @ApiPropertyOptional({ description: 'Expected outcome' })
   @IsString()
   @IsOptional()
   outcome?: string;
 
-  @ApiPropertyOptional({ description: 'Timeline for the challenge' })
+  @ApiPropertyOptional({ description: 'Timeline' })
   @IsString()
   @IsOptional()
   timeline?: string;
 
-  @ApiPropertyOptional({
-    enum: ChallengeStage,
-    description: 'Portfolio lane in innovation pipeline',
-    default: ChallengeStage.IDEATION,
-  })
-  @IsString()
-  @IsEnum(ChallengeStage)
-  @IsOptional()
-  portfolioLane?: ChallengeStage;
-
-  @ApiPropertyOptional({
-    description: 'User ID of the challenge owner',
-  })
+  @ApiPropertyOptional({ description: 'Portfolio lane' })
   @IsString()
   @IsOptional()
-  owner?: string;
+  portfolioLane?: string;
 
-  @ApiPropertyOptional({
-    enum: ChallengeStatus,
-    description: 'Current workflow status',
-    default: ChallengeStatus.SUBMITTED,
-  })
+  @ApiPropertyOptional({ description: 'Priority level' })
   @IsString()
-  @IsEnum(ChallengeStatus)
   @IsOptional()
-  status?: ChallengeStatus;
+  priority?: string;
 
-  @ApiPropertyOptional({
-    enum: Priority,
-    description: 'Priority level',
-    default: Priority.MEDIUM,
-  })
-  @IsString()
-  @IsEnum(Priority)
-  @IsOptional()
-  priority?: Priority;
-
-  @ApiPropertyOptional({ description: 'List of tags', type: [String] })
+  @ApiPropertyOptional({ description: 'Tags', type: [String] })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
   tags?: string[];
 
-  @ApiPropertyOptional({ description: 'Constraints or limitations' })
+  @ApiPropertyOptional({ description: 'Constraints' })
   @IsString()
   @IsOptional()
   constraint?: string;
 
-  @ApiPropertyOptional({ description: 'Key stakeholders' })
+  @ApiPropertyOptional({ description: 'Stakeholder' })
   @IsString()
   @IsOptional()
-  stakeholder?: string;
+  stakeHolder?: string;
+
+  @ApiPropertyOptional({ description: 'Swim lane status' })
+  @IsString()
+  @IsOptional()
+  status?: string;
+
+  @ApiProperty({ description: 'Creator user ID' })
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiPropertyOptional({ description: 'Month (auto-set)' })
+  @IsNumber()
+  @IsOptional()
+  month?: number;
+
+  @ApiPropertyOptional({ description: 'Year (auto-set)' })
+  @IsNumber()
+  @IsOptional()
+  year?: number;
 }
