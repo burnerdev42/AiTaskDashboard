@@ -1,7 +1,7 @@
 /**
  * @file challenges.controller.ts
  * @description Controller for challenge-related operations.
- * @responsibility Handles HTTP requests for creating, reading, updating, and deleting challenges.
+ * @responsibility Handles HTTP requests for CRUD, status updates, upvotes, and subscriptions.
  */
 
 import {
@@ -12,22 +12,23 @@ import {
   Param,
   Delete,
   Put,
+  Patch,
   Query,
   Logger,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { ChallengesService } from './challenges.service';
 import { ChallengeDto } from '../../dto/challenges/challenge.dto';
-import {
-  ChallengeApiResponse,
-  ChallengeListApiResponse,
-} from '../../dto/challenges/challenge-response.dto';
 import { AbstractController } from '../../common';
-import { QueryDto } from '../../common/dto/query.dto';
+import {
+  ChallengeListApiResponse,
+  ChallengeApiResponse,
+  CountApiResponseDto,
+} from '../../dto/challenges/challenge-response.dto';
+import { ChallengeDocument } from '../../models/challenges/challenge.schema';
 
-/**
- * Controller for Challenges.
- */
 @ApiTags('Challenges')
 @Controller('challenges')
 export class ChallengesController extends AbstractController {
@@ -41,66 +42,157 @@ export class ChallengesController extends AbstractController {
   @ApiOperation({ summary: 'Create a new challenge' })
   @ApiResponse({
     status: 201,
-    description: 'The challenge has been successfully created.',
+    description: 'Challenge created.',
     type: ChallengeApiResponse,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
   async create(@Body() dto: ChallengeDto) {
     const result = await this.challengesService.create(dto);
-    return this.success(result, 'Challenge successfully created');
+    return this.success(
+      { challenge: result },
+      'Challenge successfully created',
+    );
   }
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all challenges' })
+  @ApiOperation({ summary: 'Get all challenges' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'offset', required: false, type: Number })
   @ApiResponse({
     status: 200,
-    description:
-      'Paginated list of challenges with short owner/contributor info.',
+    description: 'List of challenges.',
     type: ChallengeListApiResponse,
   })
-  async getChallenges(@Query() query: QueryDto) {
-    const result = await this.challengesService.findAll(query);
-    return this.success(result, 'Challenges retrieved successfully');
+  async findAll(
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ) {
+    const result = await this.challengesService.findAll(
+      limit ? +limit : 20,
+      offset ? +offset : 0,
+    );
+    return this.success(
+      { challenges: result },
+      'Challenges retrieved successfully',
+    );
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Retrieve a challenge by ID (enriched)' })
+  @Get('count')
+  @ApiOperation({ summary: 'Get challenge count' })
   @ApiResponse({
     status: 200,
-    description:
-      'Challenge with linked ideas, upvotes, downvotes, subscriptions, and their counts.',
+    description: 'Total count.',
+    type: CountApiResponseDto,
+  })
+  async count() {
+    const count = await this.challengesService.count();
+    return this.success({ count }, 'Challenge count retrieved');
+  }
+
+  @Get(':virtualId')
+  @ApiOperation({ summary: 'Get challenge by Virtual ID (e.g., CH-001)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Challenge object.',
     type: ChallengeApiResponse,
   })
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
-  async findOne(@Param('id') id: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const result = await this.challengesService.findOne(id);
-    return this.success(result, 'Challenge retrieved successfully');
+  async findOne(@Param('virtualId') virtualId: string) {
+    const result = (await this.challengesService.findByVirtualId(
+      virtualId,
+    )) as ChallengeDocument;
+    return this.success(
+      { challenge: result },
+      'Challenge retrieved successfully',
+    );
   }
 
-  @Put(':id')
+  @Put(':virtualId')
   @ApiOperation({ summary: 'Update a challenge' })
   @ApiResponse({
     status: 200,
-    description: 'The updated challenge.',
+    description: 'Challenge updated.',
     type: ChallengeApiResponse,
   })
-  @ApiResponse({ status: 404, description: 'Challenge not found.' })
-  async update(@Param('id') id: string, @Body() dto: ChallengeDto) {
-    const result = await this.challengesService.update(id, dto);
-    return this.success(result, 'Challenge updated successfully');
+  async update(
+    @Param('virtualId') virtualId: string,
+    @Body() dto: ChallengeDto,
+  ) {
+    const result = (await this.challengesService.updateByVirtualId(
+      virtualId,
+      dto,
+    )) as ChallengeDocument;
+    return this.success(
+      { challenge: result },
+      'Challenge updated successfully',
+    );
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a challenge' })
+  @Patch(':virtualId/status')
+  @ApiOperation({ summary: 'Update challenge status (Swim Lane)' })
   @ApiResponse({
     status: 200,
-    description: 'The challenge has been successfully deleted.',
+    description: 'Challenge status updated.',
     type: ChallengeApiResponse,
   })
-  @ApiResponse({ status: 404, description: 'Challenge not found.' })
-  async remove(@Param('id') id: string) {
-    const result = await this.challengesService.remove(id);
-    return this.success(result, 'Challenge deleted successfully');
+  async updateStatus(
+    @Param('virtualId') virtualId: string,
+    @Body() body: { status: string; userId: string },
+  ) {
+    const result = (await this.challengesService.updateStatus(
+      virtualId,
+      body.status,
+      body.userId,
+    )) as ChallengeDocument;
+    return this.success(
+      { challenge: result },
+      'Challenge status updated successfully',
+    );
+  }
+
+  @Post(':virtualId/upvote')
+  @ApiOperation({ summary: 'Toggle upvote for a challenge' })
+  @ApiResponse({
+    status: 200,
+    description: 'Upvote toggled.',
+    type: ChallengeApiResponse,
+  })
+  async toggleUpvote(
+    @Param('virtualId') virtualId: string,
+    @Body() body: { userId: string },
+  ) {
+    const result = (await this.challengesService.toggleUpvote(
+      virtualId,
+      body.userId,
+    )) as ChallengeDocument;
+    return this.success({ challenge: result }, 'Upvote toggled successfully');
+  }
+
+  @Post(':virtualId/subscribe')
+  @ApiOperation({ summary: 'Toggle subscription for a challenge' })
+  @ApiResponse({
+    status: 200,
+    description: 'Subscription toggled.',
+    type: ChallengeApiResponse,
+  })
+  async toggleSubscribe(
+    @Param('virtualId') virtualId: string,
+    @Body() body: { userId: string },
+  ) {
+    const result = (await this.challengesService.toggleSubscribe(
+      virtualId,
+      body.userId,
+    )) as ChallengeDocument;
+    return this.success(
+      { challenge: result },
+      'Subscription toggled successfully',
+    );
+  }
+
+  @Delete(':virtualId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a challenge' })
+  @ApiResponse({ status: 204, description: 'Challenge deleted.' })
+  async remove(@Param('virtualId') virtualId: string) {
+    await this.challengesService.removeByVirtualId(virtualId);
   }
 }

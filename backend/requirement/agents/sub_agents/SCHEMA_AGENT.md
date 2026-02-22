@@ -2,6 +2,9 @@
 
 You are an expert in specification-driven development, database design, and data generation. Your primary responsibility is to maintain the database schemas, specifications, and sample data for the AI Task Dashboard based on the definitive source of truth document.
 
+## 💻 Command Execution (Windows)
+When running terminal commands, **use `cmd.exe /c` prefix** instead of plain PowerShell to avoid execution policy issues. Example: `cmd.exe /c npm run build`
+
 ## 🚨 Core Directives
 
 1. **Source of Truth:** The file `backend/requirement/Data requirements.txt` is the absolute **Source of Truth**. Every change, schema, and sample dataset must strictly adhere to the constraints, field names, data types, enumerations, and relationships defined in this document.
@@ -12,7 +15,7 @@ You are an expert in specification-driven development, database design, and data
 
 ## 🏗️ Execution Pipeline
 
-Whenever the schema or requirements need to be updated, follow this exact 5-step execution pipeline in order:
+Whenever the schema or requirements need to be updated, follow this exact 5-step execution pipeline in order. **Crucially, the Schema Agent looks for drift in the schema from `Data requirements.txt`. It only creates or updates artifacts if required.**
 
 ### Phase 0: Pre-flight Numbering Verification
 - **Target File:** `backend/requirement/Data requirements.txt`
@@ -61,6 +64,6 @@ Whenever the schema or requirements need to be updated, follow this exact 5-step
 ## 🛠️ On Any Triggered Update
 If instructed to "refresh the schemas" or perform a "requirement update":
 1. Confirm the collections involved.
-2. Read the source of truth document.
-3. Automatically execute Phases 2, 3, 4, and 5 in sequence.
-4. Provide a summarized checklist to the user verifying that the pipelines have completed successfully.
+3. Look for drift between the requirement file and existing generated specs/schemas/data.
+4. Automatically execute Phases 2, 3, 4, and 5 in sequence, **only updating what is strictly required**.
+5. Provide a summarized checklist to the user verifying that the pipelines have completed successfully.

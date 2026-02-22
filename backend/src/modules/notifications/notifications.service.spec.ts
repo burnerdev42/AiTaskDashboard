@@ -1,23 +1,43 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationsService } from './notifications.service';
-import { NotificationsRepository } from './notifications.repository';
-import { Logger } from '@nestjs/common';
-import { Types } from 'mongoose';
-import { NotificationType } from '../../models/notifications/notification.schema';
+import { getModelToken } from '@nestjs/mongoose';
+import { Notification } from '../../models/notifications/notification.schema';
+import { Types, Model } from 'mongoose';
 
 describe('NotificationsService', () => {
   let service: NotificationsService;
-  let repository: NotificationsRepository;
+  let model: Model<any>;
 
   const mockNotification = {
     _id: new Types.ObjectId(),
-    userId: new Types.ObjectId(),
-    type: NotificationType.CHALLENGE,
-    title: 'Test Notification',
-    text: 'Test notification text',
-    unread: true,
+    userId: 'user123',
+    initiatorId: 'initiator456',
+    fk_id: 'challenge789',
+    type: 'challenge_created',
+    isSeen: false,
     createdAt: new Date(),
     updatedAt: new Date(),
+  };
+
+  const mockNotificationModel = {
+    create: jest.fn().mockImplementation((dto) =>
+      Promise.resolve({
+        ...dto,
+        save: () => Promise.resolve({ ...dto, _id: new Types.ObjectId() }),
+      }),
+    ),
+    find: jest.fn().mockReturnThis(),
+    findById: jest.fn().mockReturnThis(),
+    findByIdAndUpdate: jest.fn().mockReturnThis(),
+    findByIdAndDelete: jest.fn().mockReturnThis(),
+    countDocuments: jest.fn().mockReturnThis(),
+    deleteMany: jest.fn().mockReturnThis(),
+    insertMany: jest.fn().mockResolvedValue([]),
+    sort: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    lean: jest.fn().mockReturnThis(),
+    exec: jest.fn().mockResolvedValue([mockNotification]),
   };
 
   beforeEach(async () => {
@@ -25,107 +45,85 @@ describe('NotificationsService', () => {
       providers: [
         NotificationsService,
         {
-          provide: NotificationsRepository,
-          useValue: {
-            create: jest.fn().mockResolvedValue(mockNotification),
-            findByUserId: jest.fn().mockResolvedValue([mockNotification]),
-            findOne: jest.fn().mockResolvedValue(mockNotification),
-            findOneAndUpdate: jest.fn().mockResolvedValue(mockNotification),
-            delete: jest.fn().mockResolvedValue(mockNotification),
-            countUnread: jest.fn().mockResolvedValue(5),
-            markAsRead: jest.fn().mockResolvedValue({ modifiedCount: 3 }),
-            softDeleteOld: jest.fn().mockResolvedValue({ modifiedCount: 10 }),
-          },
+          provide: getModelToken(Notification.name),
+          useValue: mockNotificationModel,
         },
       ],
     }).compile();
 
     service = module.get<NotificationsService>(NotificationsService);
-    repository = module.get<NotificationsRepository>(NotificationsRepository);
+    model = module.get<Model<any>>(getModelToken(Notification.name));
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('create', () => {
-    it('should create a notification', async () => {
-      const createDto = {
-        userId: mockNotification.userId.toString(),
-        type: NotificationType.CHALLENGE,
-        title: 'Test Notification',
-        text: 'Test notification text',
-      };
-
-      const result = await service.create(createDto);
-
-      expect(result).toEqual(mockNotification);
-      expect(jest.spyOn(repository, 'create')).toHaveBeenCalled();
-    });
-  });
-
   describe('findByUserId', () => {
     it('should return notifications for a user', async () => {
-      const findByUserIdSpy = jest.spyOn(repository, 'findByUserId');
       const result = await service.findByUserId('user123');
-
-      expect(result).toEqual([mockNotification]);
-      expect(findByUserIdSpy).toHaveBeenCalledWith('user123', {});
+      expect(model.find).toHaveBeenCalledWith({ userId: 'user123' });
+      expect(result).toHaveLength(1);
     });
   });
 
-  describe('getUnreadCount', () => {
-    it('should return unread count', async () => {
-      const countUnreadSpy = jest.spyOn(repository, 'countUnread');
-      const result = await service.getUnreadCount('user123');
-
+  describe('getUnseenCount', () => {
+    it('should return unseen count', async () => {
+      mockNotificationModel.exec.mockResolvedValueOnce(5); // For countDocuments
+      const result = await service.getUnseenCount('user123');
+      expect(model.countDocuments).toHaveBeenCalledWith({
+        userId: 'user123',
+        isSeen: false,
+      });
       expect(result).toBe(5);
-      expect(countUnreadSpy).toHaveBeenCalledWith('user123');
     });
   });
 
-  describe('markAsRead', () => {
-    it('should mark notifications as read', async () => {
-      const markAsReadSpy = jest.spyOn(repository, 'markAsRead');
-      const result = await service.markAsRead('user123', ['notif1', 'notif2']);
+  describe('updateIsSeen', () => {
+    it('should update isSeen status', async () => {
+      mockNotificationModel.exec.mockResolvedValueOnce(mockNotification);
+      const result = await service.updateIsSeen('notif123', true);
+      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
+        'notif123',
+        { isSeen: true },
+        { new: true },
+      );
+      expect(result).toEqual(mockNotification);
+    });
+  });
 
-      expect(result).toEqual({ modifiedCount: 3 });
-      expect(markAsReadSpy).toHaveBeenCalledWith('user123', [
-        'notif1',
-        'notif2',
+  describe('dispatchToMany', () => {
+    it('should insert many notifications, excluding the initiator', async () => {
+      await service.dispatchToMany(
+        ['user1', 'user2', 'initiator456'],
+        'idea_created',
+        'idea123',
+        'initiator456',
+      );
+      expect(model.insertMany).toHaveBeenCalledWith([
+        {
+          type: 'idea_created',
+          fk_id: 'idea123',
+          userId: 'user1',
+          initiatorId: 'initiator456',
+          isSeen: false,
+        },
+        {
+          type: 'idea_created',
+          fk_id: 'idea123',
+          userId: 'user2',
+          initiatorId: 'initiator456',
+          isSeen: false,
+        },
       ]);
     });
   });
 
-  describe('notify', () => {
-    it('should create and log a notification', async () => {
-      const loggerSpy = jest
-        .spyOn(Logger.prototype, 'log')
-        .mockImplementation(() => {});
-
-      const validUserId = '507f1f77bcf86cd799439011';
-      const result = await service.notify(
-        validUserId,
-        'Test Title',
-        'Test Text',
-        NotificationType.CHALLENGE,
-        { link: '/test' },
-      );
-
-      expect(result).toEqual(mockNotification);
-      expect(loggerSpy).toHaveBeenCalledWith(
-        `Sending notification to User ${validUserId}: Test Title`,
-      );
-    });
-  });
-
-  describe('cleanupOldNotifications', () => {
-    it('should soft delete old notifications', async () => {
-      const softDeleteOldSpy = jest.spyOn(repository, 'softDeleteOld');
-      const result = await service.cleanupOldNotifications('user123', 30);
-
-      expect(result).toEqual({ modifiedCount: 10 });
-      expect(softDeleteOldSpy).toHaveBeenCalledWith('user123', 30);
+  describe('deleteByFkId', () => {
+    it('should delete many notifications by fk_id', async () => {
+      mockNotificationModel.exec.mockResolvedValueOnce({ deletedCount: 5 });
+      await service.deleteByFkId('fk123');
+      expect(model.deleteMany).toHaveBeenCalledWith({ fk_id: 'fk123' });
     });
   });
 });

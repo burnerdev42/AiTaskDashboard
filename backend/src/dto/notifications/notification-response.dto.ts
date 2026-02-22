@@ -1,175 +1,111 @@
 /**
  * @file notification-response.dto.ts
  * @description Response DTOs for notification endpoints.
- * @responsibility Defines Swagger-documented response types for notification operations.
  */
 
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiStatus } from '../../common/enums/api-status.enum';
-import { NotificationType } from '../../models/notifications/notification.schema';
-import { PaginationMetaDto } from '../../common/dto/responses/pagination.dto';
+import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
+import { CountDataDto } from '../../common/dto/responses/api-response.dto';
+export { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
 
-/**
- * Full notification document response.
- */
 export class NotificationDto {
-  @ApiProperty({
-    description: 'Notification ID',
-    example: '507f1f77bcf86cd799439015',
-  })
+  @ApiProperty({ description: 'Notification ID' })
   _id: string;
 
-  @ApiProperty({ description: 'User ID', example: '507f1f77bcf86cd799439011' })
+  @ApiProperty({ description: 'Event type', enum: NOTIFICATION_TYPES })
+  type: string;
+
+  @ApiPropertyOptional({ description: 'Foreign key ID' })
+  fk_id?: string;
+
+  @ApiProperty({ description: 'Recipient user ID' })
   userId: string;
 
-  @ApiProperty({
-    enum: NotificationType,
-    description: 'Notification type',
-    example: NotificationType.CHALLENGE,
-  })
-  type: NotificationType;
+  @ApiProperty({ description: 'Initiator user ID' })
+  initiatorId: string;
 
   @ApiProperty({
-    description: 'Notification title',
-    example: 'New Challenge Submitted',
+    description: 'Whether notification has been seen',
+    example: false,
   })
-  title: string;
+  isSeen: boolean;
 
-  @ApiProperty({
-    description: 'Notification text',
-    example: 'Ravi Patel submitted a new challenge',
-  })
-  text: string;
-
-  @ApiPropertyOptional({
-    description: 'Action link',
-    example: '/challenges/CH-01',
-  })
-  link?: string;
-
-  @ApiPropertyOptional({ description: 'Related entity ID' })
-  relatedEntityId?: string;
-
-  @ApiProperty({ description: 'Read status', example: false })
-  unread: boolean;
-
-  @ApiProperty({ description: 'Deletion status', example: false })
-  deleted: boolean;
-
-  @ApiPropertyOptional({ description: 'Deletion timestamp' })
-  deletedAt?: string;
-
-  @ApiProperty({
-    description: 'Creation timestamp',
-    example: '2026-02-18T10:00:00.000Z',
-  })
+  @ApiProperty({ description: 'Creation timestamp' })
   createdAt: string;
 
-  @ApiProperty({
-    description: 'Last update timestamp',
-    example: '2026-02-18T10:00:00.000Z',
-  })
+  @ApiProperty({ description: 'Last update timestamp' })
   updatedAt: string;
 }
 
 /**
- * API response for single notification.
+ * Domain-keyed data payload for single notification responses.
  */
+export class NotificationDataDto {
+  @ApiProperty({ type: NotificationDto })
+  notification: NotificationDto;
+}
+
+/**
+ * Domain-keyed data payload for notification list responses.
+ */
+export class NotificationListDataDto {
+  @ApiProperty({ type: [NotificationDto] })
+  notifications: NotificationDto[];
+}
+
 export class NotificationApiResponseDto {
   @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
   status: ApiStatus;
 
-  @ApiPropertyOptional({ example: 'Notification retrieved successfully' })
+  @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty({ type: NotificationDto })
-  data: NotificationDto;
+  @ApiProperty({ type: NotificationDataDto })
+  data: NotificationDataDto;
 
-  @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
-  requestId?: string;
-
-  @ApiProperty({ example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty()
   timestamp: string;
 }
 
-/**
- * API response for notification list.
- */
 export class NotificationListApiResponseDto {
   @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
   status: ApiStatus;
 
-  @ApiPropertyOptional({ example: 'Notifications retrieved successfully' })
+  @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty({ type: [NotificationDto] })
-  data: NotificationDto[];
+  @ApiProperty({ type: NotificationListDataDto })
+  data: NotificationListDataDto;
 
-  @ApiPropertyOptional({ type: PaginationMetaDto })
-  pagination?: PaginationMetaDto;
-
-  @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
-  requestId?: string;
-
-  @ApiProperty({ example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty()
   timestamp: string;
 }
 
-/**
- * Unread count response.
- */
-export class UnreadCountDto {
-  @ApiProperty({ description: 'Number of unread notifications', example: 5 })
-  count: number;
-}
-
-/**
- * API response for unread count.
- */
 export class UnreadCountApiResponseDto {
-  @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
+  @ApiProperty({ enum: ApiStatus })
   status: ApiStatus;
 
-  @ApiPropertyOptional({ example: 'Unread count retrieved' })
+  @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty({ type: UnreadCountDto })
-  data: UnreadCountDto;
+  @ApiProperty({ type: CountDataDto })
+  data: CountDataDto;
 
-  @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
-  requestId?: string;
-
-  @ApiProperty({ example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty()
   timestamp: string;
 }
 
-/**
- * Mark as read result.
- */
-export class MarkReadResultDto {
-  @ApiProperty({
-    description: 'Number of notifications marked as read',
-    example: 3,
-  })
-  modifiedCount: number;
-}
-
-/**
- * API response for mark as read.
- */
 export class MarkReadApiResponseDto {
-  @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
+  @ApiProperty({ enum: ApiStatus })
   status: ApiStatus;
 
-  @ApiPropertyOptional({ example: 'Notifications marked as read' })
+  @ApiPropertyOptional()
   message?: string;
 
-  @ApiProperty({ type: MarkReadResultDto })
-  data: MarkReadResultDto;
+  @ApiProperty()
+  data: { modifiedCount: number };
 
-  @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
-  requestId?: string;
-
-  @ApiProperty({ example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty()
   timestamp: string;
 }

@@ -5,7 +5,7 @@
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![License](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
-> **Architect**: Antigravity  
+> **Architect**: Ananta  
 > **Status**: Production-Hardened, Enterprise-Ready
 
 ---
@@ -69,8 +69,8 @@ src/
 │   ├── user-actions/      # Shared user actions (votes, subscriptions)
 │   ├── tasks/             # Automated AI/Background tasks
 │   ├── notifications/     # Notification dispatch & Newsletter subscription
-│   ├── dashboard/         # Aggregated views (e.g., Swimlanes)
-│   └── metrics/           # ROI and KPI reporting APIs
+│   ├── home/              # Aggregated home views (e.g., Top Challenges, Team)
+│   └── metric/            # Real-time reporting, ROI, and KPI APIs
 ├── common/                # Shared Cross-Cutting Concerns
 │   ├── auth/              # Authentication decorators (CurrentUser, etc.)
 │   ├── controllers/       # Abstract base controller
@@ -167,7 +167,7 @@ Assigns a unique trace ID (`traceId`) to every incoming request for distributed 
 **Error Response (400 Bad Request / 500 Internal)**
 ```json
 {
-  "status": "error",
+  "status": "failed",
   "message": "User-friendly error message",
   "errors": [ ... ],
   "requestId": "uuid-v4",
@@ -257,9 +257,21 @@ Copy `.env.example` to `.env` and configure the following:
 | :--- | :--- | :--- |
 | `NODE_ENV` | Environment (development/production) | `development` |
 | `PORT` | API Port | `3000` |
-| `MONGODB_URI` | Connection string for MongoDB | `mongodb://localhost:27017/dashboard` |
+| `MONGODB_URI` | Connection string for MongoDB | `mongodb://localhost:27017/ai_task_dashboard` (or `ananta`) |
 | `JWT_SECRET` | Secret key for signing tokens | *Mandatory Change* |
 | `LOG_LEVEL` | Pino log level (info/debug/error) | `info` |
+
+> **Connecting to your Database:** Make sure that the database name in `MONGODB_URI` points to the correct DB (e.g., `ai_task_dashboard`, `ananta`). Mongoose will automatically map code structures to the following expected collections:
+> 
+> 1. `users` (For the `User` schema)
+> 2. `challenges` (For the `Challenge` schema)
+> 3. `ideas` (For the `Idea` schema)
+> 4. `comments` (For the `Comment` schema)
+> 5. `activities` (For the `Activity` schema)
+> 6. `notifications` (For the `Notification` schema)
+> 7. `tasks` (Legacy/Deprecated - For the `Task` schema)
+>
+> If you are setting up the DB from scratch manually, those are the collection strings you will need.
 
 ---
 
@@ -293,7 +305,7 @@ Copy `.env.example` to `.env` and configure the following:
 2.  **Auth**: Send JWT in the header: `Authorization: Bearer <token>`.
 3.  **Standard Response**: Expect the `data` object for the actual payload.
 4.  **Traceability**: Every response includes `requestId` and `traceId` for debugging.
-5.  **Errors**: Check for `status: "error"` and the `message` field for user feedback.
+5.  **Errors**: Check for `status: "failed"` and the `message` field for user feedback.
 6.  **Swagger UI**: Visit `/api/docs` for the interactive playground and model definitions.
 
 
@@ -359,33 +371,21 @@ Copy `.env.example` to `.env` and configure the following:
 |--------|----------|-------------|---------------|
 | `POST` | `/challenges` | Create a new challenge | ✅ |
 | `GET` | `/challenges` | List all challenges (supports pagination) | ✅ |
-| `GET` | `/challenges/:id` | Get challenge by ID (enriched with ideas, votes) | ✅ |
-| `PUT` | `/challenges/:id` | Update challenge | ✅ |
-| `DELETE` | `/challenges/:id` | Delete challenge | ✅ |
+| `GET` | `/challenges/count` | Get total challenge count | ✅ |
+| `GET` | `/challenges/:virtualId` | Get challenge by virtual ID (e.g., CH-001) | ✅ |
+| `PUT` | `/challenges/:virtualId` | Update challenge | ✅ |
+| `PATCH` | `/challenges/:virtualId/status` | Update swim lane status | ✅ |
+| `POST` | `/challenges/:virtualId/upvote` | Toggle upvote (auto-subscribes) | ✅ |
+| `POST` | `/challenges/:virtualId/subscribe` | Toggle subscription | ✅ |
+| `DELETE` | `/challenges/:virtualId` | Delete challenge | ✅ |
 
-**Create / Update Challenge Request Body (ChallengeDto):**
-```json
-{
-  "title": "AI-Powered Customer Support",
-  "description": "Implement conversational AI for customer queries",
-  "portfolioLane": "Ideation",
-  "status": "Submitted",
-  "owner": "60d21b4667d0d8992e610c85",
-  "priority": "High",
-  "tags": ["AI", "Customer Experience"],
-  "opco": ["OpCo1"],
-  "platform": ["Web"],
-  "outcome": "30% reduction in support tickets",
-  "timeline": "Q3 2026"
-}
-```
+> **⚠️ Pilot-lock constraint:** Once a challenge is in `pilot` status, it **cannot** be moved back to `submitted`. Any such attempt returns `HTTP 400`.
 
-**Challenge Statuses:** `Submitted` | `Under Review` | `Approved` | `In Progress` | `Completed` | `Rejected`
-**Portfolio Lanes:** `Ideation` | `Prototype` | `Pilot` | `Scale`
-
-> **GET /challenges/:id enriched response** includes: linked `ideas`, `upvotes` (userId list), `downvotes` (userId list), `subscriptions` (userId list), and short `owner`/`contributor` details (`_id, name, email, avatar`).
+**Challenge Status Codes:** `submitted` | `ideation` | `pilot` | `completed` | `archive`  
+**Portfolio Lanes:** `Customer Value Driver` | `Non Strategic Product Management` | `Tech Enabler` | `Maintenance`
 
 ---
+
 
 ### Comments (`/api/v1/comments`)
 
@@ -393,9 +393,18 @@ Copy `.env.example` to `.env` and configure the following:
 |--------|----------|-------------|---------------|
 | `POST` | `/comments` | Create a comment on a Challenge or Idea | ✅ |
 | `GET` | `/comments?parentId=&type=` | List comments for a specific entity | ✅ |
+| `GET` | `/comments/count` | Get total comments count | ✅ |
+| `GET` | `/comments/challenge/:virtualId` | Get comments for a challenge by virtualId | ✅ |
+| `GET` | `/comments/challenge/:virtualId/count` | Get comment count for a challenge by virtualId | ✅ |
+| `GET` | `/comments/idea/:virtualId` | Get comments for an idea by virtualId | ✅ |
+| `GET` | `/comments/idea/:virtualId/count` | Get comment count for an idea by virtualId | ✅ |
+| `GET` | `/comments/user/:userId` | Get comments by user (paginated) | ✅ |
+| `GET` | `/comments/user/:userId/count` | Get comment count for a user | ✅ |
 | `DELETE` | `/comments/:id` | Delete a comment | ✅ |
 
-**Why a separate Comment collection?** Comments are shared between Challenges and Ideas using a polymorphic `type` field (`Challenge` or `Idea`) and a `parentId` reference. This avoids duplicating comment logic across modules and ensures a consistent commenting experience.
+> **Virtual ID Prefix Routing:** The virtualId prefix (`CH-` or `ID-`) determines the comment type to query, mapping directly to Comment Types `["CH", "ID"]`. E.g., `CH-001` → type `"CH"` (Challenge); `ID-0001` → type `"ID"` (Idea).
+
+**Why a separate Comment collection?** Comments are shared between Challenges and Ideas using a polymorphic `type` field (`CH` or `ID`) and a `typeId` reference. This avoids duplicating comment logic across modules and ensures a consistent commenting experience.
 
 ---
 
@@ -407,7 +416,7 @@ Copy `.env.example` to `.env` and configure the following:
 | `GET` | `/user-actions?targetId=&targetType=` | Get actions on an entity | ✅ |
 | `GET` | `/user-actions/counts?targetId=&targetType=` | Get aggregated action counts | ✅ |
 
-**Why a separate UserAction collection?** Votes (upvote/downvote) and subscriptions are shared between Challenges and Ideas using polymorphic `targetType`/`targetId` fields. A unique compound index (`userId + targetId + targetType + actionType`) prevents duplicate actions. This design avoids embedding votes inside parent documents (which would cause write contention at scale).
+**Why a separate UserAction collection?** Votes (upvote) and subscriptions are shared between Challenges and Ideas using polymorphic `targetType`/`targetId` fields. A unique compound index (`userId + targetId + targetType + actionType`) prevents duplicate actions. This design avoids embedding votes inside parent documents (which would cause write contention at scale).
 
 ---
 
@@ -426,73 +435,53 @@ Copy `.env.example` to `.env` and configure the following:
 {
   "title": "Chatbot for FAQ Handling",
   "description": "Automate common customer questions with AI",
-  "status": "Ideation",
-  "owner": "60d21b4667d0d8992e610c85",
   "linkedChallenge": "60d21b4667d0d8992e610c86",
   "tags": ["AI", "Automation"],
   "problemStatement": "High volume of repetitive customer queries",
-  "proposedSolution": "AI-powered FAQ chatbot",
-  "expectedImpact": "30% reduction in support tickets"
+  "proposedSolution": "AI-powered FAQ chatbot"
 }
 ```
 
-**Idea Statuses:** `Ideation` | `Evaluation` | `POC` | `Pilot` | `Scale`
-
 ---
 
-### Tasks (`/api/v1/tasks`)
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `POST` | `/tasks` | Create a new task | ✅ |
-| `GET` | `/tasks` | List all tasks (supports pagination) | ✅ |
-| `GET` | `/tasks/:id` | Get task by ID | ✅ |
-| `PUT` | `/tasks/:id` | Update task | ✅ |
-| `DELETE` | `/tasks/:id` | Delete task | ✅ |
-
-**Create Task Request Body:**
-```json
-{
-  "title": "Review prototype feedback",
-  "description": "Analyze user feedback from prototype testing",
-  "stage": "Prototype",
-  "owner": "60d21b4667d0d8992e610c85",
-  "priority": "High",
-  "status": "pending"
-}
-```
-
-**Task Priorities:** `High` | `Medium` | `Low`  
-**Task Statuses:** `pending` | `in_progress` | `completed` | `cancelled`
-
----
 
 ### Notifications (`/api/v1/notifications`)
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `POST` | `/notifications` | Create a notification | ✅ |
-| `GET` | `/notifications/user/:userId` | Get notifications for a user | ✅ |
-| `GET` | `/notifications/user/:userId/unread-count` | Get unread notification count | ✅ |
-| `POST` | `/notifications/user/:userId/mark-read` | Mark all notifications as read | ✅ |
+| `POST` | `/notifications` | Create a notification (admin/test only) | ✅ |
+| `GET` | `/notifications` | List all notifications (paginated) | ✅ |
+| `GET` | `/notifications/count` | Get total notification count | ✅ |
+| `GET` | `/notifications/user/:userId` | Get notifications for a specific user (paginated) | ✅ |
+| `GET` | `/notifications/user/:userId/count` | Get notification count for a user. Optional `?isSeen=true/false` to filter by seen status; omit for total | ✅ |
 | `GET` | `/notifications/:id` | Get notification by ID | ✅ |
 | `PUT` | `/notifications/:id` | Update notification | ✅ |
-| `DELETE` | `/notifications/:id` | Soft delete notification | ✅ |
+| `PATCH` | `/notifications/:id/status` | Mark notification as seen (`{ "isSeen": true }`) | ✅ |
+| `DELETE` | `/notifications/:id` | Delete notification | ✅ |
 
-**Create Notification Request Body:**
-```json
-{
-  "userId": "60d21b4667d0d8992e610c85",
-  "type": "challenge",
-  "title": "New Challenge Submitted",
-  "message": "Ravi Patel submitted 'Optimize Cloud Infrastructure'",
-  "link": "/challenges/CH-001"
-}
-```
-
-**Notification Types:** `challenge` | `idea` | `comment` | `mention` | `status` | `system`
+**Notification Types:** `challenge_created` \| `challenge_status_update` \| `challenge_edited` \| `idea_edited` \| `challenge_upvoted` \| `idea_upvoted` \| `challenge_commented` \| `idea_commented` \| `challenge_subscribed` \| `idea_subscribed` \| `challenge_deleted` \| `idea_deleted`
 
 ---
+
+### Activities (`/api/v1/activities`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/activities` | List all activities (paginated) | ✅ |
+| `GET` | `/activities/count` | Get total activity count | ✅ |
+| `GET` | `/activities/user/:userId` | Get activities for a specific user (paginated) | ✅ |
+| `GET` | `/activities/user/:userId/count` | Get total activity count for a specific user | ✅ |
+| `GET` | `/activities/:id` | Get activity by ID | ✅ |
+| `POST` | `/activities` | Create an activity (admin/test only) | ✅ |
+| `PUT` | `/activities/:id` | Update an activity | ✅ |
+| `DELETE` | `/activities/:id` | Delete an activity | ✅ |
+
+> **Note:** Activities are created internally by the system when users perform actions (create, upvote, comment, subscribe, login, logout). Direct POST is for admin/testing only.
+
+**Activity Types:** `challenge_created` \| `idea_created` \| `challenge_status_update` \| `challenge_edited` \| `idea_edited` \| `challenge_upvoted` \| `idea_upvoted` \| `challenge_commented` \| `idea_commented` \| `challenge_subscribed` \| `idea_subscribed` \| `challenge_deleted` \| `idea_deleted` \| `log_in` \| `log_out`
+
+---
+
 
 ### Newsletter (`/api/v1/newsletter`)
 
@@ -502,20 +491,25 @@ Copy `.env.example` to `.env` and configure the following:
 
 ---
 
-### Dashboard (`/api/v1/dashboard`)
+### Home (`/api/v1/home`)
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/dashboard/swimlanes` | Get aggregated swimlane view | ✅ |
+| `GET` | `/home/top-challenges` | Get top challenges ordered by status/date | ✅ |
+| `GET` | `/home/innovation-team` | Get the leading users based on innovation score | ✅ |
 
 ---
 
-### Metrics (`/api/v1/metrics`)
+### Metric (`/api/v1/metric`)
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/metrics/summary` | Get KPI summary (ROI, savings, etc.) | ✅ |
-| `GET` | `/metrics/throughput` | Get throughput metrics | ✅ |
+| `GET` | `/metric/summary` | Get KPI summary (Total Ideas, Challenges vs Conversion) | ✅ |
+| `GET` | `/metric/funnel` | Get funnel throughput metrics across swimlanes | ✅ |
+| `GET` | `/metric/team-engagement` | Get team engagement split by platform | ✅ |
+| `GET` | `/metric/portfolio-balance` | Get portfolio balance across specific lanes | ✅ |
+| `GET` | `/metric/innovation-velocity` | Get 6-month historical innovation velocity data | ✅ |
+| `GET` | `/metric/opco-radar` | Get geographic OpCo radar challenge allocations | ✅ |
 
 ---
 
@@ -537,7 +531,15 @@ Copy `.env.example` to `.env` and configure the following:
   email: string,           // Unique, required
   password: string,        // Hashed with bcrypt
   name: string,            // Required
-  role: UserRole,          // 'admin' | 'user' | 'manager' | 'viewer'
+  opco: string,            // Validated against OPCO_LIST
+  platform: string,        // Validated against OPCO_PLATFORM_MAP
+  companyTechRole: string, // Validated against COMPANY_TECH_ROLES
+  interestAreas: string[], // Validated against INTEREST_AREAS
+  role: UserRole,          // 'ADMIN' | 'MEMBER' | 'USER'
+  status: UserStatus,      // 'PENDING' | 'APPROVED' | 'BLOCKED' | 'INACTIVE'
+  innovationScore: number, // Default: 0
+  upvotedChallengeList: string[],
+  upvotedAppreciatedIdeaList: string[],
   avatar?: string,
   createdAt: Date,
   updatedAt: Date
@@ -552,19 +554,25 @@ Copy `.env.example` to `.env` and configure the following:
   title: string,              // Required
   description: string,        // Required
   summary?: string,
-  opco: string[],             // Operating companies
-  platform: string[],         // Platforms
+  opco: string,               // Validated against OPCO_LIST
+  platform: string,           // Validated against OPCO_PLATFORM_MAP
   outcome?: string,           // Expected outcome
-  timeline?: string,          // Timeline
-  portfolioLane: ChallengeStage, // 'Ideation' | 'Prototype' | 'Pilot' | 'Scale'
-  owner: ObjectId,            // Reference to User (short info: _id, name, email, avatar)
-  status: ChallengeStatus,    // 'Submitted' | 'Under Review' | 'Approved' | 'In Progress' | 'Completed' | 'Rejected'
-  priority: Priority,         // 'High' | 'Medium' | 'Low'
+  timeline?: string,          // Validated against TIMELINE_OPTIONS
+  portfolioLane: ChallengeStage, // 'Customer Value Driver' | 'Non Strategic Product Management' | 'Tech Enabler' | 'Maintenance'
+  owner: ObjectId,            // Reference to User
+  status: ChallengeStatus,    // 'submitted' | 'ideation' | 'pilot' | 'completed' | 'archive'
+  priority: Priority,         // 'Critical' | 'High' | 'Medium' | 'Low'
   tags: string[],
   constraint?: string,
   stakeholder?: string,
+  virtualId: string,          // E.g., CH-001
   ideasCount: number,         // Denormalized count of linked ideas
   contributor: ObjectId[],    // References to User
+  upVotes: string[],          // List of User IDs
+  subscriptions: string[],    // List of User IDs
+  viewCount: number,          // Long
+  timestampOfStatusChangedToPilot?: Date,
+  timestampOfCompleted?: Date,
   createdAt: Date,
   updatedAt: Date
 }
@@ -594,7 +602,7 @@ Copy `.env.example` to `.env` and configure the following:
   userId: ObjectId,           // Reference to User
   targetId: ObjectId,         // Reference to target entity
   targetType: TargetType,     // 'Challenge' | 'Idea'
-  actionType: ActionType,     // 'upvote' | 'downvote' | 'subscribe'
+  actionType: ActionType,     // 'upvote' | 'subscribe'
   createdAt: Date,
   updatedAt: Date
 }
@@ -608,44 +616,24 @@ Copy `.env.example` to `.env` and configure the following:
 ```typescript
 {
   _id: ObjectId,
+  ideaId: string,          // E.g., ID-0001
   title: string,           // Required
   description: string,     // Required
-  status: IdeaStatus,      // 'Ideation' | 'Evaluation' | 'POC' | 'Pilot' | 'Scale'
+  status: boolean,         // Default: true (Accepted)
   owner: ObjectId,         // Reference to User
-  linkedChallenge?: ObjectId,
+  linkedChallenge: string, // Reference to Challenge _id
   tags: string[],
-  stats: {
-    appreciations: number,
-    comments: number,
-    views: number
-  },
+  appreciationCount: number, // Upvote count
+  viewCount: number,
   problemStatement?: string,
   proposedSolution?: string,
-  expectedImpact?: string,
-  implementationPlan?: string,
-  impactLevel?: 'High' | 'Medium' | 'Low',
+  upVotes: string[],       // List of User IDs
+  subscription: string[],  // List of User IDs
   createdAt: Date,
   updatedAt: Date
 }
 ```
 
-### Task Schema
-
-```typescript
-{
-  _id: ObjectId,
-  title: string,           // Required
-  description: string,     // Required
-  stage: ChallengeStage,   // Related challenge stage
-  owner: ObjectId,         // Reference to User
-  priority: Priority,      // 'High' | 'Medium' | 'Low'
-  status: TaskStatus,      // 'pending' | 'in_progress' | 'completed' | 'cancelled'
-  progress?: number,       // 0-100
-  dueDate?: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
 
 ### Notification Schema
 
@@ -680,7 +668,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/aitaskdashboard
+      - MONGODB_URI=mongodb://mongo:27017/ai_task_dashboard
       - JWT_SECRET=your-production-secret
     depends_on:
       - mongo
@@ -766,33 +754,21 @@ enum UserRole {
 ### ChallengeStage (Portfolio Lane)
 ```typescript
 enum ChallengeStage {
-  IDEATION = 'Ideation',
-  PROTOTYPE = 'Prototype',
-  PILOT = 'Pilot',
-  SCALE = 'Scale'
+  CUSTOMER_VALUE_DRIVER = 'Customer Value Driver',
+  NON_STRATEGIC_PRODUCT_MANAGEMENT = 'Non Strategic Product Management',
+  TECH_ENABLER = 'Tech Enabler',
+  MAINTENANCE = 'Maintenance'
 }
 ```
 
 ### ChallengeStatus
 ```typescript
 enum ChallengeStatus {
-  SUBMITTED = 'Submitted',
-  UNDER_REVIEW = 'Under Review',
-  APPROVED = 'Approved',
-  IN_PROGRESS = 'In Progress',
-  COMPLETED = 'Completed',
-  REJECTED = 'Rejected'
-}
-```
-
-### IdeaStatus
-```typescript
-enum IdeaStatus {
-  IDEATION = 'Ideation',
-  EVALUATION = 'Evaluation',
-  POC = 'POC',
-  PILOT = 'Pilot',
-  SCALE = 'Scale'
+  SUBMITTED = 'submitted',
+  IDEATION = 'ideation',
+  PILOT = 'pilot',
+  COMPLETED = 'completed',
+  ARCHIVE = 'archive'
 }
 ```
 
@@ -815,33 +791,33 @@ enum Priority {
 }
 ```
 
-### TargetType
+### TargetType / CommentType
 ```typescript
+// Shared entities
 enum TargetType {
-  CHALLENGE = 'Challenge',
-  IDEA = 'Idea'
+  CHALLENGE = 'CH',
+  IDEA = 'ID'
 }
 ```
 
 ### ActionType
 ```typescript
-enum ActionType {
-  UPVOTE = 'upvote',
-  DOWNVOTE = 'downvote',
-  SUBSCRIBE = 'subscribe'
-}
+const ACTIVITY_TYPES = [
+  'challenge_created', 'idea_created', 'challenge_status_update',
+  'challenge_edited', 'idea_edited', 'challenge_upvoted', 'idea_upvoted',
+  'challenge_commented', 'idea_commented', 'challenge_subscribed',
+  'idea_subscribed', 'challenge_deleted', 'idea_deleted', 'log_in', 'log_out'
+] as const;
 ```
 
 ### NotificationType
 ```typescript
-enum NotificationType {
-  CHALLENGE = 'challenge',
-  IDEA = 'idea',
-  COMMENT = 'comment',
-  MENTION = 'mention',
-  STATUS = 'status',
-  SYSTEM = 'system'
-}
+const NOTIFICATION_TYPES = [
+  'challenge_created', 'challenge_status_update', 'challenge_edited',
+  'idea_edited', 'challenge_upvoted', 'idea_upvoted', 'challenge_commented',
+  'idea_commented', 'challenge_subscribed', 'idea_subscribed',
+  'challenge_deleted', 'idea_deleted'
+] as const;
 ```
 
 ---
@@ -1031,8 +1007,8 @@ List endpoints return paginated data with metadata:
 | **Tasks** | `TaskApiResponseDto`, `TaskListApiResponseDto` |
 | **Notifications** | `NotificationApiResponseDto`, `NotificationListApiResponseDto`, `UnreadCountApiResponseDto`, `MarkReadApiResponseDto` |
 | **Users** | `UserApiResponseDto`, `UserListApiResponseDto` |
-| **Dashboard** | `SwimLanesApiResponseDto` |
-| **Metrics** | `MetricsSummaryApiResponseDto`, `ThroughputApiResponseDto` |
+| **Home** | `TopChallengesApiResponseDto`, `InnovationTeamApiResponseDto` |
+| **Metric** | `MetricSummaryApiResponseDto`, `MetricFunnelApiResponseDto`, `MetricTeamEngagementApiResponseDto`, `MetricPortfolioBalanceApiResponseDto`, `MetricInnovationVelocityApiResponseDto`, `MetricOpcoRadarApiResponseDto` |
 | **Newsletter** | `NewsletterApiResponseDto` |
 
 ### Swagger Integration

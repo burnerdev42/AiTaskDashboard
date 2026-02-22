@@ -4,12 +4,22 @@
  * @responsibility Orchestrates data operations for the Comment collection.
  */
 
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  Inject,
+  forwardRef,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommentsRepository } from './comments.repository';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
 import { AbstractService } from '../../common';
 import { CommentDocument } from '../../models/comments/comment.schema';
 import { Types } from 'mongoose';
+import { ChallengesService } from '../challenges/challenges.service';
+import { IdeasService } from '../ideas/ideas.service';
+import { IdeaDocument } from '../../models/ideas/idea.schema';
+import { ChallengeDocument } from '../../models/challenges/challenge.schema';
 
 /**
  * Service for Comments.
@@ -18,7 +28,13 @@ import { Types } from 'mongoose';
 export class CommentsService extends AbstractService {
   protected readonly logger = new Logger(CommentsService.name);
 
-  constructor(private readonly commentsRepository: CommentsRepository) {
+  constructor(
+    private readonly commentsRepository: CommentsRepository,
+    @Inject(forwardRef(() => ChallengesService))
+    private readonly challengesService: ChallengesService,
+    @Inject(forwardRef(() => IdeasService))
+    private readonly ideasService: IdeasService,
+  ) {
     super();
   }
 
@@ -33,9 +49,38 @@ export class CommentsService extends AbstractService {
       userId: new Types.ObjectId(createCommentDto.userId),
       parentId: new Types.ObjectId(createCommentDto.parentId),
     };
-    return this.commentsRepository.create(
+    const savedComment = await this.commentsRepository.create(
       document as unknown as Partial<CommentDocument>,
     );
+
+    if (createCommentDto.type === 'CH') {
+      await this.challengesService.subscribeUser(
+        createCommentDto.parentId,
+        createCommentDto.userId,
+      );
+    } else if (createCommentDto.type === 'ID') {
+      await this.ideasService.subscribeUser(
+        createCommentDto.parentId,
+        createCommentDto.userId,
+      );
+      try {
+        const idea = (await this.ideasService.findByIdeaId(
+          createCommentDto.parentId,
+        )) as IdeaDocument;
+        if (idea && idea.challengeId) {
+          await this.challengesService.subscribeUser(
+            idea.challengeId,
+            createCommentDto.userId,
+          );
+        }
+      } catch {
+        this.logger.error(
+          `Could not find idea ${createCommentDto.parentId} for comment subscription`,
+        );
+      }
+    }
+
+    return savedComment;
   }
 
   /**
@@ -55,11 +100,126 @@ export class CommentsService extends AbstractService {
   }
 
   /**
+   * Retrieves all comments for a challenge by its virtualId.
+   * Resolves the challenge, then queries comments where type='CH' and typeId matches.
+   * @param virtualId Challenge virtual ID (e.g., CH-001).
+   * @returns List of comments for the challenge.
+   */
+  async findByChallengeVirtualId(
+    virtualId: string,
+  ): Promise<CommentDocument[]> {
+    const challenge = (await this.challengesService.findByVirtualId(
+      virtualId,
+    )) as ChallengeDocument;
+    if (!challenge) {
+      throw new NotFoundException(
+        `Challenge with virtualId ${virtualId} not found`,
+      );
+    }
+    return this.commentsRepository.find(
+      { typeId: challenge._id.toString(), type: 'CH' },
+      { sort: { createdat: -1 }, populate: 'userId' },
+    );
+  }
+
+  /**
+   * Counts comments for a challenge by its virtualId.
+   * @param virtualId Challenge virtual ID (e.g., CH-001).
+   * @returns Comment count for the challenge.
+   */
+  async countByChallengeVirtualId(virtualId: string): Promise<number> {
+    const challenge = (await this.challengesService.findByVirtualId(
+      virtualId,
+    )) as ChallengeDocument;
+    if (!challenge) {
+      throw new NotFoundException(
+        `Challenge with virtualId ${virtualId} not found`,
+      );
+    }
+    return this.commentsRepository.count({
+      typeId: challenge._id.toString(),
+      type: 'CH',
+    });
+  }
+
+  /**
+   * Retrieves all comments for an idea by its virtualId (ideaId).
+   * Resolves the idea, then queries comments where type='ID' and typeId matches.
+   * @param virtualId Idea virtual ID (e.g., ID-0001).
+   * @returns List of comments for the idea.
+   */
+  async findByIdeaVirtualId(virtualId: string): Promise<CommentDocument[]> {
+    const idea = (await this.ideasService.findByIdeaId(
+      virtualId,
+    )) as IdeaDocument;
+    if (!idea) {
+      throw new NotFoundException(`Idea with virtualId ${virtualId} not found`);
+    }
+    return this.commentsRepository.find(
+      { typeId: idea._id.toString(), type: 'ID' },
+      { sort: { createdat: -1 }, populate: 'userId' },
+    );
+  }
+
+  /**
+   * Counts comments for an idea by its virtualId (ideaId).
+   * @param virtualId Idea virtual ID (e.g., ID-0001).
+   * @returns Comment count for the idea.
+   */
+  async countByIdeaVirtualId(virtualId: string): Promise<number> {
+    const idea = (await this.ideasService.findByIdeaId(
+      virtualId,
+    )) as IdeaDocument;
+    if (!idea) {
+      throw new NotFoundException(`Idea with virtualId ${virtualId} not found`);
+    }
+    return this.commentsRepository.count({
+      typeId: idea._id.toString(),
+      type: 'ID',
+    });
+  }
+
+  /**
+   * Retrieves all comments by a specific user (MongoDB hex ID).
+   * @param userId The user's MongoDB hex ID.
+   * @param limit Pagination limit.
+   * @param offset Pagination offset.
+   * @returns List of comments by the user.
+   */
+  async findByUserId(
+    userId: string,
+    limit = 20,
+    offset = 0,
+  ): Promise<CommentDocument[]> {
+    return this.commentsRepository.find(
+      { userId },
+      { sort: { createdat: -1 }, skip: offset, limit },
+    );
+  }
+
+  /**
+   * Counts comments by a specific user.
+   * @param userId The user's MongoDB hex ID.
+   * @returns Comment count for the user.
+   */
+  async countByUserId(userId: string): Promise<number> {
+    return this.commentsRepository.count({ userId });
+  }
+
+  /**
    * Deletes a comment by ID.
    * @param id Comment ID.
    * @returns The deleted comment.
    */
   async remove(id: string): Promise<CommentDocument> {
     return this.commentsRepository.delete({ _id: id });
+  }
+
+  /**
+   * Retrieves the total count of comments.
+   * @returns The total comment count.
+   */
+  async count(): Promise<number> {
+    return this.commentsRepository.count();
   }
 }

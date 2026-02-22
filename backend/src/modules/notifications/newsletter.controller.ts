@@ -44,7 +44,7 @@ export class NewsletterController extends AbstractController {
   subscribe(@Body() subscribeDto: SubscribeNewsletterDto) {
     // Mock subscription logic
     return this.success(
-      { email: subscribeDto.email, subscribed: true },
+      { subscription: { email: subscribeDto.email, subscribed: true } },
       'Subscribed successfully',
     );
   }

@@ -7,6 +7,9 @@ import helmet from 'helmet';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { register } from 'prom-client';
+import { join } from 'path';
+import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 async function bootstrap() {
   // Clear Prometheus registry to prevent duplicate metrics on hot-reload
@@ -17,8 +20,24 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  // Helmet
-  app.use(helmet());
+  // CORS and Global Prefix MUST come before Swagger Config
+  app.enableCors();
+  app.setGlobalPrefix('api/v1');
+
+  // Helmet with CSP for Swagger
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          'script-src': ["'self'", "'unsafe-inline'"],
+          'style-src': ["'self'", "'unsafe-inline'"],
+          'connect-src': ["'self'"],
+          'img-src': ["'self'", 'data:', 'https://validator.swagger.io'],
+        },
+      },
+    }),
+  );
 
   // Swagger Config
   const config = new DocumentBuilder()
@@ -30,10 +49,21 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  app.enableCors();
-  app.setGlobalPrefix('api/v1');
+  const port = process.env.PORT || 3000;
 
-  await app.listen(3000);
+  // Serve static files from the client folder ONLY for non-API paths
+  const clientPath = join(process.cwd(), 'client');
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.url.startsWith('/api')) {
+      return next();
+    }
+    express.static(clientPath)(req, res, () => {
+      // SPA fallback: serve index.html for unknown non-API routes
+      res.sendFile(join(clientPath, 'index.html'));
+    });
+  });
+
+  await app.listen(port);
 }
 bootstrap().catch((err) => {
   console.error('Error during bootstrap', err);

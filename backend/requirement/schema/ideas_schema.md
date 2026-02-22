@@ -1,3 +1,5 @@
+# Idea Mongoose Schema
+
 ```javascript
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
@@ -7,23 +9,21 @@ const ideaSchema = new Schema(
     ideaId: {
       type: String,
       required: true,
-      unique: true, // Format: ID-0001
+      unique: true,
     },
     title: {
       type: String,
       required: true,
     },
-    description: { // Maps to 'Description/Idea Summary'
+    description: {
       type: String,
       required: true,
     },
     proposedSolution: {
       type: String,
-      required: true,
     },
     challengeId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Challenge',
+      type: String,
       required: true,
     },
     appreciationCount: {
@@ -35,16 +35,13 @@ const ideaSchema = new Schema(
       default: 0,
     },
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
       required: true,
     },
-    subscription: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
+    subscription: {
+      type: [String],
+      default: [],
+    },
     month: {
       type: Number,
     },
@@ -53,25 +50,22 @@ const ideaSchema = new Schema(
     },
     status: {
       type: Boolean,
-      default: true, // Representing Accepted/Declined (true = Accepted)
+      default: true,
     },
-    upVotes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
+    upVotes: {
+      type: [String],
+      default: [],
+    },
   },
   {
-    timestamps: true, // Automatically manages createdAt and updatedAt
+    timestamps: true,
   }
 );
 
-// Pre-save hook to extract month and year from createdAt
 ideaSchema.pre('save', function (next) {
   if (this.isNew || this.isModified('createdAt')) {
     const date = this.createdAt || new Date();
-    this.month = date.getMonth() + 1; // 1-12
+    this.month = date.getMonth() + 1;
     this.year = date.getFullYear();
   }
   next();

@@ -3,8 +3,10 @@ import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
 import { CommentDocument } from '../../models/comments/comment.schema';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
-import { TargetType } from '../../common/enums/target-type.enum';
+
 import { Types } from 'mongoose';
+import { ChallengesService } from '../challenges/challenges.service';
+import { IdeasService } from '../ideas/ideas.service';
 
 describe('CommentsService', () => {
   let service: CommentsService;
@@ -14,9 +16,18 @@ describe('CommentsService', () => {
     _id: '1',
     userId: new Types.ObjectId(),
     comment: 'Test comment',
-    type: TargetType.CHALLENGE,
+    type: 'CH',
     parentId: new Types.ObjectId(),
     createdAt: new Date(),
+  };
+
+  const mockChallengesService = {
+    subscribeUser: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockIdeasService = {
+    subscribeUser: jest.fn().mockResolvedValue(undefined),
+    findByIdeaId: jest.fn().mockResolvedValue({ challengeId: 'CH-001' }),
   };
 
   beforeEach(async () => {
@@ -30,6 +41,14 @@ describe('CommentsService', () => {
             find: jest.fn(),
             delete: jest.fn(),
           },
+        },
+        {
+          provide: ChallengesService,
+          useValue: mockChallengesService,
+        },
+        {
+          provide: IdeasService,
+          useValue: mockIdeasService,
         },
       ],
     }).compile();
@@ -49,7 +68,7 @@ describe('CommentsService', () => {
         .mockResolvedValue(mockComment as unknown as CommentDocument);
       const dto: CreateCommentDto = {
         comment: 'Test comment',
-        type: TargetType.CHALLENGE,
+        type: 'CH',
         parentId: new Types.ObjectId().toHexString(),
         userId: new Types.ObjectId().toHexString(),
       };
@@ -65,7 +84,7 @@ describe('CommentsService', () => {
         .spyOn(repository, 'find')
         .mockResolvedValue([mockComment] as unknown as CommentDocument[]);
       const parentId = new Types.ObjectId().toHexString();
-      const result = await service.findByParent(parentId, TargetType.CHALLENGE);
+      const result = await service.findByParent(parentId, 'CH');
       expect(result).toEqual([mockComment]);
       expect(repository.find).toHaveBeenCalled();
     });

@@ -38,7 +38,7 @@ export class UsersController extends AbstractController {
   })
   async findAll() {
     const result = await this.usersService.findAll();
-    return this.success(result, 'Users retrieved successfully');
+    return this.success({ users: result }, 'Users retrieved successfully');
   }
 
   /**
@@ -59,6 +59,6 @@ export class UsersController extends AbstractController {
   })
   async findOne(@Param('id') id: string) {
     const result = await this.usersService.findOne(id);
-    return this.success(result, 'User retrieved successfully');
+    return this.success({ user: result }, 'User retrieved successfully');
   }
 }

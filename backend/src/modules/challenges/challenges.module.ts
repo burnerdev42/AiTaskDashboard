@@ -15,11 +15,10 @@ import {
 } from '../../models/challenges/challenge.schema';
 import { CommonModule } from '../../common';
 import { IdeasModule } from '../ideas/ideas.module';
-import { UserActionsModule } from '../user-actions/user-actions.module';
+import { ActivitiesModule } from '../activities/activities.module';
+import { NotificationsModule } from '../notifications/notifications.module';
+import { CommentsModule } from '../comments/comments.module';
 
-/**
- * Challenges Module.
- */
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -27,7 +26,9 @@ import { UserActionsModule } from '../user-actions/user-actions.module';
     ]),
     CommonModule,
     forwardRef(() => IdeasModule),
-    UserActionsModule,
+    ActivitiesModule,
+    NotificationsModule,
+    CommentsModule,
   ],
   controllers: [ChallengesController],
   providers: [ChallengesService, ChallengesRepository],

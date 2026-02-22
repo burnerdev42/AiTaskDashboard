@@ -1,6 +1,9 @@
+# User Mongoose Schema
+
 ```javascript
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema(
   {
@@ -10,17 +13,12 @@ const userSchema = new Schema(
     },
     opco: {
       type: String,
-      enum: [], // Populate with hardcoded options
-      required: true,
     },
     platform: {
       type: String,
-      enum: [], // Populate with hardcoded options
-      required: true,
     },
     companyTechRole: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
@@ -33,42 +31,44 @@ const userSchema = new Schema(
     },
     interestAreas: {
       type: [String],
-      enum: [], // Populate with hardcoded options
       default: [],
     },
     role: {
       type: String,
       enum: ['ADMIN', 'MEMBER', 'USER'],
-      required: true,
+      default: 'USER',
     },
     status: {
       type: String,
       enum: ['PENDING', 'APPROVED', 'BLOCKED', 'INACTIVE'],
-      required: true,
+      default: 'PENDING',
     },
     innovationScore: {
       type: Number,
-      min: 1,
-      max: 999,
-      default: 1,
+      default: 0,
     },
-    upvotedChallengeList: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Challenge',
-      },
-    ],
-    upvotedAppreciatedIdeaList: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Idea',
-      },
-    ],
+    upvotedChallengeList: {
+      type: [String],
+      default: [],
+    },
+    upvotedAppreciatedIdeaList: {
+      type: [String],
+      default: [],
+    },
   },
   {
-    timestamps: true, // Automatically manages createdAt and updatedAt
+    timestamps: true,
   }
 );
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
 module.exports = mongoose.model('User', userSchema);
 ```

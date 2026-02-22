@@ -26,16 +26,15 @@ describe('ChallengesController', () => {
     ...mockChallenge,
     ideas: [{ _id: new Types.ObjectId(), title: 'Idea 1' }],
     upvotes: [{ _id: new Types.ObjectId(), name: 'Alice' }],
-    downvotes: [],
     subscriptions: [],
   };
 
   const mockChallengesService = {
     create: jest.fn().mockResolvedValue(mockChallenge),
     findAll: jest.fn().mockResolvedValue([mockChallenge]),
-    findOne: jest.fn().mockResolvedValue(mockEnrichedChallenge),
-    update: jest.fn().mockResolvedValue(mockChallenge),
-    remove: jest.fn().mockResolvedValue(mockChallenge),
+    findByVirtualId: jest.fn().mockResolvedValue(mockEnrichedChallenge),
+    updateByVirtualId: jest.fn().mockResolvedValue(mockChallenge),
+    removeByVirtualId: jest.fn().mockResolvedValue(mockChallenge),
   };
 
   beforeEach(async () => {
@@ -61,22 +60,21 @@ describe('ChallengesController', () => {
         description: 'Leverage AI to improve processes',
         priority: Priority.HIGH,
         tags: ['AI'],
+        userId: 'owner123',
       };
       const result = await controller.create(dto);
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.create).toHaveBeenCalledWith(dto);
-      expect(result.data).toEqual(mockChallenge);
+      expect(result.data).toEqual({ challenge: mockChallenge });
     });
   });
 
-  describe('getChallenges', () => {
+  describe('findAll', () => {
     it('should return list of challenges', async () => {
-      const result = await controller.getChallenges({ page: 1, limit: 10 });
+      const result = await controller.findAll(10, 1);
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(service.findAll).toHaveBeenCalled();
-      expect(result.data).toHaveLength(1);
+      expect(service.findAll).toHaveBeenCalledWith(10, 1);
+      expect(result.data!.challenges).toHaveLength(1);
     });
   });
 
@@ -84,41 +82,41 @@ describe('ChallengesController', () => {
     it('should return enriched challenge', async () => {
       const result = await controller.findOne(mockChallengeId.toHexString());
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(service.findOne).toHaveBeenCalledWith(
+      expect(service.findByVirtualId).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
       );
-      expect(result.data).toHaveProperty('ideas');
-      expect(result.data).toHaveProperty('upvotes');
+      expect(result.data!.challenge).toHaveProperty('ideas');
+      expect(result.data!.challenge).toHaveProperty('upvotes');
     });
   });
 
   describe('update', () => {
     it('should update a challenge', async () => {
-      const dto = { title: 'Updated', description: 'Updated desc' };
+      const dto = {
+        title: 'Updated',
+        description: 'Updated desc',
+        userId: 'owner123',
+      };
       const result = await controller.update(
         mockChallengeId.toHexString(),
         dto,
       );
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(service.update).toHaveBeenCalledWith(
+      expect(service.updateByVirtualId).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
         dto,
       );
-      expect(result.data).toEqual(mockChallenge);
+      expect(result.data!).toEqual({ challenge: mockChallenge });
     });
   });
 
   describe('remove', () => {
     it('should delete a challenge', async () => {
-      const result = await controller.remove(mockChallengeId.toHexString());
+      await controller.remove(mockChallengeId.toHexString());
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(service.remove).toHaveBeenCalledWith(
+      expect(service.removeByVirtualId).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
       );
-      expect(result.data).toEqual(mockChallenge);
     });
   });
 });

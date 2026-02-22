@@ -33,6 +33,12 @@
       ],
       "@app/database/*": [
         "src/database/*"
+      ],
+      "@app/models/*": [
+        "src/models/*"
+      ],
+      "@app/modules/*": [
+        "src/modules/*"
       ]
     },
     "types": [

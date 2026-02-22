@@ -94,7 +94,6 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return access_token and user', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- intentionally discarding password
       const { password, ...safeUser } = mockUser;
       jest.spyOn(service, 'validateUser').mockResolvedValue(safeUser);
       const result = await service.login({

@@ -1,19 +1,25 @@
 # Notification Database Model Specification
 
-This specification is designed to be fed to an LLM for generating a MongoDB (Mongoose) schema.
+> Source: `backend/requirement/Data requirements.txt`
 
 ## Collection Name
 `notifications`
 
 ## Database Fields
 
-- `_id`: MongoDB ObjectId (Hex String PK). Use the default Mongoose `_id`.
-- `Type`: String. Enum with the following values: `challenge_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`
-- `fk_id`: String or MongoDB ObjectId (Nullable: ID of the linked Challenge, Idea, or Comment entity)
-- `initiatorId`: MongoDB ObjectId or String (Reference to the User who triggered the notification)
-- `userId`: MongoDB ObjectId or String (Reference to the recipient User collection)
-- `CreatedAt`: DateTime (Should map to Mongoose `createdAt` timestamp)
-- `IsSeen`: Boolean. Default value: `false`
+| Field | Mongoose Type | Required | Default | Notes |
+|-------|--------------|----------|---------|-------|
+| `_id` | `ObjectId` | auto | auto | MongoDB default PK |
+| `type` | `String` | yes | — | → `NOTIFICATION_TYPES` (12 values) |
+| `fk_id` | `String` | no | `null` | Nullable. ID of linked Challenge/Idea |
+| `userId` | `String` | yes | — | Recipient Mongo Hex ID (Not the initiator) |
+| `initiatorId` | `String` | yes | — | Mongo Hex ID of the user who caused the notification |
+| `createdAt` | `Date` | no | `Date.now` | |
+| `isSeen` | `Boolean` | no | `false` | |
+
+**Options:** `{ timestamps: true }` — auto-manages `createdAt` and `updatedAt`.
+
+**Indexes:** `{ userId: 1, isSeen: 1, createdAt: -1 }` for efficient querying.
 
 ## Generating the Schema
-Create a Mongoose schema using the defined database fields. Ensure the Enums are correctly validated, field keys are transformed to standard camelCase formatting, `CreatedAt` operates correctly with timestamps, and `IsSeen` defaults to a boolean `false`.
+Generate a Mongoose schema matching the above fields. Use `String` type for `userId`, `initiatorId`, and `fk_id`. Add compound index. Ensure `isSeen` defaults to `false`.

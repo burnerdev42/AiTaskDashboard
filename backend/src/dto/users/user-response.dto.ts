@@ -45,6 +45,22 @@ export class UserDto {
 }
 
 /**
+ * Domain-keyed data payload for single user responses.
+ */
+export class UserDataDto {
+  @ApiProperty({ type: UserDto })
+  user: UserDto;
+}
+
+/**
+ * Domain-keyed data payload for user list responses.
+ */
+export class UserListDataDto {
+  @ApiProperty({ type: [UserDto] })
+  users: UserDto[];
+}
+
+/**
  * API response for single user.
  */
 export class UserApiResponseDto {
@@ -54,8 +70,8 @@ export class UserApiResponseDto {
   @ApiPropertyOptional({ example: 'User retrieved successfully' })
   message?: string;
 
-  @ApiProperty({ type: UserDto })
-  data: UserDto;
+  @ApiProperty({ type: UserDataDto })
+  data: UserDataDto;
 
   @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
   requestId?: string;
@@ -74,8 +90,8 @@ export class UserListApiResponseDto {
   @ApiPropertyOptional({ example: 'Users retrieved successfully' })
   message?: string;
 
-  @ApiProperty({ type: [UserDto] })
-  data: UserDto[];
+  @ApiProperty({ type: UserListDataDto })
+  data: UserListDataDto;
 
   @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
   requestId?: string;
