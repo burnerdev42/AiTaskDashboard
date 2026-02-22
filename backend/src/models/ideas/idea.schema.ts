@@ -52,12 +52,11 @@ export const IdeaSchema = SchemaFactory.createForClass(Idea);
 
 IdeaSchema.pre(
   'save',
-  function (this: IdeaDocument, next: (err?: Error) => void) {
+  async function (this: IdeaDocument) {
     if (this.isNew || this.isModified('createdAt')) {
       const date = this.createdAt || new Date();
       this.month = date.getMonth() + 1;
       this.year = date.getFullYear();
     }
-    next();
   },
 );

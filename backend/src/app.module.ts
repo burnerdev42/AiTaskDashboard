@@ -21,8 +21,9 @@ import { ActivitiesModule } from './modules/activities/activities.module';
 import { CorrelationMiddleware } from './common/middleware/correlation.middleware';
 import { MetricModule } from './modules/metric/metric.module';
 import { HomeModule } from './modules/home/home.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { SeedModule } from './modules/seed/seed.module';
+
 
 @Module({
   imports: [
@@ -68,10 +69,7 @@ import { join } from 'path';
     ActivitiesModule,
     MetricModule,
     HomeModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
-      exclude: ['/api/(.*)'],
-    }),
+    SeedModule,
   ],
   controllers: [],
   providers: [],

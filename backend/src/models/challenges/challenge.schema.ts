@@ -87,12 +87,11 @@ export const ChallengeSchema = SchemaFactory.createForClass(Challenge);
 
 ChallengeSchema.pre(
   'save',
-  function (this: ChallengeDocument, next: (err?: Error) => void) {
+  async function (this: ChallengeDocument) {
     if (this.isNew || this.isModified('createdAt')) {
       const date = this.createdAt || new Date();
       this.month = date.getMonth() + 1;
       this.year = date.getFullYear();
     }
-    next();
   },
 );

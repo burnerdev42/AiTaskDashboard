@@ -138,9 +138,10 @@ export const ACTIVITY_TYPES = [
   'log_out',
 ] as const;
 
-// ─── 11. Notification Types (12 values) ──────────────────────────
+// ─── 11. Notification Types (13 values) ──────────────────────────
 export const NOTIFICATION_TYPES = [
   'challenge_created',
+  'idea_created',
   'challenge_status_update',
   'challenge_edited',
   'idea_edited',

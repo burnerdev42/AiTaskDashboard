@@ -54,13 +54,11 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre(
   'save',
-  async function (this: UserDocument, next: (err?: Error) => void) {
+  async function (this: UserDocument) {
     if (!this.isModified('password')) {
-      next();
       return;
     }
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
   },
 );

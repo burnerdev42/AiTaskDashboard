@@ -121,7 +121,7 @@ describe('Response Structure Conformance', () => {
     });
 
     it('create → data.idea', async () => {
-      assertEnvelope(await ctrl.create({}), 'idea');
+      assertEnvelope(await ctrl.create({} as any), 'idea');
     });
     it('findAll → data.ideas', async () => {
       assertEnvelope(await ctrl.findAll(10, 0), 'ideas');
@@ -271,7 +271,7 @@ describe('Response Structure Conformance', () => {
     });
 
     it('create → data.notification', async () => {
-      assertEnvelope(await ctrl.create({}), 'notification');
+      assertEnvelope(await ctrl.create({} as any), 'notification');
     });
     it('findAll → data.notifications', async () => {
       assertEnvelope(await ctrl.findAll(), 'notifications');

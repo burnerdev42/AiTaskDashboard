@@ -29,13 +29,12 @@ export const ActivitySchema = SchemaFactory.createForClass(Activity);
 
 ActivitySchema.pre(
   'save',
-  function (this: ActivityDocument, next: (err?: Error) => void) {
+  async function (this: ActivityDocument) {
     if (this.isNew || this.isModified('createdAt')) {
       const date = this.createdAt || new Date();
       this.month = date.getMonth() + 1;
       this.year = date.getFullYear();
     }
-    next();
   },
 );
 
