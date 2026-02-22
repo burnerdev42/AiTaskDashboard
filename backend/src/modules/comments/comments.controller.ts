@@ -16,12 +16,17 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiQuery,
+  ApiParam,
+} from '@nestjs/swagger';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
 import { AbstractController } from '../../common';
 import { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
-
 
 /**
  * Controller for Comments.
@@ -76,7 +81,10 @@ export class CommentsController extends AbstractController {
     @Query('type') type: string,
   ) {
     const result = await this.commentsService.findByParent(parentId, type);
-    return this.success({ comments: result }, 'Comments retrieved successfully');
+    return this.success(
+      { comments: result },
+      'Comments retrieved successfully',
+    );
   }
 
   /**
@@ -102,12 +110,22 @@ export class CommentsController extends AbstractController {
    */
   @Get('challenge/:virtualId')
   @ApiOperation({ summary: 'Get comments for a challenge by virtualId' })
-  @ApiParam({ name: 'virtualId', description: 'Challenge virtual ID (e.g., CH-001)' })
-  @ApiResponse({ status: 200, description: 'List of comments for the challenge.' })
+  @ApiParam({
+    name: 'virtualId',
+    description: 'Challenge virtual ID (e.g., CH-001)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of comments for the challenge.',
+  })
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
   async findByChallengeVirtualId(@Param('virtualId') virtualId: string) {
-    const result = await this.commentsService.findByChallengeVirtualId(virtualId);
-    return this.success({ comments: result }, 'Comments for challenge retrieved successfully');
+    const result =
+      await this.commentsService.findByChallengeVirtualId(virtualId);
+    return this.success(
+      { comments: result },
+      'Comments for challenge retrieved successfully',
+    );
   }
 
   /**
@@ -117,11 +135,19 @@ export class CommentsController extends AbstractController {
    */
   @Get('challenge/:virtualId/count')
   @ApiOperation({ summary: 'Get comment count for a challenge by virtualId' })
-  @ApiParam({ name: 'virtualId', description: 'Challenge virtual ID (e.g., CH-001)' })
-  @ApiResponse({ status: 200, description: 'Comment count for the challenge.', type: CountApiResponseDto })
+  @ApiParam({
+    name: 'virtualId',
+    description: 'Challenge virtual ID (e.g., CH-001)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Comment count for the challenge.',
+    type: CountApiResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
   async countByChallengeVirtualId(@Param('virtualId') virtualId: string) {
-    const count = await this.commentsService.countByChallengeVirtualId(virtualId);
+    const count =
+      await this.commentsService.countByChallengeVirtualId(virtualId);
     return this.success({ count }, 'Challenge comment count retrieved');
   }
 
@@ -132,12 +158,18 @@ export class CommentsController extends AbstractController {
    */
   @Get('idea/:virtualId')
   @ApiOperation({ summary: 'Get comments for an idea by virtualId' })
-  @ApiParam({ name: 'virtualId', description: 'Idea virtual ID (e.g., ID-0001)' })
+  @ApiParam({
+    name: 'virtualId',
+    description: 'Idea virtual ID (e.g., ID-0001)',
+  })
   @ApiResponse({ status: 200, description: 'List of comments for the idea.' })
   @ApiResponse({ status: 404, description: 'Idea not found.' })
   async findByIdeaVirtualId(@Param('virtualId') virtualId: string) {
     const result = await this.commentsService.findByIdeaVirtualId(virtualId);
-    return this.success({ comments: result }, 'Comments for idea retrieved successfully');
+    return this.success(
+      { comments: result },
+      'Comments for idea retrieved successfully',
+    );
   }
 
   /**
@@ -147,8 +179,15 @@ export class CommentsController extends AbstractController {
    */
   @Get('idea/:virtualId/count')
   @ApiOperation({ summary: 'Get comment count for an idea by virtualId' })
-  @ApiParam({ name: 'virtualId', description: 'Idea virtual ID (e.g., ID-0001)' })
-  @ApiResponse({ status: 200, description: 'Comment count for the idea.', type: CountApiResponseDto })
+  @ApiParam({
+    name: 'virtualId',
+    description: 'Idea virtual ID (e.g., ID-0001)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Comment count for the idea.',
+    type: CountApiResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'Idea not found.' })
   async countByIdeaVirtualId(@Param('virtualId') virtualId: string) {
     const count = await this.commentsService.countByIdeaVirtualId(virtualId);
@@ -162,9 +201,22 @@ export class CommentsController extends AbstractController {
    */
   @Get('user/:userId')
   @ApiOperation({ summary: 'Get comments by user ID' })
-  @ApiParam({ name: 'userId', description: '24-character hexadecimal MongoDB User ID' })
-  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Pagination limit' })
-  @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Pagination offset' })
+  @ApiParam({
+    name: 'userId',
+    description: '24-character hexadecimal MongoDB User ID',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Pagination limit',
+  })
+  @ApiQuery({
+    name: 'offset',
+    required: false,
+    type: Number,
+    description: 'Pagination offset',
+  })
   @ApiResponse({ status: 200, description: 'List of comments by the user.' })
   @ApiResponse({ status: 404, description: 'User not found.' })
   async findByUserId(
@@ -172,8 +224,15 @@ export class CommentsController extends AbstractController {
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
   ) {
-    const result = await this.commentsService.findByUserId(userId, limit, offset);
-    return this.success({ comments: result }, 'Comments for user retrieved successfully');
+    const result = await this.commentsService.findByUserId(
+      userId,
+      limit,
+      offset,
+    );
+    return this.success(
+      { comments: result },
+      'Comments for user retrieved successfully',
+    );
   }
 
   /**
@@ -183,8 +242,15 @@ export class CommentsController extends AbstractController {
    */
   @Get('user/:userId/count')
   @ApiOperation({ summary: 'Get comment count for a user' })
-  @ApiParam({ name: 'userId', description: '24-character hexadecimal MongoDB User ID' })
-  @ApiResponse({ status: 200, description: 'Comment count for the user.', type: CountApiResponseDto })
+  @ApiParam({
+    name: 'userId',
+    description: '24-character hexadecimal MongoDB User ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Comment count for the user.',
+    type: CountApiResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'User not found.' })
   async countByUserId(@Param('userId') userId: string) {
     const count = await this.commentsService.countByUserId(userId);

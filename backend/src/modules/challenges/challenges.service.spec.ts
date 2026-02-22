@@ -75,6 +75,13 @@ describe('ChallengesService', () => {
     limit: jest.fn().mockReturnThis(),
     lean: jest.fn().mockReturnThis(),
     exec: jest.fn().mockResolvedValue([mockChallenge]),
+    db: {
+      collection: jest.fn().mockReturnValue({
+        find: jest.fn().mockReturnThis(),
+        project: jest.fn().mockReturnThis(),
+        toArray: jest.fn().mockResolvedValue([]),
+      }),
+    },
   });
 
   const mockIdeasService = {
@@ -118,6 +125,7 @@ describe('ChallengesService', () => {
         description: 'Leverage AI to improve processes',
         priority: Priority.HIGH,
         tags: ['AI'],
+        userId: 'owner123',
       };
 
       const result = await service.create(dto);
@@ -129,7 +137,7 @@ describe('ChallengesService', () => {
 
   describe('findAll', () => {
     it('should return paginated challenges with short user info', async () => {
-      const result = await service.findAll({ page: 1, limit: 10 });
+      const result = await service.findAll(10, 0);
 
       expect(challengeModel.find).toHaveBeenCalled();
       expect(result).toHaveLength(1);
@@ -138,6 +146,7 @@ describe('ChallengesService', () => {
 
   describe('findOne', () => {
     it('should return challenge', async () => {
+      mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result = await service.findByVirtualId(
         mockChallengeId.toHexString(),

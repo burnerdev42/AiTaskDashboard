@@ -7,7 +7,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiStatus } from '../../common/enums/api-status.enum';
 export { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
 
-
 export class ActivityDto {
   @ApiProperty({ description: 'Activity ID' })
   _id: string;
@@ -77,4 +76,3 @@ export class ActivityListApiResponseDto {
   @ApiProperty()
   timestamp: string;
 }
-

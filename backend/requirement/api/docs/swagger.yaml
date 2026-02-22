@@ -143,6 +143,7 @@ paths:
   /users/count:
     get:
       tags: [Users]
+      operationId: getUserCount
       summary: Get user count
       responses:
         '200':
@@ -151,6 +152,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CountApiResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /users/count-by-role:
+    get:
+      tags: [Users]
+      summary: Get user count grouped by role
+      operationId: getUserCountByRole
+      responses:
+        '200':
+          description: User count by role
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          ADMIN:
+                            type: integer
+                          MEMBER:
+                            type: integer
+                          USER:
+                            type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
 
   /users/{id}:
     get:
@@ -468,6 +506,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponseEnvelope'
 
+  /challenges/{virtualId}/view:
+    post:
+      tags: [Challenges]
+      summary: Increment view count for a challenge
+      operationId: incrementChallengeView
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual ID of the challenge
+      responses:
+        '200':
+          description: View count incremented successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenge:
+                            $ref: '#/components/schemas/ChallengeResponse'
+        '404':
+          description: Challenge not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
   # ==============================
   # IDEAS ENDPOINTS
   # ==============================
@@ -665,6 +737,40 @@ paths:
       responses:
         '200':
           description: Subscription toggled successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          idea:
+                            $ref: '#/components/schemas/IdeaResponse'
+        '404':
+          description: Idea not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /ideas/{virtualId}/view:
+    post:
+      tags: [Ideas]
+      summary: Increment view count for an idea
+      operationId: incrementIdeaView
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual/idea ID of the idea
+      responses:
+        '200':
+          description: View count incremented successfully
           content:
             application/json:
               schema:
@@ -1404,6 +1510,369 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponseEnvelope'
 
+  # ==============================
+  # METRICS ENDPOINTS
+  # ==============================
+  /metrics/summary:
+    get:
+      tags: [Metrics]
+      summary: Get top metric summary
+      operationId: getMetricSummary
+      responses:
+        '200':
+          description: Top metric summary data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          totalChallenges:
+                            type: integer
+                          totalIdeas:
+                            type: integer
+                          conversionRate:
+                            type: number
+                          targetConversionRate:
+                            type: number
+                          averageTimeToPilot:
+                            type: number
+                          activeContributions:
+                            type: integer
+                          totalUsers:
+                            type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /metrics/funnel:
+    get:
+      tags: [Metrics]
+      summary: Get innovation funnel metrics
+      operationId: getInnovationFunnelMetrics
+      responses:
+        '200':
+          description: Innovation funnel data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          totalChallenges:
+                            type: integer
+                          totalIdeas:
+                            type: integer
+                          challengesBySwimLane:
+                            type: object
+                            additionalProperties:
+                              type: integer
+                          conversionRate:
+                            type: number
+                          targetConversionRate:
+                            type: number
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /metrics/team-engagement:
+    get:
+      tags: [Metrics]
+      summary: Get team engagement metrics
+      operationId: getTeamEngagementMetrics
+      responses:
+        '200':
+          description: Team engagement data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challengesByPlatform:
+                            type: object
+                            additionalProperties:
+                              type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /metrics/portfolio-balance:
+    get:
+      tags: [Metrics]
+      summary: Get portfolio balance metrics
+      operationId: getPortfolioBalanceMetrics
+      responses:
+        '200':
+          description: Portfolio balance data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challengesByPortfolioLane:
+                            type: object
+                            additionalProperties:
+                              type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /metrics/innovation-velocity:
+    get:
+      tags: [Metrics]
+      summary: Get innovation velocity metrics
+      operationId: getInnovationVelocityMetrics
+      responses:
+        '200':
+          description: Innovation velocity data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                month:
+                                  type: integer
+                                year:
+                                  type: integer
+                                challenges:
+                                  type: integer
+                                ideas:
+                                  type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /metrics/opco-radar:
+    get:
+      tags: [Metrics]
+      summary: Get opco radar metrics
+      operationId: getOpcoRadarMetrics
+      responses:
+        '200':
+          description: Opco radar data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challengesByOpco:
+                            type: object
+                            additionalProperties:
+                              type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  # ==============================
+  # HOME ENDPOINTS
+  # ==============================
+  /home/top-challenges:
+    get:
+      tags: [Home]
+      summary: Get top 5 challenges
+      operationId: getHomeTopChallenges
+      responses:
+        '200':
+          description: Top 5 challenges
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challenges:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/ChallengeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /home/status-distribution:
+    get:
+      tags: [Home]
+      summary: Get challenge count by status
+      operationId: getHomeStatusDistribution
+      responses:
+        '200':
+          description: Challenge count by status
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          challengesByStatus:
+                            type: object
+                            additionalProperties:
+                              type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /home/key-metrics:
+    get:
+      tags: [Home]
+      summary: Get key metrics summary
+      operationId: getHomeKeyMetrics
+      responses:
+        '200':
+          description: Key metrics for home
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          pilotRate:
+                            type: number
+                          conversionRate:
+                            type: number
+                          targetConversionRate:
+                            type: number
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /home/monthly-throughput:
+    get:
+      tags: [Home]
+      summary: Get monthly throughput 
+      operationId: getHomeMonthlyThroughput
+      responses:
+        '200':
+          description: Monthly throughput data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                month:
+                                  type: integer
+                                year:
+                                  type: integer
+                                challenges:
+                                  type: integer
+                                ideas:
+                                  type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
+  /home/innovation-team:
+    get:
+      tags: [Home]
+      summary: Get innovation team members
+      operationId: getHomeInnovationTeam
+      responses:
+        '200':
+          description: Innovation team members
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          users:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
 components:
   parameters:
     MongoIdParam:
@@ -1814,6 +2283,9 @@ components:
               items:
                 $ref: '#/components/schemas/UserMinimal'
               description: "(DERIVED) Populated contributors users details"
+            contributorsCount:
+              type: integer
+              description: "(DERIVED) Count of contributorsDetails array"
             commentCount:
               type: integer
               description: "(DERIVED) Calculated from Comments table"
@@ -1832,6 +2304,17 @@ components:
               items:
                 $ref: '#/components/schemas/UserMinimal'
               description: "(DERIVED) Owner details of all ideas under challenge"
+            upvoteCount:
+              type: integer
+              description: "(DERIVED) Count of upVotes array"
+            totalViews:
+              type: integer
+              description: "(DERIVED) Alias or direct mapped from viewCount field"
+            upvoteList:
+              type: array
+              items:
+                type: string
+              description: "(DERIVED) Alias or direct mapped from upVotes field"
 
     IdeaResponse:
       allOf:
@@ -1861,6 +2344,12 @@ components:
               description: "(DERIVED) Populated list of comments"
             ownerDetails:
               $ref: '#/components/schemas/UserMinimal'
+            upvoteCount:
+              type: integer
+              description: "(DERIVED) Alias for appreciationCount (number of upvotes)"
+            viewCount:
+              type: integer
+              description: "(DERIVED) From DB viewCount field"
 
     CommentResponse:
       allOf:

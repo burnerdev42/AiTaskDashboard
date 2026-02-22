@@ -9,7 +9,6 @@ import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
 import { CountDataDto } from '../../common/dto/responses/api-response.dto';
 export { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
 
-
 export class NotificationDto {
   @ApiProperty({ description: 'Notification ID' })
   _id: string;

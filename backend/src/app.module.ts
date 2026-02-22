@@ -19,6 +19,10 @@ import { UsersModule } from './modules/users/users.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { CorrelationMiddleware } from './common/middleware/correlation.middleware';
+import { MetricModule } from './modules/metric/metric.module';
+import { HomeModule } from './modules/home/home.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -62,6 +66,12 @@ import { CorrelationMiddleware } from './common/middleware/correlation.middlewar
     UsersModule,
     CommentsModule,
     ActivitiesModule,
+    MetricModule,
+    HomeModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      exclude: ['/api/(.*)'],
+    }),
   ],
   controllers: [],
   providers: [],

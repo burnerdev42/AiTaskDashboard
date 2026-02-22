@@ -52,9 +52,9 @@ describe('CommentsController', () => {
       const result = [] as CommentDocument[];
       jest.spyOn(service, 'findByParent').mockResolvedValue(result);
       const parentId = new Types.ObjectId().toHexString();
-      expect((await controller.findByParent(parentId, 'CH')).data).toEqual(
-        { comments: result },
-      );
+      expect((await controller.findByParent(parentId, 'CH')).data).toEqual({
+        comments: result,
+      });
     });
   });
 

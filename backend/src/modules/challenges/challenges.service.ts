@@ -4,6 +4,7 @@
  * @responsibility Orchestrates data operations for the Challenge collection,
  *   including derived fields, activity logging, and notification dispatch.
  */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-argument */
 
 import {
   Injectable,
@@ -14,7 +15,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ChallengeDto } from '../../dto/challenges/challenge.dto';
 import { AbstractService } from '../../common';
 import {
@@ -24,8 +25,7 @@ import {
 import { IdeasService } from '../ideas/ideas.service';
 import { ActivitiesService } from '../activities/activities.service';
 
-/** Short user select fields for population. */
-const USER_SHORT_SELECT = '_id name email companyTechRole role';
+
 
 @Injectable()
 export class ChallengesService extends AbstractService {
@@ -78,6 +78,82 @@ export class ChallengesService extends AbstractService {
     return saved;
   }
 
+  /** Enriches challenges with derived fields. */
+  private async enrichChallenges(challenges: any[]): Promise<any[]> {
+    if (!challenges || challenges.length === 0) return [];
+
+    const challengeIds = challenges.map((c) => c._id.toString());
+    const ownerIds = challenges.map((c) => c.userId);
+
+    // Fetch related docs using raw collections to avoid circular DI/schema sync issues
+    const db = this.challengeModel.db;
+    const allIdeas = (await db
+      .collection('ideas')
+      .find({ challengeId: { $in: challengeIds } })
+      .toArray()) as any[];
+
+    const allComments = (await db
+      .collection('comments')
+      .find({ type: 'CH', typeId: { $in: challengeIds } })
+      .toArray()) as any[];
+
+    const contributorIds = [...new Set(allIdeas.map((idea) => idea.userId))];
+    const uniqueUserIds = [...new Set([...ownerIds, ...contributorIds])].filter(
+      (id) => Types.ObjectId.isValid(id),
+    );
+
+    const users = await db
+      .collection('users')
+      .find({ _id: { $in: uniqueUserIds.map((id) => new Types.ObjectId(id)) } })
+      .project({ _id: 1, name: 1, email: 1, companyTechRole: 1, role: 1 })
+      .toArray();
+
+    const userMap = users.reduce(
+      (acc, user) => {
+        acc[user._id.toString()] = { ...user, _id: user._id.toString() };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    return challenges.map((challenge) => {
+      const cIdStr = challenge._id.toString();
+      const thisIdeas = allIdeas
+        .filter((i) => i.challengeId === cIdStr)
+        .map((i) => ({ ...i, _id: i._id.toString() }));
+      const thisComments = allComments
+        .filter((c) => c.typeId === cIdStr)
+        .map((c) => ({ ...c, _id: c._id.toString() }));
+
+      const thisContributorIds = [...new Set(thisIdeas.map((i) => i.userId))];
+      const contributorsDetails = thisContributorIds
+        .map((id) => userMap[id])
+        .filter(Boolean);
+
+      return {
+        ...challenge,
+        _id: cIdStr,
+        createdAt: challenge.createdAt?.toISOString() || null,
+        updatedAt: challenge.updatedAt?.toISOString() || null,
+        timestampOfStatusChangedToPilot:
+          challenge.timestampOfStatusChangedToPilot?.toISOString() || null,
+        timestampOfCompleted:
+          challenge.timestampOfCompleted?.toISOString() || null,
+        countOfIdeas: thisIdeas.length,
+        ownerDetails: userMap[challenge.userId] || null,
+        contributorsDetails,
+        contributorsCount: contributorsDetails.length,
+        commentCount: thisComments.length,
+        ideaList: thisIdeas,
+        comments: thisComments,
+        contributors: contributorsDetails,
+        upvoteCount: challenge.upVotes?.length || 0,
+        totalViews: challenge.viewCount || 0,
+        upvoteList: challenge.upVotes || [],
+      };
+    });
+  }
+
   /** Retrieves all challenges with pagination and derived fields. */
   async findAll(limit = 20, offset = 0): Promise<any[]> {
     const challenges = await this.challengeModel
@@ -87,7 +163,7 @@ export class ChallengesService extends AbstractService {
       .limit(limit)
       .lean()
       .exec();
-    return challenges;
+    return this.enrichChallenges(challenges);
   }
 
   /** Retrieves a single challenge by virtualId with derived fields. */
@@ -99,14 +175,15 @@ export class ChallengesService extends AbstractService {
     if (!challenge) {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
     }
-    return challenge;
+    const enriched = await this.enrichChallenges([challenge]);
+    return enriched[0];
   }
 
   /** Updates a challenge by virtualId. */
   async updateByVirtualId(
     virtualId: string,
     dto: Partial<ChallengeDto>,
-  ): Promise<ChallengeDocument> {
+  ): Promise<any> {
     const updated = await this.challengeModel
       .findOneAndUpdate({ virtualId }, dto, { new: true })
       .lean()
@@ -121,7 +198,8 @@ export class ChallengesService extends AbstractService {
       userId: (updated as any).userId,
     });
 
-    return updated as unknown as ChallengeDocument;
+    const enriched = await this.enrichChallenges([updated]);
+    return enriched[0];
   }
 
   /** PATCH: Update challenge status (swim lane). Enforces pilot-lock constraint. */
@@ -129,7 +207,7 @@ export class ChallengesService extends AbstractService {
     virtualId: string,
     status: string,
     userId: string,
-  ): Promise<ChallengeDocument> {
+  ): Promise<any> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();
     if (!challenge) {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
@@ -157,14 +235,12 @@ export class ChallengesService extends AbstractService {
       userId,
     });
 
-    return saved;
+    const enriched = await this.enrichChallenges([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Toggle upvote for a challenge. */
-  async toggleUpvote(
-    virtualId: string,
-    userId: string,
-  ): Promise<{ upVotes: string[] }> {
+  async toggleUpvote(virtualId: string, userId: string): Promise<any> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();
     if (!challenge) {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
@@ -180,22 +256,20 @@ export class ChallengesService extends AbstractService {
         challenge.subcriptions.push(userId);
       }
     }
-    await challenge.save();
+    const saved = await challenge.save();
 
     await this.activitiesService.create({
       type: 'challenge_upvoted',
-      fk_id: challenge._id.toString(),
+      fk_id: saved._id.toString(),
       userId,
     });
 
-    return { upVotes: challenge.upVotes };
+    const enriched = await this.enrichChallenges([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Toggle subscription for a challenge. */
-  async toggleSubscribe(
-    virtualId: string,
-    userId: string,
-  ): Promise<{ subcriptions: string[] }> {
+  async toggleSubscribe(virtualId: string, userId: string): Promise<any> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();
     if (!challenge) {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
@@ -207,15 +281,16 @@ export class ChallengesService extends AbstractService {
     } else {
       challenge.subcriptions.push(userId);
     }
-    await challenge.save();
+    const saved = await challenge.save();
 
     await this.activitiesService.create({
       type: 'challenge_subscribed',
-      fk_id: challenge._id.toString(),
+      fk_id: saved._id.toString(),
       userId,
     });
 
-    return { subcriptions: challenge.subcriptions };
+    const enriched = await this.enrichChallenges([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Add user to challenge subscriptions (without toggling off). */

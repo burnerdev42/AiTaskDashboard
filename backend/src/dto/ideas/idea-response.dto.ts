@@ -6,162 +6,101 @@
 
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiStatus } from '../../common/enums/api-status.enum';
-import { IdeaStatus } from '../../common/enums/idea-status.enum';
-import { Priority } from '../../common/enums/priority.enum';
 import { PaginationMetaDto } from '../../common/dto/responses/pagination.dto';
+import {
+  UserMinimalDto,
+  ChallengeMinimalDto,
+  CommentMinimalDto,
+} from '../../common/dto/responses/common-responses.dto';
 export { CountApiResponseDto as IdeaCountApiResponseDto } from '../../common/dto/responses/api-response.dto';
 
-
-/**
- * Short owner reference for idea responses.
- */
-export class IdeaOwnerDto {
-  @ApiProperty({ description: 'Owner ID', example: '507f1f77bcf86cd799439011' })
-  _id: string;
-
-  @ApiPropertyOptional({ description: 'Owner name', example: 'John Doe' })
-  name?: string;
-
-  @ApiPropertyOptional({
-    description: 'Owner email',
-    example: 'john@example.com',
-  })
-  email?: string;
-
-  @ApiPropertyOptional({ description: 'Owner avatar', example: 'JD' })
-  avatar?: string;
-}
-
-/**
- * Linked challenge reference in idea response.
- */
-export class LinkedChallengeDto {
-  @ApiProperty({
-    description: 'Challenge ID',
-    example: '507f1f77bcf86cd799439012',
-  })
-  _id: string;
-
-  @ApiProperty({
-    description: 'Challenge title',
-    example: 'AI Innovation Challenge',
-  })
-  title: string;
-}
-
-/**
- * Engagement statistics for an idea.
- */
-export class IdeaStatsDto {
-  @ApiProperty({ description: 'Number of appreciations', example: 42 })
-  appreciations: number;
-
-  @ApiProperty({ description: 'Number of comments', example: 15 })
-  comments: number;
-
-  @ApiProperty({ description: 'Number of views', example: 250 })
-  views: number;
-}
-
-/**
- * Full idea document response.
- */
 export class IdeaDto {
-  @ApiProperty({ description: 'Idea ID', example: '507f1f77bcf86cd799439013' })
+  @ApiProperty()
   _id: string;
 
-  @ApiProperty({
-    description: 'Idea title',
-    example: 'Automated Code Reviewer',
-  })
+  @ApiProperty()
+  ideaId: string;
+
+  @ApiProperty()
   title: string;
 
-  @ApiProperty({ description: 'Idea description' })
+  @ApiProperty()
   description: string;
 
-  @ApiProperty({
-    enum: IdeaStatus,
-    description: 'Current status',
-    example: IdeaStatus.IDEATION,
-  })
-  status: IdeaStatus;
-
-  @ApiPropertyOptional({ type: IdeaOwnerDto, description: 'Idea owner' })
-  owner?: IdeaOwnerDto;
-
-  @ApiPropertyOptional({
-    type: LinkedChallengeDto,
-    description: 'Linked challenge',
-  })
-  linkedChallenge?: LinkedChallengeDto;
-
-  @ApiPropertyOptional({
-    type: [String],
-    description: 'Tags',
-    example: ['AI', 'Automation'],
-  })
-  tags?: string[];
-
-  @ApiPropertyOptional({ type: IdeaStatsDto, description: 'Engagement stats' })
-  stats?: IdeaStatsDto;
-
-  @ApiPropertyOptional({ type: [String], description: 'Approach steps' })
-  approach?: string[];
-
-  @ApiPropertyOptional({ description: 'Problem statement' })
-  problemStatement?: string;
-
-  @ApiPropertyOptional({ description: 'Proposed solution' })
+  @ApiPropertyOptional()
   proposedSolution?: string;
 
-  @ApiPropertyOptional({ description: 'Expected impact' })
-  expectedImpact?: string;
+  @ApiProperty()
+  challengeId: string;
 
-  @ApiPropertyOptional({ description: 'Implementation plan' })
-  implementationPlan?: string;
+  @ApiPropertyOptional()
+  appreciationCount?: number;
 
-  @ApiPropertyOptional({ description: 'Expected savings', example: '$500K' })
-  expectedSavings?: string;
+  @ApiPropertyOptional()
+  viewCount?: number;
 
-  @ApiPropertyOptional({
-    enum: Priority,
-    description: 'Impact level',
-    example: Priority.HIGH,
-  })
-  impactLevel?: Priority;
+  @ApiProperty()
+  userId: string;
 
-  @ApiProperty({
-    description: 'Creation timestamp',
-    example: '2026-02-18T10:00:00.000Z',
-  })
+  @ApiPropertyOptional({ type: [String] })
+  subscription?: string[];
+
+  @ApiPropertyOptional()
+  month?: number;
+
+  @ApiPropertyOptional()
+  year?: number;
+
+  @ApiPropertyOptional()
+  status?: boolean;
+
+  @ApiPropertyOptional({ type: [String] })
+  upVotes?: string[];
+
+  @ApiProperty({ format: 'date-time' })
   createdAt: string;
 
-  @ApiProperty({
-    description: 'Last update timestamp',
-    example: '2026-02-18T10:00:00.000Z',
-  })
+  @ApiProperty({ format: 'date-time' })
   updatedAt: string;
+
+  @ApiPropertyOptional({ type: ChallengeMinimalDto })
+  challengeDetails?: ChallengeMinimalDto;
+
+  @ApiPropertyOptional({
+    description: '(DERIVED) The description from the parent Challenge',
+  })
+  problemStatement?: string;
+
+  @ApiPropertyOptional({
+    description: '(DERIVED) Count calculated from Comments DB',
+  })
+  commentCount?: number;
+
+  @ApiPropertyOptional({
+    type: [CommentMinimalDto],
+    description: '(DERIVED) Populated list of comments',
+  })
+  comments?: CommentMinimalDto[];
+
+  @ApiPropertyOptional({ type: UserMinimalDto })
+  ownerDetails?: UserMinimalDto;
+
+  @ApiPropertyOptional({
+    description: '(DERIVED) Alias for appreciationCount (number of upvotes)',
+  })
+  upvoteCount?: number;
 }
 
-/**
- * Domain-keyed data payload for single idea responses.
- */
 export class IdeaDataDto {
   @ApiProperty({ type: IdeaDto })
   idea: IdeaDto;
 }
 
-/**
- * Domain-keyed data payload for idea list responses.
- */
 export class IdeaListDataDto {
   @ApiProperty({ type: [IdeaDto] })
   ideas: IdeaDto[];
 }
 
-/**
- * API response for single idea.
- */
 export class IdeaApiResponseDto {
   @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
   status: ApiStatus;
@@ -172,16 +111,13 @@ export class IdeaApiResponseDto {
   @ApiProperty({ type: IdeaDataDto })
   data: IdeaDataDto;
 
-  @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
+  @ApiPropertyOptional()
   requestId?: string;
 
-  @ApiProperty({ example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({ format: 'date-time' })
   timestamp: string;
 }
 
-/**
- * API response for paginated idea list.
- */
 export class IdeaListApiResponseDto {
   @ApiProperty({ enum: ApiStatus, example: ApiStatus.SUCCESS })
   status: ApiStatus;
@@ -195,9 +131,9 @@ export class IdeaListApiResponseDto {
   @ApiPropertyOptional({ type: PaginationMetaDto })
   pagination?: PaginationMetaDto;
 
-  @ApiPropertyOptional({ example: 'req-123e4567-e89b-12d3-a456-426614174000' })
+  @ApiPropertyOptional()
   requestId?: string;
 
-  @ApiProperty({ example: '2026-02-18T10:00:00.000Z' })
+  @ApiProperty({ format: 'date-time' })
   timestamp: string;
 }

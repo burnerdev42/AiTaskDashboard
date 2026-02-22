@@ -1,47 +1,89 @@
-# User API Implementation Specification — v2
+# User API Implementation Specification
 
-> **Source:** `Data requirements.txt`, `user_model_spec.md`, `swagger.yaml`
-> **Replaces:** `user_api_spec_final_v1.md`
+This document details the step-by-step implementation logic for the User domain API endpoints, adhering to the database schema (`user_model_spec.md`), business logic (`Data requirements.txt`), and the API Swagger documentation (`swagger.yaml`).
 
----
+## Common Aggregation & Derived Fields Logic
+
+Several `GET` endpoints require enriching the base `User` MongoDB document with various derived metric fields. Because many of these derivations require heavy cross-collection querying (to `challenges`, `ideas`, `comments`, and `activities`), this logic should be implemented via concurrent `Promise.all` sweeps or a highly optimized MongoDB `$lookup` aggregation pipeline.
+
+For a given `user`:
+
+1. **`upvoteCount`** (Number):
+   - Definition: Sum of upvotes received on all challenges and ideas submitted by this user.
+   - Logic: 
+     - Query `challenges`: sum the lengths of the `upVotes` arrays for all challenges where `userId = user._id`.
+     - Query `ideas`: sum the lengths of the `upVotes` arrays for all ideas where `userId = user._id`. (NOTE: DB field is upVotes, not appreciationCount list).
+     - Add both sums together.
+
+2. **`recentActivity`** (Array of `ActivityResponse`):
+   - Query `activities` collection: `Activity.find({ userId: user._id }).sort({ createdAt: -1 }).limit(3)`.
+
+3. **`recentSubmission`** (Array of `ActivityResponse`):
+   - Query `activities` collection: `Activity.find({ userId: user._id, type: { $in: ['challenge_created', 'idea_created'] } }).sort({ createdAt: -1 }).limit(5)`.
+
+4. **`contributionGraph`** (Map/Object of `String (Month) -> Number (Count)`):
+   - Query `activities` collection to get a count of events grouped by `month` and `year` for the last 6 months for this `user._id`.
+
+5. **`commentCount`** (Number):
+   - Query `comments` collection: `Comment.countDocuments({ userId: user._id })`
+
+6. **`challengeCount`** (Number):
+   - Query `challenges` collection: `Challenge.countDocuments({ userId: user._id })`
+
+7. **`totalIdeaCount`** (Number):
+   - Query `ideas` collection: `Idea.countDocuments({ userId: user._id })`
 
 ## Endpoints
 
-### `GET /users`
-1. Fetch all users from DB, paginated via `limit` & `offset`.
-2. **Never include `password`** in response — strip it in the service layer.
-3. For each user, compute and attach derived fields:
-   - `upvoteCount`: Sum of upvotes on all challenges + ideas submitted by this user (count from Challenge where `userId == user._id` and sum `upVotes.length`, plus count from Idea where `userId == user._id` and sum `upVotes.length`).
-   - `recentActivity`: Top 3 activities from Activity collection where `userId == user._id`, sorted by `createdAt` descending. Return as `ActivityResponse`.
-   - `recentSubmission`: Top 5 activities from Activity collection where `userId == user._id` AND `type IN ['challenge_created', 'idea_created']`, sorted by `createdAt` descending.
-   - `contributionGraph`: Map of month name (String) to activity count (Long) from Activity DB for the last 6 months.
-   - `commentCount`: Total comments from Comment collection where `userId == user._id`.
-   - `challengeCount`: Total challenges from Challenge collection where `userId == user._id`.
-   - `totalIdeaCount`: Total ideas from Idea collection where `userId == user._id`.
-4. Return array of `UserResponse`.
+### 1. GET `/users`
+- **Summary**: Get all users with pagination and derived fields.
+- **Implementation Steps**:
+  1. Extract `limit` and `offset`.
+  2. Query `User.find({}).skip(offset).limit(limit).lean()`.
+  3. Execute **Common Aggregation Logic**.
+  4. Return `200 OK`.
 
-### `GET /users/{id}`
-1. Find user by MongoDB `_id`. 404 if not found.
-2. Strip `password` from response.
-3. Compute and attach all derived fields as above.
-4. Return single `UserResponse`.
+### 2. POST `/users`
+- **Summary**: Create a new user (Registration).
+- **Implementation Steps**:
+  1. Validate incoming body. Verify email uniqueness.
+  2. Hash `password` using `bcrypt`.
+  3. Map default values.
+  4. Insert document: `User.create(...)`.
+  5. Return `201 Created` omitting password.
 
-### `POST /users`
-1. Validate payload against `UserBase` schema.
-2. Hash `password` via bcrypt (pre-save hook handles this).
-3. Check email uniqueness — return 409 if duplicate.
-4. Set defaults: `role: 'USER'`, `status: 'PENDING'`, `innovationScore: 0`, `interestAreas: []`, `upvotedChallengeList: []`, `upvotedAppreciatedIdeaList: []`.
-5. Return 201 with user (no password in response).
+### 3. GET `/users/count`
+- **Summary**: Get total count of users.
+- **Implementation Steps**:
+  1. Query `User.countDocuments({})`.
+  2. Return `200 OK` with `{ count: <result> }`.
 
-### `PUT /users/{id}`
-1. Find user by `_id`. 404 if not found.
-2. Update provided fields. If `password` is changed, bcrypt will hash it on save.
-3. Return 200.
+### 4. GET `/users/count-by-role`
+- **Summary**: Get user count grouped by role.
+- **Implementation Steps**:
+  1. **[SBL-USER-COUNT-BY-ROLE]**
+  2. Aggregation on `User`: `$group` by `role` and `$count`.
+  3. Map the results into an object: `{ "ADMIN": calc, "MEMBER": calc, "USER": calc }`. 
+  4. Return `200 OK`.
 
-### `DELETE /users/{id}`
-1. Find user by `_id`. 404 if not found.
-2. Delete user.
-3. Return 204.
+### 5. GET `/users/{id}`
+- **Summary**: Get a specific user by ID.
+- **Implementation Steps**:
+  1. Query `User.findById(id).lean()`. Return `404` if not found.
+  2. Execute **Common Aggregation Logic**.
+  3. Omitting the `password` field.
+  4. Return `200 OK`.
 
-### `GET /users/count`
-1. Return `{ count: <total users> }`.
+### 6. PUT `/users/{id}`
+- **Summary**: Fully update an existing user document.
+- **Implementation Steps**:
+  1. If `password` exists, hash it. Enforce email uniqueness constraint updates.
+  2. Cannot update `role` or `status` directly via this endpoint unless administratively authorized.
+  3. `User.findByIdAndUpdate(id, req.body, { new: true })`.
+  4. Return `200 OK` omitting password.
+
+### 7. DELETE `/users/{id}`
+- **Summary**: Delete a user.
+- **Implementation Steps**:
+  1. `User.findByIdAndDelete(id)`. Return `404` if not found.
+  2. Return `204 No Content`.

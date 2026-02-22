@@ -60,6 +60,7 @@ describe('ChallengesController', () => {
         description: 'Leverage AI to improve processes',
         priority: Priority.HIGH,
         tags: ['AI'],
+        userId: 'owner123',
       };
       const result = await controller.create(dto);
 
@@ -75,7 +76,7 @@ describe('ChallengesController', () => {
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.findAll).toHaveBeenCalledWith(10, 1);
-      expect(result.data.challenges).toHaveLength(1);
+      expect(result.data!.challenges).toHaveLength(1);
     });
   });
 
@@ -87,14 +88,18 @@ describe('ChallengesController', () => {
       expect(service.findByVirtualId).toHaveBeenCalledWith(
         mockChallengeId.toHexString(),
       );
-      expect(result.data.challenge).toHaveProperty('ideas');
-      expect(result.data.challenge).toHaveProperty('upvotes');
+      expect(result.data!.challenge).toHaveProperty('ideas');
+      expect(result.data!.challenge).toHaveProperty('upvotes');
     });
   });
 
   describe('update', () => {
     it('should update a challenge', async () => {
-      const dto = { title: 'Updated', description: 'Updated desc' };
+      const dto = {
+        title: 'Updated',
+        description: 'Updated desc',
+        userId: 'owner123',
+      };
       const result = await controller.update(
         mockChallengeId.toHexString(),
         dto,
@@ -105,7 +110,7 @@ describe('ChallengesController', () => {
         mockChallengeId.toHexString(),
         dto,
       );
-      expect(result.data).toEqual({ challenge: mockChallenge });
+      expect(result.data!).toEqual({ challenge: mockChallenge });
     });
   });
 

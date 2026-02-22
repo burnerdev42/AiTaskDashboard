@@ -1,75 +1,82 @@
-# Challenge API Implementation Specification — v2
+# Challenge API Implementation Specification
 
-> **Source:** `Data requirements.txt`, `challenge_model_spec.md`, `swagger.yaml`
-> **Replaces:** `challenge_api_spec_final_v1.md`
+This document details the step-by-step implementation logic for the Challenge domain API endpoints, adhering to the database schema, business logic, and the Swagger API documentation.
 
----
+## Common Aggregation & Derived Fields Logic
+
+For a given `challenge`:
+1. **`ownerDetails`**: `User.findById(challenge.userId).select('_id name email companyTechRole role')`
+2. **`ideaList`**: `Idea.find({ challengeId: challenge.virtualId }).select('_id ideaId title')`
+3. **`countOfIdeas`**: Length of `ideaList`.
+4. **`contributorsDetails`**: Distinct `userId` from `ideaList` mapped to `User` profiles.
+5. **`contributorsCount`**: Length of `contributorsDetails`.
+6. **`comments`**: `Comment.find({ type: 'CH', typeId: challenge.virtualId })`.
+7. **`commentCount`**: Length of `comments`.
+8. **`upvoteCount`**: Length of `upVotes` array.
+9. **`totalViews`**: Direct map from DB `viewCount`.
+10. **`upvoteList`**: Alias/Direct map from DB `upVotes`.
 
 ## Endpoints
 
-### `GET /challenges`
-1. Fetch all challenges from DB, paginated via `limit` & `offset`.
-2. For each challenge, compute and attach derived fields:
-   - `countOfIdeas`: Count from Idea collection where `challengeId == challenge._id`.
-   - `ownerDetails`: Fetch UserMinimal from User collection via `userId`.
-   - `commentCount`: Count from Comment collection where `typeId == challenge._id` AND `type == 'CH'`.
-   - `ideaList`: Fetch IdeaMinimal list from Idea collection by `challengeId`.
-   - `comments`: Fetch CommentMinimal list from Comment collection by `typeId` and `type == 'CH'`.
-   - `contributorsDetails`: Fetch UserMinimal for each unique idea owner under this challenge.
-   - `contributors`: Same as `contributorsDetails` (owner details of all ideas under challenge). Default `[]`.
-3. Return array of `ChallengeResponse`.
+### 1. GET `/challenges`
+- **Implementation Steps**: 
+  1. Extract `limit`/`offset`. 
+  2. Query `Challenge.find({}).skip(offset).limit(limit).lean()`.
+  3. Apply **Common Aggregation Logic**.
+  4. Return `200 OK`.
 
-### `GET /challenges/{virtualId}`
-1. Find challenge by `virtualId` field (e.g., `CH-001`).
-2. Compute and attach all derived fields as above.
-3. Return single `ChallengeResponse`. 404 if not found.
+### 2. POST `/challenges`
+- **Implementation Steps**: 
+  1. Generate `virtualId`.
+  2. Set explicit defaults (`viewCount: 0`). User automatically becomes subscriber.
+  3. `Challenge.create(...)`.
+  4. Fire Notification & Activity events (challenge_created).
+  5. Return `201 Created`.
 
-### `POST /challenges`
-1. Validate payload against `ChallengeBase` schema.
-2. Auto-generate `virtualId` programmatically (`CH-001` to `CH-999`, sequential).
-3. Set `month` and `year` from current date (pre-save hook handles this).
-4. Set defaults: `upVotes: []`, `subcriptions: [userId]` (creator auto-subscribes), `viewCount: 0`, `timestampOfStatusChangedToPilot: null`, `timestampOfCompleted: null`.
-5. Create Activity record: `{ type: 'challenge_created', fk_id: challenge._id, userId }`.
-6. Create Notification for all users (except creator): `{ type: 'challenge_created', fk_id: challenge._id, initiatorId: userId, userId: recipientId }`.
-7. Return 201 with created challenge.
+### 3. GET `/challenges/count`
+- **Implementation Steps**: `Challenge.countDocuments({})`. Return `200`.
 
-### `PUT /challenges/{virtualId}`
-1. Find challenge by `virtualId`. 404 if not found.
-2. Update provided fields.
-3. Create Activity: `{ type: 'challenge_edited', fk_id: challenge._id, userId }`.
-4. Create Notification for all subscribers (except editor): `{ type: 'challenge_edited', fk_id, initiatorId, userId }`.
-5. Return 200.
+### 4. GET `/challenges/{virtualId}`
+- **Implementation Steps**: 
+  1. Query `Challenge.findOne({ virtualId }).lean()`. `404` if not found.
+  2. Apply **Common Aggregation Logic**.
+  3. Return `200 OK`.
 
-### `PATCH /challenges/{virtualId}/status`
-1. Find challenge by `virtualId`. 404 if not found.
-2. Update `status` field only.
-3. If new status is "In Pilot", set `timestampOfStatusChangedToPilot = new Date()`.
-4. If new status is "Completed", set `timestampOfCompleted = new Date()`.
-5. Create Activity: `{ type: 'challenge_status_update', fk_id, userId }`.
-6. Create Notification for all subscribers (except initiator): `{ type: 'challenge_status_update' }`.
-7. Return 200.
+### 5. PUT `/challenges/{virtualId}`
+- **Implementation Steps**: 
+  1. `Challenge.findOneAndUpdate({ virtualId }, req.body, { new: true })`. `404` if not found.
+  2. Fire Notification & Activity events (challenge_edited).
+  3. Return `200 OK`.
 
-### `DELETE /challenges/{virtualId}`
-1. Find challenge by `virtualId`. 404 if not found.
-2. Delete all associated ideas, comments, activities, and notifications.
-3. Create Activity: `{ type: 'challenge_deleted', fk_id, userId }`.
-4. Create Notification for all subscribers (except deleter): `{ type: 'challenge_deleted' }`.
-5. Return 204.
+### 6. PATCH `/challenges/{virtualId}`
+- **Implementation Steps**: 
+  1. Validate status updates. Set `timestampOfStatusChangedToPilot` if moving to pilot. Set `timestampOfCompleted` if completed.
+  2. `Challenge.findOneAndUpdate({ virtualId }, { status: ... })`.
+  3. Fire Notification & Activity events (challenge_status_update).
+  4. Return `200 OK`.
 
-### `POST /challenges/{virtualId}/upvote`
-1. Find challenge by `virtualId`. 404 if not found.
-2. Toggle `userId` in `upVotes` array (add if absent, remove if present).
-3. Auto-subscribe user to challenge if not already subscribed (add to `subcriptions`).
-4. Create Activity: `{ type: 'challenge_upvoted', fk_id, userId }`.
-5. Create Notification for subscribers + owner (except voter): `{ type: 'challenge_upvoted' }`.
-6. Return 200 with updated upVotes.
+### 7. DELETE `/challenges/{virtualId}`
+- **Implementation Steps**:
+  1. `Challenge.findOneAndDelete({ virtualId })`. `404` if not found.
+  2. Cascade deletions.
+  3. Fire Notification & Activity events (challenge_deleted).
+  4. Return `204 No Content`.
 
-### `POST /challenges/{virtualId}/subscribe`
-1. Find challenge by `virtualId`. 404 if not found.
-2. Toggle `userId` in `subcriptions` array (add if absent, remove if present).
-3. Create Activity: `{ type: 'challenge_subscribed', fk_id, userId }`.
-4. Create Notification for subscribers + owner (except subscriber): `{ type: 'challenge_subscribed' }`.
-5. Return 200 with updated subscriptions.
+### 8. POST `/challenges/{virtualId}/upvote`
+- **Implementation Steps**:
+  1. Toggle `userId` in `upVotes` array. `$pull` if exists, `$addToSet` if not.
+  2. Fire Notification & Activity events (challenge_upvoted).
+  3. Return `200 OK`.
 
-### `GET /challenges/count`
-1. Return `{ count: <total challenges> }`.
+### 9. POST `/challenges/{virtualId}/subscribe`
+- **Implementation Steps**:
+  1. Toggle `userId` in `subcriptions` array.
+  2. Fire Notification & Activity events (challenge_subscribed).
+  3. Return `200 OK`.
+
+### 10. POST `/challenges/{virtualId}/view` (NEW)
+- **Implementation Steps**:
+  1. `Challenge.findOneAndUpdate({ virtualId }, { $inc: { viewCount: 1 } }, { new: true })`.
+  2. If not found, `404 Not Found`.
+  3. Apply **Common Aggregation Logic** to return updated challenge.
+  4. Return `200 OK`.

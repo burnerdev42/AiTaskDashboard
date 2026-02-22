@@ -4,160 +4,155 @@
  */
 
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
-import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
-import { Priority } from '../../common/enums/priority.enum';
 export { CountApiResponseDto } from '../../common/dto/responses/api-response.dto';
 
+import {
+  UserMinimalDto,
+  IdeaMinimalDto,
+  CommentMinimalDto,
+} from '../../common/dto/responses/common-responses.dto';
 
-/**
- * Short user info included in challenge responses.
- */
-export class ShortUserDto {
-  @ApiProperty({ description: 'User ID', example: '60d21b4667d0d8992e610c85' })
+export class ChallengeResponseDto {
+  @ApiProperty()
   _id: string;
 
-  @ApiProperty({ description: 'User name', example: 'John Doe' })
-  name: string;
+  @ApiProperty()
+  virtualId: string;
 
-  @ApiPropertyOptional({
-    description: 'User email',
-    example: 'john@example.com',
-  })
-  email?: string;
-
-  @ApiPropertyOptional({ description: 'Avatar URL' })
-  avatar?: string;
-}
-
-/**
- * Short idea info included in enriched challenge response.
- */
-export class ShortIdeaDto {
-  @ApiProperty({ description: 'Idea ID', example: '60d21b4667d0d8992e610c86' })
-  _id: string;
-
-  @ApiProperty({ description: 'Idea title', example: 'AI Chatbot MVP' })
+  @ApiProperty()
   title: string;
 
-  @ApiPropertyOptional({ type: ShortUserDto, description: 'Idea owner' })
-  owner?: ShortUserDto;
-}
-
-/**
- * Challenge list item — used for GET /challenges (no enriched data).
- */
-export class ChallengeListItemDto {
-  @ApiProperty({ example: '60d21b4667d0d8992e610c87' })
-  _id: string;
-
-  @ApiProperty({ example: 'AI Innovation Challenge' })
-  title: string;
-
-  @ApiProperty({ example: 'Leverage AI to improve customer experience' })
-  description: string;
-
-  @ApiPropertyOptional({ example: 'Short summary' })
-  summary?: string;
-
-  @ApiPropertyOptional({ type: [String], example: ['OpCo1'] })
+  @ApiPropertyOptional({ type: [String] })
   opco?: string[];
 
-  @ApiPropertyOptional({ type: [String], example: ['Web'] })
+  @ApiPropertyOptional({ type: [String] })
   platform?: string[];
 
-  @ApiProperty({ enum: ChallengeStage, example: ChallengeStage.IDEATION })
-  portfolioLane: ChallengeStage;
+  @ApiProperty()
+  description: string;
 
-  @ApiProperty({ enum: ChallengeStatus, example: ChallengeStatus.SUBMITTED })
-  status: ChallengeStatus;
+  @ApiPropertyOptional()
+  summary?: string;
 
-  @ApiProperty({ enum: Priority, example: Priority.HIGH })
-  priority: Priority;
-
-  @ApiPropertyOptional({ type: [String], example: ['AI', 'Innovation'] })
-  tags?: string[];
-
-  @ApiPropertyOptional({ type: ShortUserDto, description: 'Challenge owner' })
-  owner?: ShortUserDto;
-
-  @ApiPropertyOptional({
-    type: [ShortUserDto],
-    description: 'Contributors',
-  })
-  contributor?: ShortUserDto[];
-
-  @ApiProperty({ description: 'Number of linked ideas', example: 3 })
-  ideasCount: number;
-
-  @ApiProperty({ example: '2026-02-18T00:00:00.000Z' })
-  createdAt: string;
-
-  @ApiProperty({ example: '2026-02-18T00:00:00.000Z' })
-  updatedAt: string;
-}
-
-/**
- * Enriched challenge response — used for GET /challenges/:id.
- * Includes linked ideas, upvote/subscription user IDs + counts.
- */
-export class ChallengeResponseDto extends ChallengeListItemDto {
-  @ApiPropertyOptional({ example: 'Expected outcome text' })
+  @ApiPropertyOptional()
   outcome?: string;
 
-  @ApiPropertyOptional({ example: 'Q3 2026' })
+  @ApiPropertyOptional()
   timeline?: string;
 
-  @ApiPropertyOptional({ example: 'Budget constraint' })
+  @ApiPropertyOptional()
+  portfolioLane?: string;
+
+  @ApiPropertyOptional()
+  priority?: string;
+
+  @ApiPropertyOptional({ type: [String] })
+  tags?: string[];
+
+  @ApiPropertyOptional()
   constraint?: string;
 
-  @ApiPropertyOptional({ example: 'Product VP' })
-  stakeholder?: string;
+  @ApiPropertyOptional()
+  stakeHolder?: string;
 
-  @ApiProperty({
-    type: [ShortIdeaDto],
-    description: 'Ideas linked to this challenge',
+  @ApiProperty()
+  status: string;
+
+  @ApiProperty()
+  userId: string;
+
+  @ApiPropertyOptional()
+  month?: number;
+
+  @ApiPropertyOptional()
+  year?: number;
+
+  @ApiPropertyOptional({ type: [String] })
+  upVotes?: string[];
+
+  @ApiPropertyOptional({ type: [String] })
+  subcriptions?: string[];
+
+  @ApiPropertyOptional()
+  viewCount?: number;
+
+  @ApiPropertyOptional({ format: 'date-time' })
+  timestampOfStatusChangedToPilot?: string;
+
+  @ApiPropertyOptional({ format: 'date-time' })
+  timestampOfCompleted?: string;
+
+  @ApiProperty({ format: 'date-time' })
+  createdAt: string;
+
+  @ApiProperty({ format: 'date-time' })
+  updatedAt: string;
+
+  @ApiPropertyOptional({ description: '(DERIVED) Total active ideas linked' })
+  countOfIdeas?: number;
+
+  @ApiPropertyOptional({ type: UserMinimalDto })
+  ownerDetails?: UserMinimalDto;
+
+  @ApiPropertyOptional({
+    type: [UserMinimalDto],
+    description: '(DERIVED) Populated contributors users details',
   })
-  ideas: ShortIdeaDto[];
+  contributorsDetails?: UserMinimalDto[];
 
-  @ApiProperty({
-    type: [ShortUserDto],
-    description: 'Users who upvoted',
+  @ApiPropertyOptional({
+    description: '(DERIVED) Count of contributorsDetails array',
   })
-  upvotes: ShortUserDto[];
+  contributorsCount?: number;
 
-  @ApiProperty({
-    type: [ShortUserDto],
-    description: 'Users who subscribed',
+  @ApiPropertyOptional({
+    description: '(DERIVED) Calculated from Comments table',
   })
-  subscriptions: ShortUserDto[];
+  commentCount?: number;
 
-  @ApiProperty({ description: 'Total upvote count', example: 12 })
-  upvoteCount: number;
+  @ApiPropertyOptional({
+    type: [IdeaMinimalDto],
+    description: '(DERIVED) Full list from Idea collection',
+  })
+  ideaList?: IdeaMinimalDto[];
 
-  @ApiProperty({ description: 'Total subscription count', example: 8 })
-  subscriptionCount: number;
+  @ApiPropertyOptional({
+    type: [CommentMinimalDto],
+    description: '(DERIVED) Full list from Comment collection',
+  })
+  comments?: CommentMinimalDto[];
+
+  @ApiPropertyOptional({
+    type: [UserMinimalDto],
+    description: '(DERIVED) Owner details of all ideas under challenge',
+  })
+  contributors?: UserMinimalDto[];
+
+  @ApiPropertyOptional({ description: '(DERIVED) Count of upVotes array' })
+  upvoteCount?: number;
+
+  @ApiPropertyOptional({
+    description: '(DERIVED) Alias or direct mapped from viewCount field',
+  })
+  totalViews?: number;
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: '(DERIVED) Alias or direct mapped from upVotes field',
+  })
+  upvoteList?: string[];
 }
 
-/**
- * Domain-keyed data payload for single challenge responses.
- */
 export class ChallengeDataDto {
   @ApiProperty({ type: ChallengeResponseDto })
   challenge: ChallengeResponseDto;
 }
 
-/**
- * Domain-keyed data payload for challenge list responses.
- */
 export class ChallengeListDataDto {
-  @ApiProperty({ type: [ChallengeListItemDto] })
-  challenges: ChallengeListItemDto[];
+  @ApiProperty({ type: [ChallengeResponseDto] })
+  challenges: ChallengeResponseDto[];
 }
 
-/**
- * Standard API wrapper for single challenge.
- */
 export class ChallengeApiResponse {
   @ApiProperty({ example: 'success' })
   status: string;
@@ -172,9 +167,6 @@ export class ChallengeApiResponse {
   timestamp: string;
 }
 
-/**
- * Standard API wrapper for challenge list.
- */
 export class ChallengeListApiResponse {
   @ApiProperty({ example: 'success' })
   status: string;
@@ -188,4 +180,3 @@ export class ChallengeListApiResponse {
   @ApiProperty({ example: '2026-02-18T00:00:00.000Z' })
   timestamp: string;
 }
-

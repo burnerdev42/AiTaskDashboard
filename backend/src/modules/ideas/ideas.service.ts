@@ -3,6 +3,7 @@
  * @description Service for managing idea business logic.
  * @responsibility Orchestrates CRUD, upvote/subscribe toggles, and activity logging for Ideas.
  */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-argument */
 
 import {
   Injectable,
@@ -12,7 +13,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AbstractService } from '../../common';
 import { Idea, IdeaDocument } from '../../models/ideas/idea.schema';
 import { ActivitiesService } from '../activities/activities.service';
@@ -71,24 +72,114 @@ export class IdeasService extends AbstractService {
     return saved;
   }
 
+  /** Enriches ideas with derived fields. */
+  private async enrichIdeas(ideas: any[]): Promise<any[]> {
+    if (!ideas || ideas.length === 0) return [];
+
+    const ideaIds = ideas.map((i) => i._id.toString());
+    const ownerIds = ideas.map((i) => i.userId);
+    const challengeIds = [...new Set(ideas.map((i) => i.challengeId))];
+
+    const db = this.ideaModel.db;
+
+    // Fetch related docs using raw collections
+    const allComments = await db
+      .collection('comments')
+      .find({ type: 'ID', typeId: { $in: ideaIds } })
+      .toArray();
+
+    const allChallenges = await db
+      .collection('challenges')
+      .find({
+        _id: {
+          $in: challengeIds
+            .filter((id) => Types.ObjectId.isValid(id))
+            .map((id) => new Types.ObjectId(id)),
+        },
+      })
+      .project({ _id: 1, virtualId: 1, title: 1, description: 1 })
+      .toArray();
+
+    // The Idea challengeId might actually be virtualId depending on how it's stored.
+    // In db spec, challengeId in idea is often virtualId or Mongo ObjectId? Let's map both just in case.
+    const challengeMap = allChallenges.reduce(
+      (acc, ch) => {
+        acc[ch._id.toString()] = ch;
+        if (ch.virtualId) acc[ch.virtualId] = ch;
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    const uniqueUserIds = [...new Set(ownerIds)].filter((id) =>
+      Types.ObjectId.isValid(id),
+    );
+
+    const users = await db
+      .collection('users')
+      .find({ _id: { $in: uniqueUserIds.map((id) => new Types.ObjectId(id)) } })
+      .project({ _id: 1, name: 1, email: 1, companyTechRole: 1, role: 1 })
+      .toArray();
+
+    const userMap = users.reduce(
+      (acc, user) => {
+        acc[user._id.toString()] = { ...user, _id: user._id.toString() };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    return ideas.map((idea) => {
+      const iIdStr = idea._id.toString();
+      const thisComments = allComments
+        .filter((c) => c.typeId === iIdStr)
+        .map((c) => ({ ...c, _id: c._id.toString() }));
+
+      const challenge = challengeMap[idea.challengeId] || null;
+
+      return {
+        ...idea,
+        _id: iIdStr,
+        createdAt: idea.createdAt?.toISOString() || null,
+        updatedAt: idea.updatedAt?.toISOString() || null,
+
+        challengeDetails: challenge
+          ? {
+              _id: challenge._id.toString(),
+              virtualId: challenge.virtualId,
+              title: challenge.title,
+            }
+          : null,
+        problemStatement: challenge?.description,
+        commentCount: thisComments.length,
+        comments: thisComments,
+        ownerDetails: userMap[idea.userId] || null,
+        upvoteCount: idea.upVotes?.length || 0,
+        viewCount: idea.viewCount || 0,
+      };
+    });
+  }
+
   /** Get all ideas with pagination. */
-  async findAll(limit = 20, offset = 0): Promise<IdeaDocument[]> {
-    return this.ideaModel
+  async findAll(limit = 20, offset = 0): Promise<any[]> {
+    const ideas = await this.ideaModel
       .find()
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .lean()
-      .exec() as unknown as Promise<IdeaDocument[]>;
+      .exec();
+    return this.enrichIdeas(ideas);
   }
 
   /** Get idea by ideaId (virtual ID). */
-  async findByIdeaId(ideaId: string): Promise<IdeaDocument> {
+  async findByIdeaId(ideaId: string): Promise<any> {
     const idea = await this.ideaModel.findOne({ ideaId }).lean().exec();
     if (!idea) {
       throw new NotFoundException(`Idea ${ideaId} not found`);
     }
-    return idea as unknown as IdeaDocument;
+    const enriched = await this.enrichIdeas([idea]);
+    return enriched[0];
   }
 
   /** Get ideas by challengeId. */
@@ -100,7 +191,7 @@ export class IdeasService extends AbstractService {
   }
 
   /** Update idea by ideaId. */
-  async updateByIdeaId(ideaId: string, dto: any): Promise<IdeaDocument> {
+  async updateByIdeaId(ideaId: string, dto: any): Promise<any> {
     const updated = await this.ideaModel
       .findOneAndUpdate({ ideaId }, dto, { new: true })
       .lean()
@@ -115,14 +206,12 @@ export class IdeasService extends AbstractService {
       userId: (updated as any).userId,
     });
 
-    return updated as unknown as IdeaDocument;
+    const enriched = await this.enrichIdeas([updated]);
+    return enriched[0];
   }
 
   /** Toggle upvote for an idea. */
-  async toggleUpvote(
-    ideaId: string,
-    userId: string,
-  ): Promise<{ upVotes: string[] }> {
+  async toggleUpvote(ideaId: string, userId: string): Promise<any> {
     const idea = await this.ideaModel.findOne({ ideaId }).exec();
     if (!idea) throw new NotFoundException(`Idea ${ideaId} not found`);
 
@@ -136,25 +225,23 @@ export class IdeasService extends AbstractService {
       }
     }
     idea.appreciationCount = idea.upVotes.length;
-    await idea.save();
+    const saved = await idea.save();
 
     await this.activitiesService.create({
       type: 'idea_upvoted',
-      fk_id: idea._id.toString(),
+      fk_id: saved._id.toString(),
       userId,
     });
 
     // Subscribes upvoter to the parent challenge
-    await this.challengesService.subscribeUser(idea.challengeId, userId);
+    await this.challengesService.subscribeUser(saved.challengeId, userId);
 
-    return { upVotes: idea.upVotes };
+    const enriched = await this.enrichIdeas([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Toggle subscription for an idea. */
-  async toggleSubscribe(
-    ideaId: string,
-    userId: string,
-  ): Promise<{ subscription: string[] }> {
+  async toggleSubscribe(ideaId: string, userId: string): Promise<any> {
     const idea = await this.ideaModel.findOne({ ideaId }).exec();
     if (!idea) throw new NotFoundException(`Idea ${ideaId} not found`);
 
@@ -164,15 +251,16 @@ export class IdeasService extends AbstractService {
     } else {
       idea.subscription.push(userId);
     }
-    await idea.save();
+    const saved = await idea.save();
 
     await this.activitiesService.create({
       type: 'idea_subscribed',
-      fk_id: idea._id.toString(),
+      fk_id: saved._id.toString(),
       userId,
     });
 
-    return { subscription: idea.subscription };
+    const enriched = await this.enrichIdeas([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Add user to idea subscriptions (without toggling off). */

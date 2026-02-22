@@ -33,4 +33,3 @@ export class CommentsRepository extends AbstractRepository<CommentDocument> {
     return this.model.countDocuments(filterQuery).exec();
   }
 }
-

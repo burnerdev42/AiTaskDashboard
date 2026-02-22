@@ -228,12 +228,17 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 1 | `countOfIdeas` | Number | From Idea collection |
 | 2 | `ownerDetails` | Object | Via `userId` from User collection |
 | 3 | `contributorsDetails` | Array of Objects | Via contributor user IDs from User collection |
-| 4 | `commentCount` | Number | From Comment collection |
-| 5 | `ideaList` | Array of Objects | From Idea collection by challenge ID |
-| 6 | `comments` | Array of Objects | From Comment collection |
-| 7 | `contributors` | Array of Objects | Owner details of all ideas under challenge. Default `[]` |
+| 4 | `contributorsCount` | Number | Count of `contributorsDetails` array |
+| 5 | `commentCount` | Number | From Comment collection |
+| 6 | `ideaList` | Array of Objects | From Idea collection by challenge ID |
+| 7 | `comments` | Array of Objects | From Comment collection |
+| 8 | `contributors` | Array of Objects | Owner details of all ideas under challenge. Default `[]` |
+| 9 | `upvoteCount` | Number | Count of `upVotes` array |
+| 10 | `totalViews` | Number | Alias or direct mapped from `viewCount` field |
+| 11 | `upvoteList` | Array of String | Alias or direct mapped from `upVotes` field |
 
 ### Constraints & Requirements
+- **ALL Challenge API GET responses** (especially GET all and GET by virtualId) **MUST** include the following derived fields: `totalViews` (or `viewCount`), `upvoteList`, `upvoteCount`, `contributorsDetails`, `contributorsCount`, `commentCount`, and `countOfIdeas`.
 - Member management system and approval process for challenges; for now, hardcode members in DB among existing users.
 - Timeline, portfolio, platform list, opco list are hardcoded. Later manageable by admin.
 - Priority is always hardcoded.
@@ -244,6 +249,7 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 - Creator automatically becomes a subscriber.
 - Any user submitting an idea automatically subscribes to the challenge.
 - Any user upvoting or commenting on a challenge automatically subscribes to that challenge.
+- `POST /challenges/{virtualId}/view` — Increment the `viewCount` field by 1.
 
 ---
 
@@ -279,13 +285,17 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 3 | `commentCount` | Number | Calculated from Comment DB |
 | 4 | `comments` | Array of Objects | Fetched from Comment DB |
 | 5 | `ownerDetails` | Object | User details fetched via `userId` |
+| 6 | `upvoteCount` | Number | Alias for `appreciationCount` (number of upvotes) |
+| 7 | `viewCount` | Number | From DB `viewCount` field |
 
 ### Constraints & Requirements
+- **ALL Idea API GET responses** **MUST** include these derived fields: `viewCount`, `upvoteCount` (or `appreciationCount`), and `commentCount`.
 - Moderator-based idea status — future implementation.
 - `POST /ideas/{virtualId}/upvote` — Requires `{ "userId": "..." }` — Toggle upvote.
 - `POST /ideas/{virtualId}/subscribe` — Requires `{ "userId": "..." }` — Toggle subscription.
 - Creator subscribes to the idea and its parent challenge.
 - Any user upvoting or commenting on an idea subscribes to that idea and its parent challenge.
+- `POST /ideas/{virtualId}/view` — Increment the `viewCount` field by 1.
 
 ---
 
@@ -356,6 +366,18 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 6 | `challengeCount` | Number | Total challenges created from Challenge DB |
 | 7 | `totalIdeaCount` | Number | Total ideas created from Idea DB |
 
+### Constraints & Requirements
+
+- `GET /users` — Fetch all users.
+- `GET /users/{id}` — Fetch a single user by their MongoDB Hex ID.
+- `GET /users/count` — Fetch total count of all users.
+- `GET /users/count-by-role` — Fetch count of users grouped by role (`ADMIN`, `MEMBER`, `USER`).
+  - Response: `{ "ADMIN": <count>, "MEMBER": <count>, "USER": <count> }`
+  - Used by Home View → Innovation Team section to identify `MEMBER` users.
+- `PUT /users/{id}` — Update user profile fields (`name`, `opco`, `platform`, `companyTechRole`, `interestAreas`, etc.).
+  - Should **NOT** allow direct updates to: `password`, `role`, `status` (those have dedicated flows).
+- `DELETE /users/{id}` — Delete a user by their MongoDB Hex ID.
+
 ---
 
 ## 5. User Activity
@@ -425,29 +447,145 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 
 ## 7. Metrics & Dashboard (All Derived)
 
-### Top Metric Summary
-- Total challenges, Total ideas, Conversion rate (completed/total, target 50%), Average time to pilot, Active contributions, Total users
+> All metric and dashboard data is **computed at query time** via aggregation. No metric data is stored in the database.
 
-### Innovation Funnel
-- Total challenges, Total ideas, Challenges by swim lane count, Conversion rate + Target rate (50%)
+### Endpoint 1: `GET /metrics/summary`
 
-### Team Engagement
-- Challenges grouped by platform, Static heatmap
+**Purpose:** Top Metric Summary block on the Metrics page.
 
-### Portfolio Balance
-- Challenge count by portfolio lane
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `totalChallenges` | Number | Count of all documents in Challenge collection |
+| 2 | `totalIdeas` | Number | Count of all documents in Idea collection |
+| 3 | `conversionRate` | Number | `(count where status="completed" / totalChallenges) * 100` — this is the "current" value |
+| 4 | `targetConversionRate` | Number | Hardcoded to `50` |
+| 5 | `averageTimeToPilot` | Number | For all challenges where `timestampOfStatusChangedToPilot` is NOT null: compute the difference in days between `timestampOfStatusChangedToPilot` and `createdAt` for each, then divide the sum by the count. Result = average days from creation to pilot |
+| 6 | `activeContributions` | Number | Count of Activity documents where type ∈ `[challenge_created, idea_created, challenge_upvoted, idea_upvoted, challenge_commented, idea_commented]` |
+| 7 | `totalUsers` | Number | Count of all documents in User collection |
 
-### Innovation Velocity
-- Total challenges and ideas for the last 12 months
+---
 
-### OpCo Radar
-- Challenge count by opco
+### Endpoint 2: `GET /metrics/funnel`
 
-### Home View
-- Top 5 challenges slider (upvotes + views), Pie chart (by status), Key metrics, Monthly throughput (6-month subset), Success stories (hardcoded), Innovation team (lab users)
+**Purpose:** Innovation Funnel block on the Metrics page.
 
-### What's Next
-- Hardcoded in UI
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `totalChallenges` | Number | Count of all documents in Challenge collection |
+| 2 | `totalIdeas` | Number | Count of all documents in Idea collection |
+| 3 | `challengesBySwimLane` | Object | Count of challenges grouped by `status`. Keys: `submitted`, `ideation`, `pilot`, `completed`, `archive`. Values: count per status |
+| 4 | `conversionRate` | Number | Same formula as Endpoint 1 field 3 |
+| 5 | `targetConversionRate` | Number | Hardcoded to `50` |
+
+> [!IMPORTANT]
+> **Shared Business Logic [SBL-STATUS-DISTRIBUTION]:** The `challengesBySwimLane` grouping logic is identical to the Home View → Status Distribution endpoint. Both should use the same underlying service method.
+
+---
+
+### Endpoint 3: `GET /metrics/team-engagement`
+
+**Purpose:** Team Engagement block on the Metrics page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `challengesByPlatform` | Object | Count of challenges grouped by `platform` field. Keys: platform values (e.g., `STP`, `CTP`, `BFSI`). Values: count per platform |
+
+> [!NOTE]
+> Heatmap is static/hardcoded in the UI and does **not** require a backend endpoint.
+
+---
+
+### Endpoint 4: `GET /metrics/portfolio-balance`
+
+**Purpose:** Portfolio Balance block on the Metrics page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `challengesByPortfolioLane` | Object | Count of challenges grouped by `portfolioLane`. Keys: `Customer Value Driver`, `Non Strategic Product Management`, `Tech Enabler`, `Maintenance`. Values: count per lane |
+
+---
+
+### Endpoint 5: `GET /metrics/innovation-velocity`
+
+**Purpose:** Innovation Velocity block on the Metrics page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `data` | Array of Objects | For the last 12 months (including current month). Each object: `{ month, year, challenges, ideas }`. `challenges` = count of Challenge docs matching month/year. `ideas` = count of Idea docs matching month/year. Sorted chronologically (oldest first) |
+
+> [!IMPORTANT]
+> **Shared Business Logic [SBL-MONTHLY-THROUGHPUT]:** This aggregation logic is identical to the Home View → Monthly Throughput endpoint. Home View shows only the last **6 months** of this same data. Both should use the same service method, with Home View slicing to 6 entries.
+
+---
+
+### Endpoint 6: `GET /metrics/opco-radar`
+
+**Purpose:** OpCo Radar block on the Metrics page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `challengesByOpco` | Object | Count of challenges grouped by `opco`. Keys: `Albert Heijn`, `GSO`, `GET`, `BecSee`, `Other`. Values: count per OpCo |
+
+---
+
+### Home View Endpoints (Under `/home` prefix)
+
+#### Endpoint 7: `GET /home/top-challenges`
+
+**Purpose:** Top 5 challenges slider on the Home page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `challenges` | Array of Objects | Top 5 challenges ranked by combined score: `upVotes.length + viewCount`. Sort descending, take top 5. Each object includes at minimum: `virtualId`, `title`, `summary`, `upVotes`, `viewCount`, `status`, `ownerDetails` (from User collection) |
+
+#### Endpoint 8: `GET /home/status-distribution`
+
+**Purpose:** Pie chart showing challenge count by status on the Home page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `challengesByStatus` | Object | Count of challenges grouped by `status`. Keys: `submitted`, `ideation`, `pilot`, `completed`, `archive`. Values: count per status |
+
+> [!IMPORTANT]
+> **Shared Business Logic [SBL-STATUS-DISTRIBUTION]:** Identical to Metrics → Innovation Funnel → `challengesBySwimLane`. Both endpoints should reuse the same service method.
+
+#### Endpoint 9: `GET /home/key-metrics`
+
+**Purpose:** Key metrics summary card on the Home page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `pilotRate` | Number | Same as `GET /metrics/summary` field 5 (`averageTimeToPilot`). For all challenges where `timestampOfStatusChangedToPilot` is NOT null: compute days between `timestampOfStatusChangedToPilot` and `createdAt`, then average. Result = average days from creation to pilot |
+| 2 | `conversionRate` | Number | Same formula as `GET /metrics/summary` field 3 |
+| 3 | `targetConversionRate` | Number | Hardcoded to `50` |
+
+#### Endpoint 10: `GET /home/monthly-throughput`
+
+**Purpose:** Monthly throughput chart on the Home page (last 6 months).
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `data` | Array of Objects | Same structure as `GET /metrics/innovation-velocity`, but filtered to the most recent **6 months** only. Each object: `{ month, year, challenges, ideas }` |
+
+> [!IMPORTANT]
+> **Shared Business Logic [SBL-MONTHLY-THROUGHPUT]:** Reuses the same aggregation as `GET /metrics/innovation-velocity`, then slices to last 6 entries.
+
+#### Endpoint 11: `GET /home/innovation-team`
+
+**Purpose:** Innovation team section on the Home page.
+
+| # | Field | Type | Business Logic |
+|---|-------|------|----------------|
+| 1 | `users` | Array of Objects | All users where `role = "MEMBER"`. Each user includes at minimum: `_id`, `name`, `companyTechRole`, `email`, `interestAreas`, `innovationScore`. Plus derived counts: `challengeCount`, `totalIdeaCount`, `commentCount` (from Challenge, Idea, and Comment collections) |
+
+> [!IMPORTANT]
+> **Shared Business Logic [SBL-USER-COUNT-BY-ROLE]:** This filters users by role. The same role-based filtering logic is used by `GET /users/count-by-role`.
+
+#### Success Stories
+- Hardcoded in DB for now. No dedicated endpoint required.
+
+#### What's Next
+- Hardcoded in UI. No backend endpoint required.
 
 ---
 

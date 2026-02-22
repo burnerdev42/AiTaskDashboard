@@ -64,7 +64,9 @@ describe('IdeasController', () => {
       const dto = { title: 'Updated' } as unknown as UpdateIdeaDto;
       const result = { title: 'Updated' } as unknown as IdeaDocument;
       jest.spyOn(service, 'updateByIdeaId').mockResolvedValue(result);
-      expect((await controller.update('1', dto)).data).toEqual({ idea: result });
+      expect((await controller.update('1', dto)).data).toEqual({
+        idea: result,
+      });
     });
   });
 

@@ -27,7 +27,6 @@ import {
   CountApiResponseDto,
 } from '../../dto/notifications/notification-response.dto';
 
-
 @ApiTags('Notifications')
 @Controller('notifications')
 export class NotificationsController extends AbstractController {
@@ -66,7 +65,10 @@ export class NotificationsController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success({ notifications }, 'Notifications retrieved successfully');
+    return this.success(
+      { notifications },
+      'Notifications retrieved successfully',
+    );
   }
 
   @Get('count')
@@ -115,7 +117,11 @@ export class NotificationsController extends AbstractController {
     type: Boolean,
     description: 'Filter by seen status. Omit to count all.',
   })
-  @ApiResponse({ status: 200, description: 'Notification count.', type: CountApiResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Notification count.',
+    type: CountApiResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'User not found.' })
   async countByUserId(
     @Param('userId') userId: string,
@@ -139,7 +145,10 @@ export class NotificationsController extends AbstractController {
   @ApiResponse({ status: 404, description: 'Notification not found.' })
   async findOne(@Param('id') id: string) {
     const notification = await this.notificationsService.findById(id);
-    return this.success({ notification }, 'Notification retrieved successfully');
+    return this.success(
+      { notification },
+      'Notification retrieved successfully',
+    );
   }
 
   @Put(':id')

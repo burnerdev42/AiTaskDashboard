@@ -4,7 +4,13 @@
  * @responsibility Orchestrates data operations for the Comment collection.
  */
 
-import { Injectable, Logger, Inject, forwardRef, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  Inject,
+  forwardRef,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommentsRepository } from './comments.repository';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
 import { AbstractService } from '../../common';
@@ -97,10 +103,14 @@ export class CommentsService extends AbstractService {
    * @param virtualId Challenge virtual ID (e.g., CH-001).
    * @returns List of comments for the challenge.
    */
-  async findByChallengeVirtualId(virtualId: string): Promise<CommentDocument[]> {
+  async findByChallengeVirtualId(
+    virtualId: string,
+  ): Promise<CommentDocument[]> {
     const challenge = await this.challengesService.findByVirtualId(virtualId);
     if (!challenge) {
-      throw new NotFoundException(`Challenge with virtualId ${virtualId} not found`);
+      throw new NotFoundException(
+        `Challenge with virtualId ${virtualId} not found`,
+      );
     }
     return this.commentsRepository.find(
       { typeId: challenge._id.toString(), type: 'CH' },
@@ -116,9 +126,14 @@ export class CommentsService extends AbstractService {
   async countByChallengeVirtualId(virtualId: string): Promise<number> {
     const challenge = await this.challengesService.findByVirtualId(virtualId);
     if (!challenge) {
-      throw new NotFoundException(`Challenge with virtualId ${virtualId} not found`);
+      throw new NotFoundException(
+        `Challenge with virtualId ${virtualId} not found`,
+      );
     }
-    return this.commentsRepository.count({ typeId: challenge._id.toString(), type: 'CH' });
+    return this.commentsRepository.count({
+      typeId: challenge._id.toString(),
+      type: 'CH',
+    });
   }
 
   /**
@@ -148,7 +163,10 @@ export class CommentsService extends AbstractService {
     if (!idea) {
       throw new NotFoundException(`Idea with virtualId ${virtualId} not found`);
     }
-    return this.commentsRepository.count({ typeId: idea._id.toString(), type: 'ID' });
+    return this.commentsRepository.count({
+      typeId: idea._id.toString(),
+      type: 'ID',
+    });
   }
 
   /**
@@ -158,7 +176,11 @@ export class CommentsService extends AbstractService {
    * @param offset Pagination offset.
    * @returns List of comments by the user.
    */
-  async findByUserId(userId: string, limit = 20, offset = 0): Promise<CommentDocument[]> {
+  async findByUserId(
+    userId: string,
+    limit = 20,
+    offset = 0,
+  ): Promise<CommentDocument[]> {
     return this.commentsRepository.find(
       { userId },
       { sort: { createdat: -1 }, skip: offset, limit },

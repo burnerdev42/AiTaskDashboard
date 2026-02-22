@@ -42,6 +42,13 @@ describe('IdeasService', () => {
     limit: jest.fn().mockReturnThis(),
     lean: jest.fn().mockReturnThis(),
     exec: jest.fn().mockResolvedValue([mockIdea]),
+    db: {
+      collection: jest.fn().mockReturnValue({
+        find: jest.fn().mockReturnThis(),
+        project: jest.fn().mockReturnThis(),
+        toArray: jest.fn().mockResolvedValue([]),
+      }),
+    },
   });
 
   const mockActivitiesService = {
@@ -96,7 +103,8 @@ describe('IdeasService', () => {
     it('should return an array of ideas', async () => {
       mockIdeaModel.exec.mockResolvedValueOnce([mockIdea]);
       const result = await service.findAll(10, 0);
-      expect(result).toEqual([mockIdea]);
+      expect(result.length).toBe(1);
+      expect(result[0]).toMatchObject({ ...mockIdea, _id: mockIdea._id.toHexString() });
     });
   });
 
@@ -104,7 +112,7 @@ describe('IdeasService', () => {
     it('should return a single idea', async () => {
       mockIdeaModel.exec.mockResolvedValueOnce(mockIdea);
       const result = await service.findByIdeaId('ID-0001');
-      expect(result).toEqual(mockIdea);
+      expect(result).toMatchObject({ ...mockIdea, _id: mockIdea._id.toHexString() });
     });
   });
 
@@ -114,7 +122,7 @@ describe('IdeasService', () => {
       const result = await service.updateByIdeaId('ID-0001', {
         title: 'Updated',
       });
-      expect(result).toEqual(mockIdea);
+      expect(result).toMatchObject({ ...mockIdea, _id: mockIdea._id.toHexString() });
       expect(activitiesService.create).toHaveBeenCalled();
     });
   });

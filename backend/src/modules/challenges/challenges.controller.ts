@@ -46,7 +46,10 @@ export class ChallengesController extends AbstractController {
   })
   async create(@Body() dto: ChallengeDto) {
     const result = await this.challengesService.create(dto);
-    return this.success({ challenge: result }, 'Challenge successfully created');
+    return this.success(
+      { challenge: result },
+      'Challenge successfully created',
+    );
   }
 
   @Get()
@@ -66,7 +69,10 @@ export class ChallengesController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success({ challenges: result }, 'Challenges retrieved successfully');
+    return this.success(
+      { challenges: result },
+      'Challenges retrieved successfully',
+    );
   }
 
   @Get('count')
@@ -91,7 +97,10 @@ export class ChallengesController extends AbstractController {
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
   async findOne(@Param('virtualId') virtualId: string) {
     const result = await this.challengesService.findByVirtualId(virtualId);
-    return this.success({ challenge: result }, 'Challenge retrieved successfully');
+    return this.success(
+      { challenge: result },
+      'Challenge retrieved successfully',
+    );
   }
 
   @Put(':virtualId')
@@ -109,7 +118,10 @@ export class ChallengesController extends AbstractController {
       virtualId,
       dto,
     );
-    return this.success({ challenge: result }, 'Challenge updated successfully');
+    return this.success(
+      { challenge: result },
+      'Challenge updated successfully',
+    );
   }
 
   @Patch(':virtualId/status')
@@ -128,7 +140,10 @@ export class ChallengesController extends AbstractController {
       body.status,
       body.userId,
     );
-    return this.success({ challenge: result }, 'Challenge status updated successfully');
+    return this.success(
+      { challenge: result },
+      'Challenge status updated successfully',
+    );
   }
 
   @Post(':virtualId/upvote')
@@ -164,7 +179,10 @@ export class ChallengesController extends AbstractController {
       virtualId,
       body.userId,
     );
-    return this.success({ challenge: result }, 'Subscription toggled successfully');
+    return this.success(
+      { challenge: result },
+      'Subscription toggled successfully',
+    );
   }
 
   @Delete(':virtualId')

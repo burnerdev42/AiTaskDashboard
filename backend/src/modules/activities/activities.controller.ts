@@ -53,7 +53,10 @@ export class ActivitiesController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success({ activities: result }, 'Activities retrieved successfully');
+    return this.success(
+      { activities: result },
+      'Activities retrieved successfully',
+    );
   }
 
   @Get('count')
@@ -88,7 +91,10 @@ export class ActivitiesController extends AbstractController {
       limit ? +limit : 20,
       offset ? +offset : 0,
     );
-    return this.success({ activities: result }, 'User activities retrieved successfully');
+    return this.success(
+      { activities: result },
+      'User activities retrieved successfully',
+    );
   }
 
   @Get('user/:userId/count')
@@ -114,7 +120,10 @@ export class ActivitiesController extends AbstractController {
   @ApiResponse({ status: 404, description: 'Activity not found.' })
   async findOne(@Param('id') id: string) {
     const result = await this.activitiesService.findById(id);
-    return this.success({ activity: result }, 'Activity retrieved successfully');
+    return this.success(
+      { activity: result },
+      'Activity retrieved successfully',
+    );
   }
 
   @Post()
