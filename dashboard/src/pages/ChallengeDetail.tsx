@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import type { ChallengeDetailData } from '../types';
+import { useToast } from '../context/ToastContext';
+import type { ChallengeDetailData, Idea } from '../types';
 import { storage } from '../services/storage';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
@@ -49,6 +50,7 @@ export const ChallengeDetail: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { isAuthenticated } = useAuth();
+    const { showToast } = useToast();
     const [searchParams] = useSearchParams();
     const [challenge, setChallenge] = useState<ChallengeDetailData | null>(null);
     const [editMode, setEditMode] = useState(false);
@@ -59,6 +61,8 @@ export const ChallengeDetail: React.FC = () => {
     const [editOutcome, setEditOutcome] = useState('');
     const [comment, setComment] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [exitingIdeaIds, setExitingIdeaIds] = useState<string[]>([]);
+    const [newIdeaId, setNewIdeaId] = useState<string | null>(null);
 
     // Idea Modal States
     const [ideaTitle, setIdeaTitle] = useState('');
@@ -200,15 +204,28 @@ export const ChallengeDetail: React.FC = () => {
                     <span className="sep">/</span>
                     <a onClick={() => navigate('/challenges')}>Challenges</a>
                 </div>
-                <div style={{ padding: '40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px' }}>
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px' }}>
+                <div style={{ padding: '60px 40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px', boxShadow: 'var(--shadow-lg)' }}>
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '24px', opacity: 0.8 }}>
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
                     </svg>
-                    <h2 style={{ marginBottom: '8px' }}>Challenge Not Found</h2>
-                    <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>The challenge you are looking for does not exist or has been deleted.</p>
-                    <button className="btn-primary" onClick={() => navigate('/challenges')}>Back to Challenges</button>
+                    <h2 style={{ marginBottom: '12px', fontSize: '24px', fontWeight: '700' }}>Challenge Not Found</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '400px', marginInline: 'auto' }}>The challenge you are looking for does not exist or has been deleted from our innovation pipeline.</p>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => navigate('/challenges')}
+                        style={{
+                            minWidth: '200px',
+                            height: '42px',
+                            padding: '0 24px',
+                            borderRadius: '12px',
+                            fontWeight: 700,
+                            fontSize: '14px'
+                        }}
+                    >
+                        Back to Challenges
+                    </button>
                 </div>
             </div>
         );
@@ -246,6 +263,7 @@ export const ChallengeDetail: React.FC = () => {
             stats: { ...prev.stats, appreciations: prev.stats.appreciations + (hasVoted ? -1 : 1) }
         } : prev);
         setHasVoted(!hasVoted);
+        showToast(hasVoted ? 'Vote removed' : 'Thanks for voting!');
     };
 
     const handleSubscribe = () => {
@@ -254,6 +272,7 @@ export const ChallengeDetail: React.FC = () => {
             return;
         }
         setIsSubscribed(!isSubscribed);
+        showToast(isSubscribed ? 'Unsubscribed from challenge' : 'Subscribed to challenge updates!');
     };
 
     const handleDelete = () => {
@@ -262,8 +281,13 @@ export const ChallengeDetail: React.FC = () => {
 
     const confirmDelete = () => {
         if (challenge) {
-            storage.deleteChallenge(challenge.id);
-            navigate('/challenges');
+            try {
+                storage.deleteChallenge(challenge.id);
+                showToast('Challenge deleted successfully');
+                navigate('/challenges');
+            } catch {
+                showToast('Failed to delete challenge. Please try again.', 'error');
+            }
         }
     };
 
@@ -285,16 +309,94 @@ export const ChallengeDetail: React.FC = () => {
             return;
         }
 
-        // In a real app, post API call goes here
-        console.log('Submitting idea:', {
+        if (!challenge) return;
+
+        // Generate a new ID
+        const currentIdeas = storage.getIdeaDetails();
+        const nextIdNumber = currentIdeas.length > 0
+            ? Math.max(...currentIdeas.map(i => {
+                const parts = i.id.split('-');
+                return parts.length > 1 ? parseInt(parts[1]) : 0;
+            })) + 1
+            : 1;
+        const newId = `ID-${String(nextIdNumber).padStart(4, '0')}`;
+
+        const newIdea: Idea = {
+            id: newId,
             title: ideaTitle,
             description: ideaDescription,
-            detail: ideaDetail
-        });
+            status: 'Pending',
+            owner: {
+                name: 'Current User',
+                avatar: 'CU',
+                avatarColor: 'var(--accent-purple)',
+                role: 'Contributor'
+            },
+            linkedChallenge: { id: challenge.id, title: challenge.title },
+            tags: [],
+            stats: { appreciations: 0, comments: 0, views: 0 },
+            problemStatement: challenge.problemStatement,
+            proposedSolution: ideaDetail,
+            expectedImpact: 'TBD',
+            submittedDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+            lastUpdated: 'Just now',
+            activity: []
+        };
 
-        setShowIdeaModal(false);
-        resetIdeaForm();
+        try {
+            // Save to storage
+            storage.addIdea(challenge.id, newIdea);
+
+            // Update local state - the UI uses challenge.ideas (which are summary objects)
+            const summaryIdea = {
+                id: newIdea.id,
+                title: newIdea.title,
+                author: newIdea.owner.name,
+                status: newIdea.status,
+                appreciations: newIdea.stats.appreciations,
+                comments: newIdea.stats.comments,
+                views: newIdea.stats.views
+            };
+
+            setChallenge(prev => prev ? {
+                ...prev,
+                ideas: [...(prev.ideas || []), summaryIdea]
+            } : prev);
+
+            setNewIdeaId(newId);
+            setTimeout(() => setNewIdeaId(null), 2000);
+
+            setShowIdeaModal(false);
+            resetIdeaForm();
+            showToast('Idea posted successfully');
+        } catch {
+            showToast('Failed to submit idea. Please try again.', 'error');
+        }
     };
+
+    const handleDeleteIdea = (ideaId: string) => {
+        if (!challenge) return;
+
+        // Trigger exit animation
+        setExitingIdeaIds(prev => [...prev, ideaId]);
+
+        // Wait for animation to finish then remove
+        setTimeout(() => {
+            try {
+                storage.deleteIdea(challenge.id, ideaId);
+                setChallenge(prev => prev ? {
+                    ...prev,
+                    ideas: prev.ideas.filter(i => i.id !== ideaId)
+                } : prev);
+                setExitingIdeaIds(prev => prev.filter(id => id !== ideaId));
+                showToast('Idea deleted successfully');
+            } catch {
+                setExitingIdeaIds(prev => prev.filter(id => id !== ideaId));
+                showToast('Failed to delete idea. Please try again.', 'error');
+            }
+        }, 400); // Matches .idea-exit-animate duration
+    };
+
     const handlePostComment = () => {
         if (!isAuthenticated) {
             navigate('/login', { state: { from: location } });
@@ -493,54 +595,13 @@ export const ChallengeDetail: React.FC = () => {
                                 <div style={{ fontWeight: 500 }}>{challenge.department || 'STP'}</div>
                             </div>
 
-                            {/* Impact & Priority */}
-                            <div className="sc-form-group">
-                                <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Priority</label>
-                                <div style={{ fontWeight: 500 }}>
-                                    {editMode ? (
-                                        <select
-                                            className="sc-form-select"
-                                            value={challenge.priority}
-                                            onChange={e => setChallenge(prev => prev ? { ...prev, priority: e.target.value as any } : prev)}
-                                        >
-                                            <option value="Critical">Critical</option>
-                                            <option value="High">High</option>
-                                            <option value="Medium">Medium</option>
-                                            <option value="Low">Low</option>
-                                        </select>
-                                    ) : (
-                                        (() => {
-                                            const currentPriority = (challenge.priority as string) || 'Medium';
-                                            const brand = PRIORITY_BRANDING[currentPriority] || PRIORITY_BRANDING['Medium'];
-                                            return (
-                                                <div className="stage-badge" style={{
-                                                    background: brand.bg,
-                                                    color: brand.color,
-                                                    border: `1px solid ${brand.border}`,
-                                                    display: 'inline-flex',
-                                                    alignItems: 'center',
-                                                    gap: '6px',
-                                                    padding: '4px 10px',
-                                                    borderRadius: '12px',
-                                                    fontWeight: '600',
-                                                    fontSize: '10px',
-                                                    marginTop: '4px'
-                                                }}>
-                                                    <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: brand.color }} />
-                                                    {currentPriority} Impact
-                                                </div>
-                                            );
-                                        })()
-                                    )}
-                                </div>
-                            </div>
                             <div className="sc-form-group">
                                 <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Expected Timeline</label>
                                 <div style={{ fontWeight: 500 }}>{challenge.timeline || 'Not specified'}</div>
                             </div>
 
                             {/* Portfolio Option */}
-                            <div className="sc-form-group" style={{ gridColumn: '1 / -1' }}>
+                            <div className="sc-form-group">
                                 <label className="sc-form-label" style={{ color: 'var(--text-muted)' }}>Portfolio Option</label>
                                 <div style={{ fontWeight: 500 }}>{challenge.portfolioOption || 'Not specified'}</div>
                             </div>
@@ -677,22 +738,60 @@ export const ChallengeDetail: React.FC = () => {
                             <button className="add-idea-btn" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>Add Idea</button>
                         </div>
                         <div className="detail-ideas-list">
-                            {validIdeas.filter(idea => idea.status === 'Accepted').map(idea => (
-                                <a key={idea.id} className="detail-linked-challenge" onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)} style={{ marginBottom: '8px' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                            <div className="challenge-id-text">{idea.id}</div>
-                                        </div>
-                                        <div style={{ fontSize: '11px', color: 'var(--accent-green)', fontWeight: '600', background: 'rgba(76, 175, 80, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
-                                            {idea.appreciations} <span style={{ fontSize: '10px' }}>likes</span>
+                            {validIdeas.filter(idea => ['Accepted', 'In Review', 'Pending'].includes(idea.status)).map(idea => {
+                                const isExiting = exitingIdeaIds.includes(idea.id);
+                                const isNew = newIdeaId === idea.id;
+
+                                return (
+                                    <div
+                                        key={idea.id}
+                                        className={`detail-linked-challenge ${isExiting ? 'idea-exit-animate' : ''} ${isNew ? 'idea-entry-animate' : ''}`}
+                                        style={{ marginBottom: '8px', position: 'relative' }}
+                                    >
+                                        <div onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)} style={{ cursor: 'pointer', width: '100%' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                    <div className="challenge-id-text">{idea.id}</div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                    <div style={{ fontSize: '11px', color: 'var(--accent-green)', fontWeight: '600', background: 'rgba(76, 175, 80, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
+                                                        {idea.appreciations} <span style={{ fontSize: '10px' }}>likes</span>
+                                                    </div>
+                                                    {isAuthenticated && idea.author === 'Current User' && (
+                                                        <button
+                                                            className="idea-delete-action-btn"
+                                                            title="Delete Idea"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDeleteIdea(idea.id);
+                                                            }}
+                                                            style={{
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                padding: '4px',
+                                                                cursor: 'pointer',
+                                                                color: 'var(--text-muted)',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                borderRadius: '4px',
+                                                                transition: 'all 0.2s ease'
+                                                            }}
+                                                            onMouseOver={e => e.currentTarget.style.color = 'var(--accent-red)'}
+                                                            onMouseOut={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                                                        >
+                                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div style={{ width: '100%' }}>
+                                                <div className="challenge-title-text" style={{ whiteSpace: 'normal', lineHeight: '1.4' }}>{idea.title}</div>
+                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>by {idea.author}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div style={{ width: '100%' }}>
-                                        <div className="challenge-title-text" style={{ whiteSpace: 'normal', lineHeight: '1.4' }}>{idea.title}</div>
-                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>by {idea.author}</div>
-                                    </div>
-                                </a>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
 
@@ -837,7 +936,7 @@ export const ChallengeDetail: React.FC = () => {
                                 </span>
                                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
                             </button>
-                            {isAuthenticated && user?.name === challenge.owner.name && (
+                            {isAuthenticated && challenge.owner.name === 'Current User' && (
                                 <button
                                     className="btn btn-danger animate-pop"
                                     onClick={handleDelete}

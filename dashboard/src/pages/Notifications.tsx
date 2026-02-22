@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '../services/storage';
 import { type Notification } from '../types';
-import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp, CheckCircle } from 'lucide-react';
+import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp } from 'lucide-react';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
+import { useToast } from '../context/ToastContext';
 
 export const Notifications: React.FC = () => {
     const navigate = useNavigate();
@@ -23,17 +24,7 @@ export const Notifications: React.FC = () => {
     const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
 
     // Toast State
-    const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-    // Auto-hide inline toast
-    React.useEffect(() => {
-        if (toastMessage) {
-            const timer = setTimeout(() => {
-                setToastMessage(null);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [toastMessage]);
+    const { showToast } = useToast();
 
     // Force update state
     const [_, setTick] = useState(0);
@@ -87,14 +78,23 @@ export const Notifications: React.FC = () => {
 
             // Wait for exit CSS animation (300ms) before deleting from storage
             setTimeout(() => {
-                storage.deleteNotification(idToDelete);
-                forceUpdate();
-                setAnimatingIds(prev => {
-                    const next = new Set(prev);
-                    next.delete(idToDelete);
-                    return next;
-                });
-                setToastMessage('Notification deleted successfully');
+                try {
+                    storage.deleteNotification(idToDelete);
+                    forceUpdate();
+                    setAnimatingIds(prev => {
+                        const next = new Set(prev);
+                        next.delete(idToDelete);
+                        return next;
+                    });
+                    showToast('Notification deleted successfully');
+                } catch {
+                    setAnimatingIds(prev => {
+                        const next = new Set(prev);
+                        next.delete(idToDelete);
+                        return next;
+                    });
+                    showToast('Failed to delete notification. Please try again.', 'error');
+                }
             }, 300);
         }
     };
@@ -130,23 +130,6 @@ export const Notifications: React.FC = () => {
                 <p>Stay updated on challenges, ideas, comments, and status changes across the innovation pipeline.</p>
             </div>
 
-            {toastMessage && (
-                <div className="inline-success-banner animate-pop" style={{
-                    background: 'rgba(16, 185, 129, 0.1)',
-                    border: '1px solid var(--accent-green)',
-                    color: 'var(--accent-green)',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontWeight: 500
-                }}>
-                    <CheckCircle size={18} />
-                    {toastMessage}
-                </div>
-            )}
 
             <div className={`filter-tabs ${isLoading ? 'fade-in' : ''}`}>
                 <button

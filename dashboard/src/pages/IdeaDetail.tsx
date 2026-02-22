@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
 import type { Idea } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -7,9 +8,10 @@ import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
 export const IdeaDetail: React.FC = () => {
     const { challengeId, ideaId } = useParams<{ challengeId: string; ideaId: string }>();
+    const { showToast } = useToast();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [searchParams] = useSearchParams();
     const [idea, setIdea] = useState<Idea | null>(null);
     const [comment, setComment] = useState('');
@@ -28,7 +30,7 @@ export const IdeaDetail: React.FC = () => {
 
     useEffect(() => {
         const ideas = storage.getIdeaDetails();
-        const found = ideas.find(i => i.id === ideaId) || ideas[0];
+        const found = ideas.find(i => i.id === ideaId) || null;
 
         // Simulate API loading
         const timer = setTimeout(() => {
@@ -49,7 +51,7 @@ export const IdeaDetail: React.FC = () => {
         return () => clearTimeout(timer);
     }, [ideaId, searchParams]);
 
-    if (isLoading || !idea) {
+    if (isLoading) {
         return (
             <div className="detail-page-container">
                 <div className="breadcrumb">
@@ -79,33 +81,52 @@ export const IdeaDetail: React.FC = () => {
                             <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
                             <div className="skeleton-text" style={{ width: '90%', height: '14px', borderRadius: '4px' }}></div>
                         </div>
-                        <div className="detail-skeleton-section">
-                            <div className="skeleton-text" style={{ width: '25%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
-                            <div className="skeleton-text" style={{ width: '100%', height: '14px', borderRadius: '4px', marginBottom: '8px' }}></div>
-                            <div className="skeleton-text" style={{ width: '60%', height: '14px', borderRadius: '4px' }}></div>
-                        </div>
                     </div>
                     <aside>
                         <div className="detail-skeleton-sidebar-item">
                             <div className="skeleton-text" style={{ width: '50%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
                             <div className="skeleton-text" style={{ width: '100%', height: '48px', borderRadius: '8px' }}></div>
                         </div>
-                        <div className="detail-skeleton-sidebar-item">
-                            <div className="skeleton-text" style={{ width: '60%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
-                            {[...Array(3)].map((_, i) => (
-                                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                                    <div className="skeleton-text" style={{ width: '40%', height: '14px', borderRadius: '4px' }}></div>
-                                    <div className="skeleton-text" style={{ width: '20%', height: '14px', borderRadius: '4px' }}></div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="detail-skeleton-sidebar-item">
-                            <div className="skeleton-text" style={{ width: '50%', height: '20px', borderRadius: '4px', marginBottom: '16px' }}></div>
-                            <div className="skeleton-text" style={{ width: '100%', height: '32px', borderRadius: '6px', marginBottom: '8px' }}></div>
-                            <div className="skeleton-text" style={{ width: '100%', height: '32px', borderRadius: '6px', marginBottom: '8px' }}></div>
-                            <div className="skeleton-text" style={{ width: '100%', height: '32px', borderRadius: '6px' }}></div>
-                        </div>
                     </aside>
+                </div>
+            </div>
+        );
+    }
+
+    if (!idea) {
+        return (
+            <div className="detail-page-container fade-in">
+                <div className="breadcrumb">
+                    <a onClick={() => navigate('/')}>Home</a>
+                    <span className="sep">/</span>
+                    <a onClick={() => navigate('/challenges')}>Challenges</a>
+                    {challengeId && (
+                        <>
+                            <span className="sep">/</span>
+                            <a onClick={() => navigate(`/challenges/${challengeId}`)}>{challengeId}</a>
+                        </>
+                    )}
+                </div>
+                <div style={{ padding: '60px 40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px', boxShadow: 'var(--shadow-lg)' }}>
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '24px', opacity: 0.8 }}>
+                        <path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" />
+                    </svg>
+                    <h2 style={{ marginBottom: '12px', fontSize: '24px', fontWeight: '700' }}>Idea Not Found</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '400px', marginInline: 'auto' }}>The idea you are looking for does not exist or has been removed. It may have been deleted along with its parent challenge.</p>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => challengeId ? navigate(`/challenges/${challengeId}`) : navigate('/challenges')}
+                        style={{
+                            minWidth: '200px',
+                            height: '42px',
+                            padding: '0 24px',
+                            borderRadius: '12px',
+                            fontWeight: 700,
+                            fontSize: '14px'
+                        }}
+                    >
+                        {challengeId ? 'Back to Challenge' : 'Back to Challenges'}
+                    </button>
                 </div>
             </div>
         );
@@ -138,6 +159,7 @@ export const IdeaDetail: React.FC = () => {
             return;
         }
         setHasLiked(!hasLiked);
+        showToast(hasLiked ? 'Like removed' : 'Thanks for liking this idea!');
     };
 
     const handleSubscribe = () => {
@@ -146,6 +168,7 @@ export const IdeaDetail: React.FC = () => {
             return;
         }
         setIsSubscribed(!isSubscribed);
+        showToast(isSubscribed ? 'Unsubscribed from idea' : 'Subscribed to idea updates!');
     };
 
     const handlePostComment = () => {
@@ -178,8 +201,13 @@ export const IdeaDetail: React.FC = () => {
 
     const confirmDelete = () => {
         if (idea && challengeId) {
-            storage.deleteIdea(challengeId, idea.id);
-            navigate(`/challenges/${challengeId}`);
+            try {
+                storage.deleteIdea(challengeId, idea.id);
+                showToast('Idea deleted successfully');
+                navigate(`/challenges/${challengeId}`);
+            } catch {
+                showToast('Failed to delete idea. Please try again.', 'error');
+            }
         }
     };
 
@@ -445,7 +473,7 @@ export const IdeaDetail: React.FC = () => {
                                 </span>
                                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
                             </button>
-                            {isAuthenticated && user?.name === idea.author && (
+                            {isAuthenticated && idea.owner.name === 'Current User' && (
                                 <button
                                     className="btn btn-danger btn-sm animate-pop"
                                     onClick={handleDelete}

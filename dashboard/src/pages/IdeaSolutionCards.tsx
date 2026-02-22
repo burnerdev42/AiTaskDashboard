@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { challengeCards } from '../data/challengeData';
+import { storage } from '../services/storage';
+import { type Challenge } from '../types';
 
 const IMPACT_FILTERS = ['All', 'Critical', 'High', 'Medium', 'Low'];
 const IMPACT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -42,8 +43,13 @@ export const IdeaSolutionCards: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [challenges, setChallenges] = useState<Challenge[]>([]);
 
     React.useEffect(() => {
+        // Load challenges from storage
+        const storedChallenges = storage.getChallenges();
+        setChallenges(storedChallenges);
+
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 1200);
@@ -58,7 +64,7 @@ export const IdeaSolutionCards: React.FC = () => {
         navigate('/challenges/submit');
     };
 
-    const filteredCards = challengeCards.filter(card => {
+    const filteredCards = challenges.filter(card => {
         // Impact filter
         if (activeFilter !== 'All' && card.impact !== activeFilter) {
             return false;
@@ -179,13 +185,13 @@ export const IdeaSolutionCards: React.FC = () => {
                     ))
                 ) : (
                     filteredCards.map(card => {
-                        const impactStyle = IMPACT_COLORS[card.impact] || IMPACT_COLORS.Low;
+                        const impactStyle = IMPACT_COLORS[card.impact || 'Low'] || IMPACT_COLORS.Low;
                         return (
                             <div key={card.id} className="idea-solution-card fade-in" onClick={() => navigate(`/challenges/${card.id}`)}>
 
                                 {/* Corner: ID badge top-left, Edit icon top-right */}
                                 <div className="challenge-id-badge">
-                                    {card.challengeNumber}
+                                    {card.id}
                                 </div>
                                 {isAuthenticated && card.owner.name === 'Current User' && (
                                     <div className="idea-card-edit-icon" onClick={(e) => { e.stopPropagation(); navigate(`/challenges/${card.id}?edit=true`); }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></div>
@@ -202,7 +208,7 @@ export const IdeaSolutionCards: React.FC = () => {
                                             opacity: 0.9
                                         }}
                                     >
-                                        {getImpactIcon(card.impact)} {card.impact} Impact
+                                        {getImpactIcon(card.impact || 'Low')} {card.impact || 'Low'} Impact
                                     </span>
                                     {(() => {
                                         const brand = STAGE_BRANDING[card.stage] || STAGE_BRANDING['Challenge Submitted'];
@@ -244,20 +250,20 @@ export const IdeaSolutionCards: React.FC = () => {
                                         <span className="meta-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>
                                         <span>Top Contributors</span>
                                         <div className="idea-card-team-avatars">
-                                            {card.team.slice(0, 5).map((t, i) => (
+                                            {(card.team || []).slice(0, 5).map((t, i) => (
                                                 <div
                                                     key={i}
                                                     className="mini-av"
                                                     data-tooltip={t.name}
                                                     style={{
-                                                        background: t.color,
+                                                        background: t.avatarColor,
                                                         fontWeight: '600',
                                                         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                                                         border: '2px solid white',
                                                         cursor: 'help'
                                                     }}
                                                 >
-                                                    {t.initial}
+                                                    {t.avatar}
                                                 </div>
                                             ))}
                                         </div>

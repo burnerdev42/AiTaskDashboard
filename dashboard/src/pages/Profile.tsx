@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
+import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
 export const Profile: React.FC = () => {
-    const { user, logout, updateUser } = useAuth();
+    const { user, logout, updateUser, deleteAccount } = useAuth();
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [isEditing, setIsEditing] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         opco: '',
@@ -17,8 +21,17 @@ export const Profile: React.FC = () => {
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        if (user) {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1200);
+        return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        if (user && !isLoading) {
             setFormData({
                 name: user.name || '',
                 opco: user.opco || '',
@@ -29,7 +42,7 @@ export const Profile: React.FC = () => {
             });
             setErrors({});
         }
-    }, [user]);
+    }, [user, isLoading]);
 
     const handleLogout = () => {
         logout();
@@ -38,7 +51,13 @@ export const Profile: React.FC = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { value, name } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        if (name === 'opco') {
+            setFormData(prev => ({ ...prev, opco: value, platform: '' }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+
         // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => {
@@ -59,7 +78,6 @@ export const Profile: React.FC = () => {
             }
         });
     };
-
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -72,13 +90,19 @@ export const Profile: React.FC = () => {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            showToast('Please fill in all mandatory fields.', 'error');
             return;
         }
 
         if (user) {
             await updateUser(formData);
+            showToast('Profile updated successfully!');
             setIsEditing(false);
             setErrors({});
+
+            // Trigger loading state for feedback
+            setIsLoading(true);
+            setTimeout(() => setIsLoading(false), 1200);
         }
     };
 
@@ -98,15 +122,61 @@ export const Profile: React.FC = () => {
         setIsEditing(false);
     };
 
+    const handleDeleteAccount = async () => {
+        const success = await deleteAccount();
+        if (success) {
+            showToast('Account deleted successfully. We\'re sorry to see you go!');
+            navigate('/');
+        } else {
+            showToast('Failed to delete account. Please try again.', 'error');
+        }
+    };
+
     if (!user) {
         return (
-            <div className="login-prompt" id="loginPrompt" style={{ display: 'flex' }}>
-                <div className="icon-circle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg></div>
-                <h2>Sign in to view your profile</h2>
-                <p>Access your submissions, track your ideas, and see your impact.</p>
-                <div className="btn-group">
-                    <Link to="/login" className="btn-go-signin">Sign In</Link>
-                    <Link to="/register" className="btn-go-register">Register</Link>
+            <div className="detail-page-container fade-in" style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px' }}>
+                <div className="breadcrumb">
+                    <a onClick={() => navigate('/')}>Home</a>
+                    <span className="sep">/</span>
+                    <span className="current">Profile</span>
+                </div>
+                <div style={{ padding: '60px 40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px', boxShadow: 'var(--shadow-lg)' }}>
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '24px', opacity: 0.8 }}>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <h2 style={{ marginBottom: '12px', fontSize: '24px', fontWeight: '700' }}>User Not Found</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '400px', marginInline: 'auto' }}>This user profile does not exist or the account has been deleted. The user may have removed their account from the platform.</p>
+                    <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => navigate('/')}
+                            style={{
+                                minWidth: '160px',
+                                height: '42px',
+                                padding: '0 24px',
+                                borderRadius: '12px',
+                                fontWeight: 700,
+                                fontSize: '14px'
+                            }}
+                        >
+                            Go to Home
+                        </button>
+                        <button
+                            className="btn-cancel"
+                            onClick={() => navigate('/login')}
+                            style={{
+                                minWidth: '160px',
+                                height: '42px',
+                                padding: '0 24px',
+                                borderRadius: '12px',
+                                fontWeight: 700,
+                                fontSize: '14px'
+                            }}
+                        >
+                            Sign In
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -123,8 +193,8 @@ export const Profile: React.FC = () => {
     };
 
     const INTEREST_OPTIONS = [
-        "Customer Experience", "Product & Data", "Supply Chain",
-        "Finance & Ops", "HR & Talent", "Sustainability"
+        'Customer Experience', 'Finance & Ops', 'Supply Chain', 'Product & Data',
+        'Manufacturing', 'Sustainability', 'Logistics', 'Retail Ops'
     ];
 
     return (
@@ -136,23 +206,31 @@ export const Profile: React.FC = () => {
                 {!isEditing && (
                     <div className="view-mode" id="viewMode">
                         <div className="profile-avatar" id="profileAvatar">
-                            {typeof user.avatar === 'string' && user.avatar.length > 2 ? <img src={user.avatar} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} /> : getInitials(user.name)}
+                            {isLoading ? (
+                                <div className="skeleton" style={{ width: '100%', height: '100%', borderRadius: '50%' }}></div>
+                            ) : (
+                                typeof user.avatar === 'string' && user.avatar.length > 2 ? <img src={user.avatar} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} /> : getInitials(user.name)
+                            )}
                         </div>
-                        <div className="profile-name" id="profileName">{user.name}</div>
-                        <div className="profile-email" id="profileEmail">{user.email}</div>
+                        <div className="profile-name" id="profileName">
+                            {isLoading ? <div className="skeleton-text" style={{ width: '140px', height: '28px', margin: '0 auto' }}></div> : user.name}
+                        </div>
+                        <div className="profile-email" id="profileEmail">
+                            {isLoading ? <div className="skeleton-text" style={{ width: '180px', height: '16px', margin: '8px auto 0' }}></div> : user.email}
+                        </div>
 
                         <div className="profile-meta" style={{ marginTop: '20px' }}>
                             <div className="meta-item">
                                 <span className="label">Role</span>
-                                <span className="value">{user.role || 'Contributor'}</span>
+                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '80px', height: '14px' }}></div> : (user.role || 'Contributor')}</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">OpCo</span>
-                                <span className="value">{user.opco || 'N/A'}</span>
+                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '100px', height: '14px' }}></div> : (user.opco || 'N/A')}</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">Platform</span>
-                                <span className="value">{user.platform || 'N/A'}</span>
+                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '120px', height: '14px' }}></div> : (user.platform || 'N/A')}</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">Member since</span>
@@ -160,30 +238,45 @@ export const Profile: React.FC = () => {
                             </div>
                         </div>
 
-                        {user.about && (
+                        {(isLoading || user.about) && (
                             <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>About Me</div>
                                 <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                                    {user.about}
+                                    {isLoading ? (
+                                        <>
+                                            <div className="skeleton-text" style={{ width: '100%', height: '14px', marginBottom: '6px' }}></div>
+                                            <div className="skeleton-text" style={{ width: '90%', height: '14px', marginBottom: '6px' }}></div>
+                                            <div className="skeleton-text" style={{ width: '40%', height: '14px' }}></div>
+                                        </>
+                                    ) : (
+                                        user.about
+                                    )}
                                 </div>
                             </div>
                         )}
 
-                        {user.interests && user.interests.length > 0 && (
+                        {(isLoading || (user.interests && user.interests.length > 0)) && (
                             <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Areas of Interest</div>
                                 <div className="interest-tags" id="interestTags">
-                                    {user.interests.map(i => <span key={i} className="interest-tag">{i}</span>)}
+                                    {isLoading ? (
+                                        [1, 2, 3].map(i => <div key={i} className="skeleton" style={{ width: '70px', height: '24px', borderRadius: '12px' }}></div>)
+                                    ) : (
+                                        user.interests?.map(i => <span key={i} className="interest-tag">{i}</span>)
+                                    )}
                                 </div>
                             </div>
                         )}
 
                         <div className="profile-actions" style={{ marginTop: '24px' }}>
-                            <button className="btn-edit" onClick={() => setIsEditing(true)}>
+                            <button className="btn-edit" onClick={() => setIsEditing(true)} disabled={isLoading} style={{ width: '100%' }}>
                                 Edit Profile
                             </button>
-                            <button className="btn-logout" onClick={handleLogout}>
+                            <button className="btn-logout" onClick={handleLogout} disabled={isLoading} style={{ width: '100%' }}>
                                 Sign Out
+                            </button>
+                            <button className="btn-cancel" onClick={() => setIsDeleteModalOpen(true)} disabled={isLoading} style={{ width: '100%' }}>
+                                Delete Account
                             </button>
                         </div>
                     </div>
@@ -240,11 +333,10 @@ export const Profile: React.FC = () => {
                                     onChange={handleInputChange}
                                 >
                                     <option value="">Select OpCo</option>
-                                    <option value="TCS — India">TCS — India</option>
-                                    <option value="TCS — USA">TCS — USA</option>
-                                    <option value="TCS — UK">TCS — UK</option>
-                                    <option value="TCS — Europe">TCS — Europe</option>
-                                    <option value="TCS — APAC">TCS — APAC</option>
+                                    <option value="Albert Heijn">Albert Heijn</option>
+                                    <option value="GSO">GSO</option>
+                                    <option value="GET">GET</option>
+                                    <option value="BecSee">BecSee</option>
                                 </select>
                                 {errors.opco && <span className="error-message">{errors.opco}</span>}
                             </div>
@@ -255,14 +347,16 @@ export const Profile: React.FC = () => {
                                     name="platform"
                                     value={formData.platform}
                                     onChange={handleInputChange}
+                                    disabled={!formData.opco}
                                 >
                                     <option value="">Select Platform</option>
-                                    <option value="BFSI">BFSI</option>
-                                    <option value="Technology & Services">Technology & Services</option>
-                                    <option value="Manufacturing">Manufacturing</option>
-                                    <option value="Retail & CPG">Retail & CPG</option>
-                                    <option value="Life Sciences">Life Sciences</option>
-                                    <option value="Communications">Communications</option>
+                                    {formData.opco === 'Albert Heijn' && (
+                                        <>
+                                            <option value="STP">STP</option>
+                                            <option value="CTP">CTP</option>
+                                            <option value="RBP">RBP</option>
+                                        </>
+                                    )}
                                 </select>
                                 {errors.platform && <span className="error-message">{errors.platform}</span>}
                             </div>
@@ -304,8 +398,18 @@ export const Profile: React.FC = () => {
                             </div>
 
                             <div className="profile-actions">
-                                <button type="submit" className="btn-save">Save Changes</button>
-                                <button type="button" className="btn-cancel" onClick={handleCancel}>Cancel</button>
+                                <button
+                                    type="submit"
+                                    className="btn-save"
+                                    style={{
+                                        flex: 1,
+                                        opacity: (!formData.name.trim() || !formData.role.trim() || !formData.opco || !formData.platform) ? 0.6 : 1,
+                                        cursor: (!formData.name.trim() || !formData.role.trim() || !formData.opco || !formData.platform) ? 'not-allowed' : 'pointer'
+                                    }}
+                                >
+                                    Save Changes
+                                </button>
+                                <button type="button" className="btn-cancel" onClick={handleCancel} style={{ flex: 1 }}>Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -317,34 +421,22 @@ export const Profile: React.FC = () => {
 
                 {/* ── Stats Row ──────────────────────── */}
                 <div className="stats-row">
-                    <div className="stat-card">
-                        <div className="stat-icon" style={{ color: 'var(--accent-blue)' }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
+                    {[
+                        { label: 'Challenges', color: 'var(--accent-blue)', icon: <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />, line: <line x1="4" y1="22" x2="4" y2="15" />, val: 3 },
+                        { label: 'Ideas', color: 'var(--accent-yellow)', icon: <path d="M9 18h6" />, extra: <path d="M10 22h4" />, main: <path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" />, val: 8 },
+                        { label: 'Score', color: 'var(--accent-gold)', circle: <circle cx="12" cy="8" r="7" />, poly: <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />, val: 847 },
+                        { label: 'Engagement', color: 'var(--accent-pink)', heart: <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />, val: 36 }
+                    ].map((s, idx) => (
+                        <div key={idx} className="stat-card">
+                            <div className="stat-icon" style={{ color: s.color }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    {s.icon} {s.line} {s.extra} {s.main} {s.circle} {s.poly} {s.heart}
+                                </svg>
+                            </div>
+                            <div className="stat-value">{isLoading ? <div className="skeleton-text" style={{ width: '40px', height: '28px', margin: '4px 0' }}></div> : s.val}</div>
+                            <div className="stat-label">{s.label}</div>
                         </div>
-                        <div className="stat-value">3</div>
-                        <div className="stat-label">Challenges</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-icon" style={{ color: 'var(--accent-yellow)' }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg>
-                        </div>
-                        <div className="stat-value">8</div>
-                        <div className="stat-label">Ideas</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-icon" style={{ color: 'var(--accent-gold)' }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></svg>
-                        </div>
-                        <div className="stat-value">847</div>
-                        <div className="stat-label">Score</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-icon" style={{ color: 'var(--accent-pink)' }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                        </div>
-                        <div className="stat-value">36</div>
-                        <div className="stat-label">Engagement</div>
-                    </div>
+                    ))}
                 </div>
 
                 {/* ── Activity Feed ──────────────────── */}
@@ -354,57 +446,62 @@ export const Profile: React.FC = () => {
                     </div>
                     <div className="scroll-area">
                         <ul className="activity-feed">
-                            <li className="activity-item" onClick={() => navigate('/challenges/c1/ideas/i1')} style={{ cursor: 'pointer' }}>
-                                <div className="activity-icon-wrapper dot-idea">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                                </div>
-                                <div className="activity-body">
-                                    <div className="activity-text">
-                                        Submitted a new idea <strong>"AI-based Lead Scoring"</strong> for <strong>Sales Optimization</strong> challenge.
-                                    </div>
-                                    <div className="activity-time">2 hours ago</div>
-                                </div>
-                            </li>
-                            <li className="activity-item" onClick={() => navigate('/challenges/c2/ideas/i2')} style={{ cursor: 'pointer' }}>
-                                <div className="activity-icon-wrapper dot-comment">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>
-                                </div>
-                                <div className="activity-body">
-                                    <div className="activity-text">
-                                        Commented on <strong>"Automated Invoice Processing"</strong>.
-                                    </div>
-                                    <div className="activity-time">Yesterday at 4:15 PM</div>
-                                </div>
-                            </li>
-                            <li className="activity-item" onClick={() => navigate('/challenges/c3')} style={{ cursor: 'pointer' }}>
-                                <div className="activity-icon-wrapper dot-challenge">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                                </div>
-                                <div className="activity-body">
-                                    <div className="activity-text">
-                                        Joined the <strong>"Sustainability in Tech"</strong> challenge.
-                                    </div>
-                                    <div className="activity-time">Feb 14, 2026</div>
-                                </div>
-                            </li>
-                            <li className="activity-item">
-                                <div className="activity-icon-wrapper dot-idea">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                                </div>
-                                <div className="activity-body">
-                                    <div className="activity-text">Refined the <strong>Predictive Maintenance</strong> algorithm for the Factory 4.0 challenge.</div>
-                                    <div className="activity-time">Feb 12, 2026</div>
-                                </div>
-                            </li>
-                            <li className="activity-item">
-                                <div className="activity-icon-wrapper dot-pilot">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                                </div>
-                                <div className="activity-body">
-                                    <div className="activity-text">Successfully completed the POC for <strong>Blockchain Supply Tracking</strong>.</div>
-                                    <div className="activity-time">Feb 08, 2026</div>
-                                </div>
-                            </li>
+                            {isLoading ? (
+                                [1, 2, 3, 4].map(i => (
+                                    <li key={i} className="activity-item">
+                                        <div className="activity-icon-wrapper skeleton" style={{ width: '28px', height: '28px', borderRadius: '50%' }}></div>
+                                        <div className="activity-body">
+                                            <div className="skeleton-text" style={{ width: '85%', height: '14px', marginBottom: '6px' }}></div>
+                                            <div className="skeleton-text" style={{ width: '30%', height: '12px' }}></div>
+                                        </div>
+                                    </li>
+                                ))
+                            ) : (
+                                <>
+                                    <li className="activity-item" onClick={() => navigate('/challenges/c1/ideas/i1')} style={{ cursor: 'pointer' }}>
+                                        <div className="activity-icon-wrapper dot-idea">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                                        </div>
+                                        <div className="activity-body">
+                                            <div className="activity-text">
+                                                Submitted a new idea <strong>"AI-based Lead Scoring"</strong> for <strong>Sales Optimization</strong> challenge.
+                                            </div>
+                                            <div className="activity-time">2 hours ago</div>
+                                        </div>
+                                    </li>
+                                    <li className="activity-item" onClick={() => navigate('/challenges/c2/ideas/i2')} style={{ cursor: 'pointer' }}>
+                                        <div className="activity-icon-wrapper dot-comment">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>
+                                        </div>
+                                        <div className="activity-body">
+                                            <div className="activity-text">
+                                                Commented on <strong>"Automated Invoice Processing"</strong>.
+                                            </div>
+                                            <div className="activity-time">Yesterday at 4:15 PM</div>
+                                        </div>
+                                    </li>
+                                    <li className="activity-item" onClick={() => navigate('/challenges/c3')} style={{ cursor: 'pointer' }}>
+                                        <div className="activity-icon-wrapper dot-challenge">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                        </div>
+                                        <div className="activity-body">
+                                            <div className="activity-text">
+                                                Joined the <strong>"Sustainability in Tech"</strong> challenge.
+                                            </div>
+                                            <div className="activity-time">Feb 14, 2026</div>
+                                        </div>
+                                    </li>
+                                    <li className="activity-item">
+                                        <div className="activity-icon-wrapper dot-idea">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                                        </div>
+                                        <div className="activity-body">
+                                            <div className="activity-text">Refined the <strong>Predictive Maintenance</strong> algorithm for the Factory 4.0 challenge.</div>
+                                            <div className="activity-time">Feb 12, 2026</div>
+                                        </div>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>
@@ -425,36 +522,49 @@ export const Profile: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr onClick={() => navigate('/challenges/c4')} style={{ cursor: 'pointer' }}>
-                                    <td className="id-col">CH-007</td>
-                                    <td>Sustainability Tech</td>
-                                    <td>Feb 18, 2026</td>
-                                    <td><span className="status-pill status-ideation">Ideation</span></td>
-                                </tr>
-                                <tr onClick={() => navigate('/challenges/c1/ideas/ID-0204')} style={{ cursor: 'pointer' }}>
-                                    <td className="id-col">ID-0204</td>
-                                    <td>AI-based Lead Scoring</td>
-                                    <td>Feb 16, 2026</td>
-                                    <td><span className="status-pill status-accepted">Accepted</span></td>
-                                </tr>
-                                <tr onClick={() => navigate('/challenges/c1/ideas/ID-0198')} style={{ cursor: 'pointer' }}>
-                                    <td className="id-col">ID-0198</td>
-                                    <td>Voice Command Dashboard</td>
-                                    <td>Feb 10, 2026</td>
-                                    <td><span className="status-pill status-declined">Declined</span></td>
-                                </tr>
-                                <tr onClick={() => navigate('/challenges/c1/ideas/ID-0185')} style={{ cursor: 'pointer' }}>
-                                    <td className="id-col">ID-0185</td>
-                                    <td>Legacy System Migration Bot</td>
-                                    <td>Jan 28, 2026</td>
-                                    <td><span className="status-pill status-accepted">Accepted</span></td>
-                                </tr>
-                                <tr onClick={() => navigate('/challenges/c2')} style={{ cursor: 'pointer' }}>
-                                    <td className="id-col">CH-005</td>
-                                    <td>Smart Factory 4.0</td>
-                                    <td>Jan 20, 2026</td>
-                                    <td><span className="status-pill status-pilot">Pilot</span></td>
-                                </tr>
+                                {isLoading ? (
+                                    [1, 2, 3, 4, 5].map(i => (
+                                        <tr key={i}>
+                                            <td><div className="skeleton-text" style={{ width: '50px', height: '14px' }}></div></td>
+                                            <td><div className="skeleton-text" style={{ width: '150px', height: '14px' }}></div></td>
+                                            <td><div className="skeleton-text" style={{ width: '80px', height: '14px' }}></div></td>
+                                            <td><div className="skeleton" style={{ width: '70px', height: '20px', borderRadius: '10px' }}></div></td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <>
+                                        <tr onClick={() => navigate('/challenges/c4')} style={{ cursor: 'pointer' }}>
+                                            <td className="id-col">CH-007</td>
+                                            <td>Sustainability Tech</td>
+                                            <td>Feb 18, 2026</td>
+                                            <td><span className="status-pill status-ideation">Ideation</span></td>
+                                        </tr>
+                                        <tr onClick={() => navigate('/challenges/c1/ideas/ID-0204')} style={{ cursor: 'pointer' }}>
+                                            <td className="id-col">ID-0204</td>
+                                            <td>AI-based Lead Scoring</td>
+                                            <td>Feb 16, 2026</td>
+                                            <td><span className="status-pill status-accepted">Accepted</span></td>
+                                        </tr>
+                                        <tr onClick={() => navigate('/challenges/c1/ideas/ID-0198')} style={{ cursor: 'pointer' }}>
+                                            <td className="id-col">ID-0198</td>
+                                            <td>Voice Command Dashboard</td>
+                                            <td>Feb 10, 2026</td>
+                                            <td><span className="status-pill status-declined">Declined</span></td>
+                                        </tr>
+                                        <tr onClick={() => navigate('/challenges/c1/ideas/ID-0185')} style={{ cursor: 'pointer' }}>
+                                            <td className="id-col">ID-0185</td>
+                                            <td>Legacy System Migration Bot</td>
+                                            <td>Jan 28, 2026</td>
+                                            <td><span className="status-pill status-accepted">Accepted</span></td>
+                                        </tr>
+                                        <tr onClick={() => navigate('/challenges/c2')} style={{ cursor: 'pointer' }}>
+                                            <td className="id-col">CH-005</td>
+                                            <td>Smart Factory 4.0</td>
+                                            <td>Jan 20, 2026</td>
+                                            <td><span className="status-pill status-pilot">Pilot</span></td>
+                                        </tr>
+                                    </>
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -489,9 +599,9 @@ export const Profile: React.FC = () => {
                                         return (
                                             <div
                                                 key={i}
-                                                className={`heatmap-cell ${level > 0 ? `level-${level}` : ''}`}
+                                                className={`heatmap-cell ${isLoading ? 'skeleton' : (level > 0 ? `level-${level}` : '')}`}
                                                 style={{ animationDelay: `${i * 0.003}s` }}
-                                                title={level === 0 ? 'No activity' : `${level * 2} contributions`}
+                                                title={isLoading ? 'Loading...' : (level === 0 ? 'No activity' : `${level * 2} contributions`)}
                                             ></div>
                                         );
                                     })}
@@ -512,6 +622,16 @@ export const Profile: React.FC = () => {
                 </div>
 
             </div>
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteAccount}
+                title="Delete Account"
+                message="Are you sure you want to delete your account? This action is permanent and cannot be undone. All your data will be permanently removed."
+                confirmText="Delete Account"
+                type="danger"
+            />
         </div>
     );
 };

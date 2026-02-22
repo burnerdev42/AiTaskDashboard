@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flag, Lightbulb, TrendingUp, Clock, Users, UserCheck, Layers, Cloud, Globe, Database, Zap } from 'lucide-react';
+import { Flag, Lightbulb, TrendingUp, Clock, Users, UserCheck } from 'lucide-react';
 
 /* ── Static Data for Panels 1-3 ──────────────── */
 const FUNNEL_STAGES = [
@@ -76,27 +76,19 @@ export const Metrics: React.FC = () => {
 
             {/* ──── KPI Summary Strip ──── */}
             <div className="metrics-kpi-strip">
-                {isLoading ? (
-                    [...Array(6)].map((_, i) => (
-                        <div key={i} className="kpi-card-skeleton">
-                            <div className="skeleton" style={{ width: '40px', height: '40px', borderRadius: '8px' }}></div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <div className="skeleton-text" style={{ width: '80px', height: '12px', borderRadius: '4px' }}></div>
-                                <div className="skeleton-text" style={{ width: '50px', height: '20px', borderRadius: '4px' }}></div>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    KPI_CARDS.map(kpi => (
-                        <div key={kpi.label} className="metrics-kpi-card">
-                            <div className="kpi-icon">{kpi.icon}</div>
-                            <div className="kpi-content">
-                                <div className="kpi-label">{kpi.label}</div>
+                {KPI_CARDS.map((kpi) => (
+                    <div key={kpi.label} className="metrics-kpi-card">
+                        <div className="kpi-icon">{kpi.icon}</div>
+                        <div className="kpi-content">
+                            <div className="kpi-label">{kpi.label}</div>
+                            {isLoading ? (
+                                <div className="skeleton-text" style={{ width: '50px', height: '24px', borderRadius: '4px', marginTop: '4px' }}></div>
+                            ) : (
                                 <div className="kpi-value">{kpi.value}</div>
-                            </div>
+                            )}
                         </div>
-                    ))
-                )}
+                    </div>
+                ))}
             </div>
 
             {/* ──── Row 1: The Original 3 Panels ──── */}
@@ -259,27 +251,17 @@ export const Metrics: React.FC = () => {
 
             {/* ── Row 2: Advanced Charts ── */}
             <div className="metrics-charts-grid bottom-row">
-                {isLoading ? (
-                    [...Array(3)].map((_, i) => (
-                        <div key={i} className="chart-panel-skeleton">
-                            <div className="m-chart-header" style={{ marginBottom: '24px' }}>
-                                <div className="skeleton-text" style={{ width: '140px', height: '24px', borderRadius: '4px', marginBottom: '8px' }}></div>
-                                <div className="skeleton-text" style={{ width: '100px', height: '14px', borderRadius: '4px' }}></div>
-                            </div>
-                            <div className="m-chart-body" style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-                                <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <>
-                        {/* 1. Gradient Line Chart: Innovation Velocity */}
-                        <div className="m-chart-panel velocity-graph">
-                            <div className="m-chart-header">
-                                <h3>Innovation Velocity</h3>
-                                <p>Ratio: Ideas/Challenge</p>
-                            </div>
-                            <div className="m-chart-body">
+                {/* 1. Gradient Line Chart: Innovation Velocity */}
+                <div className="m-chart-panel velocity-graph">
+                    <div className="m-chart-header">
+                        <h3>Innovation Velocity</h3>
+                        <p>Ratio: Ideas/Challenge</p>
+                    </div>
+                    <div className="m-chart-body">
+                        {isLoading ? (
+                            <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
+                        ) : (
+                            <>
                                 <svg viewBox="0 0 400 150" className="line-chart-svg">
                                     <defs>
                                         <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
@@ -322,152 +304,160 @@ export const Metrics: React.FC = () => {
                                 <div className="line-chart-labels">
                                     <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
                                 </div>
-                            </div>
-                        </div>
+                            </>
+                        )}
+                    </div>
+                </div>
 
-                        {/* 2. Scatter Plot: Portfolio Balance */}
-                        <div className="m-chart-panel scatter-graph">
-                            <div className="m-chart-header">
-                                <h3>Portfolio Balance</h3>
-                                <p>Value (Y) vs. Effort (X)</p>
-                            </div>
-                            <div className="m-chart-body">
-                                <svg viewBox="0 0 300 200" className="scatter-svg">
-                                    {/* Axes */}
-                                    <line x1="40" y1="170" x2="280" y2="170" stroke="var(--border)" strokeWidth="1" />
-                                    <line x1="40" y1="20" x2="40" y2="170" stroke="var(--border)" strokeWidth="1" />
+                {/* 2. Scatter Plot: Portfolio Balance */}
+                <div className="m-chart-panel scatter-graph">
+                    <div className="m-chart-header">
+                        <h3>Portfolio Balance</h3>
+                        <p>Value (Y) vs. Effort (X)</p>
+                    </div>
+                    <div className="m-chart-body">
+                        {isLoading ? (
+                            <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
+                        ) : (
+                            <svg viewBox="0 0 300 200" className="scatter-svg">
+                                {/* Axes */}
+                                <line x1="40" y1="170" x2="280" y2="170" stroke="var(--border)" strokeWidth="1" />
+                                <line x1="40" y1="20" x2="40" y2="170" stroke="var(--border)" strokeWidth="1" />
 
-                                    {/* Labels */}
-                                    <text x="280" y="185" fontSize="9" fill="var(--text-muted)" textAnchor="end">High Effort →</text>
-                                    <text x="30" y="20" fontSize="9" fill="var(--text-muted)" transform="rotate(-90 30,20)" textAnchor="end">High Value →</text>
+                                {/* Labels */}
+                                <text x="280" y="185" fontSize="9" fill="var(--text-muted)" textAnchor="end">High Effort →</text>
+                                <text x="30" y="20" fontSize="9" fill="var(--text-muted)" transform="rotate(-90 30,20)" textAnchor="end">High Value →</text>
 
-                                    {/* Bubbles */}
-                                    {SCATTER_DATA.map(item => (
-                                        <g key={item.id} className="scatter-bubble-group">
-                                            <circle
-                                                cx={40 + (item.x / 100) * 240}
-                                                cy={170 - (item.y / 100) * 150}
-                                                r={item.size / 2}
-                                                fill={item.color}
-                                                opacity="0.8"
-                                                stroke="#fff"
-                                                strokeWidth="1"
-                                            />
-                                            <text
-                                                x={40 + (item.x / 100) * 240}
-                                                y={170 - (item.y / 100) * 150 - (item.size / 2) - 4}
-                                                fontSize="7"
-                                                fill="var(--text-primary)"
-                                                textAnchor="middle"
-                                                fontWeight="600"
-                                            >
-                                                {item.name}
-                                            </text>
-                                        </g>
-                                    ))}
-                                </svg>
-                            </div>
-                        </div>
+                                {/* Bubbles */}
+                                {SCATTER_DATA.map(item => (
+                                    <g key={item.id} className="scatter-bubble-group">
+                                        <circle
+                                            cx={40 + (item.x / 100) * 240}
+                                            cy={170 - (item.y / 100) * 150}
+                                            r={item.size / 2}
+                                            fill={item.color}
+                                            opacity="0.8"
+                                            stroke="#fff"
+                                            strokeWidth="1"
+                                        />
+                                        <text
+                                            x={40 + (item.x / 100) * 240}
+                                            y={170 - (item.y / 100) * 150 - (item.size / 2) - 4}
+                                            fontSize="7"
+                                            fill="var(--text-primary)"
+                                            textAnchor="middle"
+                                            fontWeight="600"
+                                        >
+                                            {item.name}
+                                        </text>
+                                    </g>
+                                ))}
+                            </svg>
+                        )}
+                    </div>
+                </div>
 
-                        {/* 3. Tech Radar */}
-                        <div className="m-chart-panel radar-graph">
-                            <div className="m-chart-header">
-                                <h3>OpCo Radar</h3>
-                                <p>Platform Engagement</p>
-                            </div>
-                            <div className="m-chart-body">
-                                <svg viewBox="0 0 200 200" className="radar-svg">
-                                    <defs>
-                                        <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                            <stop offset="0%" stopColor="var(--accent-gold)" stopOpacity="0.4" />
-                                            <stop offset="100%" stopColor="var(--accent-gold)" stopOpacity="0" />
-                                        </radialGradient>
-                                        <filter id="glow">
-                                            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                                            <feMerge>
-                                                <feMergeNode in="coloredBlur" />
-                                                <feMergeNode in="SourceGraphic" />
-                                            </feMerge>
-                                        </filter>
-                                    </defs>
-                                    {/* Polygon Web Grids (4 Axis = Square grids) */}
-                                    {[0.2, 0.4, 0.6, 0.8, 1.0].map(scale => {
-                                        const r = 75 * scale;
-                                        return (
-                                            <polygon
-                                                key={scale}
-                                                points={RADAR_AXIS.map((_, i) => {
-                                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                                    return `${100 + Math.cos(angle) * r},${100 + Math.sin(angle) * r}`;
-                                                }).join(' ')}
-                                                fill="none"
-                                                stroke="var(--border)"
-                                                strokeWidth="0.5"
-                                                strokeDasharray="2"
-                                                opacity={0.5}
-                                            />
-                                        );
-                                    })}
-                                    {/* Axis Lines */}
-                                    {RADAR_AXIS.map((_, i) => {
-                                        const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                        return (
-                                            <line
-                                                key={i}
-                                                x1="100" y1="100"
-                                                x2={100 + Math.cos(angle) * 75}
-                                                y2={100 + Math.sin(angle) * 75}
-                                                stroke="var(--border)"
-                                                strokeWidth="0.5"
-                                            />
-                                        );
-                                    })}
+                {/* 3. Tech Radar */}
+                <div className="m-chart-panel radar-graph">
+                    <div className="m-chart-header">
+                        <h3>OpCo Radar</h3>
+                        <p>Platform Engagement</p>
+                    </div>
+                    <div className="m-chart-body">
+                        {isLoading ? (
+                            <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
+                        ) : (
+                            <svg viewBox="0 0 200 200" className="radar-svg">
+                                <defs>
+                                    <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                        <stop offset="0%" stopColor="var(--accent-gold)" stopOpacity="0.4" />
+                                        <stop offset="100%" stopColor="var(--accent-gold)" stopOpacity="0" />
+                                    </radialGradient>
+                                    <filter id="glow">
+                                        <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                {/* Polygon Web Grids (4 Axis = Square grids) */}
+                                {[0.2, 0.4, 0.6, 0.8, 1.0].map(scale => {
+                                    const r = 75 * scale;
+                                    return (
+                                        <polygon
+                                            key={scale}
+                                            points={RADAR_AXIS.map((_, i) => {
+                                                const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                                return `${100 + Math.cos(angle) * r},${100 + Math.sin(angle) * r}`;
+                                            }).join(' ')}
+                                            fill="none"
+                                            stroke="var(--border)"
+                                            strokeWidth="0.5"
+                                            strokeDasharray="2"
+                                            opacity={0.5}
+                                        />
+                                    );
+                                })}
+                                {/* Axis Lines */}
+                                {RADAR_AXIS.map((_, i) => {
+                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                    return (
+                                        <line
+                                            key={i}
+                                            x1="100" y1="100"
+                                            x2={100 + Math.cos(angle) * 75}
+                                            y2={100 + Math.sin(angle) * 75}
+                                            stroke="var(--border)"
+                                            strokeWidth="0.5"
+                                        />
+                                    );
+                                })}
 
-                                    {/* Data Polygon */}
-                                    <polygon
-                                        points={RADAR_DATA.map((v, i) => {
-                                            const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                            const r = (v / 100) * 75;
-                                            const x = 100 + Math.cos(angle) * r;
-                                            const y = 100 + Math.sin(angle) * r;
-                                            return `${x},${y}`;
-                                        }).join(' ')}
-                                        fill="url(#radarGrad)"
-                                        stroke="var(--accent-gold)"
-                                        strokeWidth="2"
-                                        filter="url(#glow)"
-                                    />
-
-                                    {/* Data Points & Labels */}
-                                    {RADAR_DATA.map((v, i) => {
+                                {/* Data Polygon */}
+                                <polygon
+                                    points={RADAR_DATA.map((v, i) => {
                                         const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
                                         const r = (v / 100) * 75;
                                         const x = 100 + Math.cos(angle) * r;
                                         const y = 100 + Math.sin(angle) * r;
-                                        const lx = 100 + Math.cos(angle) * 92;
-                                        const ly = 100 + Math.sin(angle) * 92;
-                                        return (
-                                            <g key={i}>
-                                                <circle cx={x} cy={y} r="3" fill="#fff" stroke="var(--accent-gold)" strokeWidth="2" />
-                                                <text
-                                                    x={lx} y={ly}
-                                                    fontSize="9"
-                                                    fill="var(--text-secondary)"
-                                                    textAnchor="middle"
-                                                    alignmentBaseline="middle"
-                                                    fontWeight="700"
-                                                    className="radar-label"
-                                                >
-                                                    {RADAR_AXIS[i]}
-                                                </text>
-                                            </g>
-                                        );
-                                    })}
-                                </svg>
-                            </div>
-                        </div>
-                    </>
-                )}
+                                        return `${x},${y}`;
+                                    }).join(' ')}
+                                    fill="url(#radarGrad)"
+                                    stroke="var(--accent-gold)"
+                                    strokeWidth="2"
+                                    filter="url(#glow)"
+                                />
+
+                                {/* Data Points & Labels */}
+                                {RADAR_DATA.map((v, i) => {
+                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                    const r = (v / 100) * 75;
+                                    const x = 100 + Math.cos(angle) * r;
+                                    const y = 100 + Math.sin(angle) * r;
+                                    const lx = 100 + Math.cos(angle) * 92;
+                                    const ly = 100 + Math.sin(angle) * 92;
+                                    return (
+                                        <g key={i}>
+                                            <circle cx={x} cy={y} r="3" fill="#fff" stroke="var(--accent-gold)" strokeWidth="2" />
+                                            <text
+                                                x={lx} y={ly}
+                                                fontSize="9"
+                                                fill="var(--text-secondary)"
+                                                textAnchor="middle"
+                                                alignmentBaseline="middle"
+                                                fontWeight="700"
+                                                className="radar-label"
+                                            >
+                                                {RADAR_AXIS[i]}
+                                            </text>
+                                        </g>
+                                    );
+                                })}
+                            </svg>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

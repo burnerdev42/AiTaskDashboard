@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Eye, EyeOff, Lock } from 'lucide-react';
 
@@ -9,6 +10,7 @@ export const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const { login } = useAuth();
+    const { showToast } = useToast();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -42,6 +44,7 @@ export const Login: React.FC = () => {
 
         const success = await login(email);
         if (success) {
+            showToast('Welcome back! You have signed in successfully.');
             navigate(from, { replace: true });
         } else {
             setError('Login failed. Please check your credentials or register.');

@@ -1,9 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 export const Register: React.FC = () => {
     const navigate = useNavigate();
+    const { register } = useAuth();
+    const { showToast } = useToast();
     const [formData, setFormData] = useState({
         name: '',
         opco: '',
@@ -45,7 +49,7 @@ export const Register: React.FC = () => {
         if (!/[A-Z]/.test(pwd)) return false;
         if (!/[a-z]/.test(pwd)) return false;
         if (!/[0-9]/.test(pwd)) return false;
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return false;
+        if (!/[!@#$%^&*(),.?":{}\|<>]/.test(pwd)) return false;
         return true;
     }, [formData.password]);
 
@@ -53,7 +57,7 @@ export const Register: React.FC = () => {
 
     const isFormValid = isEmailValid && isPasswordValid;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const newErrors: Record<string, string> = {};
@@ -68,13 +72,23 @@ export const Register: React.FC = () => {
         }
 
         setErrors({});
-        // Mock registration logic similar to mockup
-        localStorage.setItem('ip_user', JSON.stringify(formData));
-        localStorage.setItem('ip_loggedIn', 'true');
-        localStorage.setItem('isAuthenticated', 'true');
 
-        alert(`Registration successful! Welcome, ${formData.name}`);
-        navigate('/');
+        const success = await register({
+            name: formData.name,
+            email: formData.email,
+            role: formData.role,
+            opco: formData.opco,
+            platform: formData.platform,
+            about: formData.about,
+            interests: formData.interests,
+        });
+
+        if (success) {
+            showToast(`Registration successful! Welcome, ${formData.name}`);
+            navigate('/');
+        } else {
+            showToast('An account with this email already exists. Please sign in instead.', 'error');
+        }
     };
 
     const interestsList = [

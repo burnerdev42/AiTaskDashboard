@@ -61,7 +61,7 @@ export const SwimLanes: React.FC = () => {
             { id: 'Parking Lot', title: 'Parking<br/>Lot', max: 8, color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: 'Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
         ];
 
-    const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId && c.id.toUpperCase().startsWith('CHG'));
+    const getCardsByLane = (laneId: string) => cards.filter(c => c.stage === laneId);
 
     /* ── Drag & Drop Handlers ── */
     const handleDragStart = (e: React.DragEvent, cardId: string) => {

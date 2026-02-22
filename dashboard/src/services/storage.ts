@@ -19,15 +19,23 @@ export const storage = {
                 localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(MOCK_USERS));
             }
 
-            // Always refresh volatile data to pick up latest mock data structure changes
-            localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(MOCK_CHALLENGES));
-            localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(MOCK_NOTIFICATIONS));
-            localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(MOCK_SWIMLANES));
+            if (!localStorage.getItem(STORAGE_KEYS.CHALLENGES)) {
+                localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(MOCK_CHALLENGES));
+            }
 
-            if (MOCK_CHALLENGE_DETAILS && MOCK_CHALLENGE_DETAILS.length > 0) {
+            if (!localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS)) {
+                localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(MOCK_NOTIFICATIONS));
+            }
+
+            if (!localStorage.getItem(STORAGE_KEYS.SWIMLANES)) {
+                localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(MOCK_SWIMLANES));
+            }
+
+            if (!localStorage.getItem(STORAGE_KEYS.CHALLENGE_DETAILS) && MOCK_CHALLENGE_DETAILS && MOCK_CHALLENGE_DETAILS.length > 0) {
                 localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(MOCK_CHALLENGE_DETAILS));
             }
-            if (MOCK_IDEA_DETAILS && MOCK_IDEA_DETAILS.length > 0) {
+
+            if (!localStorage.getItem(STORAGE_KEYS.IDEA_DETAILS) && MOCK_IDEA_DETAILS && MOCK_IDEA_DETAILS.length > 0) {
                 localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(MOCK_IDEA_DETAILS));
             }
         } catch (e) {
@@ -115,6 +123,18 @@ export const storage = {
         return false;
     },
 
+    deleteUser: (email: string) => {
+        const users = storage.getUsers();
+        const updatedUsers = users.filter(u => u.email !== email);
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updatedUsers));
+
+        const currentUser = storage.getCurrentUser();
+        if (currentUser && currentUser.email === email) {
+            storage.setCurrentUser(null);
+        }
+        return true;
+    },
+
     updateChallenge: (challenge: Challenge) => {
         const challenges = storage.getChallenges();
         const index = challenges.findIndex(c => c.id === challenge.id);
@@ -183,7 +203,16 @@ export const storage = {
         const updatedSwimlanes = swimlanes.filter(s => s.id !== id);
         localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(updatedSwimlanes));
 
+        // Cascade delete: remove all ideas linked to this challenge
         const details = storage.getChallengeDetails();
+        const challengeDetail = details.find(d => d.id === id);
+        if (challengeDetail && challengeDetail.ideas && challengeDetail.ideas.length > 0) {
+            const ideaIds = challengeDetail.ideas.map((i: any) => i.id);
+            const allIdeas = storage.getIdeaDetails();
+            const updatedIdeas = allIdeas.filter(i => !ideaIds.includes(i.id));
+            localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(updatedIdeas));
+        }
+
         const updatedDetails = details.filter(d => d.id !== id);
         localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(updatedDetails));
     },
@@ -193,6 +222,11 @@ export const storage = {
         const updatedIdeas = ideas.filter(i => i.id !== ideaId);
         localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(updatedIdeas));
 
+        // Also remove from swim lanes if it exists there
+        const swimlanes = storage.getSwimLanes();
+        const updatedSwimlanes = swimlanes.filter(s => s.id !== ideaId);
+        localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(updatedSwimlanes));
+
         const challengeDetails = storage.getChallengeDetails();
         const challengeIndex = challengeDetails.findIndex(c => c.id === challengeId);
         if (challengeIndex !== -1) {
@@ -201,5 +235,104 @@ export const storage = {
             );
             localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(challengeDetails));
         }
+    },
+
+    addIdea: (challengeId: string, idea: Idea) => {
+        // Update Idea Details (for global idea list / detail view)
+        const ideas = storage.getIdeaDetails();
+        ideas.push(idea);
+        localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
+
+        // Update specific challenge's idea list
+        const challengeDetails = storage.getChallengeDetails();
+        const challengeIndex = challengeDetails.findIndex(c => c.id === challengeId);
+
+        const summaryIdea = {
+            id: idea.id,
+            title: idea.title,
+            author: idea.owner.name,
+            status: idea.status,
+            appreciations: idea.stats.appreciations,
+            comments: idea.stats.comments,
+            views: idea.stats.views
+        };
+
+        if (challengeIndex !== -1) {
+            if (!challengeDetails[challengeIndex].ideas) {
+                challengeDetails[challengeIndex].ideas = [];
+            }
+            challengeDetails[challengeIndex].ideas.push(summaryIdea);
+            localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(challengeDetails));
+        } else {
+            // Handle dynamically constructed challenges that aren't in detailed storage yet
+            const basicChallenges = storage.getChallenges();
+            const basicIndex = basicChallenges.findIndex(c => c.id === challengeId);
+            if (basicIndex !== -1) {
+                // If it's a basic challenge, we should probably promote it to a detailed one
+                // but for now let's just ensure we have it in detailed storage if we're adding ideas
+                const mockDetails = storage.getChallengeDetails();
+                const newDetail = {
+                    ...basicChallenges[basicIndex],
+                    problemStatement: basicChallenges[basicIndex].description,
+                    expectedOutcome: 'Pending detailed assessment',
+                    businessUnit: 'Global',
+                    department: 'Cross-functional',
+                    priority: basicChallenges[basicIndex].impact || 'Medium',
+                    estimatedImpact: 'TBD',
+                    challengeTags: basicChallenges[basicIndex].tags || [],
+                    timeline: 'TBD',
+                    portfolioOption: 'TBD',
+                    constraints: 'None specified yet',
+                    stakeholders: 'TBD',
+                    ideas: [summaryIdea],
+                    team: basicChallenges[basicIndex].team?.map(t => ({ ...t, role: 'Member' })) || [],
+                    activity: [],
+                    createdDate: 'Recently',
+                    updatedDate: 'Just now'
+                };
+                mockDetails.push(newDetail as any);
+                localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(mockDetails));
+            }
+        }
+    },
+
+    addChallenge: (challenge: ChallengeDetailData) => {
+        // 1. Update Detailed Data
+        const details = storage.getChallengeDetails();
+        details.push(challenge);
+        localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
+
+        // 2. Create and update basic challenge list
+        const challenges = storage.getChallenges();
+        const basicChallenge: Challenge = {
+            id: challenge.id,
+            title: challenge.title,
+            description: challenge.problemStatement.substring(0, 150) + '...',
+            stage: challenge.stage,
+            owner: challenge.owner,
+            accentColor: challenge.accentColor,
+            stats: challenge.stats,
+            tags: challenge.challengeTags,
+            team: challenge.team,
+            impact: challenge.priority as any
+        };
+        challenges.push(basicChallenge);
+        localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
+
+        // 3. Create and update swim lane card
+        const swimlanes = storage.getSwimLanes();
+        const swimlaneCard: SwimLaneCard = {
+            id: challenge.id,
+            title: challenge.title,
+            description: challenge.problemStatement.substring(0, 100) + '...',
+            owner: challenge.owner.name,
+            priority: challenge.priority as any,
+            stage: challenge.stage,
+            type: 'standard',
+            progress: 0,
+            value: challenge.estimatedImpact
+        };
+        swimlanes.push(swimlaneCard);
+        localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(swimlanes));
     }
 };
