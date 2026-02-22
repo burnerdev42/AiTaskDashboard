@@ -67,8 +67,17 @@ export const SubmitChallenge: React.FC = () => {
             return;
         }
 
+        const challenges = storage.getChallenges();
+        const nextIdNumber = challenges.length > 0
+            ? Math.max(...challenges.map(c => {
+                const parts = c.id.split('-');
+                return parts.length > 1 ? parseInt(parts[1]) : 0;
+            })) + 1
+            : 1;
+        const newChallengeId = `CH-${String(nextIdNumber).padStart(3, '0')}`;
+
         const newChallenge: ChallengeDetailData = {
-            id: `CH-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+            id: newChallengeId,
             title,
             description: problemStatement,
             stage: 'Challenge Submitted',
