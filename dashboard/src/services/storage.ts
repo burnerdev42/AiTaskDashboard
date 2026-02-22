@@ -15,6 +15,20 @@ const STORAGE_KEYS = {
 export const storage = {
     initialize: () => {
         try {
+            // Migration: Replace legacy CHG- IDs with standard CH- IDs across all storage items
+            [
+                STORAGE_KEYS.CHALLENGES,
+                STORAGE_KEYS.CHALLENGE_DETAILS,
+                STORAGE_KEYS.IDEA_DETAILS,
+                STORAGE_KEYS.SWIMLANES,
+                STORAGE_KEYS.NOTIFICATIONS
+            ].forEach(key => {
+                const data = localStorage.getItem(key);
+                if (data && data.includes('CHG-')) {
+                    localStorage.setItem(key, data.replace(/CHG-/g, 'CH-'));
+                }
+            });
+
             if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
                 localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(MOCK_USERS));
             }
