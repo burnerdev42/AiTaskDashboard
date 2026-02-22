@@ -3,7 +3,7 @@ import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
 import { CommentDocument } from '../../models/comments/comment.schema';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
-import { TargetType } from '../../common/enums/target-type.enum';
+
 import { Types } from 'mongoose';
 
 describe('CommentsService', () => {
@@ -14,7 +14,7 @@ describe('CommentsService', () => {
     _id: '1',
     userId: new Types.ObjectId(),
     comment: 'Test comment',
-    type: TargetType.CHALLENGE,
+    type: 'CH',
     parentId: new Types.ObjectId(),
     createdAt: new Date(),
   };
@@ -49,7 +49,7 @@ describe('CommentsService', () => {
         .mockResolvedValue(mockComment as unknown as CommentDocument);
       const dto: CreateCommentDto = {
         comment: 'Test comment',
-        type: TargetType.CHALLENGE,
+        type: 'CH',
         parentId: new Types.ObjectId().toHexString(),
         userId: new Types.ObjectId().toHexString(),
       };
@@ -65,7 +65,7 @@ describe('CommentsService', () => {
         .spyOn(repository, 'find')
         .mockResolvedValue([mockComment] as unknown as CommentDocument[]);
       const parentId = new Types.ObjectId().toHexString();
-      const result = await service.findByParent(parentId, TargetType.CHALLENGE);
+      const result = await service.findByParent(parentId, 'CH');
       expect(result).toEqual([mockComment]);
       expect(repository.find).toHaveBeenCalled();
     });

@@ -1,103 +1,63 @@
-/**
- * @file user.schema.ts
- * @description Database schema for User entities.
- * @responsibility Handles user profiles, authentication metadata, and role assignments.
- * @belongsTo Data Access Layer (Models)
- */
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from '../../common/database/abstract.schema';
-import * as bcrypt from 'bcryptjs';
 import { Document } from 'mongoose';
-import { UserRole } from '../../common/enums/user-role.enum';
+import * as bcrypt from 'bcryptjs';
+import {
+  OPCO_LIST,
+  ALL_PLATFORMS,
+  COMPANY_TECH_ROLES,
+  INTEREST_AREAS,
+  AUTH_ROLES,
+  USER_STATUSES,
+} from '../../common/constants/app-constants';
 
-/**
- * Type definition for User document in MongoDB.
- */
 export type UserDocument = User & Document;
 
-/**
- * User Class representing a system participant.
- */
 @Schema({ timestamps: true })
-export class User extends AbstractDocument {
-  /**
-   * Full name of the user.
-   */
+export class User {
   @Prop({ required: true })
   name: string;
 
-  /**
-   * Unique email address used for login.
-   */
+  @Prop({ enum: [...OPCO_LIST] })
+  opco: string;
+
+  @Prop({ enum: [...ALL_PLATFORMS] })
+  platform: string;
+
+  @Prop({ enum: [...COMPANY_TECH_ROLES] })
+  companyTechRole: string;
+
   @Prop({ required: true, unique: true })
   email: string;
 
-  /**
-   * Hashed password.
-   */
   @Prop({ required: true })
   password: string;
 
-  /**
-   * System-wide role for access control.
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(UserRole),
-    default: UserRole.USER,
-  })
-  role: UserRole;
+  @Prop({ type: [String], default: [] })
+  interestAreas: string[];
 
-  /**
-   * URL to profile image.
-   */
-  @Prop()
-  avatar?: string;
+  @Prop({ enum: [...AUTH_ROLES], default: 'USER' })
+  role: string;
 
-  /**
-   * Monogram initial for placeholder avatars.
-   */
-  @Prop()
-  initial?: string;
+  @Prop({ enum: [...USER_STATUSES], default: 'PENDING' })
+  status: string;
 
-  /**
-   * HEX color for placeholder avatars.
-   */
-  @Prop()
-  avatarColor?: string;
+  @Prop({ default: 0 })
+  innovationScore: number;
 
-  /**
-   * Operating Company affiliation.
-   */
-  @Prop()
-  opco?: string;
+  @Prop({ type: [String], default: [] })
+  upvotedChallengeList: string[];
 
-  /**
-   * Primary internal platform used.
-   */
-  @Prop()
-  platform?: string;
-
-  /**
-   * Areas of professional interest.
-   */
-  @Prop([String])
-  interests?: string[];
+  @Prop({ type: [String], default: [] })
+  upvotedAppreciatedIdeaList: string[];
 }
 
-/**
- * Schema Factory with pre-save hooks for security.
- */
 export const UserSchema = SchemaFactory.createForClass(User);
 
-/**
- * Mongoose middleware to hash passwords before saving.
- */
-UserSchema.pre('save', async function () {
+UserSchema.pre('save', async function (this: UserDocument, next: Function) {
   if (!this.isModified('password')) {
-    return;
+    return next();
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });

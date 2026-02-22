@@ -1,19 +1,26 @@
-# User Activity Database Model Specification
+# Activity Database Model Specification
 
-This specification is designed to be fed to an LLM for generating a MongoDB (Mongoose) schema.
+> Source: `backend/requirement/Data requirements.txt`
 
 ## Collection Name
 `activities`
 
 ## Database Fields
 
-- `_id`: MongoDB ObjectId (Hex String PK). Use the default Mongoose `_id`.
-- `Type`: String. Enum with values: `challenge_created`, `idea_created`, `challenge_status_update`, `challenge_edited`, `idea_edited`, `challenge_upvoted`, `idea_upvoted`, `challenge_commented`, `idea_commented`, `challenge_subscribed`, `idea_subscribed`, `challenge_deleted`, `idea_deleted`, `log_in`, `log_out`
-- `fk_id`: String or MongoDB ObjectId (Nullable: ID of related Challenge, Idea, or Comment; can be null for login/logout actions)
-- `userId`: MongoDB ObjectId or String (Reference to the User collection)
-- `CreatedAt`: DateTime (Should map to Mongoose `createdAt` timestamp)
-- `Month`: Number (Integer, derived from `CreatedAt`)
-- `Year`: Number (Integer, derived from `CreatedAt`)
+| Field | Mongoose Type | Required | Default | Notes |
+|-------|--------------|----------|---------|-------|
+| `_id` | `ObjectId` | auto | auto | MongoDB default PK |
+| `type` | `String` | yes | — | → `ACTIVITY_TYPES` (15 values) |
+| `fk_id` | `String` | no | `null` | Nullable. ID of related Challenge, Idea, or Comment; null for login/logout |
+| `userId` | `String` | yes | — | User Hex ID (ref: User) |
+| `month` | `Number` | no | — | Integer, derived from `createdAt` via pre-save hook |
+| `year` | `Number` | no | — | Integer, derived from `createdAt` via pre-save hook |
+
+**Options:** `{ timestamps: true }` — auto-manages `createdAt`.
+
+**Pre-save hook:** Extract `month` (1–12) and `year` from `createdAt`.
+
+**Indexes:** `{ userId: 1, createdAt: -1 }`, `{ type: 1 }`, `{ fk_id: 1 }` for efficient querying.
 
 ## Generating the Schema
-Generate the Mongoose schema representing the fields above. Please apply standard camelCase formatting for the property names. Implement the specified constraints (like the enums and nullable attributes) where indicated.
+Generate a Mongoose schema matching the above fields. Use `String` type for `userId` and `fk_id`. Add pre-save hook for `month`/`year`. Add indexes.

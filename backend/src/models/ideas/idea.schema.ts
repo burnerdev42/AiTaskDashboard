@@ -1,161 +1,57 @@
-/**
- * @file idea.schema.ts
- * @description Database schema for Idea entities.
- * @responsibility Defines the structure and lifecycle of an idea before it becomes a challenge.
- * @belongsTo Data Access Layer (Models)
- */
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from '../../common/database/abstract.schema';
-import { SchemaTypes, Types, Document } from 'mongoose';
-import { IdeaStatus } from '../../common/enums/idea-status.enum';
-import { Priority } from '../../common/enums/priority.enum';
+import { Document } from 'mongoose';
 
-/**
- * Type definition for Idea document in MongoDB.
- */
 export type IdeaDocument = Idea & Document;
 
-/**
- * Idea Class representing a proposal for an innovation.
- */
 @Schema({ timestamps: true })
-export class Idea extends AbstractDocument {
-  /**
-   * Title of the idea.
-   */
+export class Idea {
+  @Prop({ required: true, unique: true })
+  ideaId: string;
+
   @Prop({ required: true })
   title: string;
 
-  /**
-   * Brief explanation of the idea.
-   */
   @Prop({ required: true })
   description: string;
 
-  /**
-   * Current status in the evaluation funnel.
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(IdeaStatus),
-    default: IdeaStatus.IDEATION,
-  })
-  status: IdeaStatus;
-
-  /**
-   * User who submitted the idea.
-   */
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
-  owner?: Types.ObjectId;
-
-  /**
-   * The challenge this idea is addressing (if any).
-   */
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'Challenge' })
-  linkedChallenge?: Types.ObjectId;
-
-  /**
-   * Keywords for search and grouping.
-   */
-  @Prop([String])
-  tags: string[];
-
-  /**
-   * Community engagement metrics.
-   */
-  @Prop({
-    type: {
-      appreciations: { type: Number, default: 0 },
-      comments: { type: Number, default: 0 },
-      views: { type: Number, default: 0 },
-    },
-    default: {},
-  })
-  stats: {
-    appreciations: number;
-    comments: number;
-    views: number;
-  };
-
-  /**
-   * Step-by-step approach to realization.
-   */
-  @Prop([String])
-  approach: string[];
-
-  /**
-   * The business problem solved.
-   */
   @Prop()
-  problemStatement?: string;
+  proposedSolution: string;
 
-  /**
-   * Description of the solution.
-   */
+  @Prop({ required: true })
+  challengeId: string;
+
+  @Prop({ default: 0 })
+  appreciationCount: number;
+
+  @Prop({ default: 0 })
+  viewCount: number;
+
+  @Prop({ required: true })
+  userId: string;
+
+  @Prop({ type: [String], default: [] })
+  subscription: string[];
+
   @Prop()
-  proposedSolution?: string;
+  month: number;
 
-  /**
-   * Qualitative impact description.
-   */
   @Prop()
-  expectedImpact?: string;
+  year: number;
 
-  /**
-   * Rough timeline/steps.
-   */
-  @Prop()
-  implementationPlan?: string;
+  @Prop({ default: true })
+  status: boolean;
 
-  /**
-   * Quantifiable financial targets.
-   */
-  @Prop()
-  expectedSavings?: string;
-
-  /**
-   * Perceived significance of the impact.
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(Priority),
-    default: Priority.MEDIUM,
-  })
-  impactLevel: Priority;
-
-  /**
-   * Urgency ranking.
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(Priority),
-    default: Priority.MEDIUM,
-  })
-  priority: Priority;
-
-  /**
-   * History of actions and feedback.
-   */
-  @Prop([
-    {
-      author: String,
-      avatar: String,
-      avatarColor: String,
-      text: String,
-      time: { type: Date, default: Date.now },
-    },
-  ])
-  activity?: {
-    author: string;
-    avatar?: string;
-    avatarColor?: string;
-    text: string;
-    time: Date;
-  }[];
+  @Prop({ type: [String], default: [] })
+  upVotes: string[];
 }
 
-/**
- * Factory for creating the Mongoose Schema.
- */
 export const IdeaSchema = SchemaFactory.createForClass(Idea);
+
+IdeaSchema.pre('save', function (this: IdeaDocument, next: Function) {
+  if (this.isNew || this.isModified('createdAt')) {
+    const date = (this as any).createdAt || new Date();
+    this.month = date.getMonth() + 1;
+    this.year = date.getFullYear();
+  }
+  next();
+});

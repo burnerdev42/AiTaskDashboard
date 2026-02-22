@@ -51,10 +51,8 @@ export class DashboardService extends AbstractService {
    * @returns Array of swim lane cards for the dashboard
    */
   async getSwimLanes(): Promise<SwimLaneCard[]> {
-    const challenges = (await this.challengesService.findAll(
-      {},
-    )) as ChallengeForSwimLane[];
-    const ideas = (await this.ideasService.findAll({})) as IdeaForSwimLane[];
+    const challenges = (await this.challengesService.findAll(1000, 0)) as unknown as ChallengeForSwimLane[];
+    const ideas = (await this.ideasService.findAll(1000, 0)) as unknown as IdeaForSwimLane[];
 
     const challengeCards = this.mapChallengesToCards(challenges);
     const ideaCards = this.mapIdeasToCards(ideas);

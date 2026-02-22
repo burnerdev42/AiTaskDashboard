@@ -1,28 +1,32 @@
 # Idea Database Model Specification
 
-This specification is designed to be fed to an LLM for generating a MongoDB (Mongoose) schema.
+> Source: `backend/requirement/Data requirements.txt`
 
 ## Collection Name
 `ideas`
 
 ## Database Fields
 
-- `_id`: MongoDB ObjectId (Hex String PK). Use the default Mongoose `_id`.
-- `Idea Id`: String. Format: `ID-0001` (Programmatic 0001-9999)
-- `Title`: String
-- `Description / Idea Summary`: String
-- `Proposed Solution`: String
-- `Challenge Id`: String (Link to Challenge collection)
-- `Appreciation Count` (Upvote): Number (Long)
-- `View Count`: Number (Long)
-- `User Id`: String (Creator mongo hex ID)
-- `Subscription`: List of Strings (User hex IDs, default [])
-- `Created At`: DateTime
-- `Month`: Number (Int, from Created At)
-- `Year`: Number (Int, from Created At)
-- `Updated At`: DateTime (Initially same as Created At)
-- `Status`: Boolean (Accepted/Declined - Default: true/Accepted)
-- `UpVotes`: userId list - default []
+| Field | Mongoose Type | Required | Default | Notes |
+|-------|--------------|----------|---------|-------|
+| `_id` | `ObjectId` | auto | auto | MongoDB default PK |
+| `ideaId` | `String` | yes | — | Unique. Format: `ID-0001` to `ID-9999` (ID = Idea) |
+| `title` | `String` | yes | — | |
+| `description` | `String` | yes | — | Idea Summary |
+| `proposedSolution` | `String` | no | — | |
+| `challengeId` | `String` | yes | — | Link to Challenge collection (virtualId) |
+| `appreciationCount` | `Number` | no | `0` | Upvote count (Long) |
+| `viewCount` | `Number` | no | `0` | Long |
+| `userId` | `String` | yes | — | Creator Mongo Hex ID (ref: User) |
+| `subscription` | `[String]` | no | `[]` | List of User IDs |
+| `month` | `Number` | no | — | Integer, derived from `createdAt` via pre-save hook |
+| `year` | `Number` | no | — | Integer, derived from `createdAt` via pre-save hook |
+| `status` | `Boolean` | no | `true` | Accepted/Declined. Default: Accepted |
+| `upVotes` | `[String]` | no | `[]` | List of User IDs |
+
+**Options:** `{ timestamps: true }` — auto-manages `createdAt` and `updatedAt`.
+
+**Pre-save hook:** Extract `month` (1–12) and `year` from `createdAt`.
 
 ## Generating the Schema
-Please generate a Mongoose schema based on the spec above. Convert field names to standard camelCase. Ensure proper relationships (`Schema.Types.ObjectId` with `ref`) if suitable. Use the `timestamps: true` configuration for generating timestamps.
+Generate a Mongoose schema matching the above fields. Use `timestamps: true`. Use `String` type for `userId` and `challengeId` (not ObjectId). Add pre-save hook for `month`/`year`.

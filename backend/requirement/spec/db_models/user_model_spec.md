@@ -1,27 +1,31 @@
 # User Database Model Specification
 
-This specification is designed to be fed to an LLM for generating a MongoDB (Mongoose) schema.
+> Source: `backend/requirement/Data requirements.txt`
 
 ## Collection Name
 `users`
 
 ## Database Fields
 
-- `_id`: MongoDB ObjectId (Hex String PK). Use the default Mongoose `_id`.
-- `Name`: String
-- `Opco`: String (Enum, conceptually a hardcoded dropdown)
-- `Platform`: String (Enum, conceptually a hardcoded dropdown)
-- `Company Tech Role`: String
-- `Email`: String (Must be a Unique Identifier)
-- `Password`: String (encrypted string)
-- `Interest Areas`: List of Strings (Enum/Hardcoded options). Default: `[]`
-- `Role`: String (Enum: `ADMIN`, `MEMBER`, `USER`)
-- `Created At`: DateTime (Should map to Mongoose's `createdAt` timestamp)
-- `Updated At`: DateTime (Should map to Mongoose's `updatedAt` timestamp)
-- `Status`: String (Enum: `PENDING`, `APPROVED`, `BLOCKED`, `INACTIVE`)
-- `Innovation Score`: Number (Integer between 1 and 999)
-- `Upvoted Challenge List`: List of Strings or ObjectIds (References to Challenge IDs). Default: `[]`
-- `Upvoted/Appreciated Idea List`: List of Strings or ObjectIds (References to Idea IDs). Default: `[]`
+| Field | Mongoose Type | Required | Default | Notes |
+|-------|--------------|----------|---------|-------|
+| `_id` | `ObjectId` | auto | auto | MongoDB default PK |
+| `name` | `String` | yes | — | |
+| `opco` | `String` | no | — | → `OPCO_LIST` |
+| `platform` | `String` | no | — | → Value from `OPCO_PLATFORM_MAP[opco]` |
+| `companyTechRole` | `String` | no | — | → `COMPANY_TECH_ROLES` |
+| `email` | `String` | yes | — | Unique Identifier |
+| `password` | `String` | yes | — | Encrypted (bcrypt hashed) |
+| `interestAreas` | `[String]` | no | `[]` | → `INTEREST_AREAS` |
+| `role` | `String` | no | `USER` | → `AUTH_ROLES` |
+| `status` | `String` | no | `PENDING` | → `USER_STATUSES` |
+| `innovationScore` | `Number` | no | `0` | Integer, range 1–999 |
+| `upvotedChallengeList` | `[String]` | no | `[]` | List of Challenge IDs |
+| `upvotedAppreciatedIdeaList` | `[String]` | no | `[]` | List of Idea IDs |
+
+**Options:** `{ timestamps: true }` — auto-manages `createdAt` and `updatedAt`.
+
+**Pre-save hook:** Hash `password` with bcrypt before save (only if modified).
 
 ## Generating the Schema
-Please generate a Mongoose schema matching the exact field names (in standard camelCase). Include appropriate Mongoose schema configurations like `timestamps: true` for `createdAt` and `updatedAt`.
+Generate a Mongoose schema matching the above fields. Use `timestamps: true`. Add pre-save hook for password hashing. Email must be unique.

@@ -775,7 +775,7 @@ components:
         priority: { type: string }
         tags: { type: array, items: { type: string }, default: ["ai"] }
         constraint: { type: string }
-        stackeHolder: { type: string }
+        stakeHolder: { type: string }
         virtualId: { type: string }
         status: { type: string }
         userId: { type: string }
@@ -794,7 +794,6 @@ components:
         title: { type: string }
         description: { type: string }
         proposedSolution: { type: string }
-        expectedImpact: { type: string }
         challengeId: { type: string }
         appreciationCount: { type: integer }
         viewCount: { type: integer }
@@ -839,7 +838,7 @@ components:
           type: string
           enum: [
             'challenge_created', 'challenge_status_update', 'challenge_edited',
-            'idea_edited', 'challenge_upvoted', 'idea_upvoted',
+            'idea_edited', 'challenge_upvoted', 'challenge_downvoted', 'idea_upvoted',
             'challenge_commented', 'idea_commented', 'challenge_subscribed',
             'idea_subscribed', 'challenge_deleted', 'idea_deleted'
           ]

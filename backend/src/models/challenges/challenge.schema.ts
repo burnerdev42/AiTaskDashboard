@@ -1,140 +1,92 @@
-/**
- * @file challenge.schema.ts
- * @description Database schema for Challenge entities.
- * @responsibility Defines the structure, validation, and relationships for challenges.
- * @belongsTo Data Access Layer (Models)
- */
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from '../../common/database/abstract.schema';
-import { SchemaTypes, Types, Document } from 'mongoose';
-import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
-import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
-import { Priority } from '../../common/enums/priority.enum';
+import { Document } from 'mongoose';
+import {
+  OPCO_LIST,
+  ALL_PLATFORMS,
+  TIMELINE_OPTIONS,
+  PORTFOLIO_LANES,
+  PRIORITY_LEVELS,
+  SWIM_LANE_CODES,
+} from '../../common/constants/app-constants';
 
-/**
- * Type definition for Challenge document in MongoDB.
- */
 export type ChallengeDocument = Challenge & Document;
 
-/**
- * Challenge Class representing a strategic initiative or problem to be solved.
- * Part of the Innovation Pipeline.
- */
 @Schema({ timestamps: true })
-export class Challenge extends AbstractDocument {
-  /**
-   * Primary title of the challenge.
-   */
+export class Challenge {
   @Prop({ required: true })
   title: string;
 
-  /**
-   * Detailed breakdown of what the challenge entails.
-   */
+  @Prop({ required: true, enum: [...OPCO_LIST] })
+  opco: string;
+
+  @Prop({ required: true, enum: [...ALL_PLATFORMS] })
+  platform: string;
+
   @Prop({ required: true })
   description: string;
 
-  /**
-   * Short summary text for the challenge.
-   */
   @Prop()
-  summary?: string;
+  summary: string;
 
-  /**
-   * Operating company list (dropdown selection from UI).
-   */
-  @Prop([String])
-  opco: string[];
-
-  /**
-   * Platform list (dropdown selection from UI).
-   */
-  @Prop([String])
-  platform: string[];
-
-  /**
-   * Expected outcome of the challenge (long text).
-   */
   @Prop()
-  outcome?: string;
+  outcome: string;
 
-  /**
-   * Timeline selection from UI dropdown.
-   */
-  @Prop()
-  timeline?: string;
+  @Prop({ enum: [...TIMELINE_OPTIONS] })
+  timeline: string;
 
-  /**
-   * Position in the innovation portfolio pipeline.
-   * Controls Swimlane view.
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(ChallengeStage),
-    default: ChallengeStage.IDEATION,
-  })
-  portfolioLane: ChallengeStage;
+  @Prop({ enum: [...PORTFOLIO_LANES] })
+  portfolioLane: string;
 
-  /**
-   * Reference to the User who owns/manages this challenge.
-   */
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
-  owner?: Types.ObjectId;
+  @Prop({ enum: [...PRIORITY_LEVELS] })
+  priority: string;
 
-  /**
-   * Current workflow status of the challenge.
-   * @default ChallengeStatus.SUBMITTED
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(ChallengeStatus),
-    default: ChallengeStatus.SUBMITTED,
-  })
-  status: ChallengeStatus;
-
-  /**
-   * Level of urgency or importance.
-   */
-  @Prop({
-    type: String,
-    enum: Object.values(Priority),
-    default: Priority.MEDIUM,
-  })
-  priority: Priority;
-
-  /**
-   * Contextual tags for categorization.
-   */
-  @Prop([String])
+  @Prop({ type: [String], default: ['ai'] })
   tags: string[];
 
-  /**
-   * Known constraints or limitations.
-   */
   @Prop()
-  constraint?: string;
+  constraint: string;
 
-  /**
-   * Key stakeholder(s) for this challenge.
-   */
   @Prop()
-  stakeholder?: string;
+  stakeHolder: string;
 
-  /**
-   * Number of linked ideas. Maintained as a denormalized counter.
-   */
+  @Prop({ required: true, unique: true })
+  virtualId: string;
+
+  @Prop({ required: true, enum: SWIM_LANE_CODES })
+  status: string;
+
+  @Prop({ required: true })
+  userId: string;
+
+  @Prop()
+  month: number;
+
+  @Prop()
+  year: number;
+
+  @Prop({ type: [String], default: [] })
+  upVotes: string[];
+
+  @Prop({ type: [String], default: [] })
+  subcriptions: string[];
+
   @Prop({ default: 0 })
-  ideasCount: number;
+  viewCount: number;
 
-  /**
-   * List of contributors (Idea owners linked to this challenge).
-   */
-  @Prop([{ type: SchemaTypes.ObjectId, ref: 'User' }])
-  contributor: Types.ObjectId[];
+  @Prop({ type: Date, default: null })
+  timestampOfStatusChangedToPilot: Date;
+
+  @Prop({ type: Date, default: null })
+  timestampOfCompleted: Date;
 }
 
-/**
- * Factory for creating the Mongoose Schema with metadata.
- */
 export const ChallengeSchema = SchemaFactory.createForClass(Challenge);
+
+ChallengeSchema.pre('save', function (this: ChallengeDocument, next: Function) {
+  if (this.isNew || this.isModified('createdAt')) {
+    const date = (this as any).createdAt || new Date();
+    this.month = date.getMonth() + 1;
+    this.year = date.getFullYear();
+  }
+  next();
+});

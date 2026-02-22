@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChallengesService } from './challenges.service';
-import { ChallengesRepository } from './challenges.repository';
+import { getModelToken } from '@nestjs/mongoose';
+import { Challenge } from '../../models/challenges/challenge.schema';
 import { IdeasService } from '../ideas/ideas.service';
-import { UserActionsService } from '../user-actions/user-actions.service';
+import { ActivitiesService } from '../activities/activities.service';
 import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
 import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
 import { Priority } from '../../common/enums/priority.enum';
-import { TargetType } from '../../common/enums/target-type.enum';
-import { Types } from 'mongoose';
+import { Types, Model } from 'mongoose';
 
 describe('ChallengesService', () => {
   let service: ChallengesService;
-  let challengesRepository: ChallengesRepository;
+  let challengeModel: Model<any>;
   let ideasService: IdeasService;
-  let userActionsService: UserActionsService;
+  let activitiesService: ActivitiesService;
 
   const mockOwnerId = new Types.ObjectId();
   const mockChallengeId = new Types.ObjectId();
@@ -60,20 +60,30 @@ describe('ChallengesService', () => {
     },
   ];
 
-  const mockChallengesRepository = {
-    create: jest.fn().mockResolvedValue(mockChallenge),
-    find: jest.fn().mockResolvedValue([mockChallenge]),
-    findOne: jest.fn().mockResolvedValue(mockChallenge),
-    findOneAndUpdate: jest.fn().mockResolvedValue(mockChallenge),
-    delete: jest.fn().mockResolvedValue(mockChallenge),
-  };
+  const mockChallengesRepository: any = jest.fn().mockImplementation((dto) => ({
+    ...dto,
+    save: jest.fn().mockResolvedValue({ ...dto, _id: mockChallengeId, userId: dto.userId || '1' }),
+  }));
+  Object.assign(mockChallengesRepository, {
+    find: jest.fn().mockReturnThis(),
+    findOne: jest.fn().mockReturnThis(),
+    findOneAndUpdate: jest.fn().mockReturnThis(),
+    deleteOne: jest.fn().mockReturnThis(),
+    sort: jest.fn().mockReturnThis(),
+    select: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    lean: jest.fn().mockReturnThis(),
+    exec: jest.fn().mockResolvedValue([mockChallenge]),
+  });
 
   const mockIdeasService = {
     findByChallenge: jest.fn().mockResolvedValue(mockIdeas),
   };
 
-  const mockUserActionsService = {
-    findByTarget: jest.fn().mockResolvedValue(mockActions),
+  const mockActivitiesService = {
+    create: jest.fn().mockResolvedValue({}),
+    deleteByFkId: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
@@ -82,17 +92,16 @@ describe('ChallengesService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ChallengesService,
-        { provide: ChallengesRepository, useValue: mockChallengesRepository },
+        { provide: getModelToken(Challenge.name), useValue: mockChallengesRepository },
         { provide: IdeasService, useValue: mockIdeasService },
-        { provide: UserActionsService, useValue: mockUserActionsService },
+        { provide: ActivitiesService, useValue: mockActivitiesService },
       ],
     }).compile();
 
     service = module.get<ChallengesService>(ChallengesService);
-    challengesRepository =
-      module.get<ChallengesRepository>(ChallengesRepository);
+    challengeModel = module.get<Model<any>>(getModelToken(Challenge.name));
     ideasService = module.get<IdeasService>(IdeasService);
-    userActionsService = module.get<UserActionsService>(UserActionsService);
+    activitiesService = module.get<ActivitiesService>(ActivitiesService);
   });
 
   it('should be defined', () => {
@@ -110,7 +119,7 @@ describe('ChallengesService', () => {
 
       const result = await service.create(dto);
 
-      expect(challengesRepository.create).toHaveBeenCalled();
+      expect(mockChallengesRepository).toHaveBeenCalled();
       expect(result.title).toBe('AI Innovation');
     });
   });
@@ -119,53 +128,30 @@ describe('ChallengesService', () => {
     it('should return paginated challenges with short user info', async () => {
       const result = await service.findAll({ page: 1, limit: 10 });
 
-      expect(challengesRepository.find).toHaveBeenCalled();
+      expect(challengeModel.find).toHaveBeenCalled();
       expect(result).toHaveLength(1);
     });
   });
 
   describe('findOne', () => {
-    it('should return enriched challenge with ideas and user actions', async () => {
+    it('should return challenge', async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const result = await service.findOne(mockChallengeId.toHexString());
+      const result = await service.findByVirtualId(mockChallengeId.toHexString());
 
-      expect(challengesRepository.findOne).toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(ideasService.findByChallenge).toHaveBeenCalledWith(
-        mockChallengeId.toHexString(),
-      );
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(userActionsService.findByTarget).toHaveBeenCalledWith(
-        mockChallengeId.toHexString(),
-        TargetType.CHALLENGE,
-      );
-
-      expect(result).toHaveProperty('ideas');
-
-      expect(result).toHaveProperty('upvotes');
-
-      expect(result).toHaveProperty('downvotes');
-
-      expect(result).toHaveProperty('subscriptions');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(result.ideas).toHaveLength(1);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(result.upvotes).toHaveLength(1);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(result.downvotes).toHaveLength(1);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(result.subscriptions).toHaveLength(1);
+      expect(challengeModel.findOne).toHaveBeenCalledWith({ virtualId: mockChallengeId.toHexString() });
     });
   });
 
   describe('update', () => {
     it('should update a challenge', async () => {
       const dto = { title: 'Updated', description: 'Updated desc' };
-      const result = await service.update(mockChallengeId.toHexString(), dto);
+      mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge); // for findOneAndUpdate
+      const result = await service.updateByVirtualId(mockChallengeId.toHexString(), dto);
 
-      expect(challengesRepository.findOneAndUpdate).toHaveBeenCalledWith(
-        { _id: mockChallengeId.toHexString() },
+      expect(challengeModel.findOneAndUpdate).toHaveBeenCalledWith(
+        { virtualId: mockChallengeId.toHexString() },
         dto,
+        { new: true }
       );
       expect(result.title).toBe('AI Innovation');
     });
@@ -173,12 +159,14 @@ describe('ChallengesService', () => {
 
   describe('remove', () => {
     it('should delete a challenge', async () => {
-      const result = await service.remove(mockChallengeId.toHexString());
+      mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge); // for findByIdAndDelete (assuming logic uses _id)
+      mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge); // for fallback
+      const result = await service.removeByVirtualId(mockChallengeId.toHexString());
 
-      expect(challengesRepository.delete).toHaveBeenCalledWith({
-        _id: mockChallengeId.toHexString(),
+      expect(challengeModel.deleteOne).toHaveBeenCalledWith({
+        _id: mockChallenge._id,
       });
-      expect(result._id).toEqual(mockChallengeId);
+      expect(result).toBeUndefined();
     });
   });
 });

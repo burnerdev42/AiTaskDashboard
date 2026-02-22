@@ -1,37 +1,41 @@
 # Challenge Database Model Specification
 
-This specification is designed to be fed to an LLM for generating a MongoDB (Mongoose) schema.
+> Source: `backend/requirement/Data requirements.txt`
 
 ## Collection Name
 `challenges`
 
 ## Database Fields
 
-- `_id`: MongoDB ObjectId (Hex String PK). Use the default Mongoose `_id`.
-- `Title`: String
-- `opco`: String (Enum from list of hardcoded options)
-- `Platform`: String (Enum from list of hardcoded options)
-- `Description`: Long text - String
-- `Summary`: String
-- `Outcome`: String
-- `Timeline`: String (Enum from list of hardcoded options)
-- `Portfolio Lane`: String (Enum from list of hardcoded options)
-- `Priority`: String (Hardcoded)
-- `Tags`: List of Strings. Default: `["ai"]`
-- `Constraint`: String
-- `StackeHolder`: String
-- `Virtual Id`: String. Format `CH-001` (Programmatically generated 001 to 999)
-- `Status`: String (Swim lane status)
-- `userId`: MongoDB ObjectId (Reference to the User collection)
-- `CreatedAt`: DateTime
-- `month`: Number (Integer)
-- `year`: Number (Integer)
-- `updatedAt`: DateTime (Initially same as `CreatedAt`)
-- `upVotes`: List of MongoDB ObjectIds (userId list). Default: `[]`
-- `Subcriptions`: List of MongoDB ObjectIds (userId list). Default: `[]`
-- `View count`: Number (Long)
-- `timestampOfStatusChangedToPilot`: DateTime (Nullable)
-- `timestampOfCompleted`: DateTime (Nullable)
+| Field | Mongoose Type | Required | Default | Notes |
+|-------|--------------|----------|---------|-------|
+| `_id` | `ObjectId` | auto | auto | MongoDB default PK |
+| `title` | `String` | yes | — | |
+| `opco` | `String` | yes | — | → `OPCO_LIST` |
+| `platform` | `String` | yes | — | → Value from `OPCO_PLATFORM_MAP[opco]` |
+| `description` | `String` | yes | — | Long text |
+| `summary` | `String` | no | — | |
+| `outcome` | `String` | no | — | |
+| `timeline` | `String` | no | — | → `TIMELINE_OPTIONS` |
+| `portfolioLane` | `String` | no | — | → `PORTFOLIO_LANES` |
+| `priority` | `String` | no | — | → `PRIORITY_LEVELS` |
+| `tags` | `[String]` | no | `["ai"]` | |
+| `constraint` | `String` | no | — | |
+| `stakeHolder` | `String` | no | — | Preserve original spelling |
+| `virtualId` | `String` | yes | — | Unique. Format: `CH-001` to `CH-999` (CH = Challenge) |
+| `status` | `String` | yes | — | → `SWIM_LANE_STATUS` (short codes only) |
+| `userId` | `String` | yes | — | Creator Mongo Hex ID (ref: User) |
+| `month` | `Number` | no | — | Integer, derived from `createdAt` via pre-save hook |
+| `year` | `Number` | no | — | Integer, derived from `createdAt` via pre-save hook |
+| `upVotes` | `[String]` | no | `[]` | Array of User IDs |
+| `subcriptions` | `[String]` | no | `[]` | Array of User IDs. Preserve original spelling |
+| `viewCount` | `Number` | no | `0` | Long |
+| `timestampOfStatusChangedToPilot` | `Date` | no | `null` | Nullable |
+| `timestampOfCompleted` | `Date` | no | `null` | Nullable |
+
+**Options:** `{ timestamps: true }` — auto-manages `createdAt` and `updatedAt`.
+
+**Pre-save hook:** Extract `month` (1–12) and `year` from `createdAt`.
 
 ## Generating the Schema
-Please generate a Mongoose schema matching the above fields. Convert field names to standard camelCase where appropriate (keeping typos like `StackeHolder` and `Subcriptions` exactly as written in the database field name). Use Mongoose's `timestamps` option for `CreatedAt` and `updatedAt`. Set correct defaults and data types as specified.
+Generate a Mongoose schema matching the above fields. Use `timestamps: true`. Keep typo fields (`stakeHolder`, `subcriptions`) as-is. Use `String` type for `userId` (not ObjectId). Add pre-save hook for `month`/`year`.

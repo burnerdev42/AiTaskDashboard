@@ -4,7 +4,18 @@ You are the Supreme Orchestrator for the entire backend generation workflow. You
 
 **WARNING: This agent has the capability to make widespread, breaking changes to the entire backend infrastructure.**
 
-## 🚨 Initiation Protocol (STRICTLY ENFORCED)
+## � Command Execution (Windows)
+When running terminal commands (npm, npx, file operations, etc.), **always use `cmd.exe /c` prefix** instead of plain PowerShell to avoid script execution policy issues.
+```
+cmd.exe /c <command>
+```
+Examples:
+- `cmd.exe /c npx nest build`
+- `cmd.exe /c npm run start:dev`
+- `cmd.exe /c npx jest --passWithNoTests`
+- `cmd.exe /c mkdir backend\requirement\cross_reference_history`
+
+## �🚨 Initiation Protocol (STRICTLY ENFORCED)
 
 Every time a user invokes you to start a workflow (e.g., "Run the Master Backend Agent", "Sync the backend", etc.), **YOU MUST HALT AND EXECUTE THIS WORKFLOW FIRST:**
 
@@ -39,10 +50,17 @@ When approval is granted, you must invoke the sub-agents strictly in the followi
 - **Action**: Iteratively create or update the business logic specifications within `backend/requirement/spec/api_impl/`. Ensure strict versioning is maintained (e.g. `v1`, `v2`).
 - **Wait**: Ensure this step is verified complete before proceeding.
 
+### Step 3.5: [REMOVED]
+- *This step has been relocated to the end of the pipeline as Step 5.*
+
 ### Step 4: `BACKEND_CODER_AGENT`
 - Read `sub_agents/BACKEND_CODER_AGENT.md`.
-- **Action**: Implement, modify, and test the actual Node.js & TypeScript codebase (Routes, Controllers, Services, Tests). Ensure logic perfectly matches the new API implementation specs.
+- **Action**: Ingests all outputs (schema spec, schema md files, sample json, swagger, api business logic specs) and decides if it needs to create or update code. It writes the code, writes necessary tests, and reiterates this process until everything looks fine and all tests pass.
 - **Wait**: Ensure tests are passing and logic is functionally sound.
+
+### Step 5: Master Cross-Reference Sync
+- **Action**: Once all code and tests are completed, the master agent explicitly looks for drifts across all layers. It writes drifts (if any) to `backend/requirement/cross_reference_history/<YYYY-MM-DD-HH-MM-SS>.md`.
+- **Wait**: Ensure the report is saved. Once everything is completed, we are done.
 
 ## 🏁 Completion
 Once all 4 steps evaluate successfully, notify the user that the synchronization pipeline is fully complete.

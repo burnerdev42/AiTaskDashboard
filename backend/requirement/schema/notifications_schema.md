@@ -1,40 +1,41 @@
+# Notification Mongoose Schema
+
 ```javascript
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+
+const NOTIFICATION_TYPES = [
+  'challenge_created',
+  'challenge_status_update',
+  'challenge_edited',
+  'idea_edited',
+  'challenge_upvoted',
+  'idea_upvoted',
+  'challenge_commented',
+  'idea_commented',
+  'challenge_subscribed',
+  'idea_subscribed',
+  'challenge_deleted',
+  'idea_deleted',
+];
 
 const notificationSchema = new Schema(
   {
     type: {
       type: String,
-      enum: [
-        'challenge_created',
-        'idea_created',
-        'challenge_status_update',
-        'challenge_edited',
-        'idea_edited',
-        'challenge_upvoted',
-        'idea_upvoted',
-        'challenge_commented',
-        'idea_commented',
-        'challenge_subscribed',
-        'idea_subscribed',
-        'challenge_deleted',
-        'idea_deleted',
-      ],
       required: true,
+      enum: NOTIFICATION_TYPES,
     },
     fk_id: {
-      type: String, // Link to Challenge, Idea, or Comment virtualId
+      type: String,
       default: null,
     },
-    initiatorId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User', // The user who triggered the event
+    userId: {
+      type: String,
       required: true,
     },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User', // Recipient
+    initiatorId: {
+      type: String,
       required: true,
     },
     isSeen: {
@@ -43,9 +44,11 @@ const notificationSchema = new Schema(
     },
   },
   {
-    timestamps: { createdAt: true, updatedAt: false },
+    timestamps: true,
   }
 );
+
+notificationSchema.index({ userId: 1, isSeen: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Notification', notificationSchema);
 ```

@@ -19,7 +19,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
 import { UsersModule } from './modules/users/users.module';
 import { CommentsModule } from './modules/comments/comments.module';
-import { UserActionsModule } from './modules/user-actions/user-actions.module';
+import { ActivitiesModule } from './modules/activities/activities.module';
 import { CorrelationMiddleware } from './common/middleware/correlation.middleware';
 
 @Module({
@@ -65,7 +65,7 @@ import { CorrelationMiddleware } from './common/middleware/correlation.middlewar
     MetricsModule,
     UsersModule,
     CommentsModule,
-    UserActionsModule,
+    ActivitiesModule,
   ],
   controllers: [],
   providers: [],
