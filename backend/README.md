@@ -69,8 +69,8 @@ src/
 │   ├── user-actions/      # Shared user actions (votes, subscriptions)
 │   ├── tasks/             # Automated AI/Background tasks
 │   ├── notifications/     # Notification dispatch & Newsletter subscription
-│   ├── dashboard/         # Aggregated views (e.g., Swimlanes)
-│   └── metrics/           # ROI and KPI reporting APIs
+│   ├── home/              # Aggregated home views (e.g., Top Challenges, Team)
+│   └── metric/            # Real-time reporting, ROI, and KPI APIs
 ├── common/                # Shared Cross-Cutting Concerns
 │   ├── auth/              # Authentication decorators (CurrentUser, etc.)
 │   ├── controllers/       # Abstract base controller
@@ -257,9 +257,21 @@ Copy `.env.example` to `.env` and configure the following:
 | :--- | :--- | :--- |
 | `NODE_ENV` | Environment (development/production) | `development` |
 | `PORT` | API Port | `3000` |
-| `MONGODB_URI` | Connection string for MongoDB | `mongodb://localhost:27017/dashboard` |
+| `MONGODB_URI` | Connection string for MongoDB | `mongodb://localhost:27017/ai_task_dashboard` (or `ananta`) |
 | `JWT_SECRET` | Secret key for signing tokens | *Mandatory Change* |
 | `LOG_LEVEL` | Pino log level (info/debug/error) | `info` |
+
+> **Connecting to your Database:** Make sure that the database name in `MONGODB_URI` points to the correct DB (e.g., `ai_task_dashboard`, `ananta`). Mongoose will automatically map code structures to the following expected collections:
+> 
+> 1. `users` (For the `User` schema)
+> 2. `challenges` (For the `Challenge` schema)
+> 3. `ideas` (For the `Idea` schema)
+> 4. `comments` (For the `Comment` schema)
+> 5. `activities` (For the `Activity` schema)
+> 6. `notifications` (For the `Notification` schema)
+> 7. `tasks` (Legacy/Deprecated - For the `Task` schema)
+>
+> If you are setting up the DB from scratch manually, those are the collection strings you will need.
 
 ---
 
@@ -479,20 +491,25 @@ Copy `.env.example` to `.env` and configure the following:
 
 ---
 
-### Dashboard (`/api/v1/dashboard`)
+### Home (`/api/v1/home`)
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/dashboard/swimlanes` | Get aggregated swimlane view | ✅ |
+| `GET` | `/home/top-challenges` | Get top challenges ordered by status/date | ✅ |
+| `GET` | `/home/innovation-team` | Get the leading users based on innovation score | ✅ |
 
 ---
 
-### Metrics (`/api/v1/metrics`)
+### Metric (`/api/v1/metric`)
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/metrics/summary` | Get KPI summary (ROI, savings, etc.) | ✅ |
-| `GET` | `/metrics/throughput` | Get throughput metrics | ✅ |
+| `GET` | `/metric/summary` | Get KPI summary (Total Ideas, Challenges vs Conversion) | ✅ |
+| `GET` | `/metric/funnel` | Get funnel throughput metrics across swimlanes | ✅ |
+| `GET` | `/metric/team-engagement` | Get team engagement split by platform | ✅ |
+| `GET` | `/metric/portfolio-balance` | Get portfolio balance across specific lanes | ✅ |
+| `GET` | `/metric/innovation-velocity` | Get 6-month historical innovation velocity data | ✅ |
+| `GET` | `/metric/opco-radar` | Get geographic OpCo radar challenge allocations | ✅ |
 
 ---
 
@@ -651,7 +668,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/aitaskdashboard
+      - MONGODB_URI=mongodb://mongo:27017/ai_task_dashboard
       - JWT_SECRET=your-production-secret
     depends_on:
       - mongo
@@ -990,8 +1007,8 @@ List endpoints return paginated data with metadata:
 | **Tasks** | `TaskApiResponseDto`, `TaskListApiResponseDto` |
 | **Notifications** | `NotificationApiResponseDto`, `NotificationListApiResponseDto`, `UnreadCountApiResponseDto`, `MarkReadApiResponseDto` |
 | **Users** | `UserApiResponseDto`, `UserListApiResponseDto` |
-| **Dashboard** | `SwimLanesApiResponseDto` |
-| **Metrics** | `MetricsSummaryApiResponseDto`, `ThroughputApiResponseDto` |
+| **Home** | `TopChallengesApiResponseDto`, `InnovationTeamApiResponseDto` |
+| **Metric** | `MetricSummaryApiResponseDto`, `MetricFunnelApiResponseDto`, `MetricTeamEngagementApiResponseDto`, `MetricPortfolioBalanceApiResponseDto`, `MetricInnovationVelocityApiResponseDto`, `MetricOpcoRadarApiResponseDto` |
 | **Newsletter** | `NewsletterApiResponseDto` |
 
 ### Swagger Integration
