@@ -14,7 +14,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './common';
 import { DatabaseModule } from './database/database.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
 import { UsersModule } from './modules/users/users.module';
 import { CommentsModule } from './modules/comments/comments.module';
@@ -59,7 +58,6 @@ import { CorrelationMiddleware } from './common/middleware/correlation.middlewar
     ChallengesModule,
     IdeasModule,
     AuthModule,
-    DashboardModule,
     MetricsModule,
     UsersModule,
     CommentsModule,

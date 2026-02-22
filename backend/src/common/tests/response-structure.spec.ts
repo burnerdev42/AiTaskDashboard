@@ -26,8 +26,6 @@ import { NotificationsController } from '../../modules/notifications/notificatio
 import { NotificationsService } from '../../modules/notifications/notifications.service';
 import { MetricsController } from '../../modules/metrics/metrics.controller';
 import { MetricsService } from '../../modules/metrics/metrics.service';
-import { DashboardController } from '../../modules/dashboard/dashboard.controller';
-import { DashboardService } from '../../modules/dashboard/dashboard.service';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -318,26 +316,6 @@ describe('Response Structure Conformance', () => {
         });
         it('getThroughput → data.throughput', async () => {
             assertEnvelope(await ctrl.getThroughput(), 'throughput');
-        });
-    });
-
-    // ── Dashboard ────────────────────────────────────────────────────────
-    describe('DashboardController', () => {
-        let ctrl: DashboardController;
-        const svc = {
-            getSwimLanes: jest.fn().mockResolvedValue([]),
-        };
-
-        beforeEach(async () => {
-            const mod: TestingModule = await Test.createTestingModule({
-                controllers: [DashboardController],
-                providers: [{ provide: DashboardService, useValue: svc }],
-            }).compile();
-            ctrl = mod.get(DashboardController);
-        });
-
-        it('getSwimLanes → data.swimlanes', async () => {
-            assertEnvelope(await ctrl.getSwimLanes(), 'swimlanes');
         });
     });
 });
