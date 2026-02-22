@@ -47,8 +47,13 @@
                                 },
                                 "url": {
                                     "raw": "{{baseUrl}}/auth/register",
-                                    "host": ["{{baseUrl}}"],
-                                    "path": ["auth", "register"]
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "auth",
+                                        "register"
+                                    ]
                                 }
                             },
                             "status": "Created",
@@ -282,7 +287,7 @@
                                 "{{challengeId}}"
                             ]
                         },
-                        "description": "Returns challenge with linked ideas, upvote/downvote/subscription userIds, and short owner/contributor info.\n\nResponse: ChallengeApiResponse"
+                        "description": "Returns challenge with linked ideas, upvote/subscription userIds, and short owner/contributor info.\n\nResponse: ChallengeApiResponse"
                     }
                 },
                 {

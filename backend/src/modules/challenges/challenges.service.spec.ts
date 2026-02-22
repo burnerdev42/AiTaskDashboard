@@ -51,10 +51,6 @@ describe('ChallengesService', () => {
       userId: { _id: new Types.ObjectId(), name: 'Alice' },
     },
     {
-      actionType: 'downvote',
-      userId: { _id: new Types.ObjectId(), name: 'Bob' },
-    },
-    {
       actionType: 'subscribe',
       userId: { _id: new Types.ObjectId(), name: 'Carol' },
     },

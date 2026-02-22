@@ -58,9 +58,13 @@ When approval is granted, you must invoke the sub-agents strictly in the followi
 - **Action**: Ingests all outputs (schema spec, schema md files, sample json, swagger, api business logic specs) and decides if it needs to create or update code. It writes the code, writes necessary tests, and reiterates this process until everything looks fine and all tests pass.
 - **Wait**: Ensure tests are passing and logic is functionally sound.
 
-### Step 5: Master Cross-Reference Sync
-- **Action**: Once all code and tests are completed, the master agent explicitly looks for drifts across all layers. It writes drifts (if any) to `backend/requirement/cross_reference_history/<YYYY-MM-DD-HH-MM-SS>.md`.
+### Step 5: `README_AGENT` (or Master Self-Update)
+- **Action**: Review all generated schemas, DB models, Swagger documentation, and `Data requirements.txt`. Update the `backend/README.md` to perfectly reflect the current state of Data Models, Enums, and API Endpoints.
+- **Wait**: Ensure the README accurately mirrors the new truth before proceeding.
+
+### Step 6: Master Cross-Reference Sync
+- **Action**: Once all code, tests, and documentation are completed, the master agent explicitly looks for drifts across all layers. It writes drifts (if any) to `backend/requirement/cross_reference_history/<YYYY-MM-DD-HH-MM-SS>.md`.
 - **Wait**: Ensure the report is saved. Once everything is completed, we are done.
 
 ## 🏁 Completion
-Once all 4 steps evaluate successfully, notify the user that the synchronization pipeline is fully complete.
+Once all 6 steps evaluate successfully, notify the user that the synchronization pipeline is fully complete.

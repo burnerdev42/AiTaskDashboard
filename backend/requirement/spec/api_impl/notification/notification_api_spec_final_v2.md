@@ -57,7 +57,6 @@
 | `idea_created` | Idea subscribers + Challenge owner + Challenge subscribers (except initiator) |
 | `idea_edited` | Idea subscribers + Challenge owner + Challenge subscribers (except initiator) |
 | `challenge_upvoted` | Challenge subscribers + Challenge owner (except initiator) |
-| `challenge_downvoted` | Challenge subscribers + Challenge owner (except initiator) |
 | `idea_upvoted` | Idea subscribers + Challenge owner + Challenge subscribers (except initiator) |
 | `challenge_commented` | Challenge subscribers + Challenge owner (except initiator) |
 | `idea_commented` | Idea subscribers + Challenge owner + Challenge subscribers (except initiator) |
@@ -69,7 +68,7 @@
 ## Notification Type Enum
 ```
 challenge_created, challenge_status_update, challenge_edited, idea_edited,
-challenge_upvoted, challenge_downvoted, idea_upvoted,
+challenge_upvoted, idea_upvoted,
 challenge_commented, idea_commented, challenge_subscribed, idea_subscribed,
 challenge_deleted, idea_deleted
 ```

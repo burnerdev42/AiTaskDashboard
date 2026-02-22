@@ -97,7 +97,7 @@ export class ChallengeListItemDto {
 
 /**
  * Enriched challenge response — used for GET /challenges/:id.
- * Includes linked ideas, upvote/downvote/subscription user IDs + counts.
+ * Includes linked ideas, upvote/subscription user IDs + counts.
  */
 export class ChallengeResponseDto extends ChallengeListItemDto {
   @ApiPropertyOptional({ example: 'Expected outcome text' })
@@ -126,21 +126,12 @@ export class ChallengeResponseDto extends ChallengeListItemDto {
 
   @ApiProperty({
     type: [ShortUserDto],
-    description: 'Users who downvoted',
-  })
-  downvotes: ShortUserDto[];
-
-  @ApiProperty({
-    type: [ShortUserDto],
     description: 'Users who subscribed',
   })
   subscriptions: ShortUserDto[];
 
   @ApiProperty({ description: 'Total upvote count', example: 12 })
   upvoteCount: number;
-
-  @ApiProperty({ description: 'Total downvote count', example: 2 })
-  downvoteCount: number;
 
   @ApiProperty({ description: 'Total subscription count', example: 8 })
   subscriptionCount: number;

@@ -5,7 +5,7 @@
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![License](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
-> **Architect**: Antigravity  
+> **Architect**: Ananta  
 > **Status**: Production-Hardened, Enterprise-Ready
 
 ---
@@ -368,22 +368,21 @@ Copy `.env.example` to `.env` and configure the following:
 {
   "title": "AI-Powered Customer Support",
   "description": "Implement conversational AI for customer queries",
-  "portfolioLane": "Ideation",
-  "status": "Submitted",
-  "owner": "60d21b4667d0d8992e610c85",
+  "portfolioLane": "Customer Value Driver",
+  "status": "submitted",
   "priority": "High",
   "tags": ["AI", "Customer Experience"],
-  "opco": ["OpCo1"],
-  "platform": ["Web"],
+  "opco": "Albert Heijn",
+  "platform": "STP",
   "outcome": "30% reduction in support tickets",
-  "timeline": "Q3 2026"
+  "timeline": "6-12 months"
 }
 ```
 
-**Challenge Statuses:** `Submitted` | `Under Review` | `Approved` | `In Progress` | `Completed` | `Rejected`
-**Portfolio Lanes:** `Ideation` | `Prototype` | `Pilot` | `Scale`
+**Challenge Status Code:** `submitted` | `ideation` | `pilot` | `completed` | `archive`
+**Portfolio Lanes:** `Customer Value Driver` | `Non Strategic Product Management` | `Tech Enabler` | `Maintenance`
 
-> **GET /challenges/:id enriched response** includes: linked `ideas`, `upvotes` (userId list), `downvotes` (userId list), `subscriptions` (userId list), and short `owner`/`contributor` details (`_id, name, email, avatar`).
+> **GET /challenges/:id enriched response** includes: linked `ideas`, `upvotes` (userId list), `subscriptions` (userId list), and short `owner`/`contributor` details (`_id, name, email, avatar`).
 
 ---
 
@@ -407,7 +406,7 @@ Copy `.env.example` to `.env` and configure the following:
 | `GET` | `/user-actions?targetId=&targetType=` | Get actions on an entity | ✅ |
 | `GET` | `/user-actions/counts?targetId=&targetType=` | Get aggregated action counts | ✅ |
 
-**Why a separate UserAction collection?** Votes (upvote/downvote) and subscriptions are shared between Challenges and Ideas using polymorphic `targetType`/`targetId` fields. A unique compound index (`userId + targetId + targetType + actionType`) prevents duplicate actions. This design avoids embedding votes inside parent documents (which would cause write contention at scale).
+**Why a separate UserAction collection?** Votes (upvote) and subscriptions are shared between Challenges and Ideas using polymorphic `targetType`/`targetId` fields. A unique compound index (`userId + targetId + targetType + actionType`) prevents duplicate actions. This design avoids embedding votes inside parent documents (which would cause write contention at scale).
 
 ---
 
@@ -426,17 +425,12 @@ Copy `.env.example` to `.env` and configure the following:
 {
   "title": "Chatbot for FAQ Handling",
   "description": "Automate common customer questions with AI",
-  "status": "Ideation",
-  "owner": "60d21b4667d0d8992e610c85",
   "linkedChallenge": "60d21b4667d0d8992e610c86",
   "tags": ["AI", "Automation"],
   "problemStatement": "High volume of repetitive customer queries",
-  "proposedSolution": "AI-powered FAQ chatbot",
-  "expectedImpact": "30% reduction in support tickets"
+  "proposedSolution": "AI-powered FAQ chatbot"
 }
 ```
-
-**Idea Statuses:** `Ideation` | `Evaluation` | `POC` | `Pilot` | `Scale`
 
 ---
 
@@ -537,7 +531,15 @@ Copy `.env.example` to `.env` and configure the following:
   email: string,           // Unique, required
   password: string,        // Hashed with bcrypt
   name: string,            // Required
-  role: UserRole,          // 'admin' | 'user' | 'manager' | 'viewer'
+  opco: string,            // Validated against OPCO_LIST
+  platform: string,        // Validated against OPCO_PLATFORM_MAP
+  companyTechRole: string, // Validated against COMPANY_TECH_ROLES
+  interestAreas: string[], // Validated against INTEREST_AREAS
+  role: UserRole,          // 'ADMIN' | 'MEMBER' | 'USER'
+  status: UserStatus,      // 'PENDING' | 'APPROVED' | 'BLOCKED' | 'INACTIVE'
+  innovationScore: number, // Default: 0
+  upvotedChallengeList: string[],
+  upvotedAppreciatedIdeaList: string[],
   avatar?: string,
   createdAt: Date,
   updatedAt: Date
@@ -552,19 +554,25 @@ Copy `.env.example` to `.env` and configure the following:
   title: string,              // Required
   description: string,        // Required
   summary?: string,
-  opco: string[],             // Operating companies
-  platform: string[],         // Platforms
+  opco: string,               // Validated against OPCO_LIST
+  platform: string,           // Validated against OPCO_PLATFORM_MAP
   outcome?: string,           // Expected outcome
-  timeline?: string,          // Timeline
-  portfolioLane: ChallengeStage, // 'Ideation' | 'Prototype' | 'Pilot' | 'Scale'
-  owner: ObjectId,            // Reference to User (short info: _id, name, email, avatar)
-  status: ChallengeStatus,    // 'Submitted' | 'Under Review' | 'Approved' | 'In Progress' | 'Completed' | 'Rejected'
-  priority: Priority,         // 'High' | 'Medium' | 'Low'
+  timeline?: string,          // Validated against TIMELINE_OPTIONS
+  portfolioLane: ChallengeStage, // 'Customer Value Driver' | 'Non Strategic Product Management' | 'Tech Enabler' | 'Maintenance'
+  owner: ObjectId,            // Reference to User
+  status: ChallengeStatus,    // 'submitted' | 'ideation' | 'pilot' | 'completed' | 'archive'
+  priority: Priority,         // 'Critical' | 'High' | 'Medium' | 'Low'
   tags: string[],
   constraint?: string,
   stakeholder?: string,
+  virtualId: string,          // E.g., CH-001
   ideasCount: number,         // Denormalized count of linked ideas
   contributor: ObjectId[],    // References to User
+  upVotes: string[],          // List of User IDs
+  subscriptions: string[],    // List of User IDs
+  viewCount: number,          // Long
+  timestampOfStatusChangedToPilot?: Date,
+  timestampOfCompleted?: Date,
   createdAt: Date,
   updatedAt: Date
 }
@@ -594,7 +602,7 @@ Copy `.env.example` to `.env` and configure the following:
   userId: ObjectId,           // Reference to User
   targetId: ObjectId,         // Reference to target entity
   targetType: TargetType,     // 'Challenge' | 'Idea'
-  actionType: ActionType,     // 'upvote' | 'downvote' | 'subscribe'
+  actionType: ActionType,     // 'upvote' | 'subscribe'
   createdAt: Date,
   updatedAt: Date
 }
@@ -608,22 +616,19 @@ Copy `.env.example` to `.env` and configure the following:
 ```typescript
 {
   _id: ObjectId,
+  ideaId: string,          // E.g., ID-0001
   title: string,           // Required
   description: string,     // Required
-  status: IdeaStatus,      // 'Ideation' | 'Evaluation' | 'POC' | 'Pilot' | 'Scale'
+  status: boolean,         // Default: true (Accepted)
   owner: ObjectId,         // Reference to User
-  linkedChallenge?: ObjectId,
+  linkedChallenge: string, // Reference to Challenge _id
   tags: string[],
-  stats: {
-    appreciations: number,
-    comments: number,
-    views: number
-  },
+  appreciationCount: number, // Upvote count
+  viewCount: number,
   problemStatement?: string,
   proposedSolution?: string,
-  expectedImpact?: string,
-  implementationPlan?: string,
-  impactLevel?: 'High' | 'Medium' | 'Low',
+  upVotes: string[],       // List of User IDs
+  subscription: string[],  // List of User IDs
   createdAt: Date,
   updatedAt: Date
 }
@@ -766,33 +771,21 @@ enum UserRole {
 ### ChallengeStage (Portfolio Lane)
 ```typescript
 enum ChallengeStage {
-  IDEATION = 'Ideation',
-  PROTOTYPE = 'Prototype',
-  PILOT = 'Pilot',
-  SCALE = 'Scale'
+  CUSTOMER_VALUE_DRIVER = 'Customer Value Driver',
+  NON_STRATEGIC_PRODUCT_MANAGEMENT = 'Non Strategic Product Management',
+  TECH_ENABLER = 'Tech Enabler',
+  MAINTENANCE = 'Maintenance'
 }
 ```
 
 ### ChallengeStatus
 ```typescript
 enum ChallengeStatus {
-  SUBMITTED = 'Submitted',
-  UNDER_REVIEW = 'Under Review',
-  APPROVED = 'Approved',
-  IN_PROGRESS = 'In Progress',
-  COMPLETED = 'Completed',
-  REJECTED = 'Rejected'
-}
-```
-
-### IdeaStatus
-```typescript
-enum IdeaStatus {
-  IDEATION = 'Ideation',
-  EVALUATION = 'Evaluation',
-  POC = 'POC',
-  PILOT = 'Pilot',
-  SCALE = 'Scale'
+  SUBMITTED = 'submitted',
+  IDEATION = 'ideation',
+  PILOT = 'pilot',
+  COMPLETED = 'completed',
+  ARCHIVE = 'archive'
 }
 ```
 
@@ -815,33 +808,33 @@ enum Priority {
 }
 ```
 
-### TargetType
+### TargetType / CommentType
 ```typescript
+// Shared entities
 enum TargetType {
-  CHALLENGE = 'Challenge',
-  IDEA = 'Idea'
+  CHALLENGE = 'CH',
+  IDEA = 'ID'
 }
 ```
 
 ### ActionType
 ```typescript
-enum ActionType {
-  UPVOTE = 'upvote',
-  DOWNVOTE = 'downvote',
-  SUBSCRIBE = 'subscribe'
-}
+const ACTIVITY_TYPES = [
+  'challenge_created', 'idea_created', 'challenge_status_update',
+  'challenge_edited', 'idea_edited', 'challenge_upvoted', 'idea_upvoted',
+  'challenge_commented', 'idea_commented', 'challenge_subscribed',
+  'idea_subscribed', 'challenge_deleted', 'idea_deleted', 'log_in', 'log_out'
+] as const;
 ```
 
 ### NotificationType
 ```typescript
-enum NotificationType {
-  CHALLENGE = 'challenge',
-  IDEA = 'idea',
-  COMMENT = 'comment',
-  MENTION = 'mention',
-  STATUS = 'status',
-  SYSTEM = 'system'
-}
+const NOTIFICATION_TYPES = [
+  'challenge_created', 'challenge_status_update', 'challenge_edited',
+  'idea_edited', 'challenge_upvoted', 'idea_upvoted', 'challenge_commented',
+  'idea_commented', 'challenge_subscribed', 'idea_subscribed',
+  'challenge_deleted', 'idea_deleted'
+] as const;
 ```
 
 ---

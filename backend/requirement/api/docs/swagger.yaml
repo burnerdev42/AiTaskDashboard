@@ -838,7 +838,7 @@ components:
           type: string
           enum: [
             'challenge_created', 'challenge_status_update', 'challenge_edited',
-            'idea_edited', 'challenge_upvoted', 'challenge_downvoted', 'idea_upvoted',
+            'idea_edited', 'challenge_upvoted', 'idea_upvoted',
             'challenge_commented', 'idea_commented', 'challenge_subscribed',
             'idea_subscribed', 'challenge_deleted', 'idea_deleted'
           ]

@@ -26,7 +26,6 @@ describe('ChallengesController', () => {
     ...mockChallenge,
     ideas: [{ _id: new Types.ObjectId(), title: 'Idea 1' }],
     upvotes: [{ _id: new Types.ObjectId(), name: 'Alice' }],
-    downvotes: [],
     subscriptions: [],
   };
 
