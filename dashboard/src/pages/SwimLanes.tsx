@@ -156,7 +156,7 @@ export const SwimLanes: React.FC = () => {
 
     /* ── Priority color helper ── */
     const priorityColor = (p: string) =>
-        p === 'High' ? 'var(--accent-red)' : p === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-green)';
+        (p === 'High' || p === 'Critical') ? '#ef5350' : p === 'Medium' ? '#ffa726' : '#66bb6a';
 
     /* ── Mobile: active lane tab ── */
     const [activeLaneIndex, setActiveLaneIndex] = useState(0);

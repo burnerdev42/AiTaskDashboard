@@ -145,7 +145,7 @@ export const Header: React.FC = () => {
                             {user.avatar}
                         </div>
                     ) : (
-                        <NavLink to="/login" className="nav-link" onClick={closeMobileNav}>Login</NavLink>
+                        <NavLink to="/login" className="login-btn" onClick={closeMobileNav}>Login</NavLink>
                     )}
                 </div>
             </div>

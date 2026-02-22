@@ -9,6 +9,7 @@ export interface User {
     password?: string; // In a real app, this wouldn't be here like this
     opco?: string;
     platform?: string;
+    about?: string;
     interests?: string[];
 }
 

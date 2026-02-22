@@ -531,41 +531,41 @@ export const WhatsNext: React.FC = () => {
 
                     <div className="funnel-pipeline">
                         <div className="funnel-stage">
-                            <div className="funnel-icon">ID</div>
-                            <h4>Ideation</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-teal)' }}>42</div>
-                            <div className="funnel-label">Ideas Submitted</div>
+                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg></div>
+                            <h4>Challenge Submitted</h4>
+                            <div className="funnel-count" style={{ color: 'var(--accent-red)' }}>42</div>
+                            <div className="funnel-label">Challenges submitted</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">EV</div>
-                            <h4>Evaluation</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-blue)' }}>28</div>
-                            <div className="funnel-label">Under Review</div>
+                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg></div>
+                            <h4>Ideation & Evaluation</h4>
+                            <div className="funnel-count" style={{ color: 'var(--accent-yellow)' }}>28</div>
+                            <div className="funnel-label">To be Evaluated</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">PT</div>
-                            <h4>Prototyping</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-purple)' }}>12</div>
-                            <div className="funnel-label">Being Built</div>
+                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></div>
+                            <h4>POC & Pilot</h4>
+                            <div className="funnel-count" style={{ color: 'var(--accent-blue)' }}>12</div>
+                            <div className="funnel-label">Prototypes running</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">PL</div>
-                            <h4>Piloting</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-orange)' }}>5</div>
-                            <div className="funnel-label">In Pilot</div>
+                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg></div>
+                            <h4>Scaled & Deployed</h4>
+                            <div className="funnel-count" style={{ color: 'var(--accent-gold)' }}>5</div>
+                            <div className="funnel-label">In production</div>
                         </div>
                         <div className="funnel-stage">
-                            <div className="funnel-icon">SC</div>
-                            <h4>Scaled</h4>
-                            <div className="funnel-count" style={{ color: 'var(--accent-green)' }}>3</div>
-                            <div className="funnel-label">In Production</div>
+                            <div className="funnel-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="10" y1="15" x2="10" y2="9" /><line x1="14" y1="15" x2="14" y2="9" /></svg></div>
+                            <h4>Parking Lot</h4>
+                            <div className="funnel-count" style={{ color: 'var(--accent-grey)' }}>3</div>
+                            <div className="funnel-label">Items parked</div>
                         </div>
                     </div>
                 </section>
 
                 {/* ═══ CTA BANNER ═══ */}
                 <section className="cta-banner">
-                    <div className="cta-icon">?</div>
+                    <div className="cta-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" /></svg></div>
                     <h2>Got an Idea That Could Shape the Future?</h2>
                     <p>
                         The best innovations start with a single spark. Submit your idea, join a challenge, or collaborate

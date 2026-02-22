@@ -8,7 +8,7 @@ import { TeamMember } from '../components/ui/TeamMember';
 import { useAuth } from '../context/AuthContext';
 
 export const Home: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -291,6 +291,17 @@ export const Home: React.FC = () => {
                     <h2><span className="icon" style={{ color: 'var(--accent-teal)' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span> Meet the Innovation Team</h2>
                 </div>
                 <div className="team-grid">
+                    {/* Render the logged-in user dynamically if present */}
+                    {isAuthenticated && user && (
+                        <TeamMember
+                            avatar={user.avatar && user.avatar.length > 2 ? user.avatar : (user.name ? user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) : 'ME')}
+                            name={user.name || 'Current User'}
+                            role={user.role || ''}
+                            bio={user.about || ''}
+                            stats={{ challenges: 0, ideas: 0, score: 0 }}
+                            color="gold"
+                        />
+                    )}
                     {/* hardcoded team members for now to match exactly */}
                     <TeamMember avatar="SB" name="Siddharth Banerjee" role="Innovation Lead" bio="Driving enterprise-scale digital transformation with 15+ years in AI & cloud architecture." stats={{ challenges: 4, ideas: 6, score: 92 }} color="green" />
                     <TeamMember avatar="AB" name="Ananya Basu" role="AI / ML Engineer" bio="GenAI specialist building conversational AI and intelligent automation solutions." stats={{ challenges: 3, ideas: 5, score: 87 }} color="blue" />
@@ -302,6 +313,8 @@ export const Home: React.FC = () => {
                     <TeamMember avatar="VR" name="Vikram Rao" role="Cloud Architect" bio="Designing resilient multi-cloud infrastructure for mission-critical innovation workloads." stats={{ challenges: 3, ideas: 3, score: 82 }} color="blue" />
                     <TeamMember avatar="NK" name="Neha Kapoor" role="Data Engineer" bio="Building scalable data lakehouse architectures and real-time streaming pipelines." stats={{ challenges: 2, ideas: 5, score: 88 }} color="teal" />
                     <TeamMember avatar="SC" name="Sourav Chatterjee" role="DevOps Lead" bio="CI/CD evangelist automating deployment pipelines and infrastructure-as-code at scale." stats={{ challenges: 3, ideas: 4, score: 85 }} color="orange" />
+                    <TeamMember avatar="JS" name="Jane Smith" role="Data Analyst" bio="" stats={{ challenges: 2, ideas: 1, score: 55 }} color="purple" />
+                    <TeamMember avatar="JD" name="John Doe" role="" bio="" stats={{ challenges: 1, ideas: 2, score: 45 }} color="pink" />
                 </div>
 
                 {!isAuthenticated && (

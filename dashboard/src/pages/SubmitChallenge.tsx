@@ -181,6 +181,7 @@ export const SubmitChallenge: React.FC = () => {
                                             <>
                                                 <option value="STP">STP</option>
                                                 <option value="CTP">CTP</option>
+                                                <option value="RBP">RBP</option>
                                             </>
                                         )}
                                     </select>
@@ -361,9 +362,9 @@ export const SubmitChallenge: React.FC = () => {
                         </div>
 
                         {/* Form Actions */}
-                        <div className="sc-form-actions" style={{ marginTop: '40px' }}>
-                            <button type="button" className="sc-btn sc-btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
-                            <button type="submit" className="sc-btn sc-btn-primary">Submit Challenge</button>
+                        <div className="submit-form-actions">
+                            <button type="button" className="btn-cancel" onClick={() => navigate(-1)}>Cancel</button>
+                            <button type="submit" className="btn-save">Submit Challenge</button>
                         </div>
                     </form>
                 )}
