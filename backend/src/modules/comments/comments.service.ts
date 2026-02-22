@@ -18,6 +18,8 @@ import { CommentDocument } from '../../models/comments/comment.schema';
 import { Types } from 'mongoose';
 import { ChallengesService } from '../challenges/challenges.service';
 import { IdeasService } from '../ideas/ideas.service';
+import { IdeaDocument } from '../../models/ideas/idea.schema';
+import { ChallengeDocument } from '../../models/challenges/challenge.schema';
 
 /**
  * Service for Comments.
@@ -62,16 +64,16 @@ export class CommentsService extends AbstractService {
         createCommentDto.userId,
       );
       try {
-        const idea = await this.ideasService.findByIdeaId(
+        const idea = (await this.ideasService.findByIdeaId(
           createCommentDto.parentId,
-        );
+        )) as IdeaDocument;
         if (idea && idea.challengeId) {
           await this.challengesService.subscribeUser(
             idea.challengeId,
             createCommentDto.userId,
           );
         }
-      } catch (err) {
+      } catch {
         this.logger.error(
           `Could not find idea ${createCommentDto.parentId} for comment subscription`,
         );
@@ -106,7 +108,9 @@ export class CommentsService extends AbstractService {
   async findByChallengeVirtualId(
     virtualId: string,
   ): Promise<CommentDocument[]> {
-    const challenge = await this.challengesService.findByVirtualId(virtualId);
+    const challenge = (await this.challengesService.findByVirtualId(
+      virtualId,
+    )) as ChallengeDocument;
     if (!challenge) {
       throw new NotFoundException(
         `Challenge with virtualId ${virtualId} not found`,
@@ -124,7 +128,9 @@ export class CommentsService extends AbstractService {
    * @returns Comment count for the challenge.
    */
   async countByChallengeVirtualId(virtualId: string): Promise<number> {
-    const challenge = await this.challengesService.findByVirtualId(virtualId);
+    const challenge = (await this.challengesService.findByVirtualId(
+      virtualId,
+    )) as ChallengeDocument;
     if (!challenge) {
       throw new NotFoundException(
         `Challenge with virtualId ${virtualId} not found`,
@@ -143,7 +149,9 @@ export class CommentsService extends AbstractService {
    * @returns List of comments for the idea.
    */
   async findByIdeaVirtualId(virtualId: string): Promise<CommentDocument[]> {
-    const idea = await this.ideasService.findByIdeaId(virtualId);
+    const idea = (await this.ideasService.findByIdeaId(
+      virtualId,
+    )) as IdeaDocument;
     if (!idea) {
       throw new NotFoundException(`Idea with virtualId ${virtualId} not found`);
     }
@@ -159,7 +167,9 @@ export class CommentsService extends AbstractService {
    * @returns Comment count for the idea.
    */
   async countByIdeaVirtualId(virtualId: string): Promise<number> {
-    const idea = await this.ideasService.findByIdeaId(virtualId);
+    const idea = (await this.ideasService.findByIdeaId(
+      virtualId,
+    )) as IdeaDocument;
     if (!idea) {
       throw new NotFoundException(`Idea with virtualId ${virtualId} not found`);
     }

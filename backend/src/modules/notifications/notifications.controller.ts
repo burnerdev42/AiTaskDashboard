@@ -26,6 +26,7 @@ import {
   NotificationApiResponseDto,
   CountApiResponseDto,
 } from '../../dto/notifications/notification-response.dto';
+import { CreateNotificationDto } from '../../dto/notifications/create-notification.dto';
 
 @ApiTags('Notifications')
 @Controller('notifications')
@@ -43,7 +44,7 @@ export class NotificationsController extends AbstractController {
     description: 'Notification created.',
     type: NotificationApiResponseDto,
   })
-  async create(@Body() dto: any) {
+  async create(@Body() dto: CreateNotificationDto) {
     const notification = await this.notificationsService.create(dto);
     return this.success({ notification }, 'Notification created successfully');
   }
@@ -158,7 +159,10 @@ export class NotificationsController extends AbstractController {
     description: 'Notification updated.',
     type: NotificationApiResponseDto,
   })
-  async update(@Param('id') id: string, @Body() dto: any) {
+  async update(
+    @Param('id') id: string,
+    @Body() dto: Partial<CreateNotificationDto>,
+  ) {
     const notification = await this.notificationsService.update(id, dto);
     return this.success({ notification }, 'Notification updated successfully');
   }

@@ -104,7 +104,10 @@ describe('IdeasService', () => {
       mockIdeaModel.exec.mockResolvedValueOnce([mockIdea]);
       const result = await service.findAll(10, 0);
       expect(result.length).toBe(1);
-      expect(result[0]).toMatchObject({ ...mockIdea, _id: mockIdea._id.toHexString() });
+      expect(result[0]).toMatchObject({
+        ...mockIdea,
+        _id: mockIdea._id.toHexString(),
+      });
     });
   });
 
@@ -112,7 +115,10 @@ describe('IdeasService', () => {
     it('should return a single idea', async () => {
       mockIdeaModel.exec.mockResolvedValueOnce(mockIdea);
       const result = await service.findByIdeaId('ID-0001');
-      expect(result).toMatchObject({ ...mockIdea, _id: mockIdea._id.toHexString() });
+      expect(result).toMatchObject({
+        ...mockIdea,
+        _id: mockIdea._id.toHexString(),
+      });
     });
   });
 
@@ -122,7 +128,10 @@ describe('IdeasService', () => {
       const result = await service.updateByIdeaId('ID-0001', {
         title: 'Updated',
       });
-      expect(result).toMatchObject({ ...mockIdea, _id: mockIdea._id.toHexString() });
+      expect(result).toMatchObject({
+        ...mockIdea,
+        _id: mockIdea._id.toHexString(),
+      });
       expect(activitiesService.create).toHaveBeenCalled();
     });
   });

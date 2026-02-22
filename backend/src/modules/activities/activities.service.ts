@@ -130,7 +130,7 @@ export class ActivitiesService extends AbstractService {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const results = await this.activityModel
+    const results = (await this.activityModel
       .aggregate([
         {
           $match: {
@@ -146,7 +146,10 @@ export class ActivitiesService extends AbstractService {
         },
         { $sort: { '_id.year': 1, '_id.month': 1 } },
       ])
-      .exec();
+      .exec()) as Array<{
+      _id: { month: number; year: number };
+      count: number;
+    }>;
 
     const graph: Record<string, number> = {};
     const monthNames = [

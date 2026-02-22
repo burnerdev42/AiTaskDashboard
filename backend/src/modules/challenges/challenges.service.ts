@@ -25,8 +25,6 @@ import {
 import { IdeasService } from '../ideas/ideas.service';
 import { ActivitiesService } from '../activities/activities.service';
 
-
-
 @Injectable()
 export class ChallengesService extends AbstractService {
   protected readonly logger = new Logger(ChallengesService.name);

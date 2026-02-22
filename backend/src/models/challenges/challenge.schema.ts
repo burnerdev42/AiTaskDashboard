@@ -78,15 +78,21 @@ export class Challenge {
 
   @Prop({ type: Date, default: null })
   timestampOfCompleted: Date;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const ChallengeSchema = SchemaFactory.createForClass(Challenge);
 
-ChallengeSchema.pre('save', function (this: ChallengeDocument, next: Function) {
-  if (this.isNew || this.isModified('createdAt')) {
-    const date = (this as any).createdAt || new Date();
-    this.month = date.getMonth() + 1;
-    this.year = date.getFullYear();
-  }
-  next();
-});
+ChallengeSchema.pre(
+  'save',
+  function (this: ChallengeDocument, next: (err?: Error) => void) {
+    if (this.isNew || this.isModified('createdAt')) {
+      const date = this.createdAt || new Date();
+      this.month = date.getMonth() + 1;
+      this.year = date.getFullYear();
+    }
+    next();
+  },
+);

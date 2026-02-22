@@ -27,6 +27,7 @@ import {
   ChallengeApiResponse,
   CountApiResponseDto,
 } from '../../dto/challenges/challenge-response.dto';
+import { ChallengeDocument } from '../../models/challenges/challenge.schema';
 
 @ApiTags('Challenges')
 @Controller('challenges')
@@ -96,7 +97,9 @@ export class ChallengesController extends AbstractController {
   })
   @ApiResponse({ status: 404, description: 'Challenge not found.' })
   async findOne(@Param('virtualId') virtualId: string) {
-    const result = await this.challengesService.findByVirtualId(virtualId);
+    const result = (await this.challengesService.findByVirtualId(
+      virtualId,
+    )) as ChallengeDocument;
     return this.success(
       { challenge: result },
       'Challenge retrieved successfully',
@@ -114,10 +117,10 @@ export class ChallengesController extends AbstractController {
     @Param('virtualId') virtualId: string,
     @Body() dto: ChallengeDto,
   ) {
-    const result = await this.challengesService.updateByVirtualId(
+    const result = (await this.challengesService.updateByVirtualId(
       virtualId,
       dto,
-    );
+    )) as ChallengeDocument;
     return this.success(
       { challenge: result },
       'Challenge updated successfully',
@@ -135,11 +138,11 @@ export class ChallengesController extends AbstractController {
     @Param('virtualId') virtualId: string,
     @Body() body: { status: string; userId: string },
   ) {
-    const result = await this.challengesService.updateStatus(
+    const result = (await this.challengesService.updateStatus(
       virtualId,
       body.status,
       body.userId,
-    );
+    )) as ChallengeDocument;
     return this.success(
       { challenge: result },
       'Challenge status updated successfully',
@@ -157,10 +160,10 @@ export class ChallengesController extends AbstractController {
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
   ) {
-    const result = await this.challengesService.toggleUpvote(
+    const result = (await this.challengesService.toggleUpvote(
       virtualId,
       body.userId,
-    );
+    )) as ChallengeDocument;
     return this.success({ challenge: result }, 'Upvote toggled successfully');
   }
 
@@ -175,10 +178,10 @@ export class ChallengesController extends AbstractController {
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
   ) {
-    const result = await this.challengesService.toggleSubscribe(
+    const result = (await this.challengesService.toggleSubscribe(
       virtualId,
       body.userId,
-    );
+    )) as ChallengeDocument;
     return this.success(
       { challenge: result },
       'Subscription toggled successfully',

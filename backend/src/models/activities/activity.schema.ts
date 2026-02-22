@@ -20,18 +20,24 @@ export class Activity {
 
   @Prop()
   year: number;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
 
-ActivitySchema.pre('save', function (this: ActivityDocument, next: Function) {
-  if (this.isNew || this.isModified('createdAt')) {
-    const date = (this as any).createdAt || new Date();
-    this.month = date.getMonth() + 1;
-    this.year = date.getFullYear();
-  }
-  next();
-});
+ActivitySchema.pre(
+  'save',
+  function (this: ActivityDocument, next: (err?: Error) => void) {
+    if (this.isNew || this.isModified('createdAt')) {
+      const date = this.createdAt || new Date();
+      this.month = date.getMonth() + 1;
+      this.year = date.getFullYear();
+    }
+    next();
+  },
+);
 
 ActivitySchema.index({ userId: 1, createdAt: -1 });
 ActivitySchema.index({ type: 1 });

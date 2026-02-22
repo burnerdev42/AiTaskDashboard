@@ -31,13 +31,20 @@ import { MetricsService } from '../../modules/metrics/metrics.service';
 
 /** Asserts the standardized envelope shape. */
 function assertEnvelope(
-  result: any,
+  result: {
+    status?: unknown;
+    timestamp?: unknown;
+    message?: unknown;
+    data?: unknown;
+  },
   expectedKey: string,
   message?: string,
 ): void {
   expect(result.status).toBe('success');
   expect(typeof result.timestamp).toBe('string');
-  expect(new Date(result.timestamp).toISOString()).toBe(result.timestamp);
+  expect(new Date(result.timestamp as string).toISOString()).toBe(
+    result.timestamp,
+  );
   if (message) expect(result.message).toBe(message);
 
   // data must be a plain object, never an array or primitive
@@ -75,7 +82,7 @@ describe('Response Structure Conformance', () => {
     });
 
     it('create → data.challenge', async () => {
-      assertEnvelope(await ctrl.create({} as any), 'challenge');
+      assertEnvelope(await ctrl.create({} as never), 'challenge');
     });
     it('findAll → data.challenges', async () => {
       assertEnvelope(await ctrl.findAll(10, 0), 'challenges');
@@ -87,7 +94,7 @@ describe('Response Structure Conformance', () => {
       assertEnvelope(await ctrl.findOne('CH-001'), 'challenge');
     });
     it('update → data.challenge', async () => {
-      assertEnvelope(await ctrl.update('CH-001', {} as any), 'challenge');
+      assertEnvelope(await ctrl.update('CH-001', {} as never), 'challenge');
     });
   });
 
@@ -176,7 +183,7 @@ describe('Response Structure Conformance', () => {
     });
 
     it('create → data.comment', async () => {
-      assertEnvelope(await ctrl.create({} as any), 'comment');
+      assertEnvelope(await ctrl.create({} as never), 'comment');
     });
     it('findByParent → data.comments', async () => {
       assertEnvelope(await ctrl.findByParent('abc', 'CH'), 'comments');
@@ -236,7 +243,7 @@ describe('Response Structure Conformance', () => {
       assertEnvelope(await ctrl.findOne('1'), 'activity');
     });
     it('create → data.activity', async () => {
-      assertEnvelope(await ctrl.create({} as any), 'activity');
+      assertEnvelope(await ctrl.create({} as never), 'activity');
     });
   });
 

@@ -12,6 +12,7 @@ import {
   Notification,
   NotificationDocument,
 } from '../../models/notifications/notification.schema';
+import { CreateNotificationDto } from '../../dto/notifications/create-notification.dto';
 
 @Injectable()
 export class NotificationsService extends AbstractService {
@@ -25,7 +26,7 @@ export class NotificationsService extends AbstractService {
   }
 
   /** Create a new notification. */
-  async create(dto: any): Promise<NotificationDocument> {
+  async create(dto: CreateNotificationDto): Promise<NotificationDocument> {
     const created = new this.notificationModel(dto);
     return created.save();
   }
@@ -54,7 +55,10 @@ export class NotificationsService extends AbstractService {
   }
 
   /** Update a notification. */
-  async update(id: string, updates: any): Promise<NotificationDocument> {
+  async update(
+    id: string,
+    updates: Partial<CreateNotificationDto>,
+  ): Promise<NotificationDocument> {
     const updated = await this.notificationModel
       .findByIdAndUpdate(id, updates, { new: true })
       .lean()
@@ -120,7 +124,7 @@ export class NotificationsService extends AbstractService {
    * If isSeen is undefined, returns the total count for the user.
    */
   async countByUserId(userId: string, isSeen?: boolean): Promise<number> {
-    const filter: Record<string, unknown> = { userId };
+    const filter: { userId: string; isSeen?: boolean } = { userId };
     if (isSeen !== undefined) {
       filter.isSeen = isSeen;
     }

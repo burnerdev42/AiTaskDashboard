@@ -21,10 +21,13 @@ import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { IdeasService } from './ideas.service';
 import { AbstractController } from '../../common';
 import {
-  IdeaListApiResponseDto,
   IdeaApiResponseDto,
   IdeaCountApiResponseDto,
+  IdeaListApiResponseDto,
 } from '../../dto/ideas/idea-response.dto';
+import { CreateIdeaDto } from '../../dto/ideas/create-idea.dto';
+import { UpdateIdeaDto } from '../../dto/ideas/update-idea.dto';
+import { IdeaDocument } from '../../models/ideas/idea.schema';
 
 @ApiTags('Ideas')
 @Controller('ideas')
@@ -42,7 +45,7 @@ export class IdeasController extends AbstractController {
     description: 'Idea created.',
     type: IdeaApiResponseDto,
   })
-  async create(@Body() dto: any) {
+  async create(@Body() dto: CreateIdeaDto) {
     const result = await this.ideasService.create(dto);
     return this.success({ idea: result }, 'Idea successfully created');
   }
@@ -88,7 +91,9 @@ export class IdeasController extends AbstractController {
   })
   @ApiResponse({ status: 404, description: 'Idea not found.' })
   async findOne(@Param('virtualId') virtualId: string) {
-    const result = await this.ideasService.findByIdeaId(virtualId);
+    const result = (await this.ideasService.findByIdeaId(
+      virtualId,
+    )) as IdeaDocument;
     return this.success({ idea: result }, 'Idea retrieved successfully');
   }
 
@@ -99,8 +104,14 @@ export class IdeasController extends AbstractController {
     description: 'Idea updated.',
     type: IdeaApiResponseDto,
   })
-  async update(@Param('virtualId') virtualId: string, @Body() dto: any) {
-    const result = await this.ideasService.updateByIdeaId(virtualId, dto);
+  async update(
+    @Param('virtualId') virtualId: string,
+    @Body() dto: UpdateIdeaDto,
+  ) {
+    const result = (await this.ideasService.updateByIdeaId(
+      virtualId,
+      dto,
+    )) as IdeaDocument;
     return this.success({ idea: result }, 'Idea updated successfully');
   }
 
@@ -115,7 +126,10 @@ export class IdeasController extends AbstractController {
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
   ) {
-    const result = await this.ideasService.toggleUpvote(virtualId, body.userId);
+    const result = (await this.ideasService.toggleUpvote(
+      virtualId,
+      body.userId,
+    )) as IdeaDocument;
     return this.success({ idea: result }, 'Upvote toggled successfully');
   }
 
@@ -130,10 +144,10 @@ export class IdeasController extends AbstractController {
     @Param('virtualId') virtualId: string,
     @Body() body: { userId: string },
   ) {
-    const result = await this.ideasService.toggleSubscribe(
+    const result = (await this.ideasService.toggleSubscribe(
       virtualId,
       body.userId,
-    );
+    )) as IdeaDocument;
     return this.success({ idea: result }, 'Subscription toggled successfully');
   }
 

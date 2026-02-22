@@ -43,15 +43,21 @@ export class Idea {
 
   @Prop({ type: [String], default: [] })
   upVotes: string[];
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const IdeaSchema = SchemaFactory.createForClass(Idea);
 
-IdeaSchema.pre('save', function (this: IdeaDocument, next: Function) {
-  if (this.isNew || this.isModified('createdAt')) {
-    const date = (this as any).createdAt || new Date();
-    this.month = date.getMonth() + 1;
-    this.year = date.getFullYear();
-  }
-  next();
-});
+IdeaSchema.pre(
+  'save',
+  function (this: IdeaDocument, next: (err?: Error) => void) {
+    if (this.isNew || this.isModified('createdAt')) {
+      const date = this.createdAt || new Date();
+      this.month = date.getMonth() + 1;
+      this.year = date.getFullYear();
+    }
+    next();
+  },
+);

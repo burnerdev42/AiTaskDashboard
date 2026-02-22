@@ -5,7 +5,6 @@ import {
   OPCO_LIST,
   ALL_PLATFORMS,
   COMPANY_TECH_ROLES,
-  INTEREST_AREAS,
   AUTH_ROLES,
   USER_STATUSES,
 } from '../../common/constants/app-constants';
@@ -53,11 +52,15 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.pre('save', async function (this: UserDocument, next: Function) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+UserSchema.pre(
+  'save',
+  async function (this: UserDocument, next: (err?: Error) => void) {
+    if (!this.isModified('password')) {
+      next();
+      return;
+    }
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  },
+);

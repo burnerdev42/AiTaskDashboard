@@ -147,7 +147,7 @@ describe('ChallengesService', () => {
   describe('findOne', () => {
     it('should return challenge', async () => {
       mockChallengesRepository.exec.mockResolvedValueOnce(mockChallenge);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       const result = await service.findByVirtualId(
         mockChallengeId.toHexString(),
       );
