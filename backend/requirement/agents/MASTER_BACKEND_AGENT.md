@@ -37,7 +37,7 @@ When approval is granted, you must invoke the sub-agents strictly in the followi
 
 ### Step 1: `SCHEMA_AGENT`
 - Read `sub_agents/SCHEMA_AGENT.md`.
-- **Action**: Create, update, or synchronize the physical Mongoose/MongoDB database models in `backend/requirement/schema/` according to `Data requirements.txt`. 
+- **Action**: Create, update, or synchronize the physical Mongoose/MongoDB database models in `backend/requirement/schema/` according to `Data requirements.md`. 
 - **Wait**: Ensure this step is verified complete before proceeding.
 
 ### Step 2: `SWAGGER_AGENT`
@@ -59,7 +59,7 @@ When approval is granted, you must invoke the sub-agents strictly in the followi
 - **Wait**: Ensure tests are passing and logic is functionally sound.
 
 ### Step 5: `README_AGENT` (or Master Self-Update)
-- **Action**: Review all generated schemas, DB models, Swagger documentation, and `Data requirements.txt`. Update the `backend/README.md` to perfectly reflect the current state of Data Models, Enums, and API Endpoints.
+- **Action**: Review all generated schemas, DB models, Swagger documentation, and `Data requirements.md`. Update the `backend/README.md` to perfectly reflect the current state of Data Models, Enums, and API Endpoints.
 - **Wait**: Ensure the README accurately mirrors the new truth before proceeding.
 
 ### Step 6: Master Cross-Reference Sync

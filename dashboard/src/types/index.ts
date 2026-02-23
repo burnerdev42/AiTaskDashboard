@@ -1,7 +1,7 @@
 export type ChallengeStage = 'Scaled & Deployed' | 'POC & Pilot' | 'Ideation & Evaluation' | 'Challenge Submitted' | 'Parking Lot';
 
 export interface User {
-    id: string;
+    id: string; // Will map to _id from backend
     name: string;
     avatar: string; // Initials or URL
     role: string;
@@ -9,8 +9,23 @@ export interface User {
     password?: string; // In a real app, this wouldn't be here like this
     opco?: string;
     platform?: string;
+    companyTechRole?: string;
     about?: string;
-    interests?: string[];
+    interestAreas?: string[]; // Mapped to backend schema
+    status?: string;
+    innovationScore?: number;
+    upvotedChallengeList?: string[];
+    upvotedAppreciatedIdeaList?: string[];
+    // Derived Fields
+    upvoteCount?: number;
+    recentActivity?: any[];
+    recentSubmission?: any[];
+    contributionGraph?: Record<string, number>;
+    commentCount?: number;
+    challengeCount?: number;
+    totalIdeaCount?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface Challenge {

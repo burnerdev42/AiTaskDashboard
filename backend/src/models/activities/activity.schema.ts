@@ -27,16 +27,13 @@ export class Activity {
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
 
-ActivitySchema.pre(
-  'save',
-  async function (this: ActivityDocument) {
-    if (this.isNew || this.isModified('createdAt')) {
-      const date = this.createdAt || new Date();
-      this.month = date.getMonth() + 1;
-      this.year = date.getFullYear();
-    }
-  },
-);
+ActivitySchema.pre('save', async function (this: ActivityDocument) {
+  if (this.isNew || this.isModified('createdAt')) {
+    const date = this.createdAt || new Date();
+    this.month = date.getMonth() + 1;
+    this.year = date.getFullYear();
+  }
+});
 
 ActivitySchema.index({ userId: 1, createdAt: -1 });
 ActivitySchema.index({ type: 1 });

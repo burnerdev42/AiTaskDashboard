@@ -37,7 +37,7 @@ export class User {
   @Prop({ enum: [...AUTH_ROLES], default: 'USER' })
   role: string;
 
-  @Prop({ enum: [...USER_STATUSES], default: 'PENDING' })
+  @Prop({ enum: [...USER_STATUSES], default: 'APPROVED' })
   status: string;
 
   @Prop({ default: 0 })
@@ -52,13 +52,10 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.pre(
-  'save',
-  async function (this: UserDocument) {
-    if (!this.isModified('password')) {
-      return;
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-  },
-);
+UserSchema.pre('save', async function (this: UserDocument) {
+  if (!this.isModified('password')) {
+    return;
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});

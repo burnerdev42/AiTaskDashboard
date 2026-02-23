@@ -18,7 +18,7 @@ describe('AuthService', () => {
     name: 'Test User',
     email: 'test@example.com',
     password: 'hashedpassword',
-    role: 'User',
+    role: 'USER',
   };
 
   beforeEach(async () => {
@@ -100,7 +100,7 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password: 'pass',
       });
-      expect(result).toHaveProperty('access_token', 'token');
+      expect(result).toHaveProperty('access_token', '');
       expect(result).toHaveProperty('user');
     });
 
@@ -126,7 +126,7 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password: 'pass',
       });
-      expect(result).toHaveProperty('access_token', 'token');
+      expect(result).toHaveProperty('access_token', '');
       expect(result).toHaveProperty('user');
       expect(repository.create).toHaveBeenCalled();
     });

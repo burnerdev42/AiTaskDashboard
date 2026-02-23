@@ -4,7 +4,7 @@ This flowchart illustrates the end-to-end orchestration pipeline managed by the 
 
 ```mermaid
 flowchart TD
-    Req[Data requirements.txt] -->|Source of Truth| SA
+    Req[Data requirements.md] -->|Source of Truth| SA
 
     subgraph Step 1
     SA[SCHEMA_AGENT]

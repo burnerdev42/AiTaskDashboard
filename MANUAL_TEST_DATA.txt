@@ -1,0 +1,19 @@
+login - user1@ananta.com / Password123!
+
+=========================================================
+
+registration - 
+{
+  "name": "John Doe",
+  "email": "test1@example.com",
+  "password": "Password123!",
+  "opco": "Albert Heijn",
+  "platform": "CTP",
+  "companyTechRole": "Innovation Lead",
+  "interestAreas": [
+    "Customer Experience"
+  ],
+  "role": "MEMBER"
+}
+
+=========================================================

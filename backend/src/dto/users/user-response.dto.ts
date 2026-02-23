@@ -31,6 +31,68 @@ export class UserDto {
   @ApiPropertyOptional({ description: 'Avatar URL or initials', example: 'JD' })
   avatar?: string;
 
+  @ApiPropertyOptional({
+    description: 'Operating Company',
+    example: 'Albert Heijn',
+  })
+  opco?: string;
+
+  @ApiPropertyOptional({ description: 'Platform', example: 'STP' })
+  platform?: string;
+
+  @ApiPropertyOptional({
+    description: 'Technical Role',
+    example: 'Innovation Lead',
+  })
+  companyTechRole?: string;
+
+  @ApiPropertyOptional({
+    description: 'Areas of interest',
+    type: [String],
+    example: ['AI'],
+  })
+  interestAreas?: string[];
+
+  @ApiPropertyOptional({ description: 'User status', example: 'APPROVED' })
+  status?: string;
+
+  @ApiPropertyOptional({ description: 'Innovation score', example: 42 })
+  innovationScore?: number;
+
+  @ApiPropertyOptional({ description: 'Upvoted challenges', type: [String] })
+  upvotedChallengeList?: string[];
+
+  @ApiPropertyOptional({ description: 'Upvoted ideas', type: [String] })
+  upvotedAppreciatedIdeaList?: string[];
+
+  // --- Derived Fields ---
+  @ApiPropertyOptional({ description: 'Total upvotes received', example: 10 })
+  upvoteCount?: number;
+
+  @ApiPropertyOptional({ description: 'Recent activity log', type: [Object] })
+  recentActivity?: any[];
+
+  @ApiPropertyOptional({
+    description: 'Recent submissions (ideas/challenges)',
+    type: [Object],
+  })
+  recentSubmission?: any[];
+
+  @ApiPropertyOptional({
+    description: 'Contribution graph data by month',
+    example: { '2023-10': 5 },
+  })
+  contributionGraph?: Record<string, number>;
+
+  @ApiPropertyOptional({ description: 'Total comments made', example: 15 })
+  commentCount?: number;
+
+  @ApiPropertyOptional({ description: 'Total challenges created', example: 2 })
+  challengeCount?: number;
+
+  @ApiPropertyOptional({ description: 'Total ideas created', example: 5 })
+  totalIdeaCount?: number;
+
   @ApiProperty({
     description: 'Creation timestamp',
     example: '2026-02-18T10:00:00.000Z',

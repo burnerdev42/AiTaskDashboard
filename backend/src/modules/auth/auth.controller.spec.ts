@@ -12,7 +12,7 @@ describe('AuthController', () => {
     _id: new Types.ObjectId('507f1f77bcf86cd799439011'),
     name: 'Test User',
     email: 'test@example.com',
-    role: 'User',
+    role: 'USER',
   };
 
   beforeEach(async () => {

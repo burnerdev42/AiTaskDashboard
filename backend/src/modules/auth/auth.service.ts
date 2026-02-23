@@ -85,14 +85,8 @@ export class AuthService extends AbstractService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload: TokenPayload = {
-      username: user.email,
-      sub: user._id.toString(),
-      roles: [user.role],
-    };
-
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: '', // Simplified as per request
       user: user,
     };
   }
@@ -122,15 +116,11 @@ export class AuthService extends AbstractService {
       registerDto,
     )) as unknown as UserDocument;
 
-    const payload: TokenPayload = {
-      username: createdUser.email,
-      sub: createdUser._id.toString(),
-      roles: [createdUser.role],
-    };
+    const safeUser = this.sanitizeUser(createdUser);
 
     return {
-      access_token: this.jwtService.sign(payload),
-      user: this.sanitizeUser(createdUser),
+      access_token: '', // Simplified as per request
+      user: safeUser,
     };
   }
 
@@ -143,7 +133,7 @@ export class AuthService extends AbstractService {
     // Convert Mongoose document to plain object before destructuring
     const userObj =
       typeof (user as unknown as { toObject: () => UserDocument }).toObject ===
-      'function'
+        'function'
         ? (user as unknown as { toObject: () => UserDocument }).toObject()
         : user;
     // Omit password field using destructuring

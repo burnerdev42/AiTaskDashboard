@@ -50,13 +50,10 @@ export class Idea {
 
 export const IdeaSchema = SchemaFactory.createForClass(Idea);
 
-IdeaSchema.pre(
-  'save',
-  async function (this: IdeaDocument) {
-    if (this.isNew || this.isModified('createdAt')) {
-      const date = this.createdAt || new Date();
-      this.month = date.getMonth() + 1;
-      this.year = date.getFullYear();
-    }
-  },
-);
+IdeaSchema.pre('save', async function (this: IdeaDocument) {
+  if (this.isNew || this.isModified('createdAt')) {
+    const date = this.createdAt || new Date();
+    this.month = date.getMonth() + 1;
+    this.year = date.getFullYear();
+  }
+});

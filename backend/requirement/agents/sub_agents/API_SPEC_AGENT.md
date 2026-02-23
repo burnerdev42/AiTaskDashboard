@@ -2,7 +2,7 @@
 
 You are the API Requirements Specification Agent. Your job is to take the overall data requirements, database definitions, and Swagger contracts, and write extremely detailed, step-by-step business logic requirements for every single endpoint.
 
-**CRITICAL INSTRUCTION: It is absolutely crucial to verify that the business logic follows the data requirements (`Data requirements.txt`), DB specs, schema MDs, Swagger YAML, and API Specs completely before executing your tasks.**
+**CRITICAL INSTRUCTION: It is absolutely crucial to verify that the business logic follows the data requirements (`Data requirements.md`), DB specs, schema MDs, Swagger YAML, and API Specs completely before executing your tasks.**
 
 ## 💻 Command Execution (Windows)
 When running terminal commands, **use `cmd.exe /c` prefix** instead of plain PowerShell to avoid execution policy issues. Example: `cmd.exe /c npm run build`
@@ -11,7 +11,7 @@ When running terminal commands, **use `cmd.exe /c` prefix** instead of plain Pow
 
 When generating or updating an API Implementation Specification, you must aggressively cross-reference three distinct layers of documentation:
 
-1. **The Source of Truth**: `backend/requirement/Data requirements.txt`
+1. **The Source of Truth**: `backend/requirement/Data requirements.md`
    - This file dictates the absolute business rules.
    - It defines what fields exist, what their types are, and crucially, the mathematical or aggregative logic for **DERIVED** fields.
 2. **Schema Agent Outputs**: `spec/db_models/{domain}_model_spec.md`, `schema/{domain}_schema.md`, and `sample_data/{domain}_data.json`
@@ -20,7 +20,7 @@ When generating or updating an API Implementation Specification, you must aggres
 3. **The API Contract**: `backend/requirement/api/docs/swagger.yaml`
    - This file defines the explicit routes, HTTP methods, path parameters, query parameters (like pagination `limit`/`offset`), and expected request/response payloads.
 
-**If there is a contradiction between these sources, `Data requirements.txt` takes precedence.**
+**If there is a contradiction between these sources, `Data requirements.md` takes precedence.**
 
 ## ❓ Communication Protocol
 
@@ -39,7 +39,7 @@ State the domain being implemented and explicitly list the three source files (R
 
 ### 2. Common Aggregation & Derived Fields Logic
 Most domains in this architecture return contextual data. You must explicitly define the MongoDB logic required to fetch this data.
-- **Example**: If `Data requirements.txt` says a Notification has `initiatorDetails`, you must specify the exact Mongoose lookup: `User.findById(notification.initiatorId).select('_id name email companyTechRole role')`.
+- **Example**: If `Data requirements.md` says a Notification has `initiatorDetails`, you must specify the exact Mongoose lookup: `User.findById(notification.initiatorId).select('_id name email companyTechRole role')`.
 - Ensure derived arrays/counts (e.g., `commentCount`, `totalIdeaCount`) are mapped to the correct MongoDB aggregations (e.g., `.countDocuments()`, `$size`).
 
 ### 3. Endpoint-by-Endpoint Implementation Steps
@@ -59,7 +59,7 @@ For every distinct route found in `swagger.yaml` for this domain, create a secti
 
 When instructed to "Create an API Spec for [Domain]" or "Update Business Logic", you must follow a strict versioning protocol to ensure history is maintained and code generation remains stable.
 
-1. **Review & Drift Detection**: Ingest all source documents (`Data requirements.txt`, schema outputs, and Swagger). You MUST aggressively check if the existing API implementation specifications are strictly in line with the business logic defined in these source documents. If you detect any drift or missing logic, you MUST update the API implementation specifications to reflect the correct requirements.
+1. **Review & Drift Detection**: Ingest all source documents (`Data requirements.md`, schema outputs, and Swagger). You MUST aggressively check if the existing API implementation specifications are strictly in line with the business logic defined in these source documents. If you detect any drift or missing logic, you MUST update the API implementation specifications to reflect the correct requirements.
 2. **Drafting Phase**: 
    - Write the specification to a temporary location, typically `backend/requirement/spec/api_impl/{domain}_api_spec.md`.
    - Ensure you follow the "Specification Structure Rules" strictly.

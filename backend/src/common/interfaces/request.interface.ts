@@ -62,14 +62,23 @@ export interface UserDocument {
   avatar?: string;
   /** Avatar initial */
   initial?: string;
-  /** Avatar background color */
-  avatarColor?: string;
   /** Operating company */
   opco?: string;
   /** Platform */
   platform?: string;
+  /** Company Technical Role */
+  companyTechRole?: string;
   /** User interests */
-  interests?: string[];
+  interestAreas?: string[];
+  /** User Status */
+  status?: string;
+  /** Innovation Score */
+  innovationScore?: number;
+  /** Upvoted challenges */
+  upvotedChallengeList?: string[];
+  /** Upvoted ideas */
+  upvotedAppreciatedIdeaList?: string[];
+
   /** Created timestamp */
   createdAt?: Date;
   /** Updated timestamp */

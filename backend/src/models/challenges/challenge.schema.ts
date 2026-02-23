@@ -85,13 +85,10 @@ export class Challenge {
 
 export const ChallengeSchema = SchemaFactory.createForClass(Challenge);
 
-ChallengeSchema.pre(
-  'save',
-  async function (this: ChallengeDocument) {
-    if (this.isNew || this.isModified('createdAt')) {
-      const date = this.createdAt || new Date();
-      this.month = date.getMonth() + 1;
-      this.year = date.getFullYear();
-    }
-  },
-);
+ChallengeSchema.pre('save', async function (this: ChallengeDocument) {
+  if (this.isNew || this.isModified('createdAt')) {
+    const date = this.createdAt || new Date();
+    this.month = date.getMonth() + 1;
+    this.year = date.getFullYear();
+  }
+});

@@ -24,7 +24,6 @@ import { HomeModule } from './modules/home/home.module';
 import { join } from 'path';
 import { SeedModule } from './modules/seed/seed.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({

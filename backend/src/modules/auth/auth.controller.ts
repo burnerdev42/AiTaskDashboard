@@ -4,7 +4,14 @@
  * @responsibility Handles login and registration API requests.
  */
 
-import { Controller, Post, Body, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Logger,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService, AuthResponse } from './auth.service';
 import { AuthDto, RegisterDto } from '../../dto/auth/auth.dto';
@@ -31,6 +38,7 @@ export class AuthController extends AbstractController {
    * @returns Authentication response with access token and user data
    */
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User login' })
   @ApiResponse({
     status: 200,
@@ -70,6 +78,6 @@ export class AuthController extends AbstractController {
     @Body() body: RegisterDto,
   ): Promise<ApiResponseType<AuthResponse>> {
     const result = await this.authService.register(body);
-    return this.success(result, 'User successfully registered');
+    return this.success(result, 'Registration successful');
   }
 }

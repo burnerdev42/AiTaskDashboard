@@ -49,7 +49,7 @@ export const Register: React.FC = () => {
         if (!/[A-Z]/.test(pwd)) return false;
         if (!/[a-z]/.test(pwd)) return false;
         if (!/[0-9]/.test(pwd)) return false;
-        if (!/[!@#$%^&*(),.?":{}\|<>]/.test(pwd)) return false;
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return false;
         return true;
     }, [formData.password]);
 
@@ -73,7 +73,7 @@ export const Register: React.FC = () => {
 
         setErrors({});
 
-        const success = await register({
+        const { success, error: apiError } = await register({
             name: formData.name,
             email: formData.email,
             role: formData.role,
@@ -87,7 +87,7 @@ export const Register: React.FC = () => {
             showToast(`Registration successful! Welcome, ${formData.name}`);
             navigate('/');
         } else {
-            showToast('An account with this email already exists. Please sign in instead.', 'error');
+            showToast(apiError || 'Registration failed. Please try again.', 'error');
         }
     };
 
@@ -189,16 +189,27 @@ export const Register: React.FC = () => {
                     {/* Role */}
                     <div className="form-group">
                         <label>Role / Job Title <span className="req">*</span></label>
-                        <input
-                            type="text"
-                            placeholder="e.g. Senior Data Engineer"
+                        <select
                             value={formData.role}
                             onChange={(e) => {
                                 setFormData({ ...formData, role: e.target.value });
                                 if (errors.role) setErrors(prev => { const n = { ...prev }; delete n.role; return n; });
                             }}
                             style={{ borderColor: errors.role ? 'var(--accent-red)' : 'var(--border)' }}
-                        />
+                        >
+                            <option value="" disabled>Select your Technical Role</option>
+                            <option value="Innovation Lead">Innovation Lead</option>
+                            <option value="AI / ML Engineer">AI / ML Engineer</option>
+                            <option value="IoT & Digital Twin Lead">IoT & Digital Twin Lead</option>
+                            <option value="Data Science Lead">Data Science Lead</option>
+                            <option value="Full-Stack Developer">Full-Stack Developer</option>
+                            <option value="UX / Design Lead">UX / Design Lead</option>
+                            <option value="Product Manager">Product Manager</option>
+                            <option value="Cloud Architect">Cloud Architect</option>
+                            <option value="Data Engineer">Data Engineer</option>
+                            <option value="DevOps Lead">DevOps Lead</option>
+                            <option value="Contributor">Contributor</option>
+                        </select>
                         {errors.role && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{errors.role}</div>}
                     </div>
 

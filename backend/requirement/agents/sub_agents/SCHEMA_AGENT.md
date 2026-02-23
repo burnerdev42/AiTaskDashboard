@@ -7,7 +7,7 @@ When running terminal commands, **use `cmd.exe /c` prefix** instead of plain Pow
 
 ## 🚨 Core Directives
 
-1. **Source of Truth:** The file `backend/requirement/Data requirements.txt` is the absolute **Source of Truth**. Every change, schema, and sample dataset must strictly adhere to the constraints, field names, data types, enumerations, and relationships defined in this document.
+1. **Source of Truth:** The file `backend/requirement/Data requirements.md` is the absolute **Source of Truth**. Every change, schema, and sample dataset must strictly adhere to the constraints, field names, data types, enumerations, and relationships defined in this document.
 2. **Clarification:** If a recent change in the requirement file is ambiguous, conflicting, or lacks clear types, **YOU MUST stop and ask the user clarifying questions** before generating any files. Do not make assumptions. **Ask questions ONE BY ONE.** Do not overwhelm the user with a massive list of questions. Ask the most critical blocking question first, resolve it, and then move to the next.
 3. **Hex IDs:** All MongoDB Object IDs generated across sample data must strictly use authentic, randomized 24-character hexadecimal strings (e.g., `"5c4b12df8e9a2f1b4c6e7a5f"`).
 
@@ -15,16 +15,16 @@ When running terminal commands, **use `cmd.exe /c` prefix** instead of plain Pow
 
 ## 🏗️ Execution Pipeline
 
-Whenever the schema or requirements need to be updated, follow this exact 5-step execution pipeline in order. **Crucially, the Schema Agent looks for drift in the schema from `Data requirements.txt`. It only creates or updates artifacts if required.**
+Whenever the schema or requirements need to be updated, follow this exact 5-step execution pipeline in order. **Crucially, the Schema Agent looks for drift in the schema from `Data requirements.md`. It only creates or updates artifacts if required.**
 
 ### Phase 0: Pre-flight Numbering Verification
-- **Target File:** `backend/requirement/Data requirements.txt`
-- **Task:** ALWAYS check the numbering sequence of the DB fields and Derived fields inside the source document. If you notice any skipped numbers (e.g., jumping from 19 to 21) or formatting issues, fix the numbering natively inside `Data requirements.txt` so it is strictly sequential *before* you generate any markdown.
+- **Target File:** `backend/requirement/Data requirements.md`
+- **Task:** ALWAYS check the numbering sequence of the DB fields and Derived fields inside the source document. If you notice any skipped numbers (e.g., jumping from 19 to 21) or formatting issues, fix the numbering natively inside `Data requirements.md` so it is strictly sequential *before* you generate any markdown.
 
 ### Phase 1: Generate/Update Markdown Requirements Document
 - **Location:** `backend/requirement/`
 - **Naming Pattern:** `Data requirements.md`
-- **Task:** Explicitly read the absolute Source of Truth document (`backend/requirement/Data requirements.txt`). Convert its contents into a well-formatted markdown file (`Data requirements.md`). Ensure all explicit collections requested by the user and their Database (DB) fields are clearly listed. Note any derived fields, but keep them separated as they apply primarily to the API level.
+- **Task:** Explicitly read the absolute Source of Truth document (`backend/requirement/Data requirements.md`). Convert its contents into a well-formatted markdown file (`Data requirements.md`). Ensure all explicit collections requested by the user and their Database (DB) fields are clearly listed. Note any derived fields, but keep them separated as they apply primarily to the API level.
 
 ### Phase 2: Generate/Update Database Model Specifications
 - **Location:** `backend/requirement/spec/db_models/`

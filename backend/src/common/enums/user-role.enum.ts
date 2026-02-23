@@ -8,6 +8,7 @@
  * Roles for system access and permissions.
  */
 export enum UserRole {
-  ADMIN = 'Admin',
-  USER = 'User',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  MEMBER = 'MEMBER',
 }

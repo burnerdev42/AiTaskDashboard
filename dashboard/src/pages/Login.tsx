@@ -42,12 +42,12 @@ export const Login: React.FC = () => {
             return;
         }
 
-        const success = await login(email);
+        const { success, error: apiError } = await login(email, password);
         if (success) {
             showToast('Welcome back! You have signed in successfully.');
             navigate(from, { replace: true });
         } else {
-            setError('Login failed. Please check your credentials or register.');
+            setError(apiError || 'Login failed. Please check your credentials or register.');
         }
     };
 
