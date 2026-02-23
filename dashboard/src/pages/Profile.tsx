@@ -16,7 +16,7 @@ export const Profile: React.FC = () => {
         platform: '',
         role: '',
         about: '',
-        interests: [] as string[],
+        interestAreas: [] as string[],
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -38,7 +38,7 @@ export const Profile: React.FC = () => {
                 platform: user.platform || '',
                 role: user.role || '',
                 about: user.about || '',
-                interests: user.interests || [],
+                interestAreas: user.interestAreas || [],
             });
             setErrors({});
         }
@@ -70,11 +70,11 @@ export const Profile: React.FC = () => {
 
     const handleInterestToggle = (interest: string) => {
         setFormData(prev => {
-            const current = prev.interests;
+            const current = prev.interestAreas;
             if (current.includes(interest)) {
-                return { ...prev, interests: current.filter(i => i !== interest) };
+                return { ...prev, interestAreas: current.filter(i => i !== interest) };
             } else {
-                return { ...prev, interests: [...current, interest] };
+                return { ...prev, interestAreas: [...current, interest] };
             }
         });
     };
@@ -115,7 +115,7 @@ export const Profile: React.FC = () => {
                 platform: user.platform || '',
                 role: user.role || '',
                 about: user.about || '',
-                interests: user.interests || [],
+                interestAreas: user.interestAreas || [],
             });
         }
         setErrors({});
@@ -255,14 +255,14 @@ export const Profile: React.FC = () => {
                             </div>
                         )}
 
-                        {(isLoading || (user.interests && user.interests.length > 0)) && (
+                        {(isLoading || (user.interestAreas && user.interestAreas.length > 0)) && (
                             <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Areas of Interest</div>
                                 <div className="interest-tags" id="interestTags">
                                     {isLoading ? (
                                         [1, 2, 3].map(i => <div key={i} className="skeleton" style={{ width: '70px', height: '24px', borderRadius: '12px' }}></div>)
                                     ) : (
-                                        user.interests?.map(i => <span key={i} className="interest-tag">{i}</span>)
+                                        user.interestAreas?.map((i: string) => <span key={i} className="interest-tag">{i}</span>)
                                     )}
                                 </div>
                             </div>
@@ -388,7 +388,7 @@ export const Profile: React.FC = () => {
                                     {INTEREST_OPTIONS.map(interest => (
                                         <div
                                             key={interest}
-                                            className={`interest-chip ${formData.interests.includes(interest) ? 'selected' : ''}`}
+                                            className={`interest-chip ${formData.interestAreas.includes(interest) ? 'selected' : ''}`}
                                             onClick={() => handleInterestToggle(interest)}
                                         >
                                             {interest}

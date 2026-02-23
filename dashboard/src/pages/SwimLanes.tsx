@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { storage } from '../services/storage';
 import { type SwimLaneCard, type ChallengeStage } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { challengeService } from '../services/challenge.service';
+import { useToast } from '../context/ToastContext';
 
 export const SwimLanes: React.FC = () => {
     const [cards, setCards] = useState<SwimLaneCard[]>([]);
@@ -11,16 +12,56 @@ export const SwimLanes: React.FC = () => {
     const [dropIndex, setDropIndex] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { user, isAuthenticated } = useAuth();
+    const { showToast } = useToast();
     const draggedRef = useRef<HTMLElement | null>(null);
 
-    useEffect(() => {
-        // Simulate API loading
-        const timer = setTimeout(() => {
-            setCards(storage.getSwimLanes());
+    // Map backend short codes to frontend UI lane IDs
+    const backendToFrontendStageMap: Record<string, string> = {
+        'submitted': 'Challenge Submitted',
+        'ideation': 'Ideation & Evaluation',
+        'pilot': 'POC & Pilot',
+        'completed': 'Scaled & Deployed',
+        'archive': 'Parking Lot',
+    };
+
+    // Map frontend UI lane IDs back to backend short codes
+    const frontendToBackendStageMap: Record<string, string> = {
+        'Challenge Submitted': 'submitted',
+        'Ideation & Evaluation': 'ideation',
+        'POC & Pilot': 'pilot',
+        'Scaled & Deployed': 'completed',
+        'Parking Lot': 'archive',
+    };
+
+    const fetchChallenges = async () => {
+        try {
+            setIsLoading(true);
+            const response = await challengeService.getChallenges(100, 0); // Fetch enough for the board
+            const backendChallenges = response.data.challenges;
+
+            // Map backend challenges to frontend SwimLaneCard format
+            const mappedCards: SwimLaneCard[] = backendChallenges.map((ch: any) => ({
+                id: ch.virtualId,
+                title: ch.title,
+                description: ch.summary || ch.description,
+                owner: ch.ownerDetails?.name || ch.stakeHolder || 'Unknown',
+                priority: ch.priority || 'Medium',
+                stage: (backendToFrontendStageMap[ch.status] || 'Parking Lot') as (ChallengeStage | 'Parking Lot'),
+                type: 'standard', // default styling
+            }));
+
+            setCards(mappedCards);
+        } catch (error: any) {
+            console.error('Failed to fetch challenges:', error);
+            showToast(error.response?.data?.message || 'Failed to load challenges', 'error');
+        } finally {
             setIsLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
+        }
+    };
+
+    useEffect(() => {
+        fetchChallenges();
     }, []);
 
     /* ── Lane Icon SVGs – outlined, inheriting lane color via currentColor ── */
@@ -125,36 +166,65 @@ export const SwimLanes: React.FC = () => {
         setDropIndex(totalCards);
     }, []);
 
-    const handleDrop = (e: React.DragEvent, laneId: string) => {
+    const handleDrop = async (e: React.DragEvent, laneId: string) => {
         e.preventDefault();
         setDragOverLaneId(null);
-        if (draggedCardId) {
-            // Update storage for stage change
-            storage.updateSwimLaneCardStage(draggedCardId, laneId);
 
-            // Reorder in state: remove card, insert at dropIndex
+        if (!draggedCardId) {
+            setDropIndex(0);
+            return;
+        }
+
+        const draggedCard = cards.find(c => c.id === draggedCardId);
+        if (!draggedCard) return;
+
+        // Rule: Once in 'pilot', cannot move back to 'submitted'
+        if (frontendToBackendStageMap[draggedCard.stage] === 'pilot' && frontendToBackendStageMap[laneId] === 'submitted') {
+            showToast('Cannot move a challenge in Pilot status back to Submitted', 'error');
+            setDropIndex(0);
+            return;
+        }
+
+        const originalLane = draggedCard.stage;
+
+        // Reorder in state optimistically
+        setCards(prev => {
+            const without = prev.filter(c => c.id !== draggedCardId);
+            const targetLaneCards = without.filter(c => c.stage === laneId);
+            const otherCards = without.filter(c => c.stage !== laneId);
+
+            const clampedIndex = Math.min(dropIndex, targetLaneCards.length);
+            const updatedCard = { ...draggedCard, stage: laneId as ChallengeStage | 'Parking Lot' };
+            targetLaneCards.splice(clampedIndex, 0, updatedCard);
+
+            return [...otherCards, ...targetLaneCards];
+        });
+
+        setDropIndex(0);
+
+        // Async API Call
+        try {
+            const backendStatus = frontendToBackendStageMap[laneId];
+            if (!backendStatus) {
+                throw new Error('Invalid swim lane configuration');
+            }
+            if (!user?.id) {
+                throw new Error('You must be logged in to update a challenge');
+            }
+
+            await challengeService.updateChallengeStatus(draggedCardId, backendStatus, user.id);
+            // Optionally we can show a success toast here
+            // showToast('Status updated successfully', 'success');
+        } catch (error: any) {
+            console.error('Failed to update challenge status:', error);
+            showToast(error.response?.data?.message || error.message || 'Failed to update challenge status', 'error');
+
+            // Revert state on failure
             setCards(prev => {
-                const draggedCard = prev.find(c => c.id === draggedCardId);
-                if (!draggedCard) return prev;
-
-                // Remove dragged card from array
                 const without = prev.filter(c => c.id !== draggedCardId);
-
-                // Get cards in the target lane (without the dragged card)
-                const targetLaneCards = without.filter(c => c.stage === laneId);
-                const otherCards = without.filter(c => c.stage !== laneId);
-
-                // Clamp dropIndex
-                const clampedIndex = Math.min(dropIndex, targetLaneCards.length);
-
-                // Insert dragged card at the correct position
-                const updatedCard = { ...draggedCard, stage: laneId as ChallengeStage | 'Parking Lot' };
-                targetLaneCards.splice(clampedIndex, 0, updatedCard);
-
-                return [...otherCards, ...targetLaneCards];
+                return [...without, { ...draggedCard, stage: originalLane }];
             });
         }
-        setDropIndex(0);
     };
 
     /* ── Priority color helper ── */
@@ -259,7 +329,7 @@ export const SwimLanes: React.FC = () => {
                                                 <div className="card-meta">
                                                     <span className="card-id">
                                                         <span className="card-priority" style={{ background: priorityColor(card.priority) }}></span>
-                                                        {`CH-${card.id.replace(/\D/g, '')}`}
+                                                        {card.id}
                                                     </span>
                                                     <span className="card-owner">{card.owner}</span>
                                                 </div>

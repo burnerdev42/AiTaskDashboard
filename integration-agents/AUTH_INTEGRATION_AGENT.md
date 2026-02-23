@@ -14,7 +14,9 @@ Ensure seamless Sign-in (Login) and Registration flows. Both processes should ac
 When reviewing or fixing the integration, rigidly enforce the following rules:
 
 ### A. Data Contract & Enums
-- **Single Source of Truth**: The file `backend/src/common/constants/app-constants.ts` defines all valid ENUMS (e.g., `COMPANY_TECH_ROLES`, `OPCO_LIST`, `ALL_PLATFORMS`, `AUTH_ROLES`).
+- **Support Documentation & Schema Specs**: The `backend/requirement` folder (specifically `backend/requirement/Data requirements.md`) contains the source of truth for schemas, specifications, and data requirements for AI agents to consult.
+- **Backend Code as Authority**: Actual backend code and the API must always be consulted as the ultimate authority for integration.
+- **Hardcoded Constants**: The file `backend/src/common/constants/app-constants.ts` defines all valid ENUMS (e.g., `COMPANY_TECH_ROLES`, `OPCO_LIST`, `ALL_PLATFORMS`, `AUTH_ROLES`).
 - **Frontend Input Enforcement**: The frontend Registration form (`Register.tsx`) MUST use `<select>` dropdowns (not free-text inputs) for any field mapping directly to one of these Enums (e.g., `companyTechRole` -> "Role / Job Title"). Free-text inputs will trigger 400 Validation errors from the backend `class-validator`.
 - **Backend Schema Defaulting**: Ensure the Registration payload doesn't need to specify everything. The DB (`user.schema.ts`) uses default values (e.g., `status: 'APPROVED'`, `role: 'USER'`).
 
