@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IdeasService } from './ideas.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Idea } from '../../models/ideas/idea.schema';
+import { User } from '../../models/users/user.schema';
 import { ActivitiesService } from '../activities/activities.service';
 import { Types, Model } from 'mongoose';
 import { ChallengesService } from '../challenges/challenges.service';
@@ -60,6 +61,10 @@ describe('IdeasService', () => {
     subscribeUser: jest.fn().mockResolvedValue(undefined),
   };
 
+  const mockUserModel = {
+    updateOne: jest.fn().mockResolvedValue({}),
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -69,6 +74,10 @@ describe('IdeasService', () => {
         {
           provide: getModelToken(Idea.name),
           useValue: mockIdeaModel,
+        },
+        {
+          provide: getModelToken(User.name),
+          useValue: mockUserModel,
         },
         {
           provide: ActivitiesService,

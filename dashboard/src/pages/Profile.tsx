@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../context/ToastContext';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
+import { userService } from '../services/user.service';
 
 export const Profile: React.FC = () => {
-    const { user, logout, updateUser, deleteAccount } = useAuth();
+    const { id } = useParams<{ id: string }>();
+    const { user: authUser, logout, updateUser, deleteAccount } = useAuth();
     const navigate = useNavigate();
     const { showToast } = useToast();
     const [isEditing, setIsEditing] = useState(false);
@@ -22,13 +24,37 @@ export const Profile: React.FC = () => {
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const [isLoading, setIsLoading] = useState(true);
+    const [publicUser, setPublicUser] = useState<any>(null);
+
+    // Identify if viewing another user's profile
+    const isPublicProfile = Boolean(id && id !== authUser?.id);
+
+    // Determine the active user to render based on URL vs logged-in
+    const activeUser = isPublicProfile ? publicUser : authUser;
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 1200);
-        return () => clearTimeout(timer);
-    }, []);
+        const fetchPublicUser = async () => {
+            if (isPublicProfile) {
+                setIsLoading(true);
+                try {
+                    const data = await userService.getUserById(id!);
+                    setPublicUser(data);
+                } catch (err) {
+                    showToast('Failed to load user profile.', 'error');
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                // For own profile, wait slightly just to show skeleton briefly
+                setIsLoading(true);
+                const timer = setTimeout(() => {
+                    setIsLoading(false);
+                }, 400);
+                return () => clearTimeout(timer);
+            }
+        };
+        fetchPublicUser();
+    }, [id, isPublicProfile, showToast]);
 
     const [heatmapLevels, setHeatmapLevels] = useState<number[]>([]);
 
@@ -46,19 +72,19 @@ export const Profile: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (user && !isLoading) {
+        if (!isPublicProfile && activeUser && !isLoading) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData({
-                name: user.name || '',
-                opco: user.opco || '',
-                platform: user.platform || '',
-                role: user.role || '',
-                about: user.about || '',
-                interestAreas: user.interestAreas || [],
+                name: activeUser.name || '',
+                opco: activeUser.opco || '',
+                platform: activeUser.platform || '',
+                role: activeUser.role || activeUser.companyTechRole || '',
+                about: activeUser.about || '',
+                interestAreas: activeUser.interestAreas || [],
             });
             setErrors({});
         }
-    }, [user, isLoading]);
+    }, [activeUser, isLoading, isPublicProfile]);
 
     const handleLogout = () => {
         logout();
@@ -110,7 +136,7 @@ export const Profile: React.FC = () => {
             return;
         }
 
-        if (user) {
+        if (!isPublicProfile && activeUser) {
             await updateUser(formData);
             showToast('Profile updated successfully!');
             setIsEditing(false);
@@ -124,14 +150,14 @@ export const Profile: React.FC = () => {
 
     const handleCancel = (e: React.MouseEvent) => {
         e.preventDefault();
-        if (user) {
+        if (!isPublicProfile && activeUser) {
             setFormData({
-                name: user.name || '',
-                opco: user.opco || '',
-                platform: user.platform || '',
-                role: user.role || '',
-                about: user.about || '',
-                interestAreas: user.interestAreas || [],
+                name: activeUser.name || '',
+                opco: activeUser.opco || '',
+                platform: activeUser.platform || '',
+                role: activeUser.role || activeUser.companyTechRole || '',
+                about: activeUser.about || '',
+                interestAreas: activeUser.interestAreas || [],
             });
         }
         setErrors({});
@@ -148,7 +174,7 @@ export const Profile: React.FC = () => {
         }
     };
 
-    if (!user) {
+    if (!activeUser && !isLoading) {
         return (
             <div className="detail-page-container fade-in" style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px' }}>
                 <div className="breadcrumb">
@@ -225,28 +251,28 @@ export const Profile: React.FC = () => {
                             {isLoading ? (
                                 <div className="skeleton" style={{ width: '100%', height: '100%', borderRadius: '50%' }}></div>
                             ) : (
-                                typeof user.avatar === 'string' && user.avatar.length > 2 ? <img src={user.avatar} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} /> : getInitials(user.name)
+                                typeof activeUser?.avatar === 'string' && activeUser.avatar.length > 2 ? <img src={activeUser.avatar} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} /> : getInitials(activeUser?.name || '?')
                             )}
                         </div>
                         <div className="profile-name" id="profileName">
-                            {isLoading ? <div className="skeleton-text" style={{ width: '140px', height: '28px', margin: '0 auto' }}></div> : user.name}
+                            {isLoading ? <div className="skeleton-text" style={{ width: '140px', height: '28px', margin: '0 auto' }}></div> : activeUser?.name}
                         </div>
                         <div className="profile-email" id="profileEmail">
-                            {isLoading ? <div className="skeleton-text" style={{ width: '180px', height: '16px', margin: '8px auto 0' }}></div> : user.email}
+                            {isLoading ? <div className="skeleton-text" style={{ width: '180px', height: '16px', margin: '8px auto 0' }}></div> : activeUser?.email}
                         </div>
 
                         <div className="profile-meta" style={{ marginTop: '20px' }}>
                             <div className="meta-item">
                                 <span className="label">Role</span>
-                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '80px', height: '14px' }}></div> : (user.role || 'Contributor')}</span>
+                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '80px', height: '14px' }}></div> : (activeUser?.role || activeUser?.companyTechRole || 'Contributor')}</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">OpCo</span>
-                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '100px', height: '14px' }}></div> : (user.opco || 'N/A')}</span>
+                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '100px', height: '14px' }}></div> : (activeUser?.opco || 'N/A')}</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">Platform</span>
-                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '120px', height: '14px' }}></div> : (user.platform || 'N/A')}</span>
+                                <span className="value">{isLoading ? <div className="skeleton-text" style={{ width: '120px', height: '14px' }}></div> : (activeUser?.platform || 'N/A')}</span>
                             </div>
                             <div className="meta-item">
                                 <span className="label">Member since</span>
@@ -254,9 +280,9 @@ export const Profile: React.FC = () => {
                             </div>
                         </div>
 
-                        {(isLoading || user.about) && (
+                        {(isLoading || activeUser?.about) && (
                             <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
-                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>About Me</div>
+                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>About {isPublicProfile ? activeUser?.name?.split(' ')[0] : 'Me'}</div>
                                 <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                                     {isLoading ? (
                                         <>
@@ -265,44 +291,45 @@ export const Profile: React.FC = () => {
                                             <div className="skeleton-text" style={{ width: '40%', height: '14px' }}></div>
                                         </>
                                     ) : (
-                                        user.about
+                                        activeUser?.about
                                     )}
                                 </div>
                             </div>
                         )}
 
-                        {(isLoading || (user.interestAreas && user.interestAreas.length > 0)) && (
+                        {(isLoading || (activeUser?.interestAreas && activeUser.interestAreas.length > 0)) && (
                             <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Areas of Interest</div>
                                 <div className="interest-tags" id="interestTags">
                                     {isLoading ? (
                                         [1, 2, 3].map(i => <div key={i} className="skeleton" style={{ width: '70px', height: '24px', borderRadius: '12px' }}></div>)
                                     ) : (
-                                        user.interestAreas?.map((i: string) => <span key={i} className="interest-tag">{i}</span>)
+                                        activeUser?.interestAreas?.map((i: string) => <span key={i} className="interest-tag">{i}</span>)
                                     )}
                                 </div>
                             </div>
                         )}
 
-                        <div className="profile-actions" style={{ marginTop: '24px' }}>
-                            <button className="btn-edit" onClick={() => setIsEditing(true)} disabled={isLoading} style={{ width: '100%' }}>
-                                Edit Profile
-                            </button>
-                            <button className="btn-logout" onClick={handleLogout} disabled={isLoading} style={{ width: '100%' }}>
-                                Sign Out
-                            </button>
-                            <button className="btn-cancel" onClick={() => setIsDeleteModalOpen(true)} disabled={isLoading} style={{ width: '100%' }}>
-                                Delete Account
-                            </button>
-                        </div>
+                        {!isPublicProfile && (
+                            <div className="profile-actions" style={{ marginTop: '24px' }}>
+                                <button className="btn-edit" onClick={() => setIsEditing(true)} disabled={isLoading} style={{ width: '100%' }}>
+                                    Edit Profile
+                                </button>
+                                <button className="btn-logout" onClick={handleLogout} disabled={isLoading} style={{ width: '100%' }}>
+                                    Sign Out
+                                </button>
+                                <button className="btn-cancel" onClick={() => setIsDeleteModalOpen(true)} disabled={isLoading} style={{ width: '100%' }}>
+                                    Delete Account
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
 
-                {/* Edit Mode */}
-                {isEditing && (
+                {isEditing && !isPublicProfile && (
                     <div className="edit-form active" id="editMode">
                         <div className="profile-avatar" id="editAvatar">
-                            {getInitials(formData.name || user.name)}
+                            {getInitials(formData.name || activeUser?.name || '')}
                         </div>
                         <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '16px', textAlign: 'center' }}>Edit Your Profile</div>
 
@@ -323,7 +350,7 @@ export const Profile: React.FC = () => {
                                 <label>Email Address</label>
                                 <input
                                     type="email"
-                                    value={user.email}
+                                    value={activeUser?.email || ''}
                                     disabled
                                     style={{ opacity: 0.7 }}
                                 />

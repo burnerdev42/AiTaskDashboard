@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
-import { CommentDocument } from '../../models/comments/comment.schema';
+import { CommentDocument, Comment } from '../../models/comments/comment.schema';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
+import { getModelToken } from '@nestjs/mongoose';
 
 import { Types } from 'mongoose';
 import { ChallengesService } from '../challenges/challenges.service';
@@ -41,6 +42,10 @@ describe('CommentsService', () => {
             find: jest.fn(),
             delete: jest.fn(),
           },
+        },
+        {
+          provide: getModelToken(Comment.name),
+          useValue: {},
         },
         {
           provide: ChallengesService,

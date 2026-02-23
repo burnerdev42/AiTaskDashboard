@@ -119,10 +119,35 @@ export class SeedService {
   private async createChallenges(
     users: UserDocument[],
   ): Promise<ChallengeDocument[]> {
+    const challengeTitles = [
+      'AI-Driven Customer Support Revolution',
+      'Next-Gen Predictive Maintenance',
+      'Automated Code Review Assistant',
+      'Smart Supply Chain Optimization',
+      'Personalized Learning Pathways',
+      'Fraud Detection at Scale',
+      'Intelligent Document Processing',
+      'Voice-Activated Enterprise Search',
+      'Robotic Process Automation 2.0',
+      'Real-time Sentiment Analysis',
+      'AI-Powered Threat Intelligence',
+      'Automated Data Governance',
+      'Smart Energy Consumption',
+      'Predictive Demand Forecasting',
+      'Intelligent Talent Acquisition',
+      'AI-Enhanced Knowledge Management',
+      'Automated Quality Assurance',
+      'Hyper-Personalized Marketing',
+      'Smart Customer Churn Prevention',
+      'AI-Driven Financial Forecasting',
+    ];
+
     const challenges: any[] = [];
     for (let i = 1; i <= 20; i++) {
       const creator = users[i % users.length];
       const virtualId = `CH-${i.toString().padStart(3, '0')}`;
+      const title =
+        challengeTitles[i - 1] || `Challenge ${i}: Optimizing AI Workflows`;
 
       const numUpvotes = Math.floor(Math.random() * 6) + 3; // 3 to 8 upvotes
       const upVotes = [...users]
@@ -131,10 +156,10 @@ export class SeedService {
         .map((u) => u._id.toString());
 
       const challenge = {
-        title: `Challenge ${i}: Optimizing AI Workflows`,
-        description: `This is a detailed description for Challenge ${i}. The goal is to improve efficiency using automated agents.`,
-        summary: `Summary of Challenge ${i}`,
-        outcome: `Expected outcome for Challenge ${i}`,
+        title,
+        description: `This is a detailed description for ${title}. The goal is to improve efficiency and drive innovation in our workflows through advanced AI.`,
+        summary: `Strategic initiative: ${title}`,
+        outcome: `Measurable efficiency gains and successful deployment of ${title}.`,
         opco: creator.opco,
         platform: creator.platform,
         timeline: TIMELINE_OPTIONS[i % TIMELINE_OPTIONS.length],
@@ -193,6 +218,18 @@ export class SeedService {
         const creator = users[ideaCounter % users.length];
         const ideaId = `ID-${ideaCounter.toString().padStart(4, '0')}`;
 
+        const ideaPrefixes = [
+          'Implementation Plan',
+          'Pilot Phase',
+          'Core Engine',
+          'User Interface Design',
+          'Data Pipeline',
+          'Analytics Dashboard',
+          'Security Architecture',
+          'Integration Strategy',
+        ];
+        const prefix = ideaPrefixes[ideaCounter % ideaPrefixes.length];
+
         const numUpvotes = Math.floor(Math.random() * 6) + 3; // 3 to 8 upvotes
         const upVotes = [...users]
           .sort(() => 0.5 - Math.random())
@@ -201,9 +238,9 @@ export class SeedService {
 
         ideas.push({
           ideaId,
-          title: `Idea ${ideaCounter} for ${challenge.virtualId}`,
-          description: `Description for Idea ${ideaCounter}`,
-          proposedSolution: `Proposed solution for Idea ${ideaCounter}`,
+          title: `${prefix} for ${challenge.title}`,
+          description: `Detailed description mapping out the ${prefix.toLowerCase()} tailored specifically for ${challenge.virtualId}.`,
+          proposedSolution: `Our proposed solution leverages cutting-edge technology to accomplish the ${prefix.toLowerCase()} effectively.`,
           challengeId: challenge._id.toString(),
           userId: creator._id.toString(),
           subscription: [creator._id.toString()],

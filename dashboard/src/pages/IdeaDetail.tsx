@@ -5,14 +5,22 @@ import type { Idea } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import { ideaService } from '../services/idea.service';
+import { challengeService } from '../services/challenge.service';
+import { commentService } from '../services/comment.service';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
+
+const getInitials = (n?: string) => {
+    if (!n) return '??';
+    const parts = n.split(' ');
+    return parts.length > 1 ? `${parts[0][0]}${parts[1][0]}`.toUpperCase() : n.substring(0, 2).toUpperCase();
+};
 
 export const IdeaDetail: React.FC = () => {
     const { challengeId, ideaId } = useParams<{ challengeId: string; ideaId: string }>();
     const { showToast } = useToast();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const [searchParams] = useSearchParams();
     const [idea, setIdea] = useState<Idea | null>(null);
     const [comment, setComment] = useState('');
@@ -25,33 +33,112 @@ export const IdeaDetail: React.FC = () => {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [parentChallenge, setParentChallenge] = useState<any>(null);
 
     // Get the parent challenge title for breadcrumb
-    const parentChallenge = storage.getChallengeDetails().find(c => c.id === challengeId);
 
     useEffect(() => {
-        const ideas = storage.getIdeaDetails();
-        const found = ideas.find(i => i.id === ideaId) || null;
+        let isMounted = true;
 
-        // Fire-and-forget: increment view count on backend
-        if (ideaId) {
-            ideaService.recordView(ideaId).catch(() => { });
-        }
+        const fetchIdea = async () => {
+            if (!ideaId) return;
+            try {
+                const response = await ideaService.getIdeaById(ideaId);
+                if (!isMounted) return;
 
-        // Simulate API loading
-        const timer = setTimeout(() => {
-            setIdea(found);
-            if (found) {
-                setEditTitle(found.title);
-                setEditDescription(found.description);
-                setEditProblem(found.problemStatement || '');
-                setEditSolution(found.proposedSolution || '');
+                // Fire-and-forget: increment view count on backend
+                ideaService.recordView(ideaId).catch(() => { });
+
+                const data = response.data?.idea || response.idea || response.data || response;
+                if (!data || !data.ideaId) {
+                    setIdea(null);
+                    return;
+                }
+
+                // Map backend data to frontend Idea model
+                const mappedIdea: Idea = {
+                    id: data.ideaId || data._id,
+                    title: data.title || 'Untitled',
+                    description: data.description || '',
+                    status: data.status ? 'In Review' : 'Pending',
+                    owner: {
+                        id: data.ownerDetails?._id || data.userId,
+                        name: data.ownerDetails?.name || 'Unknown User',
+                        avatar: getInitials(data.ownerDetails?.name),
+                        avatarColor: 'var(--accent-purple)',
+                    },
+                    linkedChallenge: data.challengeDetails ? { id: data.challengeDetails.virtualId, title: data.challengeDetails.title } : undefined,
+                    tags: data.tags || [],
+                    stats: {
+                        appreciations: data.upvoteCount || data.appreciationCount || 0,
+                        comments: data.commentCount || 0,
+                        views: data.viewCount || 0,
+                    },
+                    problemStatement: data.problemStatement || '',
+                    proposedSolution: data.proposedSolution || '',
+                    submittedDate: data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
+                    lastUpdated: data.updatedAt ? new Date(data.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    activity: (data.comments || []).map((c: any) => ({
+                        authorId: c.authorDetails?._id || c.userId,
+                        author: c.authorDetails?.name || c.userId || 'Unknown',
+                        avatar: getInitials(c.authorDetails?.name || c.userId),
+                        avatarColor: 'var(--accent-blue)',
+                        text: c.comment || '',
+                        time: c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recently'
+                    })),
+                    upVotes: data.upVotes || [],
+                    subscriptions: data.subscription || []
+                };
+
+                setIdea(mappedIdea);
+                setEditTitle(mappedIdea.title);
+                setEditDescription(mappedIdea.description);
+                setEditProblem(mappedIdea.problemStatement || '');
+                setEditSolution(mappedIdea.proposedSolution || '');
+            } catch (err) {
+                console.error('Failed to load idea', err);
+                setIdea(null);
+            } finally {
+                if (isMounted) setIsLoading(false);
             }
-            setIsLoading(false);
-        }, 800);
+        };
 
-        return () => clearTimeout(timer);
+        const fetchParentChallenge = async () => {
+            if (!challengeId) return;
+            try {
+                const response = await challengeService.getChallengeById(challengeId);
+                if (!isMounted) return;
+                const data = response.data?.challenge || response.challenge || response.data || response;
+
+                if (data && data.virtualId) {
+                    setParentChallenge({
+                        id: data.virtualId,
+                        title: data.title,
+                        owner: { name: data.ownerDetails?.name || 'Unknown User' },
+                        stats: {
+                            votes: data.upvoteCount || data.upVotes?.length || 0,
+                            comments: data.commentCount || 0
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load parent challenge', err);
+            }
+        };
+
+        fetchIdea();
+        fetchParentChallenge();
+
+        return () => { isMounted = false; };
     }, [ideaId, searchParams]);
+
+    useEffect(() => {
+        if (idea && user?.id) {
+            setHasLiked(prev => prev || (idea.upVotes || []).includes(user.id));
+            setIsSubscribed(prev => prev || (idea.subscriptions || []).includes(user.id));
+        }
+    }, [idea, user?.id]);
 
     if (isLoading) {
         return (
@@ -155,46 +242,103 @@ export const IdeaDetail: React.FC = () => {
         setEditMode(false);
     };
 
-    const handleLike = () => {
-        if (!isAuthenticated) {
+    const handleLike = async () => {
+        if (!isAuthenticated || !user?.id || !ideaId) {
             navigate('/login', { state: { from: location } });
             return;
         }
-        setHasLiked(!hasLiked);
-        showToast(hasLiked ? 'Like removed' : 'Thanks for liking this idea!');
-    };
+        if (hasLiked) return; // Prevent toggling off
 
-    const handleSubscribe = () => {
-        if (!isAuthenticated) {
-            navigate('/login', { state: { from: location } });
-            return;
-        }
-        setIsSubscribed(!isSubscribed);
-        showToast(isSubscribed ? 'Unsubscribed from idea' : 'Subscribed to idea updates!');
-    };
-
-    const handlePostComment = () => {
-        if (!isAuthenticated) {
-            navigate('/login', { state: { from: location } });
-            return;
-        }
-        if (!comment.trim()) return;
-
-        const newComment = {
-            author: 'Current User',
-            avatar: 'CU',
-            avatarColor: 'var(--accent-purple)',
-            text: comment.trim(),
-            time: 'Just now'
-        };
-
+        // Optimistic update
+        setHasLiked(true);
+        setIsSubscribed(true);
         setIdea(prev => prev ? {
             ...prev,
-            stats: { ...prev.stats, comments: (prev.stats.comments || 0) + 1 },
-            activity: [newComment, ...(prev.activity || [])]
+            stats: { ...prev.stats, appreciations: prev.stats.appreciations + 1 },
+            upVotes: [...(prev.upVotes || []), user.id],
+            subscriptions: [...(prev.subscriptions || []), user.id]
         } : prev);
 
-        setComment('');
+        try {
+            await ideaService.toggleUpvote(ideaId, user.id);
+            showToast('Thanks for liking this idea!');
+        } catch (error) {
+            console.error('Failed to toggle upvote', error);
+            // Revert on failure
+            setHasLiked(false);
+            setIdea(prev => prev ? {
+                ...prev,
+                stats: { ...prev.stats, appreciations: Math.max(0, prev.stats.appreciations - 1) },
+                upVotes: (prev.upVotes || []).filter(id => id !== user.id)
+            } : prev);
+            showToast('Failed to update like status', 'error');
+        }
+    };
+
+    const handleSubscribe = async () => {
+        if (!isAuthenticated || !user?.id || !ideaId) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+        if (isSubscribed) return; // Prevent toggling off
+
+        // Optimistic update
+        setIsSubscribed(true);
+        setIdea(prev => prev ? {
+            ...prev,
+            subscriptions: [...(prev.subscriptions || []), user.id]
+        } : prev);
+
+        try {
+            await ideaService.toggleSubscribe(ideaId, user.id);
+            showToast('Subscribed to idea updates!');
+        } catch (error) {
+            console.error('Failed to toggle subscription', error);
+            // Revert on failure
+            setIsSubscribed(false);
+            setIdea(prev => prev ? {
+                ...prev,
+                subscriptions: (prev.subscriptions || []).filter(id => id !== user.id)
+            } : prev);
+            showToast('Failed to update subscription', 'error');
+        }
+    };
+
+    const handlePostComment = async () => {
+        if (!isAuthenticated || !user?.id) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+        if (!comment.trim() || !ideaId) return;
+
+        try {
+            await commentService.createComment({
+                userId: user.id,
+                comment: comment.trim(),
+                type: 'ID',
+                typeId: ideaId
+            });
+
+            const newComment = {
+                author: user.name || 'Current User',
+                avatar: getInitials(user.name),
+                avatarColor: 'var(--accent-purple)',
+                text: comment.trim(),
+                time: 'Just now'
+            };
+
+            setIdea(prev => prev ? {
+                ...prev,
+                stats: { ...prev.stats, comments: (prev.stats.comments || 0) + 1 },
+                activity: [newComment, ...(prev.activity || [])]
+            } : prev);
+
+            setComment('');
+            showToast('Comment posted successfully');
+        } catch (error) {
+            console.error('Failed to post comment', error);
+            showToast('Failed to post comment. Please try again.', 'error');
+        }
     };
 
     const handleDelete = () => {
@@ -271,7 +415,7 @@ export const IdeaDetail: React.FC = () => {
                     </div>
                 </div>
                 <div className="detail-meta-row">
-                    <div className="detail-meta-item" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }} title={`View ${idea.owner.name}'s Profile`}>
+                    <div className="detail-meta-item" onClick={() => navigate(`/profile/${idea.owner.id || ''}`)} style={{ cursor: 'pointer' }} title={`View ${idea.owner.name}'s Profile`}>
                         <span className="icon" style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></span>
                         <span>Author: <strong style={{ color: 'var(--accent-blue)' }}>{idea.owner.name}</strong></span>
                     </div>
@@ -333,10 +477,10 @@ export const IdeaDetail: React.FC = () => {
                         <div className="detail-activity-feed">
                             {idea.activity?.map((act, i) => (
                                 <div key={i} className="detail-activity-item">
-                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, color: 'white', cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
+                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, color: 'white', cursor: 'pointer' }} onClick={() => navigate(`/profile/${act.authorId || ''}`)} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
                                     <div className="detail-activity-content">
                                         <div className="detail-activity-header">
-                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
+                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate(`/profile/${act.authorId || ''}`)} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
                                             <span className="detail-activity-time">{act.time}</span>
                                         </div>
                                         <div className="detail-activity-text">{act.text}</div>
@@ -419,7 +563,7 @@ export const IdeaDetail: React.FC = () => {
                         <div className="detail-stat-row">
                             <span className="detail-stat-label">Likes</span>
                             <span className={`detail-stat-value green ${hasLiked ? 'active' : ''}`}>
-                                {idea.stats.appreciations + (hasLiked ? 1 : 0)}
+                                {idea.stats.appreciations}
                             </span>
                         </div>
                         <div className="detail-stat-row">
@@ -442,36 +586,38 @@ export const IdeaDetail: React.FC = () => {
                         </div>
                         <div className="detail-quick-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <button
-                                className={`btn btn-secondary btn-sm ${hasLiked ? 'animate-pop' : ''}`}
+                                className={`btn btn-secondary ${hasLiked ? 'active animate-pop' : ''}`}
                                 onClick={handleLike}
-                                key={`like-${hasLiked}`}
+                                disabled={hasLiked}
+                                title={hasLiked ? "You have already liked this idea" : ""}
                                 style={{
                                     width: '100%',
-                                    color: hasLiked ? 'var(--accent-teal)' : 'inherit',
-                                    borderColor: hasLiked ? 'var(--accent-teal)' : 'var(--border)'
-                                }}
-                            >
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={hasLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    justifyContent: 'center',
+                                    opacity: hasLiked ? 0.7 : 1,
+                                    cursor: hasLiked ? 'default' : 'pointer',
+                                    color: hasLiked ? 'var(--accent-teal)' : '',
+                                    borderColor: hasLiked ? 'var(--accent-teal)' : ''
+                                }}>
+                                <span className="icon" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={hasLiked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
                                 </span>
-                                {hasLiked ? 'Liked' : 'Like Idea'}
+                                {hasLiked ? 'Liked' : 'Like'}
                             </button>
                             <button
-                                className={`btn btn-secondary btn-sm ${isSubscribed ? 'animate-pop' : ''}`}
+                                className={`btn btn-secondary ${isSubscribed ? 'active' : ''}`}
                                 onClick={handleSubscribe}
-                                key={`sub-${isSubscribed}`}
+                                disabled={isSubscribed}
+                                title={isSubscribed ? "You are already subscribed to this idea" : ""}
                                 style={{
                                     width: '100%',
-                                    color: isSubscribed ? 'var(--accent-green)' : 'inherit',
-                                    borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)'
-                                }}
-                            >
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    {isSubscribed ? (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
-                                    ) : (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                    )}
+                                    justifyContent: 'center',
+                                    opacity: isSubscribed ? 0.7 : 1,
+                                    cursor: isSubscribed ? 'default' : 'pointer',
+                                    color: isSubscribed ? 'var(--accent-green)' : '',
+                                    borderColor: isSubscribed ? 'var(--accent-green)' : ''
+                                }}>
+                                <span className="icon" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={isSubscribed ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                                 </span>
                                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
                             </button>

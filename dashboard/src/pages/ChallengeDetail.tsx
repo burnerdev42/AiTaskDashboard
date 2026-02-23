@@ -68,7 +68,7 @@ export const ChallengeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const { showToast } = useToast();
     const [searchParams] = useSearchParams();
     const [challenge, setChallenge] = useState<ChallengeDetailData | null>(null);
@@ -143,6 +143,7 @@ export const ChallengeDetail: React.FC = () => {
                     expectedOutcome: challengeData.outcome || defaultString,
                     stage: getStageFromCode(challengeData.status),
                     owner: {
+                        id: challengeData.ownerDetails?._id || challengeData.userId,
                         name: challengeData.ownerDetails?.name || 'Unknown User',
                         avatar: getInitials(challengeData.ownerDetails?.name),
                         avatarColor: 'var(--accent-purple)'
@@ -177,6 +178,7 @@ export const ChallengeDetail: React.FC = () => {
                     ideas: ideas.map((i: any) => ({
                         id: i.ideaId || i.virtualId || i._id,
                         title: i.title || defaultString,
+                        authorId: i.ownerDetails?._id || i.userId,
                         author: i.ownerDetails?.name || 'Unknown',
                         status: i.status ? 'Accepted' : 'Pending',
                         appreciations: i.upvoteCount || i.appreciationCount || 0,
@@ -185,6 +187,7 @@ export const ChallengeDetail: React.FC = () => {
                     })),
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     activity: comments.map((c: any) => ({
+                        authorId: c.userDetails?._id || c.userId,
                         author: c.userDetails?.name || 'Unknown',
                         avatar: getInitials(c.userDetails?.name),
                         avatarColor: 'var(--accent-blue)',
@@ -193,6 +196,8 @@ export const ChallengeDetail: React.FC = () => {
                     })),
                     createdDate: challengeData.createdAt ? new Date(challengeData.createdAt).toLocaleDateString() : defaultString,
                     updatedDate: challengeData.updatedAt ? new Date(challengeData.updatedAt).toLocaleDateString() : defaultString,
+                    upVotes: challengeData.upvoteList || challengeData.upVotes || [],
+                    subscriptions: challengeData.subcriptions || challengeData.subscriptions || [],
 
                     // Keep original object mapping for any missing pass-throughs
                     ...challengeData,
@@ -203,11 +208,6 @@ export const ChallengeDetail: React.FC = () => {
                 setEditSubtitle(mappedChallenge.description);
                 setEditProblem(mappedChallenge.problemStatement);
                 setEditOutcome(mappedChallenge.expectedOutcome);
-
-                // Check if current user has voted/subscribed (mock logic for currentUser)
-                const currentUserId = "TODO_CURRENT_USER_ID"; // We will pull this from auth context if needed later
-                setHasVoted(challengeData.upvoteList?.includes(currentUserId) || false);
-                setIsSubscribed(challengeData.subcriptions?.includes(currentUserId) || false);
 
             } catch (err) {
                 console.error("Failed to load challenge details", err);
@@ -225,6 +225,15 @@ export const ChallengeDetail: React.FC = () => {
 
         return () => { isMounted = false; };
     }, [id, searchParams]);
+
+    useEffect(() => {
+        if (challenge && user?.id) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const c = challenge as any;
+            setHasVoted(prev => prev || (c.upVotes || c.upvoteList || []).includes(user.id));
+            setIsSubscribed(prev => prev || (c.subscriptions || c.subcriptions || []).includes(user.id));
+        }
+    }, [challenge, user?.id]);
 
     if (isLoading) {
         return (
@@ -374,53 +383,61 @@ export const ChallengeDetail: React.FC = () => {
     };
 
     const handleVote = async () => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated || !user?.id) {
             navigate('/login', { state: { from: location } });
             return;
         }
-        if (!challenge) return;
+        if (!challenge || hasVoted) return;
 
-        // Optimistic UI update
-        const isCurrentlyVoted = hasVoted;
-        setHasVoted(!isCurrentlyVoted);
+        // Optimistic update
+        setHasVoted(true);
+        setIsSubscribed(true);
         setChallenge(prev => prev ? {
             ...prev,
-            stats: { ...prev.stats, appreciations: prev.stats.appreciations + (isCurrentlyVoted ? -1 : 1) }
+            stats: { ...prev.stats, appreciations: prev.stats.appreciations + 1 },
+            upVotes: [...(prev.upVotes || []), user.id],
+            subscriptions: [...(prev.subscriptions || []), user.id]
         } : prev);
 
         try {
-            const currentUserId = "TODO_CURRENT_USER_ID"; // Get from auth
-            await challengeService.toggleUpvote(challenge.id, currentUserId);
-            showToast(isCurrentlyVoted ? 'Vote removed' : 'Thanks for voting!');
+            await challengeService.toggleUpvote(challenge.id, user.id);
+            showToast('Thanks for voting!');
         } catch {
             // Revert on failure
-            setHasVoted(isCurrentlyVoted);
+            setHasVoted(false);
             setChallenge(prev => prev ? {
                 ...prev,
-                stats: { ...prev.stats, appreciations: prev.stats.appreciations + (isCurrentlyVoted ? 1 : -1) }
+                stats: { ...prev.stats, appreciations: Math.max(0, prev.stats.appreciations - 1) },
+                upVotes: (prev.upVotes || []).filter(id => id !== user.id)
             } : prev);
             showToast('Failed to toggle vote. Please try again.', 'error');
         }
     };
 
     const handleSubscribe = async () => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated || !user?.id) {
             navigate('/login', { state: { from: location } });
             return;
         }
-        if (!challenge) return;
+        if (!challenge || isSubscribed) return;
 
-        // Optimistic UI update
-        const isCurrentlySubscribed = isSubscribed;
-        setIsSubscribed(!isCurrentlySubscribed);
+        // Optimistic update
+        setIsSubscribed(true);
+        setChallenge(prev => prev ? {
+            ...prev,
+            subscriptions: [...(prev.subscriptions || []), user.id]
+        } : prev);
 
         try {
-            const currentUserId = "TODO_CURRENT_USER_ID"; // Get from auth
-            await challengeService.toggleSubscribe(challenge.id, currentUserId);
-            showToast(isCurrentlySubscribed ? 'Unsubscribed from challenge' : 'Subscribed to challenge updates!');
+            await challengeService.toggleSubscribe(challenge.id, user.id);
+            showToast('Subscribed to challenge updates!');
         } catch {
             // Revert on failure
-            setIsSubscribed(isCurrentlySubscribed);
+            setIsSubscribed(false);
+            setChallenge(prev => prev ? {
+                ...prev,
+                subscriptions: (prev.subscriptions || []).filter(id => id !== user.id)
+            } : prev);
             showToast('Failed to toggle subscription. Please try again.', 'error');
         }
     };
@@ -517,14 +534,14 @@ export const ChallengeDetail: React.FC = () => {
     };
 
     const handlePostComment = async () => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated || !user?.id) {
             navigate('/login', { state: { from: location } });
             return;
         }
         if (!comment.trim() || !challenge) return;
 
         try {
-            const currentUserId = "TODO_CURRENT_USER_ID"; // Replace with real auth user ID
+            const currentUserId = user.id;
 
             await commentService.createComment({
                 userId: currentUserId,
@@ -534,8 +551,8 @@ export const ChallengeDetail: React.FC = () => {
             });
 
             const newComment = {
-                author: 'Current User',
-                avatar: 'CU',
+                author: user.name || 'Current User',
+                avatar: getInitials(user.name),
                 avatarColor: 'var(--accent-purple)',
                 text: comment.trim(),
                 time: 'Just now'
@@ -554,8 +571,7 @@ export const ChallengeDetail: React.FC = () => {
         }
     };
 
-    // Calculate top contributors for the sidebar
-    const contributorsMap: Record<string, { totalAppreciations: number, initial: string, color: string }> = {};
+    const contributorsMap: Record<string, { totalAppreciations: number, initial: string, color: string, authorId?: string }> = {};
     const validIdeas = challenge.ideas || [];
     validIdeas.forEach(idea => {
         if (!contributorsMap[idea.author]) {
@@ -563,7 +579,7 @@ export const ChallengeDetail: React.FC = () => {
             const initial = parts.length > 1 ? `${parts[0].charAt(0)}${parts[1].charAt(0)}` : idea.author.substring(0, 2).toUpperCase();
             const colors = ['var(--accent-teal)', 'var(--accent-blue)', 'var(--accent-green)', 'var(--accent-purple)', 'var(--accent-orange)'];
             const color = colors[idea.author.charCodeAt(0) % colors.length];
-            contributorsMap[idea.author] = { totalAppreciations: 0, initial, color };
+            contributorsMap[idea.author] = { totalAppreciations: 0, initial, color, authorId: idea.authorId };
         }
         contributorsMap[idea.author].totalAppreciations += idea.appreciations;
     });
@@ -621,7 +637,7 @@ export const ChallengeDetail: React.FC = () => {
                     )}
                 </div>
                 <div className="detail-meta-row">
-                    <div className="detail-meta-item" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }} title="View Profile">
+                    <div className="detail-meta-item" onClick={() => navigate(`/profile/${challenge.owner.id || ''}`)} style={{ cursor: 'pointer' }} title={`View ${challenge.owner.name}'s Profile`}>
                         <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></span>
                         <span>Author: <strong style={{ color: 'var(--accent-blue)' }}>{challenge.owner.name}</strong></span>
                     </div>
@@ -790,10 +806,10 @@ export const ChallengeDetail: React.FC = () => {
                         <div className="detail-activity-feed">
                             {challenge.activity.map((act, i) => (
                                 <div key={i} className="detail-activity-item">
-                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
+                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, cursor: 'pointer' }} onClick={() => navigate(`/profile/${act.authorId || ''}`)} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
                                     <div className="detail-activity-content">
                                         <div className="detail-activity-header">
-                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
+                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate(`/profile/${act.authorId || ''}`)} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
                                             <span className="detail-activity-time">{act.time}</span>
                                         </div>
                                         <div className="detail-activity-text">{act.text}</div>
@@ -975,7 +991,7 @@ export const ChallengeDetail: React.FC = () => {
                                             {topContributors.slice(0, displayCount).reverse().map((contributor, i) => (
                                                 <div
                                                     key={contributor.name}
-                                                    onClick={() => navigate('/profile')}
+                                                    onClick={() => navigate(`/profile/${contributor.authorId || ''}`)}
                                                     style={{
                                                         width: '36px',
                                                         height: '36px',
@@ -1042,30 +1058,46 @@ export const ChallengeDetail: React.FC = () => {
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <button
-                                className={`btn btn-secondary ${hasVoted ? 'animate-pop' : ''}`}
+                                className={`btn btn-secondary ${hasVoted ? 'active animate-pop' : ''}`}
                                 onClick={handleVote}
                                 key={`vote-${hasVoted}`}
-                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: hasVoted ? 'var(--accent-blue)' : 'inherit', borderColor: hasVoted ? 'var(--accent-blue)' : 'var(--border)' }}>
+                                disabled={hasVoted}
+                                title={hasVoted ? "You have already voted for this challenge" : ""}
+                                style={{
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    opacity: hasVoted ? 0.7 : 1,
+                                    cursor: hasVoted ? 'default' : 'pointer',
+                                    color: hasVoted ? 'var(--accent-orange)' : '',
+                                    borderColor: hasVoted ? 'var(--accent-orange)' : ''
+                                }}>
                                 <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    {hasVoted ? (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-                                    ) : (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-                                    )}
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={hasVoted ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
                                 </span>
                                 {hasVoted ? 'Voted' : 'Vote for This'}
                             </button>
                             <button
-                                className={`btn btn-secondary ${isSubscribed ? 'animate-pop' : ''}`}
+                                className={`btn btn-secondary ${isSubscribed ? 'active animate-pop' : ''}`}
                                 onClick={handleSubscribe}
                                 key={`sub-${isSubscribed}`}
-                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: isSubscribed ? 'var(--accent-green)' : 'inherit', borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)' }}>
+                                disabled={isSubscribed}
+                                title={isSubscribed ? "You are already subscribed to this challenge" : ""}
+                                style={{
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    opacity: isSubscribed ? 0.7 : 1,
+                                    cursor: isSubscribed ? 'default' : 'pointer',
+                                    color: isSubscribed ? 'var(--accent-green)' : '',
+                                    borderColor: isSubscribed ? 'var(--accent-green)' : ''
+                                }}>
                                 <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    {isSubscribed ? (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
-                                    ) : (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                    )}
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={isSubscribed ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                                 </span>
                                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
                             </button>

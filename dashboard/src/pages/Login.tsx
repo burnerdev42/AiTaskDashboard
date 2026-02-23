@@ -8,7 +8,6 @@ export const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState('');
     const { login } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
@@ -18,8 +17,6 @@ export const Login: React.FC = () => {
     // @ts-ignore
     const from = location.state?.from?.pathname || '/';
 
-    // Standard Password Policy:
-    // At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
     const isPasswordValid = useMemo(() => {
         if (!password) return false;
         if (password.length < 8) return false;
@@ -35,10 +32,9 @@ export const Login: React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
 
         if (!isFormValid) {
-            setError('Please enter a valid email and a valid password.');
+            showToast('Please enter a valid email and a valid password.', 'error');
             return;
         }
 
@@ -47,7 +43,7 @@ export const Login: React.FC = () => {
             showToast('Welcome back! You have signed in successfully.');
             navigate(from, { replace: true });
         } else {
-            setError(apiError || 'Login failed. Please check your credentials or register.');
+            showToast(apiError || 'Login failed. Please check your credentials or register.', 'error');
         }
     };
 
@@ -66,8 +62,6 @@ export const Login: React.FC = () => {
                     <h2 style={{ fontSize: 24, marginBottom: 4 }}>Welcome Back</h2>
                     <p style={{ fontSize: 14 }}>Sign in to continue</p>
                 </div>
-
-                {error && <div style={{ color: 'var(--accent-red)', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>{error}</div>}
 
                 <form onSubmit={handleLogin}>
                     <div className="form-group">
@@ -114,15 +108,6 @@ export const Login: React.FC = () => {
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
-                        {password && !isPasswordValid ? (
-                            <div style={{ fontSize: 11, color: 'var(--accent-red)', marginTop: 6 }}>
-                                Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character.
-                            </div>
-                        ) : (
-                            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-                                Must be at least 8 characters, including uppercase, lowercase, number, and special character.
-                            </div>
-                        )}
                     </div>
 
                     <button
@@ -163,7 +148,7 @@ export const Login: React.FC = () => {
                         Don't have an account? <Link to="/register">Register here</Link>
                     </div>
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };

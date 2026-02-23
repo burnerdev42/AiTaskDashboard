@@ -13,6 +13,7 @@ import {
   Challenge,
   ChallengeSchema,
 } from '../../models/challenges/challenge.schema';
+import { User, UserSchema } from '../../models/users/user.schema';
 import { CommonModule } from '../../common';
 import { IdeasModule } from '../ideas/ideas.module';
 import { ActivitiesModule } from '../activities/activities.module';
@@ -23,6 +24,7 @@ import { CommentsModule } from '../comments/comments.module';
   imports: [
     MongooseModule.forFeature([
       { name: Challenge.name, schema: ChallengeSchema },
+      { name: User.name, schema: UserSchema },
     ]),
     CommonModule,
     forwardRef(() => IdeasModule),
@@ -34,4 +36,4 @@ import { CommentsModule } from '../comments/comments.module';
   providers: [ChallengesService, ChallengesRepository],
   exports: [ChallengesService],
 })
-export class ChallengesModule {}
+export class ChallengesModule { }

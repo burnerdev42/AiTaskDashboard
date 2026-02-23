@@ -7,8 +7,23 @@ export const ideaService = {
         return response.data;
     },
 
+    getIdeaById: async (virtualId: string) => {
+        const response = await api.get(`/ideas/${virtualId}`);
+        return response.data;
+    },
+
     recordView: async (ideaId: string) => {
         const response = await api.post(`/ideas/${ideaId}/view`);
+        return response.data;
+    },
+
+    toggleUpvote: async (virtualId: string, userId: string) => {
+        const response = await api.post(`/ideas/${virtualId}/upvote`, { userId });
+        return response.data;
+    },
+
+    toggleSubscribe: async (virtualId: string, userId: string) => {
+        const response = await api.post(`/ideas/${virtualId}/subscribe`, { userId });
         return response.data;
     }
 };

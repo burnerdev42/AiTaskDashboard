@@ -124,8 +124,9 @@ export const ChallengeCards: React.FC = () => {
         }
         // Search filter
         if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            return card.title.toLowerCase().includes(term) || card.description.toLowerCase().includes(term);
+            const terms = searchTerm.toLowerCase().split(' ').filter(Boolean);
+            const searchString = `${card.title} ${card.description} ${card.id} ${card.owner.name} ${card.stage} ${card.platform}`.toLowerCase();
+            return terms.every(term => searchString.includes(term));
         }
         return true;
     });

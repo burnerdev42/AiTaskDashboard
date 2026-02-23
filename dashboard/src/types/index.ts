@@ -34,6 +34,7 @@ export interface Challenge {
     description: string;
     stage: ChallengeStage;
     owner: {
+        id?: string;
         name: string;
         avatar: string; // Initials
         avatarColor: string; // Hex code
@@ -80,6 +81,7 @@ export interface SwimLaneCard {
 }
 
 export interface ActivityItem {
+    authorId?: string;
     author: string;
     avatar: string;
     avatarColor: string;
@@ -93,6 +95,7 @@ export interface Idea {
     description: string;
     status: 'Accepted' | 'Declined' | 'In Review' | 'Pending';
     owner: {
+        id?: string;
         name: string;
         avatar: string;
         avatarColor: string;
@@ -117,6 +120,8 @@ export interface Idea {
     submittedDate?: string;
     lastUpdated?: string;
     activity?: ActivityItem[];
+    upVotes?: string[];
+    subscriptions?: string[];
 }
 
 export interface ChallengeCardData {
@@ -145,9 +150,11 @@ export interface ChallengeDetailData extends Challenge {
     portfolioOption: string;
     constraints: string;
     stakeholders: string;
-    ideas: { id: string; title: string; author: string; status: string; appreciations: number; comments: number; views: number }[];
+    ideas: { id: string; title: string; authorId?: string; author: string; status: string; appreciations: number; comments: number; views: number }[];
     team: { name: string; avatar: string; avatarColor: string; role: string }[];
     activity: ActivityItem[];
     createdDate: string;
     updatedDate: string;
+    upVotes?: string[];
+    subscriptions?: string[];
 }

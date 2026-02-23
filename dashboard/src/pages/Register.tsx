@@ -19,7 +19,6 @@ export const Register: React.FC = () => {
         interests: [] as string[]
     });
     const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const handleInterestToggle = (interest: string) => {
         setFormData(prev => {
@@ -56,22 +55,14 @@ export const Register: React.FC = () => {
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
 
     const isFormValid = isEmailValid && isPasswordValid;
+    const isReadyToSubmit = isFormValid && !!formData.name.trim() && !!formData.opco && !!formData.platform && !!formData.role.trim() && formData.interests.length > 0;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        const newErrors: Record<string, string> = {};
-        if (!formData.name.trim()) newErrors.name = 'Full Name is required';
-        if (!formData.opco) newErrors.opco = 'OpCo is required';
-        if (!formData.platform) newErrors.platform = 'Platform is required';
-        if (!formData.role.trim()) newErrors.role = 'Role / Job Title is required';
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (!formData.name.trim() || !formData.opco || !formData.platform || !formData.role.trim() || !isFormValid) {
+            showToast('Please fill out all required fields correctly. Password or email might be invalid.', 'error');
             return;
         }
-
-        setErrors({});
 
         const { success, error: apiError } = await register({
             name: formData.name,
@@ -120,13 +111,8 @@ export const Register: React.FC = () => {
                             type="text"
                             placeholder="John Doe"
                             value={formData.name}
-                            onChange={(e) => {
-                                setFormData({ ...formData, name: e.target.value });
-                                if (errors.name) setErrors(prev => { const n = { ...prev }; delete n.name; return n; });
-                            }}
-                            style={{ borderColor: errors.name ? 'var(--accent-red)' : 'var(--border)' }}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         />
-                        {errors.name && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{errors.name}</div>}
                     </div>
 
                     {/* OpCo */}
@@ -134,11 +120,7 @@ export const Register: React.FC = () => {
                         <label>OpCo <span className="req">*</span></label>
                         <select
                             value={formData.opco}
-                            onChange={(e) => {
-                                setFormData({ ...formData, opco: e.target.value, platform: '' });
-                                if (errors.opco) setErrors(prev => { const n = { ...prev }; delete n.opco; return n; });
-                            }}
-                            style={{ borderColor: errors.opco ? 'var(--accent-red)' : 'var(--border)' }}
+                            onChange={(e) => setFormData({ ...formData, opco: e.target.value, platform: '' })}
                         >
                             <option value="" disabled>Select your OpCo</option>
                             <option value="Albert Heijn">Albert Heijn</option>
@@ -146,7 +128,6 @@ export const Register: React.FC = () => {
                             <option value="GET">GET</option>
                             <option value="BecSee">BecSee</option>
                         </select>
-                        {errors.opco && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{errors.opco}</div>}
                     </div>
 
                     {/* Platform */}
@@ -154,12 +135,8 @@ export const Register: React.FC = () => {
                         <label>Platform <span className="req">*</span></label>
                         <select
                             value={formData.platform}
-                            onChange={(e) => {
-                                setFormData({ ...formData, platform: e.target.value });
-                                if (errors.platform) setErrors(prev => { const n = { ...prev }; delete n.platform; return n; });
-                            }}
+                            onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
                             disabled={!formData.opco}
-                            style={{ borderColor: errors.platform ? 'var(--accent-red)' : 'var(--border)' }}
                         >
                             <option value="" disabled>Select your platform</option>
                             {formData.opco === 'Albert Heijn' && (
@@ -170,7 +147,6 @@ export const Register: React.FC = () => {
                                 </>
                             )}
                         </select>
-                        {errors.platform && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{errors.platform}</div>}
                     </div>
 
                     {/* Contact Email */}
@@ -191,11 +167,7 @@ export const Register: React.FC = () => {
                         <label>Role / Job Title <span className="req">*</span></label>
                         <select
                             value={formData.role}
-                            onChange={(e) => {
-                                setFormData({ ...formData, role: e.target.value });
-                                if (errors.role) setErrors(prev => { const n = { ...prev }; delete n.role; return n; });
-                            }}
-                            style={{ borderColor: errors.role ? 'var(--accent-red)' : 'var(--border)' }}
+                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                         >
                             <option value="" disabled>Select your Technical Role</option>
                             <option value="Innovation Lead">Innovation Lead</option>
@@ -210,7 +182,6 @@ export const Register: React.FC = () => {
                             <option value="DevOps Lead">DevOps Lead</option>
                             <option value="Contributor">Contributor</option>
                         </select>
-                        {errors.role && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{errors.role}</div>}
                     </div>
 
                     {/* About */}
@@ -266,15 +237,9 @@ export const Register: React.FC = () => {
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
-                        {formData.password && strength < 4 ? (
-                            <div style={{ fontSize: 11, color: 'var(--accent-red)', marginTop: 6 }}>
-                                Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character.
-                            </div>
-                        ) : (
-                            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, marginBottom: 8 }}>
-                                Must be at least 8 characters, including uppercase, lowercase, number, and special character.
-                            </div>
-                        )}
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, marginBottom: 8 }}>
+                            Must be at least 8 characters, including uppercase, lowercase, number, and special character.
+                        </div>
                         <div className={`strength-bar s${strength}`}>
                             <span></span><span></span><span></span><span></span>
                         </div>
@@ -310,10 +275,10 @@ export const Register: React.FC = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                opacity: isFormValid ? 1 : 0.6,
-                                cursor: isFormValid ? 'pointer' : 'not-allowed'
+                                opacity: isReadyToSubmit ? 1 : 0.6,
+                                cursor: isReadyToSubmit ? 'pointer' : 'not-allowed'
                             }}
-                            disabled={!isFormValid}
+                            disabled={!isReadyToSubmit}
                         >
                             Create Account
                         </button>

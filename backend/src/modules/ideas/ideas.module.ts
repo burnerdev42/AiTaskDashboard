@@ -9,13 +9,17 @@ import { IdeasController } from './ideas.controller';
 import { IdeasService } from './ideas.service';
 import { IdeasRepository } from './ideas.repository';
 import { Idea, IdeaSchema } from '../../models/ideas/idea.schema';
+import { User, UserSchema } from '../../models/users/user.schema';
 import { CommonModule } from '../../common';
 import { ActivitiesModule } from '../activities/activities.module';
 import { ChallengesModule } from '../challenges/challenges.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Idea.name, schema: IdeaSchema }]),
+    MongooseModule.forFeature([
+      { name: Idea.name, schema: IdeaSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
     CommonModule,
     ActivitiesModule,
     forwardRef(() => ChallengesModule),
@@ -24,4 +28,4 @@ import { ChallengesModule } from '../challenges/challenges.module';
   providers: [IdeasService, IdeasRepository],
   exports: [IdeasService],
 })
-export class IdeasModule {}
+export class IdeasModule { }

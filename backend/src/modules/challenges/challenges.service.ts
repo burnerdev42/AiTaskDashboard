@@ -22,6 +22,7 @@ import {
   Challenge,
   ChallengeDocument,
 } from '../../models/challenges/challenge.schema';
+import { User, UserDocument } from '../../models/users/user.schema';
 import { IdeasService } from '../ideas/ideas.service';
 import { ActivitiesService } from '../activities/activities.service';
 
@@ -32,6 +33,8 @@ export class ChallengesService extends AbstractService {
   constructor(
     @InjectModel(Challenge.name)
     private readonly challengeModel: Model<ChallengeDocument>,
+    @InjectModel(User.name)
+    private readonly userModel: Model<UserDocument>,
     @Inject(forwardRef(() => IdeasService))
     private readonly ideasService: IdeasService,
     private readonly activitiesService: ActivitiesService,
@@ -96,7 +99,8 @@ export class ChallengesService extends AbstractService {
       .toArray()) as any[];
 
     const contributorIds = [...new Set(allIdeas.map((idea) => idea.userId))];
-    const uniqueUserIds = [...new Set([...ownerIds, ...contributorIds])].filter(
+    const commentAuthorIds = [...new Set(allComments.map((c) => c.userId))];
+    const uniqueUserIds = [...new Set([...ownerIds, ...contributorIds, ...commentAuthorIds])].filter(
       (id) => Types.ObjectId.isValid(id),
     );
 
@@ -121,7 +125,7 @@ export class ChallengesService extends AbstractService {
         .map((i) => ({ ...i, _id: i._id.toString() }));
       const thisComments = allComments
         .filter((c) => c.typeId === cIdStr)
-        .map((c) => ({ ...c, _id: c._id.toString() }));
+        .map((c) => ({ ...c, _id: c._id.toString(), authorDetails: userMap[c.userId] || null }));
 
       const thisContributorIds = [...new Set(thisIdeas.map((i) => i.userId))];
       const contributorsDetails = thisContributorIds
@@ -237,57 +241,66 @@ export class ChallengesService extends AbstractService {
     return enriched[0];
   }
 
-  /** Toggle upvote for a challenge. */
+  /** Upvote a challenge (no downvoting). */
   async toggleUpvote(virtualId: string, userId: string): Promise<any> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();
     if (!challenge) {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
     }
 
-    const idx = challenge.upVotes.indexOf(userId);
-    if (idx >= 0) {
-      challenge.upVotes.splice(idx, 1);
-    } else {
+    if (!challenge.upVotes.includes(userId)) {
       challenge.upVotes.push(userId);
       // Auto-subscribe on upvote
       if (!challenge.subcriptions.includes(userId)) {
         challenge.subcriptions.push(userId);
       }
+      const saved = await challenge.save();
+
+      await this.activitiesService.create({
+        type: 'challenge_upvoted',
+        fk_id: saved._id.toString(),
+        userId,
+      });
+
+      // Add to user's upvotedChallengeList
+      if (Types.ObjectId.isValid(userId)) {
+        await this.userModel.updateOne(
+          { _id: new Types.ObjectId(userId) },
+          { $addToSet: { upvotedChallengeList: saved._id.toString() } }
+        );
+      }
+
+      const enriched = await this.enrichChallenges([saved.toObject()]);
+      return enriched[0];
     }
-    const saved = await challenge.save();
 
-    await this.activitiesService.create({
-      type: 'challenge_upvoted',
-      fk_id: saved._id.toString(),
-      userId,
-    });
-
-    const enriched = await this.enrichChallenges([saved.toObject()]);
+    const enriched = await this.enrichChallenges([challenge.toObject()]);
     return enriched[0];
   }
 
-  /** Toggle subscription for a challenge. */
+  /** Subscribe to a challenge (no unsubscribing). */
   async toggleSubscribe(virtualId: string, userId: string): Promise<any> {
     const challenge = await this.challengeModel.findOne({ virtualId }).exec();
     if (!challenge) {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
     }
 
-    const idx = challenge.subcriptions.indexOf(userId);
-    if (idx >= 0) {
-      challenge.subcriptions.splice(idx, 1);
-    } else {
+    if (!challenge.subcriptions.includes(userId)) {
       challenge.subcriptions.push(userId);
+
+      const saved = await challenge.save();
+
+      await this.activitiesService.create({
+        type: 'challenge_subscribed',
+        fk_id: saved._id.toString(),
+        userId,
+      });
+
+      const enriched = await this.enrichChallenges([saved.toObject()]);
+      return enriched[0];
     }
-    const saved = await challenge.save();
 
-    await this.activitiesService.create({
-      type: 'challenge_subscribed',
-      fk_id: saved._id.toString(),
-      userId,
-    });
-
-    const enriched = await this.enrichChallenges([saved.toObject()]);
+    const enriched = await this.enrichChallenges([challenge.toObject()]);
     return enriched[0];
   }
 

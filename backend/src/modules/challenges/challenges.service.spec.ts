@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChallengesService } from './challenges.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Challenge } from '../../models/challenges/challenge.schema';
+import { User } from '../../models/users/user.schema';
 import { IdeasService } from '../ideas/ideas.service';
 import { ActivitiesService } from '../activities/activities.service';
 import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
@@ -93,6 +94,10 @@ describe('ChallengesService', () => {
     deleteByFkId: jest.fn().mockResolvedValue(undefined),
   };
 
+  const mockUserModel = {
+    updateOne: jest.fn().mockResolvedValue({}),
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -102,6 +107,10 @@ describe('ChallengesService', () => {
         {
           provide: getModelToken(Challenge.name),
           useValue: mockChallengesRepository,
+        },
+        {
+          provide: getModelToken(User.name),
+          useValue: mockUserModel,
         },
         { provide: IdeasService, useValue: mockIdeasService },
         { provide: ActivitiesService, useValue: mockActivitiesService },
