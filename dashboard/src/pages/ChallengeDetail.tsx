@@ -3,9 +3,11 @@ import { createPortal } from 'react-dom';
 import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import type { ChallengeDetailData, Idea } from '../types';
-import { storage } from '../services/storage';
+import type { ChallengeDetailData } from '../types';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
+import { challengeService } from '../services/challenge.service';
+import { commentService } from '../services/comment.service';
+import { ideaService } from '../services/idea.service';
 
 const STAGE_BRANDING: Record<string, { color: string, bg: string, icon: React.ReactNode }> = {
     'Challenge Submitted': {
@@ -45,6 +47,23 @@ const PRIORITY_BRANDING: Record<string, { color: string, bg: string, border: str
     }
 };
 
+const getStageFromCode = (code: string): string => {
+    switch (code) {
+        case 'submitted': return 'Challenge Submitted';
+        case 'ideation': return 'Ideation & Evaluation';
+        case 'pilot': return 'POC & Pilot';
+        case 'completed': return 'Scaled & Deployed';
+        case 'archive': return 'Parking Lot';
+        default: return 'Challenge Submitted';
+    }
+};
+
+const getInitials = (name?: string) => {
+    if (!name) return 'U';
+    const parts = name.split(' ');
+    return parts.length > 1 ? `${parts[0][0]}${parts[1][0]}`.toUpperCase() : name.substring(0, 2).toUpperCase();
+};
+
 export const ChallengeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -76,54 +95,135 @@ export const ChallengeDetail: React.FC = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
-        const details = storage.getChallengeDetails();
-        let found = details.find(c => c.id === id);
+        let isMounted = true;
+        setIsLoading(true);
 
-        if (!found) {
-            // If the challenge is not in the detailed mock array, try to find it in the basic challenges array
-            const basicChallenge = storage.getChallenges().find(c => c.id === id);
+        const fetchChallengeData = async () => {
+            if (!id) return;
 
-            if (basicChallenge) {
-                // Dynamically construct a ChallengeDetailData object
-                found = {
-                    ...basicChallenge,
-                    problemStatement: basicChallenge.description,
-                    expectedOutcome: 'Pending detailed assessment',
-                    businessUnit: 'Global',
-                    department: 'Cross-functional',
-                    priority: basicChallenge.impact || 'Medium',
-                    estimatedImpact: 'TBD',
-                    challengeTags: basicChallenge.tags || [],
-                    timeline: 'TBD',
-                    portfolioOption: 'TBD',
-                    constraints: 'None specified yet',
-                    stakeholders: 'TBD',
-                    ideas: [],
-                    team: basicChallenge.team?.map(t => ({ ...t, role: 'Member', avatar: t.avatar || '', avatarColor: t.avatarColor || 'var(--accent-blue)' })) || [],
-                    activity: [],
-                    createdDate: 'Recently',
-                    updatedDate: 'Just now'
-                } as ChallengeDetailData;
+            try {
+                const response = await challengeService.getChallengeById(id);
+                if (!isMounted) return;
+
+                // Fire-and-forget: increment view count
+                challengeService.recordView(id).catch(() => { });
+
+                const challengeData = response.data?.challenge || response.data || response;
+
+                // Fetch related data in parallel
+                let comments = [];
+                let ideas = [];
+
+                try {
+                    const commentsRes = await commentService.getCommentsForChallenge(id);
+                    comments = commentsRes.data?.comments || commentsRes.data || commentsRes || [];
+                    if (!Array.isArray(comments)) comments = [];
+                } catch (err) {
+                    console.error("Failed to fetch comments", err);
+                }
+
+                try {
+                    const ideasRes = await ideaService.getIdeasForChallenge(id);
+                    ideas = ideasRes.data?.ideas || ideasRes.data || ideasRes || [];
+                    if (!Array.isArray(ideas)) ideas = [];
+                } catch (err) {
+                    console.error("Failed to fetch ideas", err);
+                    // If endpoint doesn't exist, we fallback to empty array
+                }
+
+                // Default empty state mapping
+                const defaultString = "Not available";
+
+                // Map backend structure to frontend ChallengeDetailData
+                const mappedChallenge: ChallengeDetailData = {
+                    id: challengeData.virtualId || id,
+                    title: challengeData.title || defaultString,
+                    description: challengeData.summary || defaultString,
+                    problemStatement: challengeData.description || defaultString,
+                    expectedOutcome: challengeData.outcome || defaultString,
+                    stage: getStageFromCode(challengeData.status),
+                    owner: {
+                        name: challengeData.ownerDetails?.name || 'Unknown User',
+                        avatar: getInitials(challengeData.ownerDetails?.name),
+                        avatarColor: 'var(--accent-purple)'
+                    },
+                    accentColor: 'teal',
+                    stats: {
+                        appreciations: challengeData.upvoteCount || 0,
+                        comments: challengeData.commentCount || 0,
+                        views: challengeData.totalViews || challengeData.viewCount || 0,
+                    },
+                    tags: challengeData.tags || [],
+                    challengeTags: challengeData.tags || [],
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    team: challengeData.contributorsDetails?.map((c: any) => ({
+                        name: c.name,
+                        avatar: getInitials(c.name),
+                        avatarColor: 'var(--accent-blue)',
+                        role: c.companyTechRole || 'Contributor'
+                    })) || [],
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    impact: challengeData.priority as any || 'Medium',
+                    businessUnit: challengeData.opco || defaultString,
+                    department: challengeData.platform || defaultString,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    priority: challengeData.priority as any || 'Medium',
+                    estimatedImpact: defaultString,
+                    timeline: challengeData.timeline || defaultString,
+                    portfolioOption: challengeData.portfolioLane || defaultString,
+                    constraints: challengeData.constraint || defaultString,
+                    stakeholders: challengeData.stakeHolder || defaultString,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    ideas: ideas.map((i: any) => ({
+                        id: i.ideaId || i.virtualId || i._id,
+                        title: i.title || defaultString,
+                        author: i.ownerDetails?.name || 'Unknown',
+                        status: i.status ? 'Accepted' : 'Pending',
+                        appreciations: i.upvoteCount || i.appreciationCount || 0,
+                        comments: i.commentCount || 0,
+                        views: i.viewCount || 0
+                    })),
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    activity: comments.map((c: any) => ({
+                        author: c.userDetails?.name || 'Unknown',
+                        avatar: getInitials(c.userDetails?.name),
+                        avatarColor: 'var(--accent-blue)',
+                        text: c.comment,
+                        time: new Date(c.createdat || c.createdAt).toLocaleDateString()
+                    })),
+                    createdDate: challengeData.createdAt ? new Date(challengeData.createdAt).toLocaleDateString() : defaultString,
+                    updatedDate: challengeData.updatedAt ? new Date(challengeData.updatedAt).toLocaleDateString() : defaultString,
+
+                    // Keep original object mapping for any missing pass-throughs
+                    ...challengeData,
+                };
+
+                setChallenge(mappedChallenge);
+                setEditTitle(mappedChallenge.title);
+                setEditSubtitle(mappedChallenge.description);
+                setEditProblem(mappedChallenge.problemStatement);
+                setEditOutcome(mappedChallenge.expectedOutcome);
+
+                // Check if current user has voted/subscribed (mock logic for currentUser)
+                const currentUserId = "TODO_CURRENT_USER_ID"; // We will pull this from auth context if needed later
+                setHasVoted(challengeData.upvoteList?.includes(currentUserId) || false);
+                setIsSubscribed(challengeData.subcriptions?.includes(currentUserId) || false);
+
+            } catch (err) {
+                console.error("Failed to load challenge details", err);
+                setChallenge(null);
+            } finally {
+                if (isMounted) setIsLoading(false);
             }
-        }
+        };
 
-        // Simulate API loading
-        const timer = setTimeout(() => {
-            setChallenge(found || null);
-            if (found) {
-                setEditTitle(found.title);
-                setEditSubtitle(found.description);
-                setEditProblem(found.problemStatement);
-                setEditOutcome(found.expectedOutcome);
-            }
-            setIsLoading(false);
-        }, 1000);
+        fetchChallengeData();
 
         if (searchParams.get('edit') === 'true') {
             setEditMode(true);
         }
 
-        return () => clearTimeout(timer);
+        return () => { isMounted = false; };
     }, [id, searchParams]);
 
     if (isLoading) {
@@ -231,62 +331,113 @@ export const ChallengeDetail: React.FC = () => {
         );
     }
 
-    const toggleEdit = () => {
+    const toggleEdit = async () => {
         if (editMode) {
+            if (!challenge) return;
             // Save
-            setChallenge(prev => prev ? {
-                ...prev,
-                title: editTitle,
-                description: editSubtitle,
-                problemStatement: editProblem,
-                expectedOutcome: editOutcome,
-            } : prev);
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const payload: any = {
+                    title: editTitle,
+                    summary: editSubtitle,
+                    description: editProblem,
+                    outcome: editOutcome
+                };
+
+                await challengeService.updateChallenge(challenge.id, payload);
+
+                setChallenge(prev => prev ? {
+                    ...prev,
+                    title: editTitle,
+                    description: editSubtitle,
+                    problemStatement: editProblem,
+                    expectedOutcome: editOutcome,
+                } : prev);
+                showToast('Challenge updated successfully');
+            } catch (err) {
+                console.error("Failed to update challenge", err);
+                showToast('Failed to update challenge. Please try again.', 'error');
+                return; // Don't exit edit mode on failure
+            }
         }
         setEditMode(!editMode);
     };
 
     const cancelEdit = () => {
-        setEditTitle(challenge.title);
-        setEditSubtitle(challenge.description);
-        setEditProblem(challenge.problemStatement);
-        setEditOutcome(challenge.expectedOutcome);
+        if (challenge) {
+            setEditTitle(challenge.title);
+            setEditSubtitle(challenge.description);
+            setEditProblem(challenge.problemStatement);
+            setEditOutcome(challenge.expectedOutcome);
+        }
         setEditMode(false);
     };
 
-    const handleVote = () => {
+    const handleVote = async () => {
         if (!isAuthenticated) {
             navigate('/login', { state: { from: location } });
             return;
         }
+        if (!challenge) return;
+
+        // Optimistic UI update
+        const isCurrentlyVoted = hasVoted;
+        setHasVoted(!isCurrentlyVoted);
         setChallenge(prev => prev ? {
             ...prev,
-            stats: { ...prev.stats, appreciations: prev.stats.appreciations + (hasVoted ? -1 : 1) }
+            stats: { ...prev.stats, appreciations: prev.stats.appreciations + (isCurrentlyVoted ? -1 : 1) }
         } : prev);
-        setHasVoted(!hasVoted);
-        showToast(hasVoted ? 'Vote removed' : 'Thanks for voting!');
+
+        try {
+            const currentUserId = "TODO_CURRENT_USER_ID"; // Get from auth
+            await challengeService.toggleUpvote(challenge.id, currentUserId);
+            showToast(isCurrentlyVoted ? 'Vote removed' : 'Thanks for voting!');
+        } catch {
+            // Revert on failure
+            setHasVoted(isCurrentlyVoted);
+            setChallenge(prev => prev ? {
+                ...prev,
+                stats: { ...prev.stats, appreciations: prev.stats.appreciations + (isCurrentlyVoted ? 1 : -1) }
+            } : prev);
+            showToast('Failed to toggle vote. Please try again.', 'error');
+        }
     };
 
-    const handleSubscribe = () => {
+    const handleSubscribe = async () => {
         if (!isAuthenticated) {
             navigate('/login', { state: { from: location } });
             return;
         }
-        setIsSubscribed(!isSubscribed);
-        showToast(isSubscribed ? 'Unsubscribed from challenge' : 'Subscribed to challenge updates!');
+        if (!challenge) return;
+
+        // Optimistic UI update
+        const isCurrentlySubscribed = isSubscribed;
+        setIsSubscribed(!isCurrentlySubscribed);
+
+        try {
+            const currentUserId = "TODO_CURRENT_USER_ID"; // Get from auth
+            await challengeService.toggleSubscribe(challenge.id, currentUserId);
+            showToast(isCurrentlySubscribed ? 'Unsubscribed from challenge' : 'Subscribed to challenge updates!');
+        } catch {
+            // Revert on failure
+            setIsSubscribed(isCurrentlySubscribed);
+            showToast('Failed to toggle subscription. Please try again.', 'error');
+        }
     };
 
     const handleDelete = () => {
         setShowDeleteConfirm(true);
     };
 
-    const confirmDelete = () => {
+    const confirmDelete = async () => {
         if (challenge) {
             try {
-                storage.deleteChallenge(challenge.id);
+                await challengeService.deleteChallenge(challenge.id);
                 showToast('Challenge deleted successfully');
                 navigate('/challenges');
             } catch {
                 showToast('Failed to delete challenge. Please try again.', 'error');
+                setShowDeleteConfirm(false);
             }
         }
     };
@@ -298,7 +449,7 @@ export const ChallengeDetail: React.FC = () => {
         setIdeaErrors({});
     };
 
-    const handleIdeaSubmit = () => {
+    const handleIdeaSubmit = async () => {
         const errors: { title?: string; description?: string; detail?: string } = {};
         if (!ideaTitle.trim()) errors.title = 'Title is required';
         if (!ideaDescription.trim()) errors.description = 'Proposed solution is required';
@@ -311,51 +462,19 @@ export const ChallengeDetail: React.FC = () => {
 
         if (!challenge) return;
 
-        // Generate a new ID
-        const currentIdeas = storage.getIdeaDetails();
-        const nextIdNumber = currentIdeas.length > 0
-            ? Math.max(...currentIdeas.map(i => {
-                const parts = i.id.split('-');
-                return parts.length > 1 ? parseInt(parts[1]) : 0;
-            })) + 1
-            : 1;
-        const newId = `ID-${String(nextIdNumber).padStart(4, '0')}`;
-
-        const newIdea: Idea = {
-            id: newId,
-            title: ideaTitle,
-            description: ideaDescription,
-            status: 'Pending',
-            owner: {
-                name: 'Current User',
-                avatar: 'CU',
-                avatarColor: 'var(--accent-purple)',
-                role: 'Contributor'
-            },
-            linkedChallenge: { id: challenge.id, title: challenge.title },
-            tags: [],
-            stats: { appreciations: 0, comments: 0, views: 0 },
-            problemStatement: challenge.problemStatement,
-            proposedSolution: ideaDetail,
-            expectedImpact: 'TBD',
-            submittedDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-            lastUpdated: 'Just now',
-            activity: []
-        };
-
         try {
-            // Save to storage
-            storage.addIdea(challenge.id, newIdea);
+            // Note: Since we don't have an idea creation API documented yet, we will mock the creation 
+            // for the UI momentarily, but ideally this calls `ideaService.createIdea(...)`
+            const newId = `ID-PENDING-${Math.floor(Math.random() * 1000)}`;
 
-            // Update local state - the UI uses challenge.ideas (which are summary objects)
             const summaryIdea = {
-                id: newIdea.id,
-                title: newIdea.title,
-                author: newIdea.owner.name,
-                status: newIdea.status,
-                appreciations: newIdea.stats.appreciations,
-                comments: newIdea.stats.comments,
-                views: newIdea.stats.views
+                id: newId,
+                title: ideaTitle,
+                author: 'Current User', // Will be real user
+                status: 'Pending',
+                appreciations: 0,
+                comments: 0,
+                views: 0
             };
 
             setChallenge(prev => prev ? {
@@ -368,28 +487,28 @@ export const ChallengeDetail: React.FC = () => {
 
             setShowIdeaModal(false);
             resetIdeaForm();
-            showToast('Idea posted successfully');
+            showToast('Idea posted successfully (Mocked)');
         } catch {
             showToast('Failed to submit idea. Please try again.', 'error');
         }
     };
 
-    const handleDeleteIdea = (ideaId: string) => {
+    const handleDeleteIdea = async (ideaId: string) => {
         if (!challenge) return;
 
         // Trigger exit animation
         setExitingIdeaIds(prev => [...prev, ideaId]);
 
         // Wait for animation to finish then remove
-        setTimeout(() => {
+        setTimeout(async () => {
             try {
-                storage.deleteIdea(challenge.id, ideaId);
+                // Mock delete for now, as delete idea endpoint wasn't provided
                 setChallenge(prev => prev ? {
                     ...prev,
                     ideas: prev.ideas.filter(i => i.id !== ideaId)
                 } : prev);
                 setExitingIdeaIds(prev => prev.filter(id => id !== ideaId));
-                showToast('Idea deleted successfully');
+                showToast('Idea deleted successfully (Mocked)');
             } catch {
                 setExitingIdeaIds(prev => prev.filter(id => id !== ideaId));
                 showToast('Failed to delete idea. Please try again.', 'error');
@@ -397,28 +516,42 @@ export const ChallengeDetail: React.FC = () => {
         }, 400); // Matches .idea-exit-animate duration
     };
 
-    const handlePostComment = () => {
+    const handlePostComment = async () => {
         if (!isAuthenticated) {
             navigate('/login', { state: { from: location } });
             return;
         }
-        if (!comment.trim()) return;
+        if (!comment.trim() || !challenge) return;
 
-        const newComment = {
-            author: 'Current User', // In a real app, this would be the logged-in user
-            avatar: 'CU',
-            avatarColor: 'var(--accent-purple)',
-            text: comment.trim(),
-            time: 'Just now'
-        };
+        try {
+            const currentUserId = "TODO_CURRENT_USER_ID"; // Replace with real auth user ID
 
-        setChallenge(prev => prev ? {
-            ...prev,
-            stats: { ...prev.stats, comments: prev.stats.comments + 1 },
-            activity: [newComment, ...prev.activity]
-        } : prev);
+            await commentService.createComment({
+                userId: currentUserId,
+                comment: comment.trim(),
+                type: 'CH',
+                typeId: challenge.id
+            });
 
-        setComment('');
+            const newComment = {
+                author: 'Current User',
+                avatar: 'CU',
+                avatarColor: 'var(--accent-purple)',
+                text: comment.trim(),
+                time: 'Just now'
+            };
+
+            setChallenge(prev => prev ? {
+                ...prev,
+                stats: { ...prev.stats, comments: prev.stats.comments + 1 },
+                activity: [newComment, ...prev.activity]
+            } : prev);
+
+            setComment('');
+            showToast('Comment posted successfully');
+        } catch {
+            showToast('Failed to post comment. Please try again.', 'error');
+        }
     };
 
     // Calculate top contributors for the sidebar
@@ -710,7 +843,7 @@ export const ChallengeDetail: React.FC = () => {
                         </div>
                         <div className="detail-stat-row">
                             <span className="detail-stat-label">Views</span>
-                            <span className="detail-stat-value blue">247</span>
+                            <span className="detail-stat-value blue">{challenge.stats.views}</span>
                         </div>
                         <div className="detail-stat-row">
                             <span className="detail-stat-label">Votes</span>

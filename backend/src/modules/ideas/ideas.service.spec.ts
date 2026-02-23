@@ -144,4 +144,29 @@ describe('IdeasService', () => {
       expect(model.deleteOne).toHaveBeenCalledWith({ _id: mockIdea._id });
     });
   });
+
+  describe('incrementView', () => {
+    it('should increment viewCount by 1', async () => {
+      mockIdeaModel.updateOne = jest.fn().mockReturnValue({
+        exec: jest.fn().mockResolvedValue({ matchedCount: 1, modifiedCount: 1 }),
+      });
+
+      await service.incrementView('ID-0001');
+
+      expect(mockIdeaModel.updateOne).toHaveBeenCalledWith(
+        { ideaId: 'ID-0001' },
+        { $inc: { viewCount: 1 } },
+      );
+    });
+
+    it('should throw NotFoundException when idea not found', async () => {
+      mockIdeaModel.updateOne = jest.fn().mockReturnValue({
+        exec: jest.fn().mockResolvedValue({ matchedCount: 0, modifiedCount: 0 }),
+      });
+
+      await expect(service.incrementView('ID-9999')).rejects.toThrow(
+        'Idea ID-9999 not found',
+      );
+    });
+  });
 });

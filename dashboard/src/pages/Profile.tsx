@@ -30,8 +30,24 @@ export const Profile: React.FC = () => {
         return () => clearTimeout(timer);
     }, []);
 
+    const [heatmapLevels, setHeatmapLevels] = useState<number[]>([]);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setHeatmapLevels([...Array(196)].map(() => {
+            const r = Math.random();
+            let level = 0;
+            if (r > 0.95) level = 4;
+            else if (r > 0.85) level = 3;
+            else if (r > 0.70) level = 2;
+            else if (r > 0.50) level = 1;
+            return level;
+        }));
+    }, []);
+
     useEffect(() => {
         if (user && !isLoading) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData({
                 name: user.name || '',
                 opco: user.opco || '',
@@ -588,13 +604,7 @@ export const Profile: React.FC = () => {
                                 </div>
                                 <div className="heatmap-grid">
                                     {[...Array(196)].map((_, i) => {
-                                        // Weighted random for a more realistic "ratio" (mostly empty/low, few high)
-                                        const r = Math.random();
-                                        let level = 0;
-                                        if (r > 0.95) level = 4;
-                                        else if (r > 0.85) level = 3;
-                                        else if (r > 0.70) level = 2;
-                                        else if (r > 0.50) level = 1;
+                                        const level = heatmapLevels[i] || 0;
 
                                         return (
                                             <div

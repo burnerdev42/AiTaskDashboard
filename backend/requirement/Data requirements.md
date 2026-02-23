@@ -242,14 +242,24 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 - Member management system and approval process for challenges; for now, hardcode members in DB among existing users.
 - Timeline, portfolio, platform list, opco list are hardcoded. Later manageable by admin.
 - Priority is always hardcoded.
-- `PATCH /challenges/{virtualId}/status` — Requires `{ "status": "..." }` — Swim lane status change only.
-- Once a challenge is in `pilot` status, it cannot be moved back to `submitted`.
-- `POST /challenges/{virtualId}/upvote` — Requires `{ "userId": "..." }` — Toggle upvote.
-- `POST /challenges/{virtualId}/subscribe` — Requires `{ "userId": "..." }` — Toggle subscription.
-- Creator automatically becomes a subscriber.
-- Any user submitting an idea automatically subscribes to the challenge.
+- Creator of challenge automatically becomes a subscriber.
+- Any user submitting an idea automatically becomes a subscriber of the challenge.
 - Any user upvoting or commenting on a challenge automatically subscribes to that challenge.
-- `POST /challenges/{virtualId}/view` — Increment the `viewCount` field by 1.
+- Once a challenge is in `pilot` status, it cannot be moved back to `submitted`.
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `GET` | `/challenges` | Get all challenges (supports `?limit=` & `?offset=`) |
+| 2 | `POST` | `/challenges` | Create a new challenge |
+| 3 | `GET` | `/challenges/count` | Get total challenge count |
+| 4 | `GET` | `/challenges/{virtualId}` | Get challenge by virtualId (e.g., CH-001) |
+| 5 | `PUT` | `/challenges/{virtualId}` | Update a challenge |
+| 6 | `DELETE` | `/challenges/{virtualId}` | Delete a challenge (204 No Content) |
+| 7 | `PATCH` | `/challenges/{virtualId}/status` | Update swim lane status. Body: `{ "status": "...", "userId": "..." }` |
+| 8 | `POST` | `/challenges/{virtualId}/upvote` | Toggle upvote. Body: `{ "userId": "..." }` |
+| 9 | `POST` | `/challenges/{virtualId}/subscribe` | Toggle subscription. Body: `{ "userId": "..." }` |
 
 ---
 
@@ -291,11 +301,22 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 ### Constraints & Requirements
 - **ALL Idea API GET responses** **MUST** include these derived fields: `viewCount`, `upvoteCount` (or `appreciationCount`), and `commentCount`.
 - Moderator-based idea status — future implementation.
-- `POST /ideas/{virtualId}/upvote` — Requires `{ "userId": "..." }` — Toggle upvote.
-- `POST /ideas/{virtualId}/subscribe` — Requires `{ "userId": "..." }` — Toggle subscription.
 - Creator subscribes to the idea and its parent challenge.
 - Any user upvoting or commenting on an idea subscribes to that idea and its parent challenge.
-- `POST /ideas/{virtualId}/view` — Increment the `viewCount` field by 1.
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `GET` | `/ideas` | Get all ideas (supports `?limit=` & `?offset=`) |
+| 2 | `POST` | `/ideas` | Create a new idea |
+| 3 | `GET` | `/ideas/count` | Get total idea count |
+| 4 | `GET` | `/ideas/challenge/{virtualId}` | Get ideas for a challenge by challenge virtualId (e.g., CH-001) |
+| 5 | `GET` | `/ideas/{virtualId}` | Get idea by ideaId (e.g., ID-0001) |
+| 6 | `PUT` | `/ideas/{virtualId}` | Update an idea |
+| 7 | `DELETE` | `/ideas/{virtualId}` | Delete an idea (204 No Content) |
+| 8 | `POST` | `/ideas/{virtualId}/upvote` | Toggle upvote. Body: `{ "userId": "..." }` |
+| 9 | `POST` | `/ideas/{virtualId}/subscribe` | Toggle subscription. Body: `{ "userId": "..." }` |
 
 ---
 
@@ -321,14 +342,23 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 ### Constraints & Requirements
 
 - **Virtual ID Prefix Routing:** The prefix of the `virtualId` (`CH-` or `ID-`) determines the comment type to query, mapping directly to Comment Types `["CH", "ID"]`. E.g., `CH-001` → type `"CH"` (Challenge); `ID-0001` → type `"ID"` (Idea).
-- `GET /comments/challenge/{virtualId}` — Fetch all comments for a challenge by its virtualId.
-- `GET /comments/idea/{virtualId}` — Fetch all comments for an idea by its virtualId (ideaId).
-- `GET /comments/user/{userId}` — Fetch all comments by a specific user (MongoDB Hex ID).
-- `GET /comments/challenge/{virtualId}/count` — Fetch comment count for a challenge by its virtualId.
-- `GET /comments/idea/{virtualId}/count` — Fetch comment count for an idea by its virtualId.
-- `GET /comments/user/{userId}/count` — Fetch comment count for a specific user.
 - Any user commenting on a challenge automatically subscribes to that challenge.
 - Any user commenting on an idea automatically subscribes to that idea and its parent challenge.
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `GET` | `/comments` | Get all comments (supports `?parentId=` & `?type=`) |
+| 2 | `POST` | `/comments` | Create a comment |
+| 3 | `GET` | `/comments/count` | Get total comment count |
+| 4 | `GET` | `/comments/challenge/{virtualId}` | Get comments for a challenge by virtualId |
+| 5 | `GET` | `/comments/challenge/{virtualId}/count` | Get comment count for a challenge by virtualId |
+| 6 | `GET` | `/comments/idea/{virtualId}` | Get comments for an idea by virtualId |
+| 7 | `GET` | `/comments/idea/{virtualId}/count` | Get comment count for an idea by virtualId |
+| 8 | `GET` | `/comments/user/{userId}` | Get comments by a user (supports `?limit=` & `?offset=`) |
+| 9 | `GET` | `/comments/user/{userId}/count` | Get comment count for a user |
+| 10 | `DELETE` | `/comments/{id}` | Delete a comment (204 No Content) |
 
 ---
 
@@ -367,16 +397,14 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 7 | `totalIdeaCount` | Number | Total ideas created from Idea DB |
 
 ### Constraints & Requirements
+- Should **NOT** allow direct updates to: `password`, `role`, `status` (those have dedicated flows).
 
-- `GET /users` — Fetch all users.
-- `GET /users/{id}` — Fetch a single user by their MongoDB Hex ID.
-- `GET /users/count` — Fetch total count of all users.
-- `GET /users/count-by-role` — Fetch count of users grouped by role (`ADMIN`, `MEMBER`, `USER`).
-  - Response: `{ "ADMIN": <count>, "MEMBER": <count>, "USER": <count> }`
-  - Used by Home View → Innovation Team section to identify `MEMBER` users.
-- `PUT /users/{id}` — Update user profile fields (`name`, `opco`, `platform`, `companyTechRole`, `interestAreas`, etc.).
-  - Should **NOT** allow direct updates to: `password`, `role`, `status` (those have dedicated flows).
-- `DELETE /users/{id}` — Delete a user by their MongoDB Hex ID.
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `GET` | `/users` | Get all users |
+| 2 | `GET` | `/users/{id}` | Get user by MongoDB Hex ID |
 
 ---
 
@@ -403,8 +431,20 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 3 | `activitySummary` | String | Human-readable string combining Type + Entity Details |
 
 ### Constraints & Requirements
-- `GET /activities/user/{userId}` — Fetch activities for a specific user.
-- `GET /activities/user/{userId}/count` — Fetch total activity count for a specific user.
+- Activities are primarily created internally by the service layer when domain events occur.
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `GET` | `/activities` | Get all activities (supports `?limit=` & `?offset=`) |
+| 2 | `POST` | `/activities` | Create an activity |
+| 3 | `GET` | `/activities/count` | Get total activity count |
+| 4 | `GET` | `/activities/user/{userId}` | Get activities for a user (supports `?limit=` & `?offset=`) |
+| 5 | `GET` | `/activities/user/{userId}/count` | Get activity count for a user |
+| 6 | `GET` | `/activities/{id}` | Get activity by MongoDB `_id` |
+| 7 | `PUT` | `/activities/{id}` | Update an activity |
+| 8 | `DELETE` | `/activities/{id}` | Delete an activity (204 No Content) |
 
 ---
 
@@ -432,9 +472,21 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 4 | `initiatorDetails` | Object | User details fetched via `initiatorId` (UserMinimal) |
 
 ### Constraints & Requirements
-- `PATCH /notifications/{id}/status` — Requires `{ "isSeen": true }` — Update isSeen.
-- `GET /notifications/user/{userId}` — Fetch notifications for a specific user.
-- `GET /notifications/user/{userId}/count` — Fetch notification count. Accepts optional query parameter `isSeen` (true/false) to filter; if absent, fetches all.
+- `GET /notifications/user/{userId}/count` accepts optional query parameter `isSeen` (true/false) to filter; if absent, fetches all.
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `GET` | `/notifications` | Get all notifications (supports `?limit=` & `?offset=`) |
+| 2 | `POST` | `/notifications` | Create a notification |
+| 3 | `GET` | `/notifications/count` | Get total notification count |
+| 4 | `GET` | `/notifications/user/{userId}` | Get notifications for a user (supports `?limit=` & `?offset=`) |
+| 5 | `GET` | `/notifications/user/{userId}/count` | Get notification count (supports `?isSeen=true/false`) |
+| 6 | `GET` | `/notifications/{id}` | Get notification by MongoDB `_id` |
+| 7 | `PUT` | `/notifications/{id}` | Update a notification |
+| 8 | `PATCH` | `/notifications/{id}/status` | Update `isSeen` status. Body: `{ "isSeen": true }` |
+| 9 | `DELETE` | `/notifications/{id}` | Delete a notification (204 No Content) |
 
 ### Notification Recipient Logic
 - `challenge_created`: All users (except initiator)
@@ -593,3 +645,30 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 
 - `POST /auth/register` — Accepts full User profile payload. Password hashed via bcrypt. Returns 201 (no password in response).
 - `POST /auth/login` — Accepts `{ "email", "password" }`. Compares via bcrypt. Returns 200 + User (no password) + token. Failure returns 401.
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `POST` | `/auth/login` | User login. Body: `{ "email": "...", "password": "..." }` |
+| 2 | `POST` | `/auth/register` | User registration. Body: full user profile payload |
+
+---
+
+## 9. Seed (Development Only)
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `POST` | `/seed` | Seed database with fake related data |
+
+---
+
+## 10. Newsletter
+
+### Implemented Endpoints
+
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | `POST` | `/newsletter/subscribe` | Subscribe to newsletter. Body: `{ "email": "..." }` |

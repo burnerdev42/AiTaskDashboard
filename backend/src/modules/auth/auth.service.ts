@@ -133,7 +133,7 @@ export class AuthService extends AbstractService {
     // Convert Mongoose document to plain object before destructuring
     const userObj =
       typeof (user as unknown as { toObject: () => UserDocument }).toObject ===
-        'function'
+      'function'
         ? (user as unknown as { toObject: () => UserDocument }).toObject()
         : user;
     // Omit password field using destructuring

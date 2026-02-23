@@ -156,7 +156,7 @@ export class ChallengesService extends AbstractService {
   async findAll(limit = 20, offset = 0): Promise<any[]> {
     const challenges = await this.challengeModel
       .find()
-      .sort({ createdAt: -1 })
+      .sort({ virtualId: 1 })
       .skip(offset)
       .limit(limit)
       .lean()
@@ -324,5 +324,14 @@ export class ChallengesService extends AbstractService {
   /** Get total challenge count. */
   async count(): Promise<number> {
     return this.challengeModel.countDocuments().exec();
+  }
+  /** Increment viewCount for a challenge by 1. */
+  async incrementView(virtualId: string): Promise<void> {
+    const result = await this.challengeModel
+      .updateOne({ virtualId }, { $inc: { viewCount: 1 } })
+      .exec();
+    if (result.matchedCount === 0) {
+      throw new NotFoundException(`Challenge ${virtualId} not found`);
+    }
   }
 }

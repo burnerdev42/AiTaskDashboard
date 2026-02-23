@@ -104,14 +104,16 @@ export class SeedService {
       });
     }
 
-    const createdUsers = await this.userModel.insertMany(users);
+    const createdUsers = (await this.userModel.insertMany(
+      users,
+    )) as UserDocument[];
 
     // Create activities for user login
     for (const user of createdUsers) {
       await this.logActivity('log_in', undefined, user._id.toString());
     }
 
-    return createdUsers as UserDocument[];
+    return createdUsers;
   }
 
   private async createChallenges(
@@ -121,6 +123,12 @@ export class SeedService {
     for (let i = 1; i <= 20; i++) {
       const creator = users[i % users.length];
       const virtualId = `CH-${i.toString().padStart(3, '0')}`;
+
+      const numUpvotes = Math.floor(Math.random() * 6) + 3; // 3 to 8 upvotes
+      const upVotes = [...users]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, numUpvotes)
+        .map((u) => u._id.toString());
 
       const challenge = {
         title: `Challenge ${i}: Optimizing AI Workflows`,
@@ -135,14 +143,16 @@ export class SeedService {
         virtualId,
         status: SWIM_LANE_CODES[i % SWIM_LANE_CODES.length],
         userId: creator._id.toString(),
-        upVotes: [],
+        upVotes,
         subcriptions: [creator._id.toString()],
-        viewCount: Math.floor(Math.random() * 50),
+        viewCount: Math.floor(Math.random() * 150) + 51,
       };
       challenges.push(challenge);
     }
 
-    const createdChallenges = await this.challengeModel.insertMany(challenges);
+    const createdChallenges = (await this.challengeModel.insertMany(
+      challenges,
+    )) as ChallengeDocument[];
 
     for (const challenge of createdChallenges) {
       await this.logActivity(
@@ -158,7 +168,7 @@ export class SeedService {
       );
     }
 
-    return createdChallenges as ChallengeDocument[];
+    return createdChallenges;
   }
 
   private async createIdeas(
@@ -168,10 +178,26 @@ export class SeedService {
     const ideas: any[] = [];
     let ideaCounter = 1;
 
-    for (const challenge of challenges) {
-      for (let j = 1; j <= 2; j++) {
+    for (let i = 0; i < challenges.length; i++) {
+      const challenge = challenges[i];
+      let numIdeas = 1;
+      if (challenge.virtualId === 'CH-020') {
+        numIdeas = 0;
+      } else if (challenge.virtualId === 'CH-001') {
+        numIdeas = 2;
+      } else {
+        numIdeas = Math.floor(Math.random() * 2) + 1; // 1 or 2 ideas
+      }
+
+      for (let j = 1; j <= numIdeas; j++) {
         const creator = users[ideaCounter % users.length];
         const ideaId = `ID-${ideaCounter.toString().padStart(4, '0')}`;
+
+        const numUpvotes = Math.floor(Math.random() * 6) + 3; // 3 to 8 upvotes
+        const upVotes = [...users]
+          .sort(() => 0.5 - Math.random())
+          .slice(0, numUpvotes)
+          .map((u) => u._id.toString());
 
         ideas.push({
           ideaId,
@@ -181,16 +207,18 @@ export class SeedService {
           challengeId: challenge._id.toString(),
           userId: creator._id.toString(),
           subscription: [creator._id.toString()],
-          appreciationCount: 0,
-          viewCount: Math.floor(Math.random() * 20),
+          appreciationCount: upVotes.length,
+          viewCount: Math.floor(Math.random() * 150) + 51,
           status: true,
-          upVotes: [],
+          upVotes,
         });
         ideaCounter++;
       }
     }
 
-    const createdIdeas = await this.ideaModel.insertMany(ideas);
+    const createdIdeas = (await this.ideaModel.insertMany(
+      ideas,
+    )) as IdeaDocument[];
 
     for (const idea of createdIdeas) {
       await this.logActivity('idea_created', idea._id.toString(), idea.userId);
@@ -211,7 +239,7 @@ export class SeedService {
       );
     }
 
-    return createdIdeas as IdeaDocument[];
+    return createdIdeas;
   }
 
   private async createComments(
@@ -219,52 +247,62 @@ export class SeedService {
     ideas: IdeaDocument[],
     users: UserDocument[],
   ) {
-    // 1 Comment on a random challenge
-    const chCommenter = users[0];
-    const challenge = challenges[0];
-    const chComment = await this.commentModel.create({
-      userId: chCommenter._id.toString(),
-      comment: 'This is a great challenge! Looking forward to ideas.',
-      type: 'CH',
-      typeId: challenge._id.toString(),
-      createdat: new Date(),
-    });
+    for (const challenge of challenges) {
+      const numComments = Math.floor(Math.random() * 3) + 2; // 2 to 4 comments
+      const shuffledUsers = [...users].sort(() => 0.5 - Math.random());
 
-    await this.logActivity(
-      'challenge_commented',
-      chComment._id.toString(),
-      chCommenter._id.toString(),
-    );
-    await this.notifySubscribersAndOwner(
-      'challenge_commented',
-      chComment._id.toString(),
-      chCommenter._id.toString(),
-      challenge._id.toString(),
-    );
+      for (let i = 0; i < numComments; i++) {
+        const commenter = shuffledUsers[i];
+        const comment = (await this.commentModel.create({
+          userId: commenter._id.toString(),
+          comment: `This is comment ${i + 1} for challenge ${challenge.virtualId}. Great initiative!`,
+          type: 'CH',
+          typeId: challenge._id.toString(),
+          createdat: new Date(),
+        })) as CommentDocument;
 
-    // 1 Comment on a random idea
-    const idCommenter = users[1];
-    const idea = ideas[0];
-    const idComment = await this.commentModel.create({
-      userId: idCommenter._id.toString(),
-      comment: 'Very interesting solution approach.',
-      type: 'ID',
-      typeId: idea._id.toString(),
-      createdat: new Date(),
-    });
+        await this.logActivity(
+          'challenge_commented',
+          comment._id.toString(),
+          commenter._id.toString(),
+        );
+        await this.notifySubscribersAndOwner(
+          'challenge_commented',
+          comment._id.toString(),
+          commenter._id.toString(),
+          challenge._id.toString(),
+        );
+      }
+    }
 
-    await this.logActivity(
-      'idea_commented',
-      idComment._id.toString(),
-      idCommenter._id.toString(),
-    );
-    await this.notifySubscribersAndOwner(
-      'idea_commented',
-      idComment._id.toString(),
-      idCommenter._id.toString(),
-      idea._id.toString(),
-      true,
-    );
+    for (const idea of ideas) {
+      const numComments = Math.floor(Math.random() * 3) + 2; // 2 to 4 comments
+      const shuffledUsers = [...users].sort(() => 0.5 - Math.random());
+
+      for (let i = 0; i < numComments; i++) {
+        const commenter = shuffledUsers[i];
+        const comment = (await this.commentModel.create({
+          userId: commenter._id.toString(),
+          comment: `Insightful idea! Here is comment ${i + 1} for ${idea.ideaId}.`,
+          type: 'ID',
+          typeId: idea._id.toString(),
+          createdat: new Date(),
+        })) as CommentDocument;
+
+        await this.logActivity(
+          'idea_commented',
+          comment._id.toString(),
+          commenter._id.toString(),
+        );
+        await this.notifySubscribersAndOwner(
+          'idea_commented',
+          comment._id.toString(),
+          commenter._id.toString(),
+          idea._id.toString(),
+          true,
+        );
+      }
+    }
   }
 
   private async logActivity(

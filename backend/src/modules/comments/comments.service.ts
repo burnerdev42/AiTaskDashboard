@@ -14,8 +14,9 @@ import {
 import { CommentsRepository } from './comments.repository';
 import { CreateCommentDto } from '../../dto/comments/create-comment.dto';
 import { AbstractService } from '../../common';
-import { CommentDocument } from '../../models/comments/comment.schema';
-import { Types } from 'mongoose';
+import { Comment, CommentDocument } from '../../models/comments/comment.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
 import { ChallengesService } from '../challenges/challenges.service';
 import { IdeasService } from '../ideas/ideas.service';
 import { IdeaDocument } from '../../models/ideas/idea.schema';
@@ -30,12 +31,56 @@ export class CommentsService extends AbstractService {
 
   constructor(
     private readonly commentsRepository: CommentsRepository,
+    @InjectModel(Comment.name) private readonly commentModel: Model<CommentDocument>,
     @Inject(forwardRef(() => ChallengesService))
     private readonly challengesService: ChallengesService,
     @Inject(forwardRef(() => IdeasService))
     private readonly ideasService: IdeasService,
   ) {
     super();
+  }
+
+  /**
+   * Enriches comments with user details by batch-fetching from the users collection.
+   * @param comments Raw comment documents.
+   * @returns Comments with userDetails attached.
+   */
+  private async enrichCommentsWithUserDetails(
+    comments: CommentDocument[],
+  ): Promise<any[]> {
+    if (!comments || comments.length === 0) return [];
+
+    const userIds = [
+      ...new Set(
+        comments
+          .map((c: any) => c.userId?.toString())
+          .filter((id: string) => id && Types.ObjectId.isValid(id)),
+      ),
+    ];
+
+    if (userIds.length === 0) {
+      return comments.map((c: any) => ({ ...c, userDetails: null }));
+    }
+
+    const db = this.commentModel.db;
+    const users = await db
+      .collection('users')
+      .find({ _id: { $in: userIds.map((id) => new Types.ObjectId(id)) } })
+      .project({ _id: 1, name: 1, email: 1, companyTechRole: 1 })
+      .toArray();
+
+    const userMap = users.reduce(
+      (acc, user) => {
+        acc[user._id.toString()] = { ...user, _id: user._id.toString() };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    return comments.map((c: any) => ({
+      ...c,
+      userDetails: userMap[c.userId?.toString()] || null,
+    }));
   }
 
   /**
@@ -107,7 +152,7 @@ export class CommentsService extends AbstractService {
    */
   async findByChallengeVirtualId(
     virtualId: string,
-  ): Promise<CommentDocument[]> {
+  ): Promise<any[]> {
     const challenge = (await this.challengesService.findByVirtualId(
       virtualId,
     )) as ChallengeDocument;
@@ -116,10 +161,11 @@ export class CommentsService extends AbstractService {
         `Challenge with virtualId ${virtualId} not found`,
       );
     }
-    return this.commentsRepository.find(
+    const comments = await this.commentsRepository.find(
       { typeId: challenge._id.toString(), type: 'CH' },
-      { sort: { createdat: -1 }, populate: 'userId' },
+      { sort: { createdat: -1 } },
     );
+    return this.enrichCommentsWithUserDetails(comments);
   }
 
   /**
@@ -148,17 +194,18 @@ export class CommentsService extends AbstractService {
    * @param virtualId Idea virtual ID (e.g., ID-0001).
    * @returns List of comments for the idea.
    */
-  async findByIdeaVirtualId(virtualId: string): Promise<CommentDocument[]> {
+  async findByIdeaVirtualId(virtualId: string): Promise<any[]> {
     const idea = (await this.ideasService.findByIdeaId(
       virtualId,
     )) as IdeaDocument;
     if (!idea) {
       throw new NotFoundException(`Idea with virtualId ${virtualId} not found`);
     }
-    return this.commentsRepository.find(
+    const comments = await this.commentsRepository.find(
       { typeId: idea._id.toString(), type: 'ID' },
-      { sort: { createdat: -1 }, populate: 'userId' },
+      { sort: { createdat: -1 } },
     );
+    return this.enrichCommentsWithUserDetails(comments);
   }
 
   /**

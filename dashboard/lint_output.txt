@@ -1,0 +1,115 @@
+
+> dashboard@0.0.0 lint
+> eslint .
+
+
+C:\CODE\AiTaskDashboard\dashboard\src\components\ui\Toast.tsx
+  36:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\CODE\AiTaskDashboard\dashboard\src\components\ui\Toast.tsx:36:13
+  34 |
+  35 |         if (isVisible) {
+> 36 |             setShouldRender(true);
+     |             ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  37 |
+  38 |             // Allow DOM to be created before applying transition trigger
+  39 |             enterTimer = setTimeout(() => {  react-hooks/set-state-in-effect
+
+C:\CODE\AiTaskDashboard\dashboard\src\context\AuthContext.tsx
+   64:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  109:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\CODE\AiTaskDashboard\dashboard\src\context\ToastContext.tsx
+  50:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\ChallengeDetail.tsx
+    6:36  error  'Idea' is defined but never used     @typescript-eslint/no-unused-vars
+    7:10  error  'storage' is defined but never used  @typescript-eslint/no-unused-vars
+  393:18  error  'err' is defined but never used      @typescript-eslint/no-unused-vars
+  419:18  error  'err' is defined but never used      @typescript-eslint/no-unused-vars
+  550:18  error  'err' is defined but never used      @typescript-eslint/no-unused-vars
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\Home.tsx
+  186:115  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\Home.tsx:186:115
+  184 |                             <div className="spark-bars-skeleton">
+  185 |                                 {[...Array(6)].map((_, i) => (
+> 186 |                                     <div key={i} className="spark-bar-skeleton skeleton" style={{ height: `${20 + Math.random() * 60}%` }}></div>
+      |                                                                                                                   ^^^^^^^^^^^^^ Cannot call impure function
+  187 |                                 ))}
+  188 |                             </div>
+  189 |                             <div style={{ marginTop: '20px' }}>  react-hooks/purity
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\IdeaDetail.tsx
+  48:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\IdeaDetail.tsx:48:13
+  46 |
+  47 |         if (searchParams.get('edit') === 'true') {
+> 48 |             setEditMode(true);
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  49 |         }
+  50 |
+  51 |         return () => clearTimeout(timer);  react-hooks/set-state-in-effect
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\Notifications.tsx
+  30:12  error  '_' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\Profile.tsx
+  592:51  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\Profile.tsx:592:51
+  590 |                                     {[...Array(196)].map((_, i) => {
+  591 |                                         // Weighted random for a more realistic "ratio" (mostly empty/low, few high)
+> 592 |                                         const r = Math.random();
+      |                                                   ^^^^^^^^^^^^^ Cannot call impure function
+  593 |                                         let level = 0;
+  594 |                                         if (r > 0.95) level = 4;
+  595 |                                         else if (r > 0.85) level = 3;  react-hooks/purity
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\SubmitChallenge.tsx
+   98:80  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  110:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\CODE\AiTaskDashboard\dashboard\src\pages\SwimLanes.tsx
+   44:76  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   55:25  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   65:8   warning  React Hook useEffect has a missing dependency: 'fetchChallenges'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  218:25  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+
+C:\CODE\AiTaskDashboard\dashboard\src\services\challenge.service.ts
+  19:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\CODE\AiTaskDashboard\dashboard\src\services\idea.service.ts
+  6:9  error  Unnecessary try/catch wrapper  no-useless-catch
+
+C:\CODE\AiTaskDashboard\dashboard\src\services\storage.ts
+  233:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  257:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  316:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  340:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  352:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\CODE\AiTaskDashboard\dashboard\src\types\index.ts
+  21:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 28 problems (27 errors, 1 warning)
+

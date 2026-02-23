@@ -182,8 +182,8 @@ export const Home: React.FC = () => {
                     {isLoading ? (
                         <>
                             <div className="spark-bars-skeleton">
-                                {[...Array(6)].map((_, i) => (
-                                    <div key={i} className="spark-bar-skeleton skeleton" style={{ height: `${20 + Math.random() * 60}%` }}></div>
+                                {[30, 70, 45, 80, 50, 65].map((height, i) => (
+                                    <div key={i} className="spark-bar-skeleton skeleton" style={{ height: `${height}%` }}></div>
                                 ))}
                             </div>
                             <div style={{ marginTop: '20px' }}>

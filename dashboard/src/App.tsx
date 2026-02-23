@@ -7,7 +7,7 @@ import { SwimLanes } from './pages/SwimLanes';
 import { ChallengeDetail } from './pages/ChallengeDetail';
 import { SubmitChallenge } from './pages/SubmitChallenge';
 import { IdeaDetail } from './pages/IdeaDetail';
-import { IdeaSolutionCards } from './pages/IdeaSolutionCards';
+import { ChallengeCards } from './pages/ChallengeCards';
 import { Metrics } from './pages/Metrics';
 import { Notifications } from './pages/Notifications';
 import { Login } from './pages/Login';
@@ -25,7 +25,7 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/swimlanes" element={<SwimLanes />} />
-              <Route path="/challenges" element={<IdeaSolutionCards />} />
+              <Route path="/challenges" element={<ChallengeCards />} />
               <Route path="/challenges/submit" element={<ProtectedRoute><SubmitChallenge /></ProtectedRoute>} />
               <Route path="/challenges/:id" element={<ChallengeDetail />} />
               <Route path="/challenges/:challengeId/ideas/:ideaId" element={<IdeaDetail />} />

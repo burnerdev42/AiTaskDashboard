@@ -603,6 +603,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/CountApiResponse'
 
+  /ideas/challenge/{virtualId}:
+    get:
+      tags: [Ideas]
+      summary: Get ideas for a challenge by challenge virtualId
+      operationId: getIdeasByChallengeVirtualId
+      description: >
+        Fetches all ideas linked to a challenge. Internally resolves the challenge
+        by virtualId and queries ideas where challengeId matches the challenge's
+        MongoDB _id. Returns enriched ideas with derived fields.
+      parameters:
+        - name: virtualId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The virtual ID of the challenge (e.g., CH-001)
+      responses:
+        '200':
+          description: List of ideas for the challenge
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          ideas:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/IdeaResponse'
+        '404':
+          description: Challenge not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEnvelope'
+
   /ideas/{virtualId}:
     get:
       tags: [Ideas]

@@ -27,7 +27,7 @@ export const Notifications: React.FC = () => {
     const { showToast } = useToast();
 
     // Force update state
-    const [_, setTick] = useState(0);
+    const [, setTick] = useState(0);
     const forceUpdate = () => setTick(t => t + 1);
 
     // Get notifications from storage

@@ -34,38 +34,45 @@ For a given `idea`:
 ### 3. GET `/ideas/count`
 - **Implementation Steps**: `Idea.countDocuments({})`. Return `200`.
 
-### 4. GET `/ideas/{virtualId}`
+### 4. GET `/ideas/challenge/{virtualId}` (NEW)
+- **Implementation Steps**:
+  1. Resolve challenge: `Challenge.findOne({ virtualId })`. `404` if not found.
+  2. Query `Idea.find({ challengeId: challenge._id }).lean()`.
+  3. Apply **Common Aggregation Logic** to enrich all ideas.
+  4. Return `200 OK` with `{ ideas: [...] }`.
+
+### 5. GET `/ideas/{virtualId}`
 - **Implementation Steps**: 
   1. Query `Idea.findOne({ ideaId: virtualId }).lean()`. `404` if not found.
   2. Apply **Common Aggregation Logic**.
   3. Return `200 OK`.
 
-### 5. PUT `/ideas/{virtualId}`
+### 6. PUT `/ideas/{virtualId}`
 - **Implementation Steps**: 
   1. `Idea.findOneAndUpdate({ ideaId: virtualId }, req.body, { new: true })`. `404` if not found.
   2. Fire Notification & Activity events (idea_edited).
   3. Return `200 OK`.
 
-### 6. DELETE `/ideas/{virtualId}`
+### 7. DELETE `/ideas/{virtualId}`
 - **Implementation Steps**:
   1. `Idea.findOneAndDelete({ ideaId: virtualId })`. `404` if not found.
   2. Cascade delete linked comments.
   3. Fire Notification & Activity events (idea_deleted).
   4. Return `204 No Content`.
 
-### 7. POST `/ideas/{virtualId}/upvote`
+### 8. POST `/ideas/{virtualId}/upvote`
 - **Implementation Steps**:
   1. Toggle `userId` in `upVotes` array.
   2. Fire Notification & Activity events (idea_upvoted).
   3. Return `200 OK`.
 
-### 8. POST `/ideas/{virtualId}/subscribe`
+### 9. POST `/ideas/{virtualId}/subscribe`
 - **Implementation Steps**:
   1. Toggle `userId` in `subscription` array. 
   2. Fire Notification & Activity events (idea_subscribed).
   3. Return `200 OK`.
 
-### 9. POST `/ideas/{virtualId}/view` (NEW)
+### 10. POST `/ideas/{virtualId}/view`
 - **Implementation Steps**:
   1. `Idea.findOneAndUpdate({ ideaId: virtualId }, { $inc: { viewCount: 1 } }, { new: true })`.
   2. If not found, `404 Not Found`.

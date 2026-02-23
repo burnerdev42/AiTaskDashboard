@@ -82,6 +82,22 @@ export class IdeasController extends AbstractController {
     return this.success({ count }, 'Idea count retrieved');
   }
 
+  @Get('challenge/:virtualId')
+  @ApiOperation({ summary: 'Get ideas by challenge Virtual ID (e.g., CH-001)' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of ideas for the challenge.',
+    type: IdeaListApiResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Challenge not found.' })
+  async findByChallengeVirtualId(@Param('virtualId') virtualId: string) {
+    const result = await this.ideasService.findByChallengeVirtualId(virtualId);
+    return this.success(
+      { ideas: result },
+      'Ideas for challenge retrieved successfully',
+    );
+  }
+
   @Get(':virtualId')
   @ApiOperation({ summary: 'Get idea by Virtual ID (e.g., ID-0001)' })
   @ApiResponse({
@@ -149,6 +165,19 @@ export class IdeasController extends AbstractController {
       body.userId,
     )) as IdeaDocument;
     return this.success({ idea: result }, 'Subscription toggled successfully');
+  }
+
+  @Post(':virtualId/view')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Increment view count for an idea' })
+  @ApiResponse({
+    status: 200,
+    description: 'View count incremented.',
+  })
+  @ApiResponse({ status: 404, description: 'Idea not found.' })
+  async incrementView(@Param('virtualId') virtualId: string) {
+    await this.ideasService.incrementView(virtualId);
+    return this.success(null, 'View count incremented');
   }
 
   @Delete(':virtualId')

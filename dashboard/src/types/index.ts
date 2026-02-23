@@ -18,8 +18,8 @@ export interface User {
     upvotedAppreciatedIdeaList?: string[];
     // Derived Fields
     upvoteCount?: number;
-    recentActivity?: any[];
-    recentSubmission?: any[];
+    recentActivity?: unknown[];
+    recentSubmission?: unknown[];
     contributionGraph?: Record<string, number>;
     commentCount?: number;
     challengeCount?: number;

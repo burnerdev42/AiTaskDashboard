@@ -145,10 +145,10 @@ export class IdeasService extends AbstractService {
 
         challengeDetails: challenge
           ? {
-              _id: challenge._id.toString(),
-              virtualId: challenge.virtualId,
-              title: challenge.title,
-            }
+            _id: challenge._id.toString(),
+            virtualId: challenge.virtualId,
+            title: challenge.title,
+          }
           : null,
         problemStatement: challenge?.description,
         commentCount: thisComments.length,
@@ -188,6 +188,25 @@ export class IdeasService extends AbstractService {
       .find({ challengeId })
       .lean()
       .exec() as unknown as Promise<IdeaDocument[]>;
+  }
+
+  /**
+   * Get ideas by challenge virtualId (e.g., CH-001).
+   * Resolves the challenge, then finds ideas whose challengeId matches.
+   */
+  async findByChallengeVirtualId(virtualId: string): Promise<any[]> {
+    const challenge = await this.challengesService.findByVirtualId(virtualId);
+    if (!challenge) {
+      throw new NotFoundException(
+        `Challenge with virtualId ${virtualId} not found`,
+      );
+    }
+    const challengeMongoId = (challenge as any)._id.toString();
+    const ideas = await this.ideaModel
+      .find({ challengeId: challengeMongoId })
+      .lean()
+      .exec();
+    return this.enrichIdeas(ideas as any[]);
   }
 
   /** Update idea by ideaId. */
@@ -292,5 +311,14 @@ export class IdeasService extends AbstractService {
   /** Get total idea count. */
   async count(): Promise<number> {
     return this.ideaModel.countDocuments().exec();
+  }
+  /** Increment viewCount for an idea by 1. */
+  async incrementView(ideaId: string): Promise<void> {
+    const result = await this.ideaModel
+      .updateOne({ ideaId }, { $inc: { viewCount: 1 } })
+      .exec();
+    if (result.matchedCount === 0) {
+      throw new NotFoundException(`Idea ${ideaId} not found`);
+    }
   }
 }

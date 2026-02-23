@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 return { success: true };
             }
             return { success: false, error: 'Invalid response from server' };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Login failed', error);
             const errorMessage = error.response?.data?.message || 'Login failed';
@@ -106,6 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 return { success: true };
             }
             return { success: false, error: 'Invalid response from server' };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Registration failed', error);
             const errorMessage = error.response?.data?.message || 'Registration failed';

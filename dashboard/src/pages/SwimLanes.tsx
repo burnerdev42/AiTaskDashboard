@@ -41,6 +41,7 @@ export const SwimLanes: React.FC = () => {
             const backendChallenges = response.data.challenges;
 
             // Map backend challenges to frontend SwimLaneCard format
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const mappedCards: SwimLaneCard[] = backendChallenges.map((ch: any) => ({
                 id: ch.virtualId,
                 title: ch.title,
@@ -52,6 +53,7 @@ export const SwimLanes: React.FC = () => {
             }));
 
             setCards(mappedCards);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Failed to fetch challenges:', error);
             showToast(error.response?.data?.message || 'Failed to load challenges', 'error');
@@ -62,6 +64,7 @@ export const SwimLanes: React.FC = () => {
 
     useEffect(() => {
         fetchChallenges();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /* ── Lane Icon SVGs – outlined, inheriting lane color via currentColor ── */
@@ -215,6 +218,7 @@ export const SwimLanes: React.FC = () => {
             await challengeService.updateChallengeStatus(draggedCardId, backendStatus, user.id);
             // Optionally we can show a success toast here
             // showToast('Status updated successfully', 'success');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Failed to update challenge status:', error);
             showToast(error.response?.data?.message || error.message || 'Failed to update challenge status', 'error');

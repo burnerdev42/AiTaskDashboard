@@ -188,6 +188,19 @@ export class ChallengesController extends AbstractController {
     );
   }
 
+  @Post(':virtualId/view')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Increment view count for a challenge' })
+  @ApiResponse({
+    status: 200,
+    description: 'View count incremented.',
+  })
+  @ApiResponse({ status: 404, description: 'Challenge not found.' })
+  async incrementView(@Param('virtualId') virtualId: string) {
+    await this.challengesService.incrementView(virtualId);
+    return this.success(null, 'View count incremented');
+  }
+
   @Delete(':virtualId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a challenge' })

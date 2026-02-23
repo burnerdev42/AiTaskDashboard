@@ -4,6 +4,7 @@ import { useToast } from '../context/ToastContext';
 import type { Idea } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
+import { ideaService } from '../services/idea.service';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 
 export const IdeaDetail: React.FC = () => {
@@ -15,7 +16,7 @@ export const IdeaDetail: React.FC = () => {
     const [searchParams] = useSearchParams();
     const [idea, setIdea] = useState<Idea | null>(null);
     const [comment, setComment] = useState('');
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(searchParams.get('edit') === 'true');
     const [editTitle, setEditTitle] = useState('');
     const [editDescription, setEditDescription] = useState('');
     const [editProblem, setEditProblem] = useState('');
@@ -32,6 +33,11 @@ export const IdeaDetail: React.FC = () => {
         const ideas = storage.getIdeaDetails();
         const found = ideas.find(i => i.id === ideaId) || null;
 
+        // Fire-and-forget: increment view count on backend
+        if (ideaId) {
+            ideaService.recordView(ideaId).catch(() => { });
+        }
+
         // Simulate API loading
         const timer = setTimeout(() => {
             setIdea(found);
@@ -43,10 +49,6 @@ export const IdeaDetail: React.FC = () => {
             }
             setIsLoading(false);
         }, 800);
-
-        if (searchParams.get('edit') === 'true') {
-            setEditMode(true);
-        }
 
         return () => clearTimeout(timer);
     }, [ideaId, searchParams]);

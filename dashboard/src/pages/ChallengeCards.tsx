@@ -1,8 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { storage } from '../services/storage';
-import { type Challenge } from '../types';
+import { challengeService } from '../services/challenge.service';
+import { type Challenge, type ChallengeStage } from '../types';
+
+const STATUS_TO_STAGE: Record<string, ChallengeStage> = {
+    submitted: 'Challenge Submitted',
+    ideation: 'Ideation & Evaluation',
+    pilot: 'POC & Pilot',
+    completed: 'Scaled & Deployed',
+    archive: 'Parking Lot',
+};
+
+function getInitials(name?: string): string {
+    if (!name) return '??';
+    const parts = name.split(' ');
+    return parts.length > 1 ? `${parts[0][0]}${parts[1][0]}`.toUpperCase() : name.substring(0, 2).toUpperCase();
+}
 
 const IMPACT_FILTERS = ['All', 'Critical', 'High', 'Medium', 'Low'];
 const IMPACT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -35,7 +49,7 @@ const STAGE_BRANDING: Record<string, { color: string, bg: string, icon: React.Re
     }
 };
 
-export const IdeaSolutionCards: React.FC = () => {
+export const ChallengeCards: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { isAuthenticated } = useAuth();
@@ -43,17 +57,56 @@ export const IdeaSolutionCards: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [challenges, setChallenges] = useState<Challenge[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [challenges, setChallenges] = useState<(Challenge & { platform?: string; createdDate?: string })[]>([]);
 
-    React.useEffect(() => {
-        // Load challenges from storage
-        const storedChallenges = storage.getChallenges();
-        setChallenges(storedChallenges);
+    useEffect(() => {
+        let isMounted = true;
+        const fetchChallenges = async () => {
+            try {
+                const response = await challengeService.getChallenges(100, 0);
+                if (!isMounted) return;
+                const items = response.data?.challenges || response.data || response || [];
+                if (!Array.isArray(items)) { setChallenges([]); return; }
 
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 1200);
-        return () => clearTimeout(timer);
+                const accentColors: Challenge['accentColor'][] = ['teal', 'blue', 'green', 'orange', 'purple', 'pink'];
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const mapped = items.map((c: any, idx: number) => ({
+                    id: c.virtualId || c._id,
+                    title: c.title || 'Untitled',
+                    description: c.summary || c.description || '',
+                    stage: (STATUS_TO_STAGE[c.status] || 'Challenge Submitted') as ChallengeStage,
+                    owner: {
+                        name: c.ownerDetails?.name || 'Unknown',
+                        avatar: getInitials(c.ownerDetails?.name),
+                        avatarColor: 'var(--accent-purple)',
+                    },
+                    accentColor: accentColors[idx % accentColors.length],
+                    stats: {
+                        appreciations: c.upvoteCount || 0,
+                        comments: c.commentCount || 0,
+                    },
+                    tags: c.tags || [],
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    team: (c.contributorsDetails || []).map((t: any) => ({
+                        name: t.name || 'Unknown',
+                        avatar: getInitials(t.name),
+                        avatarColor: 'var(--accent-blue)',
+                    })),
+                    impact: c.priority || 'Medium',
+                    platform: c.platform || c.opco || '',
+                    createdDate: c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
+                }));
+                setChallenges(mapped);
+            } catch (err) {
+                console.error('Failed to load challenges', err);
+                setChallenges([]);
+            } finally {
+                if (isMounted) setIsLoading(false);
+            }
+        };
+        fetchChallenges();
+        return () => { isMounted = false; };
     }, []);
 
     const handleNewChallenge = () => {
@@ -239,12 +292,12 @@ export const IdeaSolutionCards: React.FC = () => {
                                     <div className="idea-card-meta-row">
                                         <span className="meta-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg></span>
                                         <span>Platform</span>
-                                        <span className="meta-val">Business Unit</span>
+                                        <span className="meta-val">{card.platform || 'N/A'}</span>
                                     </div>
                                     <div className="idea-card-meta-row">
                                         <span className="meta-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></span>
                                         <span>Submitted on</span>
-                                        <span className="meta-val">Jan 15, 2026</span>
+                                        <span className="meta-val">{card.createdDate || 'N/A'}</span>
                                     </div>
                                     <div className="idea-card-meta-row">
                                         <span className="meta-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>

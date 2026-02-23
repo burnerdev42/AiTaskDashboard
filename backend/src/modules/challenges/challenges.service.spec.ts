@@ -190,4 +190,29 @@ describe('ChallengesService', () => {
       expect(result).toBeUndefined();
     });
   });
+
+  describe('incrementView', () => {
+    it('should increment viewCount by 1', async () => {
+      mockChallengesRepository.updateOne = jest.fn().mockReturnValue({
+        exec: jest.fn().mockResolvedValue({ matchedCount: 1, modifiedCount: 1 }),
+      });
+
+      await service.incrementView('CH-001');
+
+      expect(mockChallengesRepository.updateOne).toHaveBeenCalledWith(
+        { virtualId: 'CH-001' },
+        { $inc: { viewCount: 1 } },
+      );
+    });
+
+    it('should throw NotFoundException when challenge not found', async () => {
+      mockChallengesRepository.updateOne = jest.fn().mockReturnValue({
+        exec: jest.fn().mockResolvedValue({ matchedCount: 0, modifiedCount: 0 }),
+      });
+
+      await expect(service.incrementView('CH-999')).rejects.toThrow(
+        'Challenge CH-999 not found',
+      );
+    });
+  });
 });

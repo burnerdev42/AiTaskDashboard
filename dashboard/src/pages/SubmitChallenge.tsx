@@ -95,7 +95,7 @@ export const SubmitChallenge: React.FC = () => {
             expectedOutcome,
             businessUnit,
             department,
-            priority: impact === 'Critical' ? 'High' : (impact || 'Medium') as any,
+            priority: (impact === 'Critical' ? 'High' : (impact || 'Medium')) as 'High' | 'Medium' | 'Low',
             estimatedImpact: 'TBD',
             challengeTags: tags,
             timeline,
@@ -107,7 +107,7 @@ export const SubmitChallenge: React.FC = () => {
             activity: [],
             createdDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
             updatedDate: 'Just now',
-            impact: impact as any
+            impact: impact as 'High' | 'Medium' | 'Low' | 'Critical'
         };
 
         try {

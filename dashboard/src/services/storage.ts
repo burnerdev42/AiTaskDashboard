@@ -230,6 +230,7 @@ export const storage = {
         const details = storage.getChallengeDetails();
         const challengeDetail = details.find(d => d.id === id);
         if (challengeDetail && challengeDetail.ideas && challengeDetail.ideas.length > 0) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const ideaIds = challengeDetail.ideas.map((i: any) => i.id);
             const allIdeas = storage.getIdeaDetails();
             const updatedIdeas = allIdeas.filter(i => !ideaIds.includes(i.id));
@@ -254,6 +255,7 @@ export const storage = {
         const challengeIndex = challengeDetails.findIndex(c => c.id === challengeId);
         if (challengeIndex !== -1) {
             challengeDetails[challengeIndex].ideas = challengeDetails[challengeIndex].ideas.filter(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (i: any) => i.id !== ideaId
             );
             localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(challengeDetails));
@@ -313,6 +315,7 @@ export const storage = {
                     createdDate: 'Recently',
                     updatedDate: 'Just now'
                 };
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 mockDetails.push(newDetail as any);
                 localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(mockDetails));
             }
@@ -337,6 +340,7 @@ export const storage = {
             stats: challenge.stats,
             tags: challenge.challengeTags,
             team: challenge.team,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             impact: challenge.priority as any
         };
         challenges.push(basicChallenge);
@@ -349,6 +353,7 @@ export const storage = {
             title: challenge.title,
             description: challenge.problemStatement.substring(0, 100) + '...',
             owner: challenge.owner.name,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             priority: challenge.priority as any,
             stage: challenge.stage,
             type: 'standard',

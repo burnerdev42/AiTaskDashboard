@@ -33,6 +33,7 @@ export const Toast: React.FC<ToastProps> = ({
         let removeTimer: ReturnType<typeof setTimeout>;
 
         if (isVisible) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setShouldRender(true);
 
             // Allow DOM to be created before applying transition trigger
