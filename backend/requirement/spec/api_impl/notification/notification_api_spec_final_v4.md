@@ -1,7 +1,7 @@
-# Notification API Implementation Specification — v3
+# Notification API Implementation Specification — v4
 
 > **Source:** `Data requirements.txt`, `notification_model_spec.md`, `swagger.yaml`
-> **Replaces:** `notification_api_spec_final_v2.md`
+> **Replaces:** `notification_api_spec_final_v3.md`
 
 ---
 
@@ -45,13 +45,13 @@
 ### `GET /notifications/count`
 1. Return `{ count: <total notifications> }`.
 
-### `GET /notifications/user/{userId}` *(NEW in v3)*
+### `GET /notifications/user/{userId}`
 1. Validate `userId` is a valid 24-char hex string. 404 if user not found.
 2. Fetch all notifications from DB where `userId == userId`, paginated via `limit` & `offset`, sorted by `createdAt` descending.
 3. For each notification, compute and attach all derived fields (same as `GET /notifications`).
 4. Return array of `NotificationResponse`.
 
-### `GET /notifications/user/{userId}/count` *(NEW in v3)*
+### `GET /notifications/user/{userId}/count`
 1. Validate `userId` is a valid 24-char hex string. 404 if user not found.
 2. If query parameter `isSeen` is present:
    - Parse as boolean (`true` or `false`).

@@ -36,6 +36,25 @@ export const Notifications: React.FC = () => {
         }
     }, [isAuthenticated, user?.id, fetchNotifications]);
 
+    useEffect(() => {
+        const handleReadAll = () => {
+            setAllNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+        };
+
+        const handleSingleRead = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            setAllNotifications(prev => prev.map(n => n.id === customEvent.detail.id ? { ...n, unread: false } : n));
+        };
+
+        window.addEventListener('notifications-read-all', handleReadAll);
+        window.addEventListener('notification-read', handleSingleRead);
+
+        return () => {
+            window.removeEventListener('notifications-read-all', handleReadAll);
+            window.removeEventListener('notification-read', handleSingleRead);
+        };
+    }, []);
+
     // Delete Modal State
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [notificationToDelete, setNotificationToDelete] = useState<string | null>(null);
@@ -68,14 +87,17 @@ export const Notifications: React.FC = () => {
         if (notification.unread) {
             await notificationService.markAsRead(notification.id);
             setAllNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, unread: false } : n));
+            window.dispatchEvent(new CustomEvent('notification-read', { detail: { id: notification.id } }));
         }
         navigate(notification.link);
     };
 
     const handleMarkAllRead = async () => {
         const unreadNotifs = allNotifications.filter(n => n.unread);
+        if (unreadNotifs.length === 0) return;
         setAllNotifications(prev => prev.map(n => ({ ...n, unread: false })));
         await Promise.all(unreadNotifs.map(n => notificationService.markAsRead(n.id)));
+        window.dispatchEvent(new CustomEvent('notifications-read-all'));
     };
 
     const handleDeleteClick = (e: React.MouseEvent, id: string) => {

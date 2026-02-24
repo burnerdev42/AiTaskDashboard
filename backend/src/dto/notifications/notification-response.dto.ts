@@ -36,6 +36,22 @@ export class NotificationDto {
 
   @ApiProperty({ description: 'Last update timestamp' })
   updatedAt: string;
+
+  @ApiProperty({ description: 'Notification title' })
+  title: string;
+
+  @ApiProperty({ description: 'Notification description body' })
+  description: string;
+
+  @ApiPropertyOptional({
+    description: 'Derived routing details for frontend navigation',
+    example: { virtualId: 'ID-0001', type: 'ID', challengeVirtualId: 'CH-001' }
+  })
+  linkedEntityDetails?: {
+    virtualId?: string;
+    type?: string;
+    challengeVirtualId?: string;
+  };
 }
 
 /**

@@ -14,18 +14,22 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
 
 export class CreateNotificationDto {
-  @ApiProperty({
-    description: 'Event type',
-    enum: NOTIFICATION_TYPES,
-    example: 'challenge_created',
-  })
+  @ApiProperty({ description: 'Type of notification', enum: NOTIFICATION_TYPES })
   @IsEnum(NOTIFICATION_TYPES)
   @IsNotEmpty()
   type: string;
 
-  @ApiPropertyOptional({
-    description: 'Foreign key ID (challenge or idea _id)',
-  })
+  @ApiProperty({ description: 'Notification title' })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty({ description: 'Notification description body' })
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @ApiPropertyOptional({ description: 'Foreign key ID (Challenge/Idea ID)' })
   @IsString()
   @IsOptional()
   fk_id?: string;

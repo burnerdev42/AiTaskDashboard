@@ -7,11 +7,12 @@ interface BackendNotification {
     fk_id: string | null;
     isSeen: boolean;
     createdAt: string;
+    title: string;
     description: string;
     linkedEntityDetails?: {
         virtualId?: string;
-        ideaId?: string;
-        title?: string;
+        challengeVirtualId?: string;
+        type?: 'CH' | 'ID';
     };
     initiatorDetails?: {
         name?: string;
@@ -20,7 +21,7 @@ interface BackendNotification {
 
 const mapBackendTypeToFrontend = (backendType: string): Notification['type'] => {
     if (backendType.includes('comment')) return 'comment';
-    if (backendType.includes('status')) return 'status';
+    if (backendType.includes('status') || backendType.includes('subscribe') || backendType.includes('edit') || backendType.includes('delete')) return 'status';
     if (backendType.includes('upvoted')) return 'vote';
     if (backendType.includes('idea')) return 'idea';
     return 'challenge';
@@ -28,18 +29,30 @@ const mapBackendTypeToFrontend = (backendType: string): Notification['type'] => 
 
 const mapBackendToFrontend = (n: BackendNotification): Notification => {
     let link = '/';
-    if (n.linkedEntityDetails) {
-        if (n.linkedEntityDetails.ideaId) {
-            link = `/idea/${n.linkedEntityDetails.ideaId}`;
-        } else if (n.linkedEntityDetails.virtualId) {
-            link = `/challenge/${n.linkedEntityDetails.virtualId}`;
+
+    // Natively handle backend-derived virtualId + type mapping if present.
+    if (n.linkedEntityDetails?.virtualId && n.linkedEntityDetails?.type) {
+        if (n.linkedEntityDetails.type === 'ID') {
+            const cId = n.linkedEntityDetails.challengeVirtualId;
+            link = cId
+                ? `/challenges/${cId}/ideas/${n.linkedEntityDetails.virtualId}`
+                : `/idea/${n.linkedEntityDetails.virtualId}`;
+        } else {
+            link = `/challenges/${n.linkedEntityDetails.virtualId}`;
+        }
+    } else {
+        // Fallback to legacy fk_id routing based on notification type prefixes
+        if (n.type.includes('idea')) {
+            link = `/idea/${n.fk_id}`;
+        } else if (n.type.includes('challenge')) {
+            link = `/challenge/${n.fk_id}`;
         }
     }
 
     return {
         id: n._id,
         type: mapBackendTypeToFrontend(n.type),
-        title: n.linkedEntityDetails?.title || 'Notification',
+        title: n.title || 'Notification',
         text: n.description || 'You have a new notification',
         time: new Date(n.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         unread: !n.isSeen,

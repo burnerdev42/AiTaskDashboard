@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationsService } from './notifications.service';
+import { UsersRepository } from '../users/users.repository';
 import { getModelToken } from '@nestjs/mongoose';
 import { Notification } from '../../models/notifications/notification.schema';
 import { Types, Model } from 'mongoose';
@@ -40,6 +41,10 @@ describe('NotificationsService', () => {
     exec: jest.fn().mockResolvedValue([mockNotification]),
   };
 
+  const mockUsersRepository = {
+    findById: jest.fn().mockResolvedValue({ _id: 'initiator456', name: 'John Doe' }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -47,6 +52,10 @@ describe('NotificationsService', () => {
         {
           provide: getModelToken(Notification.name),
           useValue: mockNotificationModel,
+        },
+        {
+          provide: UsersRepository,
+          useValue: mockUsersRepository,
         },
       ],
     }).compile();
@@ -93,12 +102,13 @@ describe('NotificationsService', () => {
   });
 
   describe('dispatchToMany', () => {
-    it('should insert many notifications, excluding the initiator', async () => {
+    it('should insert many notifications, excluding the initiator, and dynamically format titles', async () => {
       await service.dispatchToMany(
         ['user1', 'user2', 'initiator456'],
         'idea_created',
         'idea123',
         'initiator456',
+        'My Cool Idea'
       );
       expect(model.insertMany).toHaveBeenCalledWith([
         {
@@ -107,6 +117,8 @@ describe('NotificationsService', () => {
           userId: 'user1',
           initiatorId: 'initiator456',
           isSeen: false,
+          title: 'New Idea Submitted',
+          description: "John Doe submitted an Idea: 'My Cool Idea'",
         },
         {
           type: 'idea_created',
@@ -114,6 +126,8 @@ describe('NotificationsService', () => {
           userId: 'user2',
           initiatorId: 'initiator456',
           isSeen: false,
+          title: 'New Idea Submitted',
+          description: "John Doe submitted an Idea: 'My Cool Idea'",
         },
       ]);
     });

@@ -129,17 +129,20 @@ export class CommentsService extends AbstractService {
           .findOne({ _id: parentObjectId });
         if (challenge) {
           const recipients = new Set<string>();
+          this.logger.debug(`Found challenge: ${challenge._id}, userId from mongo is: ${challenge.userId}, subscriptions: ${JSON.stringify(challenge.subcriptions)}`);
           if (challenge.userId) recipients.add(challenge.userId.toString());
           if (challenge.subcriptions) {
             challenge.subcriptions.forEach((id: string) =>
               recipients.add(id.toString()),
             );
           }
+          this.logger.debug(`Recipients set size: ${recipients.size}, values: ${Array.from(recipients).join(',')}`);
           await this.notificationsService.dispatchToMany(
             [...recipients],
             NOTIFICATION_TYPES[7], // 'challenge_commented'
             savedComment._id.toString(),
             createCommentDto.userId,
+            challenge.title,
           );
         }
       } catch (e) {
@@ -197,6 +200,7 @@ export class CommentsService extends AbstractService {
             NOTIFICATION_TYPES[8], // 'idea_commented'
             savedComment._id.toString(),
             createCommentDto.userId,
+            idea.title,
           );
         }
       } catch (e) {

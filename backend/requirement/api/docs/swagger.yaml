@@ -2432,10 +2432,17 @@ components:
               description: "(DERIVED) Dynamically generated based on Type and initiator"
             linkedEntityDetails:
               type: object
-              oneOf:
-                - $ref: '#/components/schemas/ChallengeMinimal'
-                - $ref: '#/components/schemas/IdeaMinimal'
-              description: "(DERIVED) Details of Challenge or Idea linked via fk_id"
+              properties:
+                virtualId:
+                  type: string
+                  description: CH-XXX or ID-XXXX format
+                type:
+                  type: string
+                  enum: [CH, ID]
+                challengeVirtualId:
+                  type: string
+                  description: Parent challenge ID (CH-XXX), required for Ideas
+              description: "(DERIVED) Routing payload for frontend redirection fetched via fk_id"
             recipientDetails:
               $ref: '#/components/schemas/UserMinimal'
             initiatorDetails:

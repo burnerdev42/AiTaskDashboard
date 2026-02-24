@@ -21,5 +21,14 @@
 
 **Indexes:** `{ userId: 1, isSeen: 1, createdAt: -1 }` for efficient querying.
 
+## Derived Fields (Computed at Runtime)
+
+| Field | Type | Source |
+|-------|------|--------|
+| `description` | `String` | Dynamically generated from type + initiator name |
+| `linkedEntityDetails` | `Object` | Routing object: `{ virtualId, type, challengeVirtualId }` fetched via `fk_id` |
+| `recipientDetails` | `Object` | UserMinimal fetched via `userId` |
+| `initiatorDetails` | `Object` | UserMinimal fetched via `initiatorId` |
+
 ## Generating the Schema
 Generate a Mongoose schema matching the above fields. Use `String` type for `userId`, `initiatorId`, and `fk_id`. Add compound index. Ensure `isSeen` defaults to `false`.

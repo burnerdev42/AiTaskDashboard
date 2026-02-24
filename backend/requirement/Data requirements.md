@@ -448,7 +448,7 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 
 ---
 
-## 6. Notification
+## 6. Notification (v4)
 
 ### Database Fields
 
@@ -456,20 +456,21 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 |---|-------|------|-------|
 | 1 | `_id` | ObjectId | MongoDB Hex String PK |
 | 2 | `type` | String | → `NOTIFICATION_TYPES` (12 values) |
-| 3 | `fk_id` | String | Nullable. ID of linked entity |
-| 4 | `userId` | String | Recipient Mongo Hex ID (Not the initiator) |
-| 5 | `initiatorId` | String | Mongo Hex ID of the user who triggered the notification |
-| 6 | `createdAt` | DateTime | |
-| 7 | `isSeen` | Boolean | Default: `false` |
+| 3 | `title` | String | Static title mapped from event type via `NOTIFICATION_TEMPLATES` |
+| 4 | `description` | String | Dynamically generated from template utilizing `initiatorDetails.name` and entity title |
+| 5 | `fk_id` | String | Nullable. ID of linked entity |
+| 6 | `userId` | String | Recipient Mongo Hex ID (Not the initiator) |
+| 7 | `initiatorId` | String | Mongo Hex ID of the user who triggered the notification |
+| 8 | `createdAt` | DateTime | |
+| 9 | `isSeen` | Boolean | Default: `false` |
 
 ### Derived Fields
 
 | # | Field | Type | Source |
 |---|-------|------|--------|
-| 1 | `description` | String | Dynamically generated from Type + initiatorDetails.name |
-| 2 | `linkedEntityDetails` | Object | Details of Challenge or Idea fetched via `fk_id` |
-| 3 | `recipientDetails` | Object | User details fetched via `userId` |
-| 4 | `initiatorDetails` | Object | User details fetched via `initiatorId` (UserMinimal) |
+| 1 | `linkedEntityDetails` | Object | Routing details containing `virtualId` (e.g. CH-001/ID-0001), `type` ('CH' or 'ID'), and optionally `challengeVirtualId` (for Ideas) dynamically fetched via `fk_id` |
+| 2 | `recipientDetails` | Object | User details fetched via `userId` |
+| 3 | `initiatorDetails` | Object | User details fetched via `initiatorId` (UserMinimal) |
 
 ### Constraints & Requirements
 - `GET /notifications/user/{userId}/count` accepts optional query parameter `isSeen` (true/false) to filter; if absent, fetches all.

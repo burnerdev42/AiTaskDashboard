@@ -550,7 +550,13 @@ body {
 }
 
 .notification-item.unread {
-  background: rgba(232, 167, 88, .05);
+  background: rgba(232, 167, 88, .08);
+  border-left: 2px solid var(--accent-orange);
+}
+
+.notification-item.unread .notification-title {
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
 .notification-item:last-child {
@@ -7197,8 +7203,13 @@ svg.icon,
 }
 
 .notif-card.unread {
-  background: rgba(232, 167, 88, .05);
-  border-left: 4px solid var(--accent-teal);
+  background: rgba(232, 167, 88, .08);
+  border-left: 4px solid var(--accent-orange);
+}
+
+.notif-card.unread .notif-title {
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
 .notif-icon {

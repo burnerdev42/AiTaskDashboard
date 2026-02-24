@@ -89,6 +89,7 @@ export class IdeasService extends AbstractService {
       NOTIFICATION_TYPES[1], // 'idea_created'
       saved._id.toString(),
       userId,
+      saved.title,
     );
 
     const enriched = await this.enrichIdeas([saved.toObject()]);
@@ -199,10 +200,10 @@ export class IdeasService extends AbstractService {
 
         challengeDetails: challenge
           ? {
-              _id: challenge._id.toString(),
-              virtualId: challenge.virtualId,
-              title: challenge.title,
-            }
+            _id: challenge._id.toString(),
+            virtualId: challenge.virtualId,
+            title: challenge.title,
+          }
           : null,
         problemStatement: challenge?.description,
         commentCount: thisComments.length,
@@ -226,9 +227,12 @@ export class IdeasService extends AbstractService {
     return this.enrichIdeas(ideas);
   }
 
-  /** Get idea by ideaId (virtual ID). */
+  /** Get idea by ideaId (virtual ID) or Mongo _id. */
   async findByIdeaId(ideaId: string): Promise<any> {
-    const idea = await this.ideaModel.findOne({ ideaId }).lean().exec();
+    const isMongoId = Types.ObjectId.isValid(ideaId) && String(new Types.ObjectId(ideaId)) === ideaId;
+    const query = isMongoId ? { _id: ideaId } : { ideaId };
+
+    const idea = await this.ideaModel.findOne(query).lean().exec();
     if (!idea) {
       throw new NotFoundException(`Idea ${ideaId} not found`);
     }
@@ -285,6 +289,7 @@ export class IdeasService extends AbstractService {
       NOTIFICATION_TYPES[4], // 'idea_edited'
       (updated as any)._id.toString(),
       (updated as any).userId,
+      (updated as any).title,
     );
 
     const enriched = await this.enrichIdeas([updated]);
@@ -327,6 +332,7 @@ export class IdeasService extends AbstractService {
         NOTIFICATION_TYPES[6], // 'idea_upvoted'
         saved._id.toString(),
         userId,
+        saved.title,
       );
 
       const enriched = await this.enrichIdeas([saved.toObject()]);
@@ -358,6 +364,7 @@ export class IdeasService extends AbstractService {
         NOTIFICATION_TYPES[10], // 'idea_subscribed'
         saved._id.toString(),
         userId,
+        saved.title,
       );
 
       const enriched = await this.enrichIdeas([saved.toObject()]);
@@ -398,6 +405,7 @@ export class IdeasService extends AbstractService {
       NOTIFICATION_TYPES[12], // 'idea_deleted'
       null, // Entity deleted
       idea.userId, // Assuming owner deleted it
+      idea.title,
     );
 
     await this.ideaModel.deleteOne({ _id: idea._id }).exec();

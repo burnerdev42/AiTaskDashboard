@@ -9,6 +9,12 @@ export class Notification {
   @Prop({ required: true, enum: [...NOTIFICATION_TYPES] })
   type: string;
 
+  @Prop({ required: true })
+  title: string;
+
+  @Prop({ required: true })
+  description: string;
+
   @Prop({ default: null })
   fk_id: string;
 

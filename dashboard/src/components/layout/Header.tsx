@@ -46,8 +46,24 @@ export const Header: React.FC = () => {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
+        const handleReadAll = () => {
+            setUnreadCount(0);
+            setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+        };
+
+        const handleSingleRead = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            setUnreadCount(prev => Math.max(0, prev - 1));
+            setNotifications(prev => prev.map(n => n.id === customEvent.detail.id ? { ...n, unread: false } : n));
+        };
+
+        window.addEventListener('notifications-read-all', handleReadAll);
+        window.addEventListener('notification-read', handleSingleRead);
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('notifications-read-all', handleReadAll);
+            window.removeEventListener('notification-read', handleSingleRead);
         };
     }, [showNotifications]);
 
@@ -109,6 +125,7 @@ export const Header: React.FC = () => {
                                                 setUnreadCount(0);
                                                 setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
                                                 notifications.filter(n => n.unread).forEach(n => notificationService.markAsRead(n.id));
+                                                window.dispatchEvent(new CustomEvent('notifications-read-all'));
                                             }
                                             setShowNotifications(false);
                                         }}
@@ -143,6 +160,7 @@ export const Header: React.FC = () => {
                                                         notificationService.markAsRead(notification.id);
                                                         setUnreadCount(Math.max(0, unreadCount - 1));
                                                         setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, unread: false } : n));
+                                                        window.dispatchEvent(new CustomEvent('notification-read', { detail: { id: notification.id } }));
                                                     }
                                                     setShowNotifications(false);
                                                     closeMobileNav();

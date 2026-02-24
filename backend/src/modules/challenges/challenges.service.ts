@@ -87,6 +87,7 @@ export class ChallengesService extends AbstractService {
       NOTIFICATION_TYPES[0], // 'challenge_created'
       saved._id.toString(),
       saved.userId,
+      saved.title,
     );
 
     const enriched = await this.enrichChallenges([saved.toObject()]);
@@ -186,10 +187,13 @@ export class ChallengesService extends AbstractService {
     return this.enrichChallenges(challenges);
   }
 
-  /** Retrieves a single challenge by virtualId with derived fields. */
+  /** Retrieves a single challenge by virtualId or Mongo _id with derived fields. */
   async findByVirtualId(virtualId: string): Promise<any> {
+    const isMongoId = Types.ObjectId.isValid(virtualId) && String(new Types.ObjectId(virtualId)) === virtualId;
+    const query = isMongoId ? { _id: virtualId } : { virtualId };
+
     const challenge = await this.challengeModel
-      .findOne({ virtualId })
+      .findOne(query)
       .lean()
       .exec();
     if (!challenge) {
@@ -229,6 +233,7 @@ export class ChallengesService extends AbstractService {
       NOTIFICATION_TYPES[3], // 'challenge_edited'
       cObj._id.toString(),
       cObj.userId, // User who performed update is ideally the one making request, but here we only have the challenge's userId. Wait, update doesn't take userId. I will use the challenge's owner for now, as that's the only one updating.
+      (updated as any).title,
     );
 
     const enriched = await this.enrichChallenges([updated]);
@@ -274,6 +279,7 @@ export class ChallengesService extends AbstractService {
       NOTIFICATION_TYPES[2], // 'challenge_status_update'
       saved._id.toString(),
       userId,
+      saved.title,
     );
 
     const enriched = await this.enrichChallenges([saved.toObject()]);
@@ -315,6 +321,7 @@ export class ChallengesService extends AbstractService {
         NOTIFICATION_TYPES[5], // 'challenge_upvoted'
         saved._id.toString(),
         userId,
+        saved.title,
       );
 
       const enriched = await this.enrichChallenges([saved.toObject()]);
@@ -349,6 +356,7 @@ export class ChallengesService extends AbstractService {
         NOTIFICATION_TYPES[9], // 'challenge_subscribed'
         saved._id.toString(),
         userId,
+        saved.title,
       );
 
       const enriched = await this.enrichChallenges([saved.toObject()]);
@@ -382,6 +390,7 @@ export class ChallengesService extends AbstractService {
         NOTIFICATION_TYPES[9], // 'challenge_subscribed'
         challenge._id.toString(),
         userId,
+        challenge.title,
       );
     }
   }
@@ -405,6 +414,7 @@ export class ChallengesService extends AbstractService {
       NOTIFICATION_TYPES[11], // 'challenge_deleted'
       null, // Entity is deleted, fk doesn't matter
       challenge.userId, // assuming owner is deleting
+      challenge.title,
     );
 
     // Delete challenge

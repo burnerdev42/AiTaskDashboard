@@ -14,6 +14,7 @@ import { NotificationsController } from './notifications.controller';
 import { NotificationsService } from './notifications.service';
 import { NotificationsRepository } from './notifications.repository';
 import { NewsletterController } from './newsletter.controller';
+import { UsersModule } from '../users/users.module';
 
 /**
  * Notifications Module.
@@ -24,9 +25,10 @@ import { NewsletterController } from './newsletter.controller';
     MongooseModule.forFeature([
       { name: Notification.name, schema: NotificationSchema },
     ]),
+    UsersModule,
   ],
   controllers: [NotificationsController, NewsletterController],
   providers: [NotificationsService, NotificationsRepository],
   exports: [NotificationsService],
 })
-export class NotificationsModule {}
+export class NotificationsModule { }

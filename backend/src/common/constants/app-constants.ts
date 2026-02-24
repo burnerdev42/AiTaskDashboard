@@ -155,6 +155,67 @@ export const NOTIFICATION_TYPES = [
   'idea_deleted',
 ] as const;
 
+export const NOTIFICATION_LINKED_ENTITY_TYPES = ['CH', 'ID'] as const;
+
 // ─── Comment Types ───────────────────────────────────────────────
 // CH = Challenge, ID = Idea
 export const COMMENT_TYPES = ['CH', 'ID'] as const;
+
+// ─── 12. Notification Templates ──────────────────────────────────
+export const NOTIFICATION_TEMPLATES: Record<
+  typeof NOTIFICATION_TYPES[number],
+  { title: string; descriptionTemplate: string }
+> = {
+  challenge_created: {
+    title: 'New Challenge Published',
+    descriptionTemplate: '{initiatorName} published a new Challenge: {entityTitle}',
+  },
+  idea_created: {
+    title: 'New Idea Submitted',
+    descriptionTemplate: '{initiatorName} submitted an Idea: {entityTitle}',
+  },
+  challenge_status_update: {
+    title: 'Challenge Status Updated',
+    descriptionTemplate: '{initiatorName} updated the status of Challenge: {entityTitle}',
+  },
+  challenge_edited: {
+    title: 'Challenge Updated',
+    descriptionTemplate: '{initiatorName} updated the Challenge: {entityTitle}',
+  },
+  idea_edited: {
+    title: 'Idea Updated',
+    descriptionTemplate: '{initiatorName} updated the Idea: {entityTitle}',
+  },
+  challenge_upvoted: {
+    title: 'New Upvote',
+    descriptionTemplate: '{initiatorName} upvoted the Challenge: {entityTitle}',
+  },
+  idea_upvoted: {
+    title: 'New Upvote',
+    descriptionTemplate: '{initiatorName} upvoted the Idea: {entityTitle}',
+  },
+  challenge_commented: {
+    title: 'New Comment',
+    descriptionTemplate: '{initiatorName} commented on the Challenge: {entityTitle}',
+  },
+  idea_commented: {
+    title: 'New Comment',
+    descriptionTemplate: '{initiatorName} commented on the Idea: {entityTitle}',
+  },
+  challenge_subscribed: {
+    title: 'New Subscriber',
+    descriptionTemplate: '{initiatorName} subscribed to the Challenge: {entityTitle}',
+  },
+  idea_subscribed: {
+    title: 'New Subscriber',
+    descriptionTemplate: '{initiatorName} subscribed to the Idea: {entityTitle}',
+  },
+  challenge_deleted: {
+    title: 'Challenge Deleted',
+    descriptionTemplate: '{initiatorName} deleted the Challenge: {entityTitle}',
+  },
+  idea_deleted: {
+    title: 'Idea Deleted',
+    descriptionTemplate: '{initiatorName} deleted the Idea: {entityTitle}',
+  },
+};
