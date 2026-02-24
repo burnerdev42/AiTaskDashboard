@@ -6,6 +6,12 @@ export const challengeService = {
     return response.data;
   },
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  createChallenge: async (data: any) => {
+    const response = await api.post(`/challenges`, data);
+    return response.data;
+  },
+
   getChallengeById: async (virtualId: string) => {
     const response = await api.get(`/challenges/${virtualId}`);
     return response.data;

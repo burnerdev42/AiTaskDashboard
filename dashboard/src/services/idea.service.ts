@@ -25,5 +25,11 @@ export const ideaService = {
     toggleSubscribe: async (virtualId: string, userId: string) => {
         const response = await api.post(`/ideas/${virtualId}/subscribe`, { userId });
         return response.data;
+    },
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    createIdea: async (data: any) => {
+        const response = await api.post(`/ideas`, data);
+        return response.data;
     }
 };

@@ -81,13 +81,13 @@ export const ChallengeDetail: React.FC = () => {
     const [comment, setComment] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [exitingIdeaIds, setExitingIdeaIds] = useState<string[]>([]);
-    const [newIdeaId, setNewIdeaId] = useState<string | null>(null);
 
     // Idea Modal States
     const [ideaTitle, setIdeaTitle] = useState('');
     const [ideaDescription, setIdeaDescription] = useState('');
     const [ideaDetail, setIdeaDetail] = useState('');
     const [ideaErrors, setIdeaErrors] = useState<{ title?: string; description?: string; detail?: string }>({});
+    const [isSubmittingIdea, setIsSubmittingIdea] = useState(false);
 
     // Quick Action States
     const [hasVoted, setHasVoted] = useState(false);
@@ -469,45 +469,54 @@ export const ChallengeDetail: React.FC = () => {
     const handleIdeaSubmit = async () => {
         const errors: { title?: string; description?: string; detail?: string } = {};
         if (!ideaTitle.trim()) errors.title = 'Title is required';
+        if (!ideaDetail.trim()) errors.detail = 'Idea details are required';
         if (!ideaDescription.trim()) errors.description = 'Proposed solution is required';
-        if (!ideaDetail.trim()) errors.detail = 'Idea detail is required';
 
         if (Object.keys(errors).length > 0) {
             setIdeaErrors(errors);
             return;
         }
 
-        if (!challenge) return;
+        if (!challenge || !user?.id) return;
+
+        setIsSubmittingIdea(true);
+        setIdeaErrors({});
+
+        const ideaPayload = {
+            title: ideaTitle,
+            description: ideaDetail,
+            proposedSolution: ideaDescription,
+            owner: user.id,
+            // The backend requires the MongoDB ObjectId for the challengeId, not the virtualId (e.g. CH-0001)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            linkedChallenge: (challenge as any)._id ? String((challenge as any)._id) : String(challenge.id)
+        };
 
         try {
-            // Note: Since we don't have an idea creation API documented yet, we will mock the creation 
-            // for the UI momentarily, but ideally this calls `ideaService.createIdea(...)`
-            const newId = `ID-PENDING-${Math.floor(Math.random() * 1000)}`;
+            const response = await ideaService.createIdea(ideaPayload);
+            const newIdeaVirtualId = response?.data?.idea?.ideaId || response?.data?.idea?.virtualId || response?.idea?.ideaId || response?.idea?.virtualId || response?.ideaId || response?.virtualId;
 
-            const summaryIdea = {
-                id: newId,
-                title: ideaTitle,
-                author: 'Current User', // Will be real user
-                status: 'Pending',
-                appreciations: 0,
-                comments: 0,
-                views: 0
-            };
-
-            setChallenge(prev => prev ? {
-                ...prev,
-                ideas: [...(prev.ideas || []), summaryIdea]
-            } : prev);
-
-            setNewIdeaId(newId);
-            setTimeout(() => setNewIdeaId(null), 2000);
-
+            showToast('Idea posted successfully!');
             setShowIdeaModal(false);
             resetIdeaForm();
-            showToast('Idea posted successfully (Mocked)');
-        } catch {
-            showToast('Failed to submit idea. Please try again.', 'error');
+
+            if (newIdeaVirtualId) {
+                navigate(`/challenges/${challenge.id}/ideas/${newIdeaVirtualId}`);
+            } else {
+                // Fallback if virtualId is not found in the response for some reason
+                window.location.reload();
+            }
+        } catch (error: any) {
+            console.error('Failed to submit idea', error);
+            const errorMessage = error.response?.data?.message || 'Failed to submit idea. Please try again.';
+            showToast(Array.isArray(errorMessage) ? errorMessage[0] : errorMessage, 'error');
+            setTimeout(() => {
+                setIsSubmittingIdea(false);
+            }, 5000); // Fail-safe to ensure button re-enables
+            return; // Exit early so isSubmittingIdea is not set to false immediately
         }
+
+        setIsSubmittingIdea(false);
     };
 
     const handleDeleteIdea = async (ideaId: string) => {
@@ -889,12 +898,11 @@ export const ChallengeDetail: React.FC = () => {
                         <div className="detail-ideas-list">
                             {validIdeas.filter(idea => ['Accepted', 'In Review', 'Pending'].includes(idea.status)).map(idea => {
                                 const isExiting = exitingIdeaIds.includes(idea.id);
-                                const isNew = newIdeaId === idea.id;
 
                                 return (
                                     <div
                                         key={idea.id}
-                                        className={`detail-linked-challenge ${isExiting ? 'idea-exit-animate' : ''} ${isNew ? 'idea-entry-animate' : ''}`}
+                                        className={`detail-linked-challenge ${isExiting ? 'idea-exit-animate' : ''}`}
                                         style={{ marginBottom: '8px', position: 'relative' }}
                                     >
                                         <div onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)} style={{ cursor: 'pointer', width: '100%' }}>
@@ -1141,9 +1149,9 @@ export const ChallengeDetail: React.FC = () => {
                                     <span className="hint">Keep it concise and descriptive (max 100 characters)</span>
                                 </div>
                                 <div className="submit-form-field">
-                                    <label>Idea Detail <span className="required">*</span></label>
+                                    <label>Idea Details <span className="required">*</span></label>
                                     <textarea
-                                        placeholder="Describe your idea in detail. How would it work? What are the specific components?"
+                                        placeholder="Enter the details of your idea. What is it about?"
                                         value={ideaDetail}
                                         onChange={(e) => {
                                             setIdeaDetail(e.target.value);
@@ -1153,12 +1161,12 @@ export const ChallengeDetail: React.FC = () => {
                                         rows={4}
                                     />
                                     {ideaErrors.detail && <span style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{ideaErrors.detail}</span>}
-                                    <span className="hint">Include technical details and specific features</span>
+                                    <span className="hint">Provide a short, high-level description of your idea</span>
                                 </div>
                                 <div className="submit-form-field">
                                     <label>Proposed Solution <span className="required">*</span></label>
                                     <textarea
-                                        placeholder="Describe your proposed solution at a high level. What is the core idea?"
+                                        placeholder="Describe your proposed solution in detail. How would it work? What are the specific components?"
                                         value={ideaDescription}
                                         onChange={(e) => {
                                             setIdeaDescription(e.target.value);
@@ -1167,11 +1175,13 @@ export const ChallengeDetail: React.FC = () => {
                                         style={{ borderColor: ideaErrors.description ? 'var(--accent-red)' : 'var(--border)' }}
                                     />
                                     {ideaErrors.description && <span style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{ideaErrors.description}</span>}
-                                    <span className="hint">Focus on the value proposition and core concept</span>
+                                    <span className="hint">Include technical details and specific features of your solution</span>
                                 </div>
                                 <div className="submit-form-actions" style={{ padding: '16px 0 0', borderTop: '1px solid var(--border)', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                                    <button className="btn-cancel" onClick={() => { setShowIdeaModal(false); resetIdeaForm(); }}>Cancel</button>
-                                    <button className="btn-save" onClick={handleIdeaSubmit}>Submit Idea</button>
+                                    <button className="btn-cancel" onClick={() => { setShowIdeaModal(false); resetIdeaForm(); }} disabled={isSubmittingIdea}>Cancel</button>
+                                    <button className="btn-save" onClick={handleIdeaSubmit} disabled={isSubmittingIdea}>
+                                        {isSubmittingIdea ? 'Submitting...' : 'Submit Idea'}
+                                    </button>
                                 </div>
                             </div>
                         </div>

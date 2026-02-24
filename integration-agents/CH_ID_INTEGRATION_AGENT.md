@@ -53,3 +53,13 @@ When reviewing or fixing integration issues, rigidly enforce these primary rules
    - If the API fails, catch the error, revert `hasLiked` to false, filter `user.id` out of the arrays, and decrement the stats.
 3. **Fix CSS State Drops**: Ensure CSS properties (`color`, `borderColor`, `opacity`) correctly reflect the local state (`hasLiked`, `hasVoted`) using explicit inline conditions if external class names (like `.active`) unexpectedly drop their tints. 
 4. **React Strict Mode Double-Fires**: If an Idea's view count is incrementing by 2, check `useEffect`. Ensure `ideaService.recordView(ideaId)` is nested safely inside the inner async fetch function, so it only fires if the component doesn't unmount instantly.
+
+### Scenario 4: Challenge and Idea Creation Forms
+1. **Match Backend Enums Exactingly**: Forms must use the exact string casing and spacing defined in `app-constants.ts` (e.g. `3-6 months` and not `3-6-months`).
+2. **Payload Property Matching (DTO vs Schema)**: 
+   - Know the difference between the API definitions (`CreateIdeaDto` expects `owner`, `linkedChallenge`) and the Database specifications (Mongoose `IdeaSchema` requires `userId`, `challengeId`).
+   - **Backend Fix Strategy**: Update backend services to map the incoming DTO fields to the Schema's required fields (e.g. `const userId = dto.owner;`) so that `ValidationPipe` stripping mechanics (`whitelist: true`) don't break the database payload.
+   - For linking endpoints (like attaching an Idea to a Challenge), ALWAYS pass the parent's MongoDB `_id`, not the `virtualId` (e.g. `CH-0001`), because backend referencing methods usually query against the ObjectID.
+3. **Handle Redirection on Success**: Verify the API response closely before routing. If the backend returns `ideaId`, checking `response.data.idea.virtualId` will fail. Missing this causes silent fallback bugs like an unintentional page reload instead of a redirect.
+4. **Backend Response Enrichment**: After a `POST` creation, ensure the backend service passes the newly saved document through its `.enrich...([saved.toObject()])` method before returning it. If you return the raw `saved` document, the frontend will receive missing derived fields (e.g. `ownerDetails` will be empty, rendering "Unknown User" upon redirect).
+5. **Dynamic Error Handling**: Capture the literal backend string responses within the `catch` block (`error.response?.data?.message`) and render them out to the UI using Toasts to instantly reflect backend data constraints (min lengths, missing fields, enum mismatches, etc).

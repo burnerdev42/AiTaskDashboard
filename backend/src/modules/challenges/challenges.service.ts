@@ -76,7 +76,8 @@ export class ChallengesService extends AbstractService {
       userId: saved.userId,
     });
 
-    return saved;
+    const enriched = await this.enrichChallenges([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Enriches challenges with derived fields. */

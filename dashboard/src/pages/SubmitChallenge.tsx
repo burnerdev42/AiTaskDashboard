@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastContext';
-import { storage } from '../services/storage';
-import { type ChallengeDetailData } from '../types';
+import { useAuth } from '../context/AuthContext';
+import { challengeService } from '../services/challenge.service';
 
 export const SubmitChallenge: React.FC = () => {
     const navigate = useNavigate();
     const { showToast } = useToast();
+    const { user } = useAuth();
 
     // Form State
     const [title, setTitle] = useState('');
+    const [summary, setSummary] = useState('');
     const [department, setDepartment] = useState('');
     const [businessUnit, setBusinessUnit] = useState('');
     const [problemStatement, setProblemStatement] = useState('');
@@ -24,6 +26,7 @@ export const SubmitChallenge: React.FC = () => {
 
     // Error State
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
     const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -41,7 +44,7 @@ export const SubmitChallenge: React.FC = () => {
     };
 
     const resetForm = () => {
-        setTitle(''); setDepartment(''); setBusinessUnit('');
+        setTitle(''); setSummary(''); setDepartment(''); setBusinessUnit('');
         setProblemStatement(''); setExpectedOutcome('');
         setTimeline(''); setBudget('');
         setImpact('');
@@ -49,11 +52,12 @@ export const SubmitChallenge: React.FC = () => {
         setConstraints(''); setStakeholders('');
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const errors: Record<string, string> = {};
         if (!title.trim()) errors.title = 'Challenge title is required';
+        if (!summary.trim()) errors.summary = 'Short summary is required';
         if (!businessUnit) errors.businessUnit = 'OpCo is required';
         if (!department) errors.department = 'Platform is required';
         if (!problemStatement.trim()) errors.problemStatement = 'Problem statement is required';
@@ -67,58 +71,48 @@ export const SubmitChallenge: React.FC = () => {
             return;
         }
 
-        const challenges = storage.getChallenges();
-        const nextIdNumber = challenges.length > 0
-            ? Math.max(...challenges.map(c => {
-                const parts = c.id.split('-');
-                return parts.length > 1 ? parseInt(parts[1]) : 0;
-            })) + 1
-            : 1;
-        const newChallengeId = `CH-${String(nextIdNumber).padStart(3, '0')}`;
+        setIsSubmitting(true);
+        setFormErrors({});
 
-        const newChallenge: ChallengeDetailData = {
-            id: newChallengeId,
+        const newChallengePayload = {
             title,
+            summary,
             description: problemStatement,
-            stage: 'Challenge Submitted',
-            owner: {
-                name: 'Current User',
-                avatar: 'CU',
-                avatarColor: 'var(--accent-purple)'
-            },
-            accentColor: 'purple',
-            stats: {
-                appreciations: 0,
-                comments: 0
-            },
-            problemStatement,
-            expectedOutcome,
-            businessUnit,
-            department,
-            priority: (impact === 'Critical' ? 'High' : (impact || 'Medium')) as 'High' | 'Medium' | 'Low',
-            estimatedImpact: 'TBD',
-            challengeTags: tags,
-            timeline,
-            portfolioOption: budget,
-            constraints,
-            stakeholders,
-            ideas: [],
-            team: [{ name: 'Current User', avatar: 'CU', avatarColor: 'var(--accent-purple)', role: 'Lead' }],
-            activity: [],
-            createdDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-            updatedDate: 'Just now',
-            impact: impact as 'High' | 'Medium' | 'Low' | 'Critical'
+            opco: businessUnit,
+            platform: department,
+            outcome: expectedOutcome,
+            timeline: timeline || undefined,
+            portfolioLane: budget || undefined,
+            priority: impact,
+            tags: tags.length > 0 ? tags : undefined,
+            constraint: constraints || undefined,
+            stakeHolder: stakeholders || undefined,
+            status: 'submitted',
+            userId: user?.id || ''
         };
 
         try {
-            storage.addChallenge(newChallenge);
+            const response = await challengeService.createChallenge(newChallengePayload);
             showToast('Challenge submitted successfully!');
-            setFormErrors({});
             resetForm();
-            navigate('/challenges');
-        } catch {
-            showToast('Failed to submit challenge. Please try again.', 'error');
+            // Redirect to the newly created challenge if the API returns the virtualId, otherwise fallback to list
+            const virtualId = response?.data?.challenge?.virtualId || response?.challenge?.virtualId;
+            if (virtualId) {
+                navigate(`/challenges/${virtualId}`);
+            } else {
+                navigate('/challenges');
+            }
+        } catch (error: any) {
+            console.error('Failed to submit challenge', error);
+            const errorMessage = error.response?.data?.message || 'Failed to submit challenge. Please try again.';
+            showToast(Array.isArray(errorMessage) ? errorMessage[0] : errorMessage, 'error');
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 5000); // Fail-safe to ensure button re-enables
+            return; // Exit early to prevent resetting isSubmitting below since we handled the error timeout
         }
+
+        setIsSubmitting(false);
     };
 
 
@@ -176,6 +170,23 @@ export const SubmitChallenge: React.FC = () => {
                                 {formErrors.title && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{formErrors.title}</div>}
                                 <div className={getCharClass(title.length, 100)}>{title.length} / 100</div>
                             </div>
+                            <div className="sc-form-group sc-full-width">
+                                <label className="sc-form-label">Short Summary <span className="sc-required">*</span></label>
+                                <input
+                                    type="text"
+                                    className="sc-form-input"
+                                    placeholder="Provide a one-sentence summary of the challenge..."
+                                    value={summary}
+                                    onChange={(e) => {
+                                        setSummary(e.target.value);
+                                        if (formErrors.summary) setFormErrors(prev => ({ ...prev, summary: '' }));
+                                    }}
+                                    maxLength={150}
+                                    style={{ borderColor: formErrors.summary ? 'var(--accent-red)' : 'var(--border)' }}
+                                />
+                                {formErrors.summary && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{formErrors.summary}</div>}
+                                <div className={getCharClass(summary.length, 150)}>{summary.length} / 150</div>
+                            </div>
                             <div className="sc-form-group">
                                 <label className="sc-form-label">OpCo <span className="sc-required">*</span></label>
                                 <select
@@ -213,7 +224,21 @@ export const SubmitChallenge: React.FC = () => {
                                         <>
                                             <option value="STP">STP</option>
                                             <option value="CTP">CTP</option>
-                                            <option value="RBP">RBP</option>
+                                            <option value="RTP">RTP</option>
+                                        </>
+                                    )}
+                                    {['GSO', 'GET', 'BecSee', 'Other'].includes(businessUnit) && (
+                                        <>
+                                            <option value="BFSI">BFSI</option>
+                                            <option value="Retail & CPG">Retail & CPG</option>
+                                            <option value="Manufacturing">Manufacturing</option>
+                                            <option value="Life Sciences & Healthcare">Life Sciences & Healthcare</option>
+                                            <option value="Communications & Media">Communications & Media</option>
+                                            <option value="Technology & Services">Technology & Services</option>
+                                            <option value="Energy, Resources & Utilities">Energy, Resources & Utilities</option>
+                                            <option value="Government & Public Services">Government & Public Services</option>
+                                            <option value="Travel & Hospitality">Travel & Hospitality</option>
+                                            <option value="Other">Other</option>
                                         </>
                                     )}
                                 </select>
@@ -285,20 +310,20 @@ export const SubmitChallenge: React.FC = () => {
                                 <label className="sc-form-label">Expected Timeline</label>
                                 <select className="sc-form-select" value={timeline} onChange={(e) => setTimeline(e.target.value)}>
                                     <option value="">Select timeline</option>
-                                    <option value="1-3-months">1-3 months</option>
-                                    <option value="3-6-months">3-6 months</option>
-                                    <option value="6-12-months">6-12 months</option>
-                                    <option value="12-months-plus">12+ months</option>
+                                    <option value="1-3 months">1-3 months</option>
+                                    <option value="3-6 months">3-6 months</option>
+                                    <option value="6-12 months">6-12 months</option>
+                                    <option value="12+ months">12+ months</option>
                                 </select>
                             </div>
                             <div className="sc-form-group">
                                 <label className="sc-form-label">Portfolio Option</label>
                                 <select className="sc-form-select" value={budget} onChange={(e) => setBudget(e.target.value)}>
                                     <option value="">Select portfolio option</option>
-                                    <option value="customer-value-driver">Customer Value Driver</option>
-                                    <option value="non-strategic-product-management">Non Strategic Product Management</option>
-                                    <option value="tech-enabler">Tech Enabler</option>
-                                    <option value="maintenance">Maintenance</option>
+                                    <option value="Customer Value Driver">Customer Value Driver</option>
+                                    <option value="Non Strategic Product Management">Non Strategic Product Management</option>
+                                    <option value="Tech Enabler">Tech Enabler</option>
+                                    <option value="Maintenance">Maintenance</option>
                                 </select>
                             </div>
                         </div>
@@ -395,8 +420,10 @@ export const SubmitChallenge: React.FC = () => {
 
                     {/* Form Actions */}
                     <div className="submit-form-actions">
-                        <button type="button" className="btn-cancel" onClick={() => navigate(-1)}>Cancel</button>
-                        <button type="submit" className="btn-save">Submit Challenge</button>
+                        <button type="button" className="btn-cancel" onClick={() => navigate(-1)} disabled={isSubmitting}>Cancel</button>
+                        <button type="submit" className="btn-save" disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Submit Challenge'}
+                        </button>
                     </div>
                 </form>
             </div>

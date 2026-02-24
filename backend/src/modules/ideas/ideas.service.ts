@@ -49,14 +49,18 @@ export class IdeasService extends AbstractService {
     return `ID-${num.toString().padStart(4, '0')}`;
   }
 
-  /** Creates a new idea with auto-generated ideaId. */
   async create(dto: any): Promise<IdeaDocument> {
     const ideaId = await this.generateIdeaId();
+    const userId = dto.owner || dto.userId;
+    const challengeId = dto.linkedChallenge || dto.challengeId;
+
     const idea = new this.ideaModel({
       ...dto,
       ideaId,
+      userId,
+      challengeId,
       upVotes: [],
-      subscription: dto.userId ? [dto.userId] : [],
+      subscription: userId ? [userId] : [],
       viewCount: 0,
       appreciationCount: 0,
       status: true,
@@ -66,13 +70,16 @@ export class IdeasService extends AbstractService {
     await this.activitiesService.create({
       type: 'idea_created',
       fk_id: saved._id.toString(),
-      userId: saved.userId,
+      userId: userId,
     });
 
     // Subscribes creator to the parent challenge
-    await this.challengesService.subscribeUser(dto.challengeId, saved.userId);
+    if (challengeId && userId) {
+      await this.challengesService.subscribeUser(challengeId, userId);
+    }
 
-    return saved;
+    const enriched = await this.enrichIdeas([saved.toObject()]);
+    return enriched[0];
   }
 
   /** Enriches ideas with derived fields. */
