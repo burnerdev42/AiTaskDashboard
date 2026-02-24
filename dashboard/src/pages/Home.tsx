@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ChallengeCard } from '../components/ui/ChallengeCard';
 import { storage } from '../services/storage';
+import { homeService } from '../services/home.service';
+import { mapBackendChallengeToFrontend } from '../services/mappers/challengeMapper';
 import { type Challenge } from '../types';
 
 import { TeamMember } from '../components/ui/TeamMember';
@@ -15,6 +17,21 @@ export const Home: React.FC = () => {
     const [subscribeSuccess, setSubscribeSuccess] = useState(false);
     const [isSubscribing, setIsSubscribing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [statusDistribution, setStatusDistribution] = useState<Record<string, number>>({
+        submitted: 0,
+        ideation: 0,
+        pilot: 0,
+        completed: 0,
+        archive: 0
+    });
+    const [keyMetrics, setKeyMetrics] = useState({
+        pilotRate: 0,
+        conversionRate: 0,
+        targetConversionRate: 50
+    });
+    const [monthlyThroughput, setMonthlyThroughput] = useState<any[]>([]);
+    const [successStories, setSuccessStories] = useState<any[]>([]);
+    const [innovationTeam, setInnovationTeam] = useState<any[]>([]);
     const isPaused = useRef(false);
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail);
 
@@ -30,12 +47,56 @@ export const Home: React.FC = () => {
         }, 1000);
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
+    const fetchData = async () => {
+        try {
+            setIsLoading(true);
+            // Fetch top challenges
+            const challengesRes = await homeService.getTopChallenges();
+            if (challengesRes.data?.data?.challenges) {
+                const mappedChallenges = challengesRes.data.data.challenges.map(mapBackendChallengeToFrontend);
+                setChallenges(mappedChallenges);
+            }
+
+            // Fetch status distribution
+            const statusRes = await homeService.getStatusDistribution();
+            if (statusRes.data?.data?.challengesByStatus) {
+                setStatusDistribution(statusRes.data.data.challengesByStatus);
+            }
+
+            // Fetch key metrics
+            const metricsRes = await homeService.getKeyMetrics();
+            if (metricsRes.data?.data) {
+                setKeyMetrics(metricsRes.data.data);
+            }
+
+            // Fetch monthly throughput
+            const throughputRes = await homeService.getMonthlyThroughput();
+            if (throughputRes.data?.data?.data) {
+                setMonthlyThroughput(throughputRes.data.data.data);
+            }
+
+            // Fetch success stories (completed challenges)
+            const storiesRes = await homeService.getChallengesByStatus('completed');
+            if (storiesRes.data?.challenges) {
+                const mappedStories = storiesRes.data.challenges.map(mapBackendChallengeToFrontend);
+                setSuccessStories(mappedStories);
+            }
+
+            // Fetch innovation team
+            const teamRes = await homeService.getInnovationTeam();
+            if (teamRes.data?.data?.users) {
+                setInnovationTeam(teamRes.data.data.users);
+            }
+        } catch (error) {
+            console.error('Failed to fetch home data:', error);
+            // Fallback to storage if API fails
             setChallenges(storage.getChallenges().slice(0, 5));
+        } finally {
             setIsLoading(false);
-        }, 800); // Small delay for smooth entry
-        return () => clearTimeout(timer);
+        }
+    };
+    useEffect(() => {
+        fetchData();
     }, []);
 
     const nextSlide = () => {
@@ -121,7 +182,6 @@ export const Home: React.FC = () => {
 
             {/* ─── METRICS DASHBOARD ───────────────── */}
             <aside className={`metrics-dashboard ${!isLoading ? 'fade-in' : ''}`}>
-                {/* Metric Panels */}
                 <div className="metric-panel">
                     <h3><span className="icon" style={{ marginRight: '8px', color: 'var(--accent-teal)', verticalAlign: 'middle' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg></span> Pipeline Summary</h3>
                     {isLoading ? (
@@ -137,15 +197,15 @@ export const Home: React.FC = () => {
                         <>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 <div className="donut-chart">
-                                    <div className="donut-hole">11</div>
+                                    <div className="donut-hole">{Object.values(statusDistribution).reduce((a, b) => a + b, 0)}</div>
                                 </div>
                             </div>
                             <div className="legend">
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-red)', flexShrink: 0 }}></span> Challenge Submitted (4)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-yellow)', flexShrink: 0 }}></span> Ideation &amp; Evaluation (2)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-blue)', flexShrink: 0 }}></span> POC &amp; Pilot (3)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-gold)', flexShrink: 0 }}></span> Scaled &amp; Deployed (1)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-grey)', flexShrink: 0 }}></span> Parking Lot (1)</div>
+                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-red)', flexShrink: 0 }}></span> Challenge Submitted ({statusDistribution.submitted})</div>
+                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-yellow)', flexShrink: 0 }}></span> Ideation &amp; Evaluation ({statusDistribution.ideation})</div>
+                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-blue)', flexShrink: 0 }}></span> POC &amp; Pilot ({statusDistribution.pilot})</div>
+                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-gold)', flexShrink: 0 }}></span> Scaled &amp; Deployed ({statusDistribution.completed})</div>
+                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-grey)', flexShrink: 0 }}></span> Parking Lot ({statusDistribution.archive})</div>
                             </div>
                         </>
                     )}
@@ -166,17 +226,16 @@ export const Home: React.FC = () => {
                         <>
                             <div className="metric-row">
                                 <span className="metric-label">Avg. Idea → Pilot</span>
-                                <span className="metric-value teal">42d</span>
+                                <span className="metric-value teal">{keyMetrics.pilotRate}d</span>
                             </div>
                             <div className="metric-row">
                                 <span className="metric-label">Pilot Success Rate</span>
-                                <span className="metric-value green">78%</span>
+                                <span className="metric-value green">{Math.round(keyMetrics.conversionRate)}%</span>
                             </div>
                         </>
                     )}
                 </div>
 
-                {/* Panel 3 simplified for React without specific charting lib availability yet, matching HTML structure */}
                 <div className="metric-panel">
                     <h3><span className="icon" style={{ marginRight: '8px', color: 'var(--accent-yellow)', verticalAlign: 'middle' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg></span> Monthly Throughput</h3>
                     {isLoading ? (
@@ -194,27 +253,31 @@ export const Home: React.FC = () => {
                     ) : (
                         <>
                             <div className="spark-bars">
-                                {[
-                                    { i: 80, c: 22 }, { i: 100, c: 30 },
-                                    { i: 85, c: 24 }, { i: 70, c: 19 }, { i: 95, c: 28 }, { i: 110, c: 35 }
-                                ].map((d, idx) => (
+                                {monthlyThroughput.map((d, idx) => (
                                     <div key={idx} className="grouped-month">
-                                        <div className="spark-bar ideas" style={{ height: `${d.i / 1.2}%`, animationDelay: `${0.5 + idx * 0.08}s` }}></div>
-                                        <div className="spark-bar challenges" style={{ height: `${d.c * 2}%`, animationDelay: `${0.5 + idx * 0.08 + 0.03}s` }}></div>
+                                        <div className="spark-bar ideas" style={{ height: `${Math.min(d.ideas * 10, 100)}%`, animationDelay: `${0.5 + idx * 0.08}s` }}></div>
+                                        <div className="spark-bar challenges" style={{ height: `${Math.min(d.challenges * 20, 100)}%`, animationDelay: `${0.5 + idx * 0.08 + 0.03}s` }}></div>
                                     </div>
                                 ))}
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                                <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+                                {monthlyThroughput.map((d, idx) => {
+                                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                                    return <span key={idx}>{months[d.month - 1]}</span>;
+                                })}
                             </div>
                             <div style={{ marginTop: '14px' }}>
                                 <div className="metric-row">
                                     <span className="metric-label dot yellow">Idea Submissions</span>
-                                    <span className="metric-value yellow" style={{ fontSize: '18px' }}>27</span>
+                                    <span className="metric-value yellow" style={{ fontSize: '18px' }}>
+                                        {monthlyThroughput.length > 0 ? monthlyThroughput[monthlyThroughput.length - 1].ideas : 0}
+                                    </span>
                                 </div>
                                 <div className="metric-row">
                                     <span className="metric-label dot orange">Challenge Submissions</span>
-                                    <span className="metric-value orange" style={{ fontSize: '18px' }}>8</span>
+                                    <span className="metric-value orange" style={{ fontSize: '18px' }}>
+                                        {monthlyThroughput.length > 0 ? monthlyThroughput[monthlyThroughput.length - 1].challenges : 0}
+                                    </span>
                                 </div>
                             </div>
                         </>
@@ -229,7 +292,7 @@ export const Home: React.FC = () => {
                 </div>
                 <div className="stories-grid">
                     {isLoading ? (
-                        [...Array(4)].map((_, i) => (
+                        [...Array(6)].map((_, i) => (
                             <div key={i} className="story-card-skeleton">
                                 <div className="skeleton" style={{ height: '14px', width: '30%', borderRadius: '4px' }}></div>
                                 <div className="skeleton" style={{ height: '24px', width: '80%', borderRadius: '4px' }}></div>
@@ -237,129 +300,35 @@ export const Home: React.FC = () => {
                                 <div className="skeleton" style={{ height: '20px', width: '100%', borderRadius: '10px' }}></div>
                             </div>
                         ))
+                    ) : successStories.length === 0 ? (
+                        <div className="no-data-message" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '100px 40px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '24px', border: '1px dashed rgba(255, 255, 255, 0.1)' }}>
+                            <div style={{ fontSize: '48px', marginBottom: '20px' }}>🚀</div>
+                            <h3 style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>No success stories yet but we are almost there</h3>
+                            <p style={{ color: 'var(--text-muted)' }}>Check back soon to see how our top ideas are transforming the business.</p>
+                        </div>
                     ) : (
-                        <>
-                            <div className="story-card">
-                                <div className="story-num">Story 1</div>
-                                <h4>Unified Customer 360 Platform</h4>
+                        successStories.map((story, index) => (
+                            <div className="story-card" key={story.id}>
+                                <div className="story-num">Story {index + 1}</div>
+                                <h4>{story.title}</h4>
                                 <div className="story-section">
-                                    <div className="label problem"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> Problem</div>
-                                    <p>Fragmented customer data across 5 systems; agents spent 8 min/call looking up history.</p>
+                                    <div className="label problem"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> Overview</div>
+                                    <p>{story.description.length > 150 ? story.description.substring(0, 150) + '...' : story.description}</p>
                                 </div>
                                 <div className="story-section">
-                                    <div className="label solution"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 11.5c.76.76 1.23 1.52 1.41 2.5Z"></path></svg></span> Solution</div>
-                                    <p>Built a real-time data fabric unifying CRM, billing, support, and IoT telemetry into a single view.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>1.2K</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>89</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>34</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 2</div>
-                                <h4>Smart Warehouse Routing</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Manual forklift routing led to 35% idle travel time and frequent aisle congestion.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>IoT sensors + reinforcement learning for dynamic path optimization in real-time.</p>
+                                    <div className="label solution"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 11.5c.76.76 1.23 1.52 1.41 2.5Z"></path></svg></span> Impact</div>
+                                    <p>Successfully completed and ready for scale-up across the enterprise.</p>
                                 </div>
                                 <div className="story-section">
                                     <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
                                     <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>987</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>72</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>28</strong> Comments</span>
+                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>{story.views}</strong> Views</span>
+                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>{story.votes}</strong> Appreciations</span>
+                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>{story.comments}</strong> Comments</span>
                                     </div>
                                 </div>
                             </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 3</div>
-                                <h4>Predictive Maintenance Engine</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Unexpected equipment failures causing 120+ hrs/year of unplanned downtime per plant.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>Streaming anomaly detection on 10K+ sensor signals, predicting failures 72 hrs ahead.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>1.5K</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>104</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>41</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 4</div>
-                                <h4>AI-Powered Demand Forecasting</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Static forecasting models caused 18% overstock and 12% stockouts across 200+ SKUs.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>Ensemble ML model combining weather, social signals, and POS data for real-time demand prediction.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>856</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>63</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>19</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 5</div>
-                                <h4>Intelligent Document Processing</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Legal team manually reviewed 5,000+ contracts/quarter, averaging 45 min per document.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>LLM-powered extraction pipeline identifying clauses, obligations, and risk flags automatically.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>1.1K</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>91</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>37</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 6</div>
-                                <h4>Carbon Footprint Optimizer</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>No visibility into Scope 3 emissions across 400+ suppliers, risking ESG compliance.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>Supply chain carbon tracking platform with automated reporting and reduction recommendations.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>743</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>58</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>22</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
+                        ))
                     )}
                 </div>
             </section>
@@ -380,27 +349,38 @@ export const Home: React.FC = () => {
                         ))
                     ) : (
                         <>
-                            {/* Render the logged-in user dynamically if present */}
-                            {isAuthenticated && user && (
-                                <TeamMember
-                                    avatar={user.avatar && user.avatar.length > 2 ? user.avatar : (user.name ? user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) : 'ME')}
-                                    name={user.name || 'Current User'}
-                                    role={user.role || ''}
-                                    bio={user.about || ''}
-                                    stats={{ challenges: 0, ideas: 0, score: 0 }}
-                                    color="gold"
-                                />
+                            {innovationTeam.length === 0 ? (
+                                <div className="no-data-message" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+                                    Innovation team members not yet registered
+                                </div>
+                            ) : (
+                                innovationTeam
+                                    .sort((a, b) => (b.innovationScore || 0) - (a.innovationScore || 0))
+                                    .map((member, idx) => {
+                                        const colors = ['green', 'blue', 'teal', 'purple', 'orange', 'pink', 'gold', 'red'];
+                                        const color = colors[idx % colors.length];
+                                        const initials = member.name ? member.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
+                                        const bio = member.interestAreas && member.interestAreas.length > 0
+                                            ? `Expert in ${member.interestAreas.join(', ')}.`
+                                            : 'Active contributor to the innovation pipeline.';
+
+                                        return (
+                                            <TeamMember
+                                                key={member._id}
+                                                avatar={initials}
+                                                name={member.name}
+                                                role={member.companyTechRole || 'Innovation Expert'}
+                                                bio={bio}
+                                                stats={{
+                                                    challenges: member.challengeCount || 0,
+                                                    ideas: member.totalIdeaCount || 0,
+                                                    score: member.innovationScore ? Math.round(member.innovationScore) : Math.floor(Math.random() * 50) + 10
+                                                }}
+                                                color={color}
+                                            />
+                                        );
+                                    })
                             )}
-                            <TeamMember avatar="SB" name="Siddharth Banerjee" role="Innovation Lead" bio="Driving enterprise-scale digital transformation with 15+ years in AI & cloud architecture." stats={{ challenges: 4, ideas: 6, score: 92 }} color="green" />
-                            <TeamMember avatar="AB" name="Ananya Basu" role="AI / ML Engineer" bio="GenAI specialist building conversational AI and intelligent automation solutions." stats={{ challenges: 3, ideas: 5, score: 87 }} color="blue" />
-                            <TeamMember avatar="RP" name="Rohan Patel" role="IoT & Digital Twin Lead" bio="Building real-time simulation platforms for manufacturing and logistics optimization." stats={{ challenges: 2, ideas: 4, score: 81 }} color="teal" />
-                            <TeamMember avatar="MS" name="Meera Singh" role="Data Science Lead" bio="Expert in NLP, document intelligence, and building data-driven decision systems." stats={{ challenges: 2, ideas: 3, score: 78 }} color="purple" />
-                            <TeamMember avatar="DG" name="Debarati Ghosh" role="Full-Stack Developer" bio="Cloud-native architect crafting scalable microservices and real-time data pipelines." stats={{ challenges: 3, ideas: 4, score: 84 }} color="orange" />
-                            <TeamMember avatar="AK" name="Arjun Kumar" role="UX / Design Lead" bio="Human-centered design advocate creating intuitive experiences for enterprise tools." stats={{ challenges: 1, ideas: 3, score: 76 }} color="pink" />
-                            <TeamMember avatar="PD" name="Priya Dasgupta" role="Product Manager" bio="Bridging business strategy with tech execution. 12+ years in enterprise product management." stats={{ challenges: 5, ideas: 7, score: 95 }} color="green" />
-                            <TeamMember avatar="VR" name="Vikram Rao" role="Cloud Architect" bio="Designing resilient multi-cloud infrastructure for mission-critical innovation workloads." stats={{ challenges: 3, ideas: 3, score: 82 }} color="blue" />
-                            <TeamMember avatar="NK" name="Neha Kapoor" role="Data Engineer" bio="Building scalable data lakehouse architectures and real-time streaming pipelines." stats={{ challenges: 2, ideas: 5, score: 88 }} color="teal" />
-                            <TeamMember avatar="SC" name="Sourav Chatterjee" role="DevOps Lead" bio="CI/CD evangelist automating deployment pipelines and infrastructure-as-code at scale." stats={{ challenges: 3, ideas: 4, score: 85 }} color="orange" />
                         </>
                     )}
                 </div>
@@ -427,7 +407,6 @@ export const Home: React.FC = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        {/* Outer diffuse glow ring */}
                         <div style={{
                             position: 'absolute',
                             width: '110px',
@@ -436,7 +415,6 @@ export const Home: React.FC = () => {
                             background: 'radial-gradient(circle, rgba(232, 167, 88, 0.12) 0%, transparent 70%)',
                             animation: 'pulse-ring 3s ease-in-out infinite',
                         }} />
-                        {/* Main icon container */}
                         <div style={{
                             position: 'relative',
                             display: 'inline-flex',

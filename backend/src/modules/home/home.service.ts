@@ -19,7 +19,7 @@ export class HomeService {
     @InjectModel(Idea.name) private ideaModel: Model<IdeaDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
-  ) {}
+  ) { }
 
   async getTopChallenges() {
     // Top 5 challenges ranked by upVotes.length + viewCount
@@ -96,10 +96,12 @@ export class HomeService {
       pilotChallenges.forEach((c) => {
         const duration =
           c.timestampOfStatusChangedToPilot.getTime() -
-          (c.get('createdAt') as Date).getTime();
+          (c.createdAt as Date).getTime();
         totalDuration += duration;
       });
-      pilotRate = totalDuration / pilotChallenges.length; // This will be in milliseconds
+      // Convert ms to days: ms / (1000 * 60 * 60 * 24)
+      pilotRate = totalDuration / pilotChallenges.length / (1000 * 60 * 60 * 24);
+      pilotRate = Math.round(pilotRate * 10) / 10; // Round to 1 decimal place
     }
 
     const conversionRate =
@@ -117,7 +119,7 @@ export class HomeService {
     const dateLimit = new Date();
     dateLimit.setMonth(dateLimit.getMonth() - 6);
 
-    // Grouping by year and month
+    // Grouping by year and month using date operators
     const challengeStats = await this.challengeModel.aggregate<{
       _id: { year: number; month: number };
       count: number;
@@ -125,7 +127,10 @@ export class HomeService {
       { $match: { createdAt: { $gte: dateLimit } } },
       {
         $group: {
-          _id: { year: '$year', month: '$month' },
+          _id: {
+            year: { $year: '$createdAt' },
+            month: { $month: '$createdAt' },
+          },
           count: { $sum: 1 },
         },
       },
@@ -138,7 +143,10 @@ export class HomeService {
       { $match: { createdAt: { $gte: dateLimit } } },
       {
         $group: {
-          _id: { year: '$year', month: '$month' },
+          _id: {
+            year: { $year: '$createdAt' },
+            month: { $month: '$createdAt' },
+          },
           count: { $sum: 1 },
         },
       },
@@ -151,8 +159,8 @@ export class HomeService {
   }
 
   async getInnovationTeam() {
-    // All users where role = 'MEMBER'
-    const team = await this.userModel.find({ role: 'MEMBER' }).lean();
+    // All users where role = 'MEMBER' or 'ADMIN'
+    const team = await this.userModel.find({ role: { $in: ['ADMIN', 'MEMBER'] } }).lean();
 
     // Populate derived counts
     return Promise.all(

@@ -260,6 +260,7 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 7 | `PATCH` | `/challenges/{virtualId}/status` | Update swim lane status. Body: `{ "status": "...", "userId": "..." }` |
 | 8 | `POST` | `/challenges/{virtualId}/upvote` | Toggle upvote. Body: `{ "userId": "..." }` |
 | 9 | `POST` | `/challenges/{virtualId}/subscribe` | Toggle subscription. Body: `{ "userId": "..." }` |
+| 10 | `GET` | `/challenges/status/{status}` | Get challenges by status (v4) |
 
 ---
 
@@ -644,7 +645,7 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 
 | # | Field | Type | Business Logic |
 |---|-------|------|----------------|
-| 1 | `users` | Array of Objects | All users where `role = "MEMBER"`. Each user includes at minimum: `_id`, `name`, `companyTechRole`, `email`, `interestAreas`, `innovationScore`. Plus derived counts: `challengeCount`, `totalIdeaCount`, `commentCount` (from Challenge, Idea, and Comment collections) |
+| 1 | `users` | Array of Objects | All users where `role` is `"ADMIN"` or `"MEMBER"`. Each user includes at minimum: `_id`, `name`, `companyTechRole`, `email`, `interestAreas`, `innovationScore`. Plus derived counts: `challengeCount`, `totalIdeaCount`, `commentCount` (from Challenge, Idea, and Comment collections) |
 
 > [!IMPORTANT]
 > **Shared Business Logic [SBL-USER-COUNT-BY-ROLE]:** This filters users by role. The same role-based filtering logic is used by `GET /users/count-by-role`.

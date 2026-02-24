@@ -187,6 +187,18 @@ export class ChallengesService extends AbstractService {
     return this.enrichChallenges(challenges);
   }
 
+  /** Retrieves challenges by status with pagination and derived fields. */
+  async findByStatus(status: string, limit = 20, offset = 0): Promise<any[]> {
+    const challenges = await this.challengeModel
+      .find({ status })
+      .sort({ virtualId: -1 })
+      .skip(offset)
+      .limit(limit)
+      .lean()
+      .exec();
+    return this.enrichChallenges(challenges);
+  }
+
   /** Retrieves a single challenge by virtualId or Mongo _id with derived fields. */
   async findByVirtualId(virtualId: string): Promise<any> {
     const isMongoId = Types.ObjectId.isValid(virtualId) && String(new Types.ObjectId(virtualId)) === virtualId;

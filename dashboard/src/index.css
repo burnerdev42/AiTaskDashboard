@@ -1310,26 +1310,22 @@ body {
 }
 
 .stories-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.stories-grid:hover {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-
-.stories-grid:hover::-webkit-scrollbar {
-  display: block;
   height: 6px;
+  background: transparent;
 }
 
-.stories-grid:hover::-webkit-scrollbar-track {
-  background: transparent;
+.stories-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.stories-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
 .stories-grid:hover::-webkit-scrollbar-thumb {
   background: var(--border-light);
-  border-radius: 3px;
 }
 
 .story-card {

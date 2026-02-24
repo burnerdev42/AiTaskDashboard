@@ -108,3 +108,8 @@ When reviewing or fixing integration issues, rigidly enforce these primary rules
 | **Idea Deleted** | `IdeasService` | None | Same as Idea Edited | Initiator excluded. Activity record is deleted. |
 | **Challenge Commented** | `CommentsService`| Current User | Challenge Owner + Challenge Subscribers | Initiator excluded. Automatically subscribes commenter to Challenge. |
 | **Idea Commented** | `CommentsService`| Current User | Idea Owner + Idea Subs + Parent Challenge Owner + Parent Challenge Subs | Initiator excluded. Automatically subscribes commenter to Idea & Challenge. |
+### Scenario 7: Dashboard Home Integration (Multi-Section)
+1. **Consult Dedicated Runbook**: For complex multi-panel integration tasks (Top Challenges, Metrics, Throughput, Team Grid), refer to the [HOME_INTEGRATION_RUNBOOK.md](file:///c:/CODE/AiTaskDashboard/integration-agents/HOME_INTEGRATION_RUNBOOK.md).
+2. **Double-Wrapping Awareness**: Check if the backend response is double-wrapped (e.g., `data.data.users`). This is a common failure point on the Home page.
+3. **Lean Query Handling**: Realize that backend results might be `.lean()`. Ensure derived counts and owner details are populated in the service layer.
+4. **UX vs Data**: Distinguish between CSS layout issues (like hidden scrollbars) and actual API data truncation.

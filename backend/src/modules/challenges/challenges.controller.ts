@@ -76,6 +76,31 @@ export class ChallengesController extends AbstractController {
     );
   }
 
+  @Get('status/:status')
+  @ApiOperation({ summary: 'Get challenges by status (e.g., completed)' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'offset', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'List of challenges by status.',
+    type: ChallengeListApiResponse,
+  })
+  async findByStatus(
+    @Param('status') status: string,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ) {
+    const result = await this.challengesService.findByStatus(
+      status,
+      limit ? +limit : 20,
+      offset ? +offset : 0,
+    );
+    return this.success(
+      { challenges: result },
+      `Challenges with status ${status} retrieved successfully`,
+    );
+  }
+
   @Get('count')
   @ApiOperation({ summary: 'Get challenge count' })
   @ApiResponse({
