@@ -24,14 +24,14 @@ describe('MetricsController', () => {
   });
 
   it('should return summary', async () => {
-    mockService.getSummary.mockResolvedValue({ roi: '10%' });
+    mockService.getSummary.mockResolvedValue({ totalChallenges: 10 });
     const result = await controller.getSummary();
-    expect(result.data).toEqual({ summary: { roi: '10%' } });
+    expect(result.data).toEqual({ summary: { totalChallenges: 10 } });
   });
 
   it('should return throughput', async () => {
     mockService.getThroughput.mockResolvedValue([]);
     const result = await controller.getThroughput();
-    expect(result.data).toEqual({ throughput: [] });
+    expect(result.data).toEqual({ velocity: [] });
   });
 });

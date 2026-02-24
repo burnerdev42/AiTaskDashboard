@@ -315,8 +315,8 @@ describe('Response Structure Conformance', () => {
     it('getSummary → data.summary', async () => {
       assertEnvelope(await ctrl.getSummary(), 'summary');
     });
-    it('getThroughput → data.throughput', async () => {
-      assertEnvelope(await ctrl.getThroughput(), 'throughput');
+    it('getThroughput → data.velocity', async () => {
+      assertEnvelope(await ctrl.getThroughput(), 'velocity');
     });
   });
 });

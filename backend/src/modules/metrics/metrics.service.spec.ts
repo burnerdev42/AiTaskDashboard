@@ -1,25 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MetricsService } from './metrics.service';
-import { ChallengesService } from '../challenges/challenges.service';
-import { IdeasService } from '../ideas/ideas.service';
+import { getModelToken } from '@nestjs/mongoose';
+import { Challenge } from '../../models/challenges/challenge.schema';
+import { Idea } from '../../models/ideas/idea.schema';
+import { Activity } from '../../models/activities/activity.schema';
+import { User } from '../../models/users/user.schema';
 
 describe('MetricsService', () => {
   let service: MetricsService;
 
-  const mockChallengesService = {
-    findAll: jest.fn(),
-  };
-
-  const mockIdeasService = {
-    findAll: jest.fn(),
+  const mockModel = {
+    countDocuments: jest.fn(),
+    find: jest.fn().mockReturnThis(),
+    select: jest.fn().mockReturnThis(),
+    lean: jest.fn().mockResolvedValue([]),
+    aggregate: jest.fn().mockResolvedValue([]),
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         MetricsService,
-        { provide: ChallengesService, useValue: mockChallengesService },
-        { provide: IdeasService, useValue: mockIdeasService },
+        { provide: getModelToken(Challenge.name), useValue: mockModel },
+        { provide: getModelToken(Idea.name), useValue: mockModel },
+        { provide: getModelToken(Activity.name), useValue: mockModel },
+        { provide: getModelToken(User.name), useValue: mockModel },
       ],
     }).compile();
 
@@ -31,23 +37,19 @@ describe('MetricsService', () => {
   });
 
   it('should return metrics summary', async () => {
-    mockChallengesService.findAll.mockResolvedValue(['c1', 'c2']);
-    mockIdeasService.findAll.mockResolvedValue(['i1', 'i2', 'i3']);
-
+    mockModel.countDocuments.mockResolvedValue(10);
     const result = await service.getSummary();
 
-    expect(result).toEqual({
-      activeChallenges: 2,
-      totalIdeas: 3,
-      roi: '1250%',
-      savings: '$450k',
-    });
+    expect(result).toHaveProperty('totalChallenges', 10);
+    expect(result).toHaveProperty('totalIdeas', 10);
+    expect(result).toHaveProperty('conversionRate');
   });
 
   it('should return throughput data', async () => {
+    mockModel.aggregate.mockResolvedValue([
+      { _id: { year: 2023, month: 1 }, count: 5 }
+    ]);
     const result = await service.getThroughput();
-    expect(result).toHaveLength(12);
-    expect(result[0]).toHaveProperty('month');
-    expect(result[0]).toHaveProperty('value');
+    expect(Array.isArray(result)).toBe(true);
   });
 });

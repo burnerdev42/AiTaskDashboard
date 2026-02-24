@@ -113,3 +113,8 @@ When reviewing or fixing integration issues, rigidly enforce these primary rules
 2. **Double-Wrapping Awareness**: Check if the backend response is double-wrapped (e.g., `data.data.users`). This is a common failure point on the Home page.
 3. **Lean Query Handling**: Realize that backend results might be `.lean()`. Ensure derived counts and owner details are populated in the service layer.
 4. **UX vs Data**: Distinguish between CSS layout issues (like hidden scrollbars) and actual API data truncation.
+
+### Scenario 8: Dashboard Metrics Integration
+1. **Consult Dedicated Runbook**: For integrating the 7 discrete MongoDB aggregation endpoints to the frontend Recharts dashboard, refer to the [METRICS_INTEGRATION_RUNBOOK.md](file:///c:/CODE/AiTaskDashboard/integration-agents/METRICS_INTEGRATION_RUNBOOK.md).
+2. **Use API Interceptor**: Ensure newly generated Axios services map to the global `api` object (from `api.ts`), avoiding relative paths that accidentally hit the Vite SPA index.
+3. **Handle CSS Text Overflow**: Truncate strings (`text-overflow: ellipsis`) and inject the native html `title` attribute for tooltip fallbacks when charting APIs return long domain names (like Platform arrays) mapped to narrow UI elements.

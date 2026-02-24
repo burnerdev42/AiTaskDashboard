@@ -4808,7 +4808,7 @@ body {
 
 .funnel-row {
   display: grid;
-  grid-template-columns: 80px 1fr 70px;
+  grid-template-columns: 100px 1fr 70px;
   gap: 10px;
   align-items: center;
 }
@@ -4889,7 +4889,21 @@ body {
 .m-conv-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+}
+
+.m-conv-value {
+  font-size: 24px;
+  font-weight: 800;
+  min-width: 70px;
+}
+
+.m-conv-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .m-conv-value {
@@ -6475,7 +6489,22 @@ svg.icon,
 .m-conv-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+}
+
+.m-conv-value {
+  font-size: 24px;
+  font-weight: 800;
+  min-width: 70px;
+  /* Ensure space for decimals so it doesn't overlap the bar */
+}
+
+.m-conv-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .m-conv-value {
@@ -6720,8 +6749,11 @@ svg.icon,
   color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  width: 90px;
+  width: 140px;
   flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

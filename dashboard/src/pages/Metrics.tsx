@@ -1,18 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flag, Lightbulb, TrendingUp, Clock, Users, UserCheck } from 'lucide-react';
+import { metricsService } from '../services/metrics.service';
 
-/* ── Static Data for Panels 1-3 ──────────────── */
-const FUNNEL_STAGES = [
-    { label: 'Challenges', sub: 'Submitted', count: 47, color: '#ef5350', pct: 100 },
-    { label: 'Ideas', sub: 'Generated', count: 82, color: '#ffa726', pct: 85 },
-    { label: 'Evaluated', sub: 'Shortlisted', count: 23, color: '#ffee58', pct: 55 },
-    { label: 'Prototypes', sub: 'Built', count: 12, color: '#42a5f5', pct: 38 },
-    { label: 'Pilots', sub: 'Running', count: 5, color: '#66bb6a', pct: 22 },
-    { label: 'Production', sub: 'Live', count: 3, color: '#ffd54f', pct: 14 },
-];
-
-
-
+/* ── Static configuration for Heatmap & UI mapping ──────────────── */
 const HEATMAP_ROWS = [
     [1, 2, 0, 3, 1, 4],
     [0, 3, 1, 2, 4, 0],
@@ -21,50 +11,143 @@ const HEATMAP_ROWS = [
     [0, 2, 3, 0, 1, 4],
 ];
 
-const LEADERBOARD = [
-    { rank: 1, name: 'STP', count: 34, pct: 100, gradient: 'var(--accent-orange)', color: 'var(--accent-orange)' },
-    { rank: 2, name: 'CTP', count: 28, pct: 82, gradient: 'var(--accent-blue)', color: 'var(--accent-blue)' },
-    { rank: 3, name: 'RBP', count: 22, pct: 64, gradient: 'var(--accent-purple)', color: 'var(--accent-purple)' },
-    { rank: 4, name: 'Data Platform', count: 17, pct: 50, gradient: 'var(--accent-green)', color: 'var(--accent-green)' },
-    { rank: 5, name: 'Integration Hub', count: 12, pct: 36, gradient: 'var(--accent-grey)', color: 'var(--accent-grey)' },
+// Helper colors
+const STAGE_COLORS: Record<string, string> = {
+    'submitted': '#ef5350',
+    'ideation': '#ffa726',
+    'pilot': '#42a5f5',
+    'completed': '#66bb6a',
+    'archive': '#ffd54f'
+};
+
+const PLATFORM_GRADIENTS = [
+    'var(--accent-orange)',
+    'var(--accent-blue)',
+    'var(--accent-purple)',
+    'var(--accent-green)',
+    'var(--accent-grey)'
 ];
 
-
-
-/* ── Static Data for New Charts ──────────────── */
-// Scatter Plot Data: Value (Y) vs Effort (X) vs ROI (Size)
-// Scatter Plot Data: Portfolio Balance (Strategic Alignment)
-const SCATTER_DATA = [
-    { id: 1, name: 'Customer Value Driver', x: 25, y: 80, size: 28, color: '#66bb6a' },
-    { id: 2, name: 'Tech Enabler', x: 75, y: 70, size: 22, color: '#42a5f5' },
-    { id: 3, name: 'Non Strategic Product Management', x: 50, y: 45, size: 18, color: '#ffa726' },
-    { id: 4, name: 'Maintenance', x: 20, y: 30, size: 14, color: '#ef5350' },
-];
-
-// Gradient Line Data: Monthly Trends
-const LINE_DATA = [1.8, 2.2, 3.5, 2.8, 4.2, 3.9];
-
-// Radar Data: OpCo Engagement
-const RADAR_AXIS = ['Albert Heijn', 'GSO', 'GET', 'BecSee'];
-const RADAR_DATA = [85, 65, 90, 70]; // % values
-
-const KPI_CARDS = [
-    { label: 'Total Challenges', value: '47', icon: <Flag size={20} /> },
-    { label: 'Ideas Generated', value: '82', icon: <Lightbulb size={20} /> },
-    { label: 'Conversion Rate', value: '6.4%', icon: <TrendingUp size={20} /> },
-    { label: 'Avg. Time to Pilot', value: '67d', icon: <Clock size={20} /> },
-    { label: 'Total Users', value: '152', icon: <Users size={20} /> },
-    { label: 'Active Contributors', value: '64', icon: <UserCheck size={20} /> },
-];
+const PORTFOLIO_MAPPING: Record<string, { x: number, y: number, color: string }> = {
+    'Customer Value Driver': { x: 25, y: 80, color: '#66bb6a' },
+    'Tech Enabler': { x: 75, y: 70, color: '#42a5f5' },
+    'Non Strategic Product Management': { x: 50, y: 45, color: '#ffa726' },
+    'Maintenance': { x: 20, y: 30, color: '#ef5350' },
+};
 
 export const Metrics: React.FC = () => {
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
+    // Data States
+    const [kpis, setKpis] = useState<any[]>([]);
+    const [funnelData, setFunnelData] = useState<any>(null);
+    const [leaderboard, setLeaderboard] = useState<any[]>([]);
+    const [scatterData, setScatterData] = useState<any[]>([]);
+    const [lineData, setLineData] = useState<number[]>([]);
+    const [lineLabels, setLineLabels] = useState<string[]>([]);
+    const [radarData, setRadarData] = useState<{ axis: string[], data: number[] }>({ axis: [], data: [] });
+    const [activeContributors, setActiveContributors] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [
+                    summaryRes,
+                    throughputRes,
+                    funnelRes,
+                    teamRes,
+                    portfolioRes,
+                    opcoRes
+                ] = await Promise.all([
+                    metricsService.getSummary(),
+                    metricsService.getThroughput(), // Innovation velocity
+                    metricsService.getFunnel(),
+                    metricsService.getTeamEngagement(),
+                    metricsService.getPortfolioBalance(),
+                    metricsService.getOpcoRadar()
+                ]);
+
+                // 1. KPIs
+                const summary = summaryRes.data.summary;
+                setActiveContributors(summary.activeContributions);
+                setKpis([
+                    { label: 'Total Challenges', value: summary.totalChallenges, icon: <Flag size={20} /> },
+                    { label: 'Ideas Generated', value: summary.totalIdeas, icon: <Lightbulb size={20} /> },
+                    { label: 'Conversion Rate', value: `${summary.conversionRate}%`, icon: <TrendingUp size={20} /> },
+                    { label: 'Avg. Time to Pilot', value: `${summary.averageTimeToPilot}d`, icon: <Clock size={20} /> },
+                    { label: 'Total Users', value: summary.totalUsers, icon: <Users size={20} /> },
+                    { label: 'Active Contributors', value: summary.activeContributions, icon: <UserCheck size={20} /> },
+                ]);
+
+                // 2. Funnel
+                const fData = funnelRes.data.funnel;
+                const stagesList = ['submitted', 'ideation', 'pilot', 'completed', 'archive'];
+                const maxCount = Math.max(...Object.values(fData.challengesBySwimLane as Record<string, number>), 1);
+
+                const mappedFunnel = stagesList.map(stage => ({
+                    label: stage.charAt(0).toUpperCase() + stage.slice(1),
+                    sub: 'Stage',
+                    count: fData.challengesBySwimLane[stage] || 0,
+                    color: STAGE_COLORS[stage] || '#ccc',
+                    pct: ((fData.challengesBySwimLane[stage] || 0) / maxCount) * 100
+                }));
+                setFunnelData({
+                    stages: mappedFunnel,
+                    conversionRate: fData.conversionRate,
+                    target: fData.targetConversionRate
+                });
+
+                // 3. Team Engagement Leaderboard
+                const pData = teamRes.data.teamEngagement.challengesByPlatform as Record<string, number>;
+                const sortedPlatforms = Object.entries(pData).sort((a, b) => b[1] - a[1]);
+                const maxPlat = sortedPlatforms[0]?.[1] || 1;
+
+                setLeaderboard(sortedPlatforms.slice(0, 5).map(([name, count], i) => ({
+                    rank: i + 1,
+                    name,
+                    count,
+                    pct: (count / maxPlat) * 100,
+                    gradient: PLATFORM_GRADIENTS[i % PLATFORM_GRADIENTS.length],
+                    color: PLATFORM_GRADIENTS[i % PLATFORM_GRADIENTS.length]
+                })));
+
+                // 4. Portfolio Scatter
+                const portData = portfolioRes.data.portfolioBalance.challengesByPortfolioLane as Record<string, number>;
+                setScatterData(Object.entries(portData).map(([lane, count], i) => {
+                    const mapping = PORTFOLIO_MAPPING[lane] || { x: 50, y: 50, color: '#999' };
+                    return {
+                        id: i,
+                        name: lane,
+                        x: mapping.x,
+                        y: mapping.y,
+                        size: Math.max(10, count * 5), // Scale size by count
+                        color: mapping.color
+                    };
+                }));
+
+                // 5. Line Chart (Velocity)
+                const velData = throughputRes.data.velocity || [];
+                const mos = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                setLineData(velData.map((d: any) => d.challenges > 0 ? (d.ideas / d.challenges) : d.ideas));
+                setLineLabels(velData.map((d: any) => mos[d.month - 1]));
+
+                // 6. OpCo Radar
+                const oData = opcoRes.data.opcoRadar.challengesByOpco as Record<string, number>;
+                const oKeys = Object.keys(oData);
+                const maxOpco = Math.max(...Object.values(oData), 1);
+                setRadarData({
+                    axis: oKeys.length > 0 ? oKeys : ['None'],
+                    data: oKeys.length > 0 ? Object.values(oData).map(v => (v / maxOpco) * 100) : [0]
+                });
+
+            } catch (err) {
+                console.error("Failed to load metrics", err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
     }, []);
 
     return (
@@ -76,7 +159,7 @@ export const Metrics: React.FC = () => {
 
             {/* ──── KPI Summary Strip ──── */}
             <div className="metrics-kpi-strip">
-                {KPI_CARDS.map((kpi) => (
+                {kpis.map((kpi) => (
                     <div key={kpi.label} className="metrics-kpi-card">
                         <div className="kpi-icon">{kpi.icon}</div>
                         <div className="kpi-content">
@@ -123,7 +206,7 @@ export const Metrics: React.FC = () => {
                         <div className="m-panel-body">
                             {/* Horizontal funnel bars */}
                             <div className="funnel-chart">
-                                {FUNNEL_STAGES.map(s => (
+                                {funnelData?.stages.map((s: any) => (
                                     <div key={s.label} className="funnel-row">
                                         <div className="funnel-row-label">
                                             <span className="funnel-row-count" style={{ color: s.color }}>{s.count}</span>
@@ -146,16 +229,16 @@ export const Metrics: React.FC = () => {
                             {/* Conversion */}
                             <div className="m-conversion">
                                 <div className="m-conv-header">
-                                    <span className="m-conv-title">Conversion: Challenge → Production</span>
-                                    <span className="m-conv-target">Target: 8%</span>
+                                    <span className="m-conv-title">Conversion: Submitted → Completed</span>
+                                    <span className="m-conv-target">Target: {funnelData?.target}%</span>
                                 </div>
                                 <div className="m-conv-row">
-                                    <span className="m-conv-value" style={{ color: 'var(--accent-teal)' }}>6.4%</span>
+                                    <span className="m-conv-value" style={{ color: 'var(--accent-teal)' }}>{funnelData?.conversionRate}%</span>
                                     <div className="m-conv-bar">
                                         <div
                                             className="m-conv-fill animate-funnel-bar"
                                             style={{
-                                                width: '80%',
+                                                width: `${Math.min(funnelData?.conversionRate * (100 / funnelData?.target), 100)}%`,
                                                 background: 'linear-gradient(90deg, var(--accent-teal), #42a5f5)',
                                             }}
                                         />
@@ -200,17 +283,17 @@ export const Metrics: React.FC = () => {
                     ) : (
                         <div className="m-panel-body">
                             <div className="engagement-hero">
-                                <div className="engagement-hero-count">64</div>
+                                <div className="engagement-hero-count">{activeContributors}</div>
                                 <div className="engagement-hero-label">Active Contributors</div>
-                                <div className="engagement-hero-sub"><span>42%</span> of ODC team</div>
+                                <div className="engagement-hero-sub">Recent engagements</div>
                             </div>
 
                             <div className="m-section-title">Platform Leaderboard</div>
                             <div className="engagement-lb">
-                                {LEADERBOARD.map(d => (
+                                {leaderboard.map(d => (
                                     <div key={d.name} className="lb-row">
                                         <span className="lb-rank">#{d.rank}</span>
-                                        <span className="lb-name">{d.name}</span>
+                                        <span className="lb-name" title={d.name}>{d.name}</span>
                                         <div className="lb-bar-wrap">
                                             <div className="lb-bar-fill" style={{ width: `${d.pct}%`, background: d.gradient }} />
                                         </div>
@@ -275,25 +358,29 @@ export const Metrics: React.FC = () => {
                                     <line x1="0" y1="125" x2="400" y2="125" stroke="var(--border)" strokeDasharray="4" />
 
                                     {/* Area Path */}
-                                    <path
-                                        d={`M0,150 ${LINE_DATA.map((v, i) => `L${(i / (LINE_DATA.length - 1)) * 400},${150 - (v * 25)}`).join(' ')} L400,150 Z`}
-                                        fill="url(#lineGrad)"
-                                    />
+                                    {lineData.length > 0 && (
+                                        <path
+                                            d={`M0,150 ${lineData.map((v, i) => `L${(i / (lineData.length - 1)) * 400},${150 - ((v || 0) * 25)}`).join(' ')} L400,150 Z`}
+                                            fill="url(#lineGrad)"
+                                        />
+                                    )}
                                     {/* Line Path */}
-                                    <path
-                                        d={`M0,${150 - (LINE_DATA[0] * 25)} ${LINE_DATA.map((v, i) => `L${(i / (LINE_DATA.length - 1)) * 400},${150 - (v * 25)}`).join(' ')}`}
-                                        fill="none"
-                                        stroke="var(--accent-gold)"
-                                        strokeWidth="3"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
+                                    {lineData.length > 0 && (
+                                        <path
+                                            d={`M0,${150 - ((lineData[0] || 0) * 25)} ${lineData.map((v, i) => `L${(i / (lineData.length - 1)) * 400},${150 - ((v || 0) * 25)}`).join(' ')}`}
+                                            fill="none"
+                                            stroke="var(--accent-gold)"
+                                            strokeWidth="3"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    )}
                                     {/* Points */}
-                                    {LINE_DATA.map((v, i) => (
+                                    {lineData.map((v, i) => (
                                         <circle
                                             key={i}
-                                            cx={(i / (LINE_DATA.length - 1)) * 400}
-                                            cy={150 - (v * 25)}
+                                            cx={lineData.length > 1 ? (i / (lineData.length - 1)) * 400 : 200}
+                                            cy={150 - ((v || 0) * 25)}
                                             r="3"
                                             fill="#fff"
                                             stroke="var(--accent-gold)"
@@ -302,7 +389,7 @@ export const Metrics: React.FC = () => {
                                     ))}
                                 </svg>
                                 <div className="line-chart-labels">
-                                    <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+                                    {lineLabels.map(l => <span key={l}>{l}</span>)}
                                 </div>
                             </>
                         )}
@@ -329,7 +416,7 @@ export const Metrics: React.FC = () => {
                                 <text x="30" y="20" fontSize="9" fill="var(--text-muted)" transform="rotate(-90 30,20)" textAnchor="end">High Value →</text>
 
                                 {/* Bubbles */}
-                                {SCATTER_DATA.map(item => (
+                                {scatterData.map(item => (
                                     <g key={item.id} className="scatter-bubble-group">
                                         <circle
                                             cx={40 + (item.x / 100) * 240}
@@ -348,7 +435,7 @@ export const Metrics: React.FC = () => {
                                             textAnchor="middle"
                                             fontWeight="600"
                                         >
-                                            {item.name}
+                                            {item.name} ({item.size / 5})
                                         </text>
                                     </g>
                                 ))}
@@ -387,8 +474,8 @@ export const Metrics: React.FC = () => {
                                     return (
                                         <polygon
                                             key={scale}
-                                            points={RADAR_AXIS.map((_, i) => {
-                                                const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                            points={radarData.axis.map((_, i) => {
+                                                const angle = (Math.PI * 2 * i) / radarData.axis.length - Math.PI / 2;
                                                 return `${100 + Math.cos(angle) * r},${100 + Math.sin(angle) * r}`;
                                             }).join(' ')}
                                             fill="none"
@@ -400,8 +487,8 @@ export const Metrics: React.FC = () => {
                                     );
                                 })}
                                 {/* Axis Lines */}
-                                {RADAR_AXIS.map((_, i) => {
-                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                {radarData.axis.map((_, i) => {
+                                    const angle = (Math.PI * 2 * i) / radarData.axis.length - Math.PI / 2;
                                     return (
                                         <line
                                             key={i}
@@ -415,23 +502,25 @@ export const Metrics: React.FC = () => {
                                 })}
 
                                 {/* Data Polygon */}
-                                <polygon
-                                    points={RADAR_DATA.map((v, i) => {
-                                        const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                        const r = (v / 100) * 75;
-                                        const x = 100 + Math.cos(angle) * r;
-                                        const y = 100 + Math.sin(angle) * r;
-                                        return `${x},${y}`;
-                                    }).join(' ')}
-                                    fill="url(#radarGrad)"
-                                    stroke="var(--accent-gold)"
-                                    strokeWidth="2"
-                                    filter="url(#glow)"
-                                />
+                                {radarData.axis.length > 2 && (
+                                    <polygon
+                                        points={radarData.data.map((v, i) => {
+                                            const angle = (Math.PI * 2 * i) / radarData.axis.length - Math.PI / 2;
+                                            const r = (v / 100) * 75;
+                                            const x = 100 + Math.cos(angle) * r;
+                                            const y = 100 + Math.sin(angle) * r;
+                                            return `${x},${y}`;
+                                        }).join(' ')}
+                                        fill="url(#radarGrad)"
+                                        stroke="var(--accent-gold)"
+                                        strokeWidth="2"
+                                        filter="url(#glow)"
+                                    />
+                                )}
 
                                 {/* Data Points & Labels */}
-                                {RADAR_DATA.map((v, i) => {
-                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                {radarData.data.map((v, i) => {
+                                    const angle = (Math.PI * 2 * i) / radarData.axis.length - Math.PI / 2;
                                     const r = (v / 100) * 75;
                                     const x = 100 + Math.cos(angle) * r;
                                     const y = 100 + Math.sin(angle) * r;
@@ -449,7 +538,7 @@ export const Metrics: React.FC = () => {
                                                 fontWeight="700"
                                                 className="radar-label"
                                             >
-                                                {RADAR_AXIS[i]}
+                                                {radarData.axis[i]}
                                             </text>
                                         </g>
                                     );

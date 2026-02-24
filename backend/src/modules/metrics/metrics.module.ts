@@ -5,17 +5,28 @@
  */
 
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { MetricsController } from './metrics.controller';
 import { MetricsService } from './metrics.service';
-import { ChallengesModule } from '../challenges/challenges.module';
-import { IdeasModule } from '../ideas/ideas.module';
+import { Challenge, ChallengeSchema } from '../../models/challenges/challenge.schema';
+import { Idea, IdeaSchema } from '../../models/ideas/idea.schema';
+import { User, UserSchema } from '../../models/users/user.schema';
+import { Activity, ActivitySchema } from '../../models/activities/activity.schema';
 
 /**
  * Metrics Module.
  */
 @Module({
-  imports: [ChallengesModule, IdeasModule],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Challenge.name, schema: ChallengeSchema },
+      { name: Idea.name, schema: IdeaSchema },
+      { name: User.name, schema: UserSchema },
+      { name: Activity.name, schema: ActivitySchema },
+    ]),
+  ],
   controllers: [MetricsController],
   providers: [MetricsService],
 })
-export class MetricsModule {}
+export class MetricsModule { }
+

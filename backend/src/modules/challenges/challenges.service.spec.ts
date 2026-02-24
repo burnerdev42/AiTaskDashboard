@@ -176,7 +176,7 @@ describe('ChallengesService', () => {
       );
 
       expect(challengeModel.findOne).toHaveBeenCalledWith({
-        virtualId: mockChallengeId.toHexString(),
+        _id: mockChallengeId.toHexString(),
       });
     });
   });

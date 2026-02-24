@@ -42,7 +42,7 @@ describe('NotificationsService', () => {
   };
 
   const mockUsersRepository = {
-    findById: jest.fn().mockResolvedValue({ _id: 'initiator456', name: 'John Doe' }),
+    findOne: jest.fn().mockResolvedValue({ _id: 'initiator456', name: 'John Doe' }),
   };
 
   beforeEach(async () => {
