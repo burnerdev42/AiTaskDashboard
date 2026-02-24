@@ -62,4 +62,36 @@ When reviewing or fixing integration issues, rigidly enforce these primary rules
    - For linking endpoints (like attaching an Idea to a Challenge), ALWAYS pass the parent's MongoDB `_id`, not the `virtualId` (e.g. `CH-0001`), because backend referencing methods usually query against the ObjectID.
 3. **Handle Redirection on Success**: Verify the API response closely before routing. If the backend returns `ideaId`, checking `response.data.idea.virtualId` will fail. Missing this causes silent fallback bugs like an unintentional page reload instead of a redirect.
 4. **Backend Response Enrichment**: After a `POST` creation, ensure the backend service passes the newly saved document through its `.enrich...([saved.toObject()])` method before returning it. If you return the raw `saved` document, the frontend will receive missing derived fields (e.g. `ownerDetails` will be empty, rendering "Unknown User" upon redirect).
-5. **Dynamic Error Handling**: Capture the literal backend string responses within the `catch` block (`error.response?.data?.message`) and render them out to the UI using Toasts to instantly reflect backend data constraints (min lengths, missing fields, enum mismatches, etc).
+   - Dynamic Error Handling: Capture the literal backend string responses within the `catch` block (`error.response?.data?.message`) and render them out to the UI using Toasts to instantly reflect backend data constraints (min lengths, missing fields, enum mismatches, etc).
+
+### Scenario 5: Activity and Notification Logic Integration
+1. **Understand Tracking vs Notification**: *Activities* are logged for the user *performing* the action. *Notifications* are dispatched to *other* users affected by the action (e.g., subscribers, owners).
+2. **Prevent Self-Notifications**: Always ensure the `dispatchToMany` method in the backend `NotificationsService` filters out the initiator user ID. No user should receive a notification for an action they performed themselves.
+3. **Handle Subscription Propagation**: 
+   - When users create, upvote, or comment on a Challenge, they must be added to the Challenge `subcriptions` array.
+   - When users create, upvote, or comment on an Idea, they must be added to the Idea `subscription` array AND the parent Challenge `subcriptions` array.
+4. **Backend Payload Interception**: The `create` and `update` logic within `ChallengesService`, `IdeasService`, and `CommentsService` are responsible for instantiating the respective `ActivitiesService` and `NotificationsService` singletons. 
+   - **Important**: When tracking entity-related events, pass the MongoDB ObjectId (`_id`) as the `fk_id`, not the `virtualId`. 
+   - For `log_in` and `log_out` tracking, the `fk_id` is null, and only the `userId` is recorded.
+   - When deleting an entity (e.g., a Challenge or Idea), ensure you also delete the associated Activity logs using `deleteByFkId` to avoid orphaned records. Notification `fk_id` can be set to `null` to indicate a deleted entity.
+5. **Frontend Logout Hook**: Ensure `AuthContext` calls the backend `/auth/logout` endpoint *before* clearing the local storage and state, passing the correct `userId` in the payload for proper `log_out` activity generation.
+
+#### Reference Matrix: Enforced Activity & Notification Logic
+
+| Action / Event | Service | Activity Logged For | Notification Sent To | Exception/Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **User Login** | `AuthService` | Current User | None | |
+| **User Logout** | `AuthService` | Current User | None | Requires active frontend `/auth/logout` hook. |
+| **Challenge Created** | `ChallengesService`| Current User | All Users | Initiator (creator) is naturally excluded. |
+| **Challenge Edited** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Status Updated** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Upvoted** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Subscribed** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Deleted** | `ChallengesService`| None | Owner + Subscribers | Initiator is excluded. Activity record is deleted. |
+| **Idea Created** | `IdeasService` | Current User | All Users | Initiator excluded. Automatically subscribes creator to parent Challenge. |
+| **Idea Edited** | `IdeasService` | Current User | Idea Owner + Idea Subs + Parent Challenge Owner + Parent Challenge Subs | Initiator excluded. |
+| **Idea Upvoted** | `IdeasService` | Current User | Same as Idea Edited | Initiator excluded. |
+| **Idea Subscribed** | `IdeasService` | Current User | Same as Idea Edited | Initiator excluded. |
+| **Idea Deleted** | `IdeasService` | None | Same as Idea Edited | Initiator excluded. Activity record is deleted. |
+| **Challenge Commented** | `CommentsService`| Current User | Challenge Owner + Challenge Subscribers | Initiator excluded. Automatically subscribes commenter to Challenge. |
+| **Idea Commented** | `CommentsService`| Current User | Idea Owner + Idea Subs + Parent Challenge Owner + Parent Challenge Subs | Initiator excluded. Automatically subscribes commenter to Idea & Challenge. |

@@ -10,6 +10,8 @@ import { UsersRepository } from '../users/users.repository';
 import * as bcrypt from 'bcryptjs';
 import { AuthDto, RegisterDto } from '../../dto/auth/auth.dto';
 import { AbstractService } from '../../common';
+import { ActivitiesService } from '../activities/activities.service';
+import { ACTIVITY_TYPES } from '../../common/constants/app-constants';
 import {
   UserDocument,
   SafeUser,
@@ -48,6 +50,7 @@ export class AuthService extends AbstractService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private jwtService: JwtService,
+    private readonly activitiesService: ActivitiesService,
   ) {
     super();
   }
@@ -83,6 +86,15 @@ export class AuthService extends AbstractService {
     const user = await this.validateUser(authDto.email, authDto.password);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    try {
+      await this.activitiesService.create({
+        type: ACTIVITY_TYPES[13], // 'log_in'
+        userId: user._id.toString()
+      });
+    } catch (e) {
+      this.logger.error(`Failed to log activity for user ${user._id}: ${e}`);
     }
 
     return {
@@ -133,12 +145,27 @@ export class AuthService extends AbstractService {
     // Convert Mongoose document to plain object before destructuring
     const userObj =
       typeof (user as unknown as { toObject: () => UserDocument }).toObject ===
-      'function'
+        'function'
         ? (user as unknown as { toObject: () => UserDocument }).toObject()
         : user;
     // Omit password field using destructuring
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- intentionally discarding password
     const { password, ...safeUser } = userObj;
     return safeUser as SafeUser;
+  }
+
+  /**
+   * Logs out a user (creates activity).
+   * @param userId - User ID
+   */
+  async logout(userId: string): Promise<void> {
+    try {
+      await this.activitiesService.create({
+        type: ACTIVITY_TYPES[14], // 'log_out'
+        userId,
+      });
+    } catch (e) {
+      this.logger.error(`Failed to log logout activity for user ${userId}: ${e}`);
+    }
   }
 }

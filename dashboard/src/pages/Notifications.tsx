@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { storage } from '../services/storage';
+import { notificationService } from '../services/notification.service';
 import { type Notification } from '../types';
+import { useAuth } from '../context/AuthContext';
 import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp } from 'lucide-react';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 import { useToast } from '../context/ToastContext';
 
 export const Notifications: React.FC = () => {
+    const { user, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status' | 'like'>('all');
     const [isLoading, setIsLoading] = useState(true);
+    const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
+    const fetchNotifications = React.useCallback(async () => {
+        setIsLoading(true);
+        try {
+            if (user?.id) {
+                // To fetch all, we can pass a high limit or another endpoint if available.
+                // Assuming limit=50 for the all notifications page
+                const notifs = await notificationService.getNotifications(user.id, 50);
+                setAllNotifications(notifs);
+            }
+        } finally {
             setIsLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, []);
+        }
+    }, [user?.id]);
+
+    useEffect(() => {
+        if (isAuthenticated && user?.id) {
+            fetchNotifications();
+        } else {
+            setIsLoading(false);
+        }
+    }, [isAuthenticated, user?.id, fetchNotifications]);
 
     // Delete Modal State
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -25,13 +43,6 @@ export const Notifications: React.FC = () => {
 
     // Toast State
     const { showToast } = useToast();
-
-    // Force update state
-    const [, setTick] = useState(0);
-    const forceUpdate = () => setTick(t => t + 1);
-
-    // Get notifications from storage
-    const allNotifications = storage.getNotifications();
 
     // Check if we need to filter based on user (optional, seeing all for now as per mock)
     // In a real app we'd filter by userId
@@ -53,14 +64,18 @@ export const Notifications: React.FC = () => {
         like: allNotifications.filter(n => n.type === 'like' || n.type === 'vote').length
     };
 
-    const handleNotificationClick = (notification: Notification) => {
-        storage.markNotificationRead(notification.id);
+    const handleNotificationClick = async (notification: Notification) => {
+        if (notification.unread) {
+            await notificationService.markAsRead(notification.id);
+            setAllNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, unread: false } : n));
+        }
         navigate(notification.link);
     };
 
-    const handleMarkAllRead = () => {
-        storage.markAllNotificationsRead();
-        forceUpdate();
+    const handleMarkAllRead = async () => {
+        const unreadNotifs = allNotifications.filter(n => n.unread);
+        setAllNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+        await Promise.all(unreadNotifs.map(n => notificationService.markAsRead(n.id)));
     };
 
     const handleDeleteClick = (e: React.MouseEvent, id: string) => {
@@ -77,10 +92,10 @@ export const Notifications: React.FC = () => {
             setNotificationToDelete(null);
 
             // Wait for exit CSS animation (300ms) before deleting from storage
-            setTimeout(() => {
+            setTimeout(async () => {
                 try {
-                    storage.deleteNotification(idToDelete);
-                    forceUpdate();
+                    await notificationService.deleteNotification(idToDelete);
+                    setAllNotifications(prev => prev.filter(n => n.id !== idToDelete));
                     setAnimatingIds(prev => {
                         const next = new Set(prev);
                         next.delete(idToDelete);

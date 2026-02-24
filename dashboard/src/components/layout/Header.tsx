@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { storage } from '../../services/storage';
+import { notificationService } from '../../services/notification.service';
 import { type Notification } from '../../types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, Bell, Lightbulb, MessageSquare, TrendingUp, Sparkles, Heart, ThumbsUp } from 'lucide-react';
@@ -11,11 +11,29 @@ export const Header: React.FC = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
-    const notifications: Notification[] = storage.getNotifications();
-    const unreadCount = notifications.filter(n => n.unread).length;
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [unreadCount, setUnreadCount] = useState(0);
     const notificationRef = useRef<HTMLDivElement>(null);
 
     const closeMobileNav = () => setMobileNavOpen(false);
+
+    useEffect(() => {
+        if (isAuthenticated && user?.id) {
+            const fetchNotifs = async () => {
+                const count = await notificationService.getUnreadCount(user.id);
+                setUnreadCount(count);
+                if (showNotifications) {
+                    setIsLoadingNotifications(true);
+                    const notifs = await notificationService.getNotifications(user.id, 10);
+                    // Sort descending by time
+                    const sorted = notifs.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+                    setNotifications(sorted);
+                    setIsLoadingNotifications(false);
+                }
+            };
+            fetchNotifs();
+        }
+    }, [isAuthenticated, user?.id, showNotifications]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -73,10 +91,6 @@ export const Header: React.FC = () => {
                                         navigate('/notifications');
                                         setMobileNavOpen(false);
                                     } else {
-                                        if (!showNotifications) {
-                                            setIsLoadingNotifications(true);
-                                            setTimeout(() => setIsLoadingNotifications(false), 800);
-                                        }
                                         setShowNotifications(!showNotifications);
                                     }
                                 }}
@@ -91,7 +105,11 @@ export const Header: React.FC = () => {
                                     <span
                                         className="mark-all-read"
                                         onClick={() => {
-                                            storage.markAllNotificationsRead();
+                                            if (user?.id) {
+                                                setUnreadCount(0);
+                                                setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+                                                notifications.filter(n => n.unread).forEach(n => notificationService.markAsRead(n.id));
+                                            }
                                             setShowNotifications(false);
                                         }}
                                     >
@@ -111,13 +129,21 @@ export const Header: React.FC = () => {
                                                 </div>
                                             </div>
                                         ))
+                                    ) : notifications.length === 0 ? (
+                                        <div style={{ padding: '24px', textAlign: 'center', color: '#888' }}>
+                                            No notifications
+                                        </div>
                                     ) : (
                                         notifications.map(notification => (
                                             <div
                                                 key={notification.id}
                                                 className={`notification-item ${notification.unread ? 'unread' : ''}`}
                                                 onClick={() => {
-                                                    storage.markNotificationRead(notification.id);
+                                                    if (notification.unread) {
+                                                        notificationService.markAsRead(notification.id);
+                                                        setUnreadCount(Math.max(0, unreadCount - 1));
+                                                        setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, unread: false } : n));
+                                                    }
                                                     setShowNotifications(false);
                                                     closeMobileNav();
                                                     navigate(notification.link);

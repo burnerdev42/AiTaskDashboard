@@ -13,6 +13,8 @@ import { Comment, CommentSchema } from '../../models/comments/comment.schema';
 import { CommonModule } from '../../common';
 import { ChallengesModule } from '../challenges/challenges.module';
 import { IdeasModule } from '../ideas/ideas.module';
+import { ActivitiesModule } from '../activities/activities.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 /**
  * Comments Module.
@@ -23,9 +25,11 @@ import { IdeasModule } from '../ideas/ideas.module';
     CommonModule,
     forwardRef(() => ChallengesModule),
     forwardRef(() => IdeasModule),
+    ActivitiesModule,
+    NotificationsModule,
   ],
   controllers: [CommentsController],
   providers: [CommentsService, CommentsRepository],
   exports: [CommentsService],
 })
-export class CommentsModule {}
+export class CommentsModule { }

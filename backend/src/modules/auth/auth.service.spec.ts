@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from '../users/users.repository';
+import { ActivitiesService } from '../activities/activities.service';
 
 import * as bcrypt from 'bcryptjs';
 import { UnauthorizedException } from '@nestjs/common';
@@ -36,6 +37,12 @@ describe('AuthService', () => {
           useValue: {
             findOne: jest.fn(),
             create: jest.fn(),
+          },
+        },
+        {
+          provide: ActivitiesService,
+          useValue: {
+            create: jest.fn().mockResolvedValue(true),
           },
         },
       ],

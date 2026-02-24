@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { ActivitiesModule } from '../activities/activities.module';
 
 import { UsersRepository } from '../users/users.repository';
 import { JwtStrategy } from './jwt.strategy';
@@ -31,9 +32,10 @@ import { User, UserSchema } from '../../models/users/user.schema';
       }),
       inject: [ConfigService],
     }),
+    ActivitiesModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, UsersRepository],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

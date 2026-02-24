@@ -8,6 +8,7 @@ import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 import { challengeService } from '../services/challenge.service';
 import { commentService } from '../services/comment.service';
 import { ideaService } from '../services/idea.service';
+import { COMMENT_TYPES } from '../constants/app-constants';
 
 const STAGE_BRANDING: Record<string, { color: string, bg: string, icon: React.ReactNode }> = {
     'Challenge Submitted': {
@@ -136,6 +137,7 @@ export const ChallengeDetail: React.FC = () => {
 
                 // Map backend structure to frontend ChallengeDetailData
                 const mappedChallenge: ChallengeDetailData = {
+                    ...challengeData,
                     id: challengeData.virtualId || id,
                     title: challengeData.title || defaultString,
                     description: challengeData.summary || defaultString,
@@ -198,9 +200,6 @@ export const ChallengeDetail: React.FC = () => {
                     updatedDate: challengeData.updatedAt ? new Date(challengeData.updatedAt).toLocaleDateString() : defaultString,
                     upVotes: challengeData.upvoteList || challengeData.upVotes || [],
                     subscriptions: challengeData.subcriptions || challengeData.subscriptions || [],
-
-                    // Keep original object mapping for any missing pass-throughs
-                    ...challengeData,
                 };
 
                 setChallenge(mappedChallenge);
@@ -555,8 +554,9 @@ export const ChallengeDetail: React.FC = () => {
             await commentService.createComment({
                 userId: currentUserId,
                 comment: comment.trim(),
-                type: 'CH',
-                typeId: challenge.id
+                type: COMMENT_TYPES.CHALLENGE,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                parentId: (challenge as any)._id ? String((challenge as any)._id) : String(challenge.id)
             });
 
             const newComment = {

@@ -70,6 +70,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = () => {
+        if (user && user.id) {
+            authService.logout(user.id).catch(err => {
+                console.error('Failed to log logout activity:', err);
+            });
+        }
         setUser(null);
         storage.setCurrentUser(null);
         localStorage.removeItem('access_token');

@@ -8,6 +8,7 @@ import { ideaService } from '../services/idea.service';
 import { challengeService } from '../services/challenge.service';
 import { commentService } from '../services/comment.service';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
+import { COMMENT_TYPES } from '../constants/app-constants';
 
 const getInitials = (n?: string) => {
     if (!n) return '??';
@@ -57,6 +58,7 @@ export const IdeaDetail: React.FC = () => {
 
                 // Map backend data to frontend Idea model
                 const mappedIdea: Idea = {
+                    ...data,
                     id: data.ideaId || data._id,
                     title: data.title || 'Untitled',
                     description: data.description || '',
@@ -88,7 +90,7 @@ export const IdeaDetail: React.FC = () => {
                         time: c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recently'
                     })),
                     upVotes: data.upVotes || [],
-                    subscriptions: data.subscription || []
+                    subscriptions: data.subscription || [],
                 };
 
                 setIdea(mappedIdea);
@@ -315,8 +317,9 @@ export const IdeaDetail: React.FC = () => {
             await commentService.createComment({
                 userId: user.id,
                 comment: comment.trim(),
-                type: 'ID',
-                typeId: ideaId
+                type: COMMENT_TYPES.IDEA,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                parentId: (idea as any)._id ? String((idea as any)._id) : String(ideaId)
             });
 
             const newComment = {

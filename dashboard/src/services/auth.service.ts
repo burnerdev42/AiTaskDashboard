@@ -24,4 +24,10 @@ export const authService = {
         const response = await api.post('/auth/register', payload);
         return response.data;
     },
+
+    logout: async (userId?: string) => {
+        const payload = userId ? { userId } : {};
+        const response = await api.post('/auth/logout', payload);
+        return response.data;
+    },
 };

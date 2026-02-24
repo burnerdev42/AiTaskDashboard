@@ -8,6 +8,8 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { ChallengesService } from '../challenges/challenges.service';
 import { IdeasService } from '../ideas/ideas.service';
+import { ActivitiesService } from '../activities/activities.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 describe('CommentsService', () => {
   let service: CommentsService;
@@ -31,6 +33,14 @@ describe('CommentsService', () => {
     findByIdeaId: jest.fn().mockResolvedValue({ challengeId: 'CH-001' }),
   };
 
+  const mockActivitiesService = {
+    create: jest.fn().mockResolvedValue(true),
+  };
+
+  const mockNotificationsService = {
+    dispatchToMany: jest.fn().mockResolvedValue(true),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -45,7 +55,14 @@ describe('CommentsService', () => {
         },
         {
           provide: getModelToken(Comment.name),
-          useValue: {},
+          useValue: {
+            db: {
+              collection: jest.fn().mockReturnValue({
+                updateOne: jest.fn().mockResolvedValue({}),
+                findOne: jest.fn().mockResolvedValue({}),
+              }),
+            }
+          },
         },
         {
           provide: ChallengesService,
@@ -54,6 +71,14 @@ describe('CommentsService', () => {
         {
           provide: IdeasService,
           useValue: mockIdeasService,
+        },
+        {
+          provide: ActivitiesService,
+          useValue: mockActivitiesService,
+        },
+        {
+          provide: NotificationsService,
+          useValue: mockNotificationsService,
         },
       ],
     }).compile();

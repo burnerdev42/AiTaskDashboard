@@ -6,6 +6,7 @@ import { User } from '../../models/users/user.schema';
 import { ActivitiesService } from '../activities/activities.service';
 import { Types, Model } from 'mongoose';
 import { ChallengesService } from '../challenges/challenges.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 describe('IdeasService', () => {
   let service: IdeasService;
@@ -20,6 +21,7 @@ describe('IdeasService', () => {
     title: 'Test Idea',
     description: 'Description',
     userId: new Types.ObjectId().toHexString(),
+    subscription: [],
   };
 
   const mockIdeaModel: any = jest.fn().mockImplementation((dto) => ({
@@ -28,6 +30,7 @@ describe('IdeasService', () => {
       ...dto,
       _id: mockIdeaId,
       userId: dto.userId || '1',
+      toObject: jest.fn().mockReturnThis(),
     }),
   }));
   Object.assign(mockIdeaModel, {
@@ -61,8 +64,17 @@ describe('IdeasService', () => {
     subscribeUser: jest.fn().mockResolvedValue(undefined),
   };
 
+  const mockNotificationsService = {
+    dispatchToMany: jest.fn().mockResolvedValue(undefined),
+  };
+
   const mockUserModel = {
     updateOne: jest.fn().mockResolvedValue({}),
+    find: jest.fn().mockReturnValue({
+      select: jest.fn().mockReturnThis(),
+      lean: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue([{ _id: new Types.ObjectId() }])
+    })
   };
 
   beforeEach(async () => {
@@ -86,6 +98,10 @@ describe('IdeasService', () => {
         {
           provide: ChallengesService,
           useValue: mockChallengesService,
+        },
+        {
+          provide: NotificationsService,
+          useValue: mockNotificationsService,
         },
       ],
     }).compile();

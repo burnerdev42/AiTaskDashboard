@@ -13,6 +13,7 @@ import { User, UserSchema } from '../../models/users/user.schema';
 import { CommonModule } from '../../common';
 import { ActivitiesModule } from '../activities/activities.module';
 import { ChallengesModule } from '../challenges/challenges.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ChallengesModule } from '../challenges/challenges.module';
     CommonModule,
     ActivitiesModule,
     forwardRef(() => ChallengesModule),
+    NotificationsModule,
   ],
   controllers: [IdeasController],
   providers: [IdeasService, IdeasRepository],

@@ -25,6 +25,8 @@ import {
 import { User, UserDocument } from '../../models/users/user.schema';
 import { IdeasService } from '../ideas/ideas.service';
 import { ActivitiesService } from '../activities/activities.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
 
 @Injectable()
 export class ChallengesService extends AbstractService {
@@ -38,6 +40,7 @@ export class ChallengesService extends AbstractService {
     @Inject(forwardRef(() => IdeasService))
     private readonly ideasService: IdeasService,
     private readonly activitiesService: ActivitiesService,
+    private readonly notificationsService: NotificationsService,
   ) {
     super();
   }
@@ -76,6 +79,16 @@ export class ChallengesService extends AbstractService {
       userId: saved.userId,
     });
 
+    // Notify all users
+    const allUsers = await this.userModel.find().select('_id').lean().exec();
+    const recipientIds = allUsers.map((u) => u._id.toString());
+    await this.notificationsService.dispatchToMany(
+      recipientIds,
+      NOTIFICATION_TYPES[0], // 'challenge_created'
+      saved._id.toString(),
+      saved.userId,
+    );
+
     const enriched = await this.enrichChallenges([saved.toObject()]);
     return enriched[0];
   }
@@ -101,9 +114,9 @@ export class ChallengesService extends AbstractService {
 
     const contributorIds = [...new Set(allIdeas.map((idea) => idea.userId))];
     const commentAuthorIds = [...new Set(allComments.map((c) => c.userId))];
-    const uniqueUserIds = [...new Set([...ownerIds, ...contributorIds, ...commentAuthorIds])].filter(
-      (id) => Types.ObjectId.isValid(id),
-    );
+    const uniqueUserIds = [
+      ...new Set([...ownerIds, ...contributorIds, ...commentAuthorIds]),
+    ].filter((id) => Types.ObjectId.isValid(id));
 
     const users = await db
       .collection('users')
@@ -126,7 +139,11 @@ export class ChallengesService extends AbstractService {
         .map((i) => ({ ...i, _id: i._id.toString() }));
       const thisComments = allComments
         .filter((c) => c.typeId === cIdStr)
-        .map((c) => ({ ...c, _id: c._id.toString(), authorDetails: userMap[c.userId] || null }));
+        .map((c) => ({
+          ...c,
+          _id: c._id.toString(),
+          authorDetails: userMap[c.userId] || null,
+        }));
 
       const thisContributorIds = [...new Set(thisIdeas.map((i) => i.userId))];
       const contributorsDetails = thisContributorIds
@@ -201,6 +218,19 @@ export class ChallengesService extends AbstractService {
       userId: (updated as any).userId,
     });
 
+    const cObj = updated as unknown as {
+      subcriptions: string[];
+      userId: string;
+      _id: Types.ObjectId;
+    };
+    const recipients = [...new Set([...cObj.subcriptions, cObj.userId])];
+    await this.notificationsService.dispatchToMany(
+      recipients,
+      NOTIFICATION_TYPES[3], // 'challenge_edited'
+      cObj._id.toString(),
+      cObj.userId, // User who performed update is ideally the one making request, but here we only have the challenge's userId. Wait, update doesn't take userId. I will use the challenge's owner for now, as that's the only one updating.
+    );
+
     const enriched = await this.enrichChallenges([updated]);
     return enriched[0];
   }
@@ -238,6 +268,14 @@ export class ChallengesService extends AbstractService {
       userId,
     });
 
+    const recipients = [...new Set([...saved.subcriptions, saved.userId])];
+    await this.notificationsService.dispatchToMany(
+      recipients,
+      NOTIFICATION_TYPES[2], // 'challenge_status_update'
+      saved._id.toString(),
+      userId,
+    );
+
     const enriched = await this.enrichChallenges([saved.toObject()]);
     return enriched[0];
   }
@@ -267,9 +305,17 @@ export class ChallengesService extends AbstractService {
       if (Types.ObjectId.isValid(userId)) {
         await this.userModel.updateOne(
           { _id: new Types.ObjectId(userId) },
-          { $addToSet: { upvotedChallengeList: saved._id.toString() } }
+          { $addToSet: { upvotedChallengeList: saved._id.toString() } },
         );
       }
+
+      const recipients = [...new Set([...saved.subcriptions, saved.userId])];
+      await this.notificationsService.dispatchToMany(
+        recipients,
+        NOTIFICATION_TYPES[5], // 'challenge_upvoted'
+        saved._id.toString(),
+        userId,
+      );
 
       const enriched = await this.enrichChallenges([saved.toObject()]);
       return enriched[0];
@@ -297,6 +343,14 @@ export class ChallengesService extends AbstractService {
         userId,
       });
 
+      const recipients = [...new Set([...saved.subcriptions, saved.userId])];
+      await this.notificationsService.dispatchToMany(
+        recipients,
+        NOTIFICATION_TYPES[9], // 'challenge_subscribed'
+        saved._id.toString(),
+        userId,
+      );
+
       const enriched = await this.enrichChallenges([saved.toObject()]);
       return enriched[0];
     }
@@ -319,6 +373,16 @@ export class ChallengesService extends AbstractService {
         fk_id: challenge._id.toString(),
         userId,
       });
+
+      const recipients = [
+        ...new Set([...challenge.subcriptions, challenge.userId]),
+      ];
+      await this.notificationsService.dispatchToMany(
+        recipients,
+        NOTIFICATION_TYPES[9], // 'challenge_subscribed'
+        challenge._id.toString(),
+        userId,
+      );
     }
   }
 
@@ -329,9 +393,21 @@ export class ChallengesService extends AbstractService {
       throw new NotFoundException(`Challenge ${virtualId} not found`);
     }
 
-    // Cascade delete activities linked to this challenge
+    // cascade activities
     await this.activitiesService.deleteByFkId(challenge._id.toString());
 
+    // dispatch notification
+    const recipients = [
+      ...new Set([...challenge.subcriptions, challenge.userId]),
+    ];
+    await this.notificationsService.dispatchToMany(
+      recipients,
+      NOTIFICATION_TYPES[11], // 'challenge_deleted'
+      null, // Entity is deleted, fk doesn't matter
+      challenge.userId, // assuming owner is deleting
+    );
+
+    // Delete challenge
     await this.challengeModel.deleteOne({ _id: challenge._id }).exec();
   }
 

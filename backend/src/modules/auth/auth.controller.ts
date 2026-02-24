@@ -80,4 +80,23 @@ export class AuthController extends AbstractController {
     const result = await this.authService.register(body);
     return this.success(result, 'Registration successful');
   }
+
+  /**
+   * Logs out a user.
+   */
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'User logout' })
+  @ApiResponse({
+    status: 200,
+    description: 'Logout successful.',
+  })
+  async logout(
+    @Body('userId') userId: string,
+  ): Promise<ApiResponseType<void>> {
+    if (userId) {
+      await this.authService.logout(userId);
+    }
+    return this.success(undefined, 'Logout successful');
+  }
 }

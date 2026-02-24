@@ -9,6 +9,7 @@ import { ChallengeStatus } from '../../common/enums/challenge-status.enum';
 import { ChallengeStage } from '../../common/enums/challenge-stage.enum';
 import { Priority } from '../../common/enums/priority.enum';
 import { Types, Model } from 'mongoose';
+import { NotificationsService } from '../notifications/notifications.service';
 
 describe('ChallengesService', () => {
   let service: ChallengesService;
@@ -35,6 +36,7 @@ describe('ChallengesService', () => {
       avatar: null,
     },
     contributor: [],
+    subcriptions: [],
     toObject: jest.fn().mockReturnThis(),
   };
 
@@ -43,6 +45,7 @@ describe('ChallengesService', () => {
       _id: new Types.ObjectId(),
       title: 'Idea 1',
       owner: { _id: mockOwnerId, name: 'John' },
+      subscription: [],
     },
   ];
 
@@ -63,6 +66,7 @@ describe('ChallengesService', () => {
       ...dto,
       _id: mockChallengeId,
       userId: dto.userId || '1',
+      toObject: jest.fn().mockReturnThis(),
     }),
   }));
   Object.assign(mockChallengesRepository, {
@@ -94,8 +98,17 @@ describe('ChallengesService', () => {
     deleteByFkId: jest.fn().mockResolvedValue(undefined),
   };
 
+  const mockNotificationsService = {
+    dispatchToMany: jest.fn().mockResolvedValue(true),
+  };
+
   const mockUserModel = {
     updateOne: jest.fn().mockResolvedValue({}),
+    find: jest.fn().mockReturnValue({
+      select: jest.fn().mockReturnThis(),
+      lean: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue([{ _id: new Types.ObjectId() }])
+    })
   };
 
   beforeEach(async () => {
@@ -114,6 +127,7 @@ describe('ChallengesService', () => {
         },
         { provide: IdeasService, useValue: mockIdeasService },
         { provide: ActivitiesService, useValue: mockActivitiesService },
+        { provide: NotificationsService, useValue: mockNotificationsService },
       ],
     }).compile();
 

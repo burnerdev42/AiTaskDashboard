@@ -19,6 +19,8 @@ import { Idea, IdeaDocument } from '../../models/ideas/idea.schema';
 import { User, UserDocument } from '../../models/users/user.schema';
 import { ActivitiesService } from '../activities/activities.service';
 import { ChallengesService } from '../challenges/challenges.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
 
 @Injectable()
 export class IdeasService extends AbstractService {
@@ -32,6 +34,7 @@ export class IdeasService extends AbstractService {
     private readonly activitiesService: ActivitiesService,
     @Inject(forwardRef(() => ChallengesService))
     private readonly challengesService: ChallengesService,
+    private readonly notificationsService: NotificationsService,
   ) {
     super();
   }
@@ -78,8 +81,43 @@ export class IdeasService extends AbstractService {
       await this.challengesService.subscribeUser(challengeId, userId);
     }
 
+    // Notify all users
+    const allUsers = await this.userModel.find().select('_id').lean().exec();
+    const recipientIds = allUsers.map((u) => u._id.toString());
+    await this.notificationsService.dispatchToMany(
+      recipientIds,
+      NOTIFICATION_TYPES[1], // 'idea_created'
+      saved._id.toString(),
+      userId,
+    );
+
     const enriched = await this.enrichIdeas([saved.toObject()]);
     return enriched[0];
+  }
+
+  private async getIdeaNotificationRecipients(idea: any): Promise<string[]> {
+    const recipients = new Set<string>();
+
+    if (idea.subscription) {
+      idea.subscription.forEach((id: string) => recipients.add(id));
+    }
+    if (idea.userId) recipients.add(idea.userId);
+
+    if (idea.challengeId && Types.ObjectId.isValid(idea.challengeId)) {
+      const db = this.ideaModel.db;
+      const challenge = await db
+        .collection('challenges')
+        .findOne({ _id: new Types.ObjectId(idea.challengeId) });
+      if (challenge) {
+        if (challenge.userId) recipients.add(challenge.userId.toString());
+        if (challenge.subcriptions) {
+          challenge.subcriptions.forEach((id: string) =>
+            recipients.add(id.toString()),
+          );
+        }
+      }
+    }
+    return [...recipients];
   }
 
   /** Enriches ideas with derived fields. */
@@ -123,9 +161,9 @@ export class IdeasService extends AbstractService {
       {} as Record<string, any>,
     );
 
-    const uniqueUserIds = [...new Set([...ownerIds, ...commentAuthorIds])].filter((id) =>
-      Types.ObjectId.isValid(id),
-    );
+    const uniqueUserIds = [
+      ...new Set([...ownerIds, ...commentAuthorIds]),
+    ].filter((id) => Types.ObjectId.isValid(id));
 
     const users = await db
       .collection('users')
@@ -145,7 +183,11 @@ export class IdeasService extends AbstractService {
       const iIdStr = idea._id.toString();
       const thisComments = allComments
         .filter((c) => c.typeId === iIdStr)
-        .map((c) => ({ ...c, _id: c._id.toString(), authorDetails: userMap[c.userId] || null }));
+        .map((c) => ({
+          ...c,
+          _id: c._id.toString(),
+          authorDetails: userMap[c.userId] || null,
+        }));
 
       const challenge = challengeMap[idea.challengeId] || null;
 
@@ -157,10 +199,10 @@ export class IdeasService extends AbstractService {
 
         challengeDetails: challenge
           ? {
-            _id: challenge._id.toString(),
-            virtualId: challenge.virtualId,
-            title: challenge.title,
-          }
+              _id: challenge._id.toString(),
+              virtualId: challenge.virtualId,
+              title: challenge.title,
+            }
           : null,
         problemStatement: challenge?.description,
         commentCount: thisComments.length,
@@ -213,7 +255,7 @@ export class IdeasService extends AbstractService {
         `Challenge with virtualId ${virtualId} not found`,
       );
     }
-    const challengeMongoId = (challenge as any)._id.toString();
+    const challengeMongoId = challenge._id.toString();
     const ideas = await this.ideaModel
       .find({ challengeId: challengeMongoId })
       .lean()
@@ -236,6 +278,14 @@ export class IdeasService extends AbstractService {
       fk_id: (updated as any)._id.toString(),
       userId: (updated as any).userId,
     });
+
+    const recipients = await this.getIdeaNotificationRecipients(updated);
+    await this.notificationsService.dispatchToMany(
+      recipients,
+      NOTIFICATION_TYPES[4], // 'idea_edited'
+      (updated as any)._id.toString(),
+      (updated as any).userId,
+    );
 
     const enriched = await this.enrichIdeas([updated]);
     return enriched[0];
@@ -267,9 +317,17 @@ export class IdeasService extends AbstractService {
       if (Types.ObjectId.isValid(userId)) {
         await this.userModel.updateOne(
           { _id: new Types.ObjectId(userId) },
-          { $addToSet: { upvotedAppreciatedIdeaList: saved._id.toString() } }
+          { $addToSet: { upvotedAppreciatedIdeaList: saved._id.toString() } },
         );
       }
+
+      const recipients = await this.getIdeaNotificationRecipients(saved);
+      await this.notificationsService.dispatchToMany(
+        recipients,
+        NOTIFICATION_TYPES[6], // 'idea_upvoted'
+        saved._id.toString(),
+        userId,
+      );
 
       const enriched = await this.enrichIdeas([saved.toObject()]);
       return enriched[0];
@@ -293,6 +351,14 @@ export class IdeasService extends AbstractService {
         fk_id: saved._id.toString(),
         userId,
       });
+
+      const recipients = await this.getIdeaNotificationRecipients(saved);
+      await this.notificationsService.dispatchToMany(
+        recipients,
+        NOTIFICATION_TYPES[10], // 'idea_subscribed'
+        saved._id.toString(),
+        userId,
+      );
 
       const enriched = await this.enrichIdeas([saved.toObject()]);
       return enriched[0];
@@ -325,6 +391,15 @@ export class IdeasService extends AbstractService {
     if (!idea) throw new NotFoundException(`Idea ${ideaId} not found`);
 
     await this.activitiesService.deleteByFkId(idea._id.toString());
+
+    const recipients = await this.getIdeaNotificationRecipients(idea);
+    await this.notificationsService.dispatchToMany(
+      recipients,
+      NOTIFICATION_TYPES[12], // 'idea_deleted'
+      null, // Entity deleted
+      idea.userId, // Assuming owner deleted it
+    );
+
     await this.ideaModel.deleteOne({ _id: idea._id }).exec();
   }
 

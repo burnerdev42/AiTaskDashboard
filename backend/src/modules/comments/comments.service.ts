@@ -3,6 +3,7 @@
  * @description Service for managing comment business logic.
  * @responsibility Orchestrates data operations for the Comment collection.
  */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-argument */
 
 import {
   Injectable,
@@ -21,6 +22,9 @@ import { ChallengesService } from '../challenges/challenges.service';
 import { IdeasService } from '../ideas/ideas.service';
 import { IdeaDocument } from '../../models/ideas/idea.schema';
 import { ChallengeDocument } from '../../models/challenges/challenge.schema';
+import { ActivitiesService } from '../activities/activities.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NOTIFICATION_TYPES } from '../../common/constants/app-constants';
 
 /**
  * Service for Comments.
@@ -31,11 +35,14 @@ export class CommentsService extends AbstractService {
 
   constructor(
     private readonly commentsRepository: CommentsRepository,
-    @InjectModel(Comment.name) private readonly commentModel: Model<CommentDocument>,
+    @InjectModel(Comment.name)
+    private readonly commentModel: Model<CommentDocument>,
     @Inject(forwardRef(() => ChallengesService))
     private readonly challengesService: ChallengesService,
     @Inject(forwardRef(() => IdeasService))
     private readonly ideasService: IdeasService,
+    private readonly activitiesService: ActivitiesService,
+    private readonly notificationsService: NotificationsService,
   ) {
     super();
   }
@@ -93,35 +100,107 @@ export class CommentsService extends AbstractService {
       ...createCommentDto,
       userId: new Types.ObjectId(createCommentDto.userId),
       parentId: new Types.ObjectId(createCommentDto.parentId),
+      typeId: createCommentDto.parentId,
     };
     const savedComment = await this.commentsRepository.create(
       document as unknown as Partial<CommentDocument>,
     );
 
+    const db = this.commentModel.db;
+    const parentObjectId = new Types.ObjectId(createCommentDto.parentId);
+
     if (createCommentDto.type === 'CH') {
-      await this.challengesService.subscribeUser(
-        createCommentDto.parentId,
-        createCommentDto.userId,
-      );
-    } else if (createCommentDto.type === 'ID') {
-      await this.ideasService.subscribeUser(
-        createCommentDto.parentId,
-        createCommentDto.userId,
-      );
       try {
-        const idea = (await this.ideasService.findByIdeaId(
-          createCommentDto.parentId,
-        )) as IdeaDocument;
-        if (idea && idea.challengeId) {
-          await this.challengesService.subscribeUser(
-            idea.challengeId,
+        await db
+          .collection('challenges')
+          .updateOne(
+            { _id: parentObjectId },
+            { $addToSet: { subcriptions: createCommentDto.userId } },
+          );
+
+        await this.activitiesService.create({
+          type: 'challenge_commented',
+          fk_id: savedComment._id.toString(),
+          userId: createCommentDto.userId,
+        });
+
+        const challenge = await db
+          .collection('challenges')
+          .findOne({ _id: parentObjectId });
+        if (challenge) {
+          const recipients = new Set<string>();
+          if (challenge.userId) recipients.add(challenge.userId.toString());
+          if (challenge.subcriptions) {
+            challenge.subcriptions.forEach((id: string) =>
+              recipients.add(id.toString()),
+            );
+          }
+          await this.notificationsService.dispatchToMany(
+            [...recipients],
+            NOTIFICATION_TYPES[7], // 'challenge_commented'
+            savedComment._id.toString(),
             createCommentDto.userId,
           );
         }
-      } catch {
-        this.logger.error(
-          `Could not find idea ${createCommentDto.parentId} for comment subscription`,
-        );
+      } catch (e) {
+        this.logger.error(`Error processing Challenge comment: ${e}`);
+      }
+    } else if (createCommentDto.type === 'ID') {
+      try {
+        await db
+          .collection('ideas')
+          .updateOne(
+            { _id: parentObjectId },
+            { $addToSet: { subscription: createCommentDto.userId } },
+          );
+
+        await this.activitiesService.create({
+          type: 'idea_commented',
+          fk_id: savedComment._id.toString(),
+          userId: createCommentDto.userId,
+        });
+
+        const idea = await db
+          .collection('ideas')
+          .findOne({ _id: parentObjectId });
+        if (idea) {
+          const recipients = new Set<string>();
+          if (idea.userId) recipients.add(idea.userId.toString());
+          if (idea.subscription) {
+            idea.subscription.forEach((id: string) =>
+              recipients.add(id.toString()),
+            );
+          }
+
+          if (idea.challengeId && Types.ObjectId.isValid(idea.challengeId)) {
+            await db
+              .collection('challenges')
+              .updateOne(
+                { _id: new Types.ObjectId(idea.challengeId) },
+                { $addToSet: { subcriptions: createCommentDto.userId } },
+              );
+            const challenge = await db
+              .collection('challenges')
+              .findOne({ _id: new Types.ObjectId(idea.challengeId) });
+            if (challenge) {
+              if (challenge.userId) recipients.add(challenge.userId.toString());
+              if (challenge.subcriptions) {
+                challenge.subcriptions.forEach((id: string) =>
+                  recipients.add(id.toString()),
+                );
+              }
+            }
+          }
+
+          await this.notificationsService.dispatchToMany(
+            [...recipients],
+            NOTIFICATION_TYPES[8], // 'idea_commented'
+            savedComment._id.toString(),
+            createCommentDto.userId,
+          );
+        }
+      } catch (e) {
+        this.logger.error(`Error processing Idea comment: ${e}`);
       }
     }
 
@@ -150,9 +229,7 @@ export class CommentsService extends AbstractService {
    * @param virtualId Challenge virtual ID (e.g., CH-001).
    * @returns List of comments for the challenge.
    */
-  async findByChallengeVirtualId(
-    virtualId: string,
-  ): Promise<any[]> {
+  async findByChallengeVirtualId(virtualId: string): Promise<any[]> {
     const challenge = (await this.challengesService.findByVirtualId(
       virtualId,
     )) as ChallengeDocument;

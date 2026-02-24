@@ -488,12 +488,27 @@ All API responses **MUST** follow a standardized response envelope structure. Th
 | 8 | `PATCH` | `/notifications/{id}/status` | Update `isSeen` status. Body: `{ "isSeen": true }` |
 | 9 | `DELETE` | `/notifications/{id}` | Delete a notification (204 No Content) |
 
-### Notification Recipient Logic
-- `challenge_created`: All users (except initiator)
-- `challenge_status_update` / `edited`: All challenge subscribers (except initiator)
-- `idea_created` / `idea_edited`: All idea subscribers + Challenge owner + Challenge subscribers (except initiator)
-- `challenge_upvoted` / `commented` / `subscribed` / `deleted`: All challenge subscribers + Challenge owner (except initiator)
-- `idea_upvoted` / `commented` / `subscribed` / `deleted`: All idea subscribers + Challenge owner + Challenge subscribers (except initiator)
+### Notification and Activity Logic
+
+| Action / Event | Service | Activity Logged For | Notification Sent To | Exception/Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **User Login** | `AuthService` | Current User | None | |
+| **User Logout** | `AuthService` | Current User | None | |
+| **Challenge Created** | `ChallengesService`| Current User | All Users | Initiator (creator) is naturally excluded. |
+| **Challenge Edited** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Status Updated** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Upvoted** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Subscribed** | `ChallengesService`| Current User | Owner + Subscribers | Initiator is excluded. |
+| **Challenge Deleted** | `ChallengesService`| None | Owner + Subscribers | Initiator is excluded. Activity record is deleted. |
+| **Idea Created** | `IdeasService` | Current User | All Users | Initiator excluded. Automatically subscribes creator to parent Challenge. |
+| **Idea Edited** | `IdeasService` | Current User | Idea Owner + Idea Subs + Parent Challenge Owner + Parent Challenge Subs | Initiator excluded. |
+| **Idea Upvoted** | `IdeasService` | Current User | Same as Idea Edited | Initiator excluded. |
+| **Idea Subscribed** | `IdeasService` | Current User | Same as Idea Edited | Initiator excluded. |
+| **Idea Deleted** | `IdeasService` | None | Same as Idea Edited | Initiator excluded. Activity record is deleted. |
+| **Challenge Commented** | `CommentsService`| Current User | Challenge Owner + Challenge Subscribers | Initiator excluded. Automatically subscribes commenter to Challenge. |
+| **Idea Commented** | `CommentsService`| Current User | Idea Owner + Idea Subs + Parent Challenge Owner + Parent Challenge Subs | Initiator excluded. Automatically subscribes commenter to Idea & Challenge. |
+
+> **Note:** In all scenarios generating notifications, the **Initiator** (the user performing the action) is strictly filtered out. No self-notifications will be created.
 
 ---
 
