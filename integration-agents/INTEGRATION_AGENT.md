@@ -1,9 +1,8 @@
----
-name: CH_ID_INTEGRATION_AGENT
-description: Instructions for validating and auto-fixing backend-to-frontend integration for Challenge and Idea features
+name: INTEGRATION_AGENT
+description: Instructions for validating and auto-fixing backend-to-frontend integration for Challenge, Idea, and Notification features
 ---
 
-# CH/ID Integration Agent Instructions
+# Global Integration Agent Instructions
 
 You are an expert full-stack AI agent tasked with validating, testing, and auto-fixing the integration between the Frontend (React via Vite) and Backend (NestJS) for Challenges, Swim Lanes, and Ideas.
 
@@ -64,7 +63,21 @@ When reviewing or fixing integration issues, rigidly enforce these primary rules
 4. **Backend Response Enrichment**: After a `POST` creation, ensure the backend service passes the newly saved document through its `.enrich...([saved.toObject()])` method before returning it. If you return the raw `saved` document, the frontend will receive missing derived fields (e.g. `ownerDetails` will be empty, rendering "Unknown User" upon redirect).
    - Dynamic Error Handling: Capture the literal backend string responses within the `catch` block (`error.response?.data?.message`) and render them out to the UI using Toasts to instantly reflect backend data constraints (min lengths, missing fields, enum mismatches, etc).
 
-### Scenario 5: Activity and Notification Logic Integration
+### Scenario 5: Notification Routing & Redirection
+1. **Understand Derived Routing**: The backend `NotificationsService` does not expect the frontend to resolve entity IDs. It returns a `linkedEntityDetails` object:
+   - `virtualId`: The human-readable ID (`CH-001` or `ID-0001`).
+   - `type`: Discriminator (`CH` or `ID`).
+   - `challengeVirtualId`: For Ideas, this is the **parent challenge's** virtual ID, resolved by the backend.
+2. **Handle Nested Path Construction**: In `notificationService.ts`, always check for the presence of `linkedEntityDetails`:
+   - If `type === 'ID'`, build the path: `/challenges/${challengeVirtualId}/ideas/${virtualId}`.
+   - If `type === 'CH'`, build the path: `/challenges/${virtualId}`.
+   - Fallback to `fk_id` based routing only if derived fields are missing.
+3. **Backend Enrichment Logic**: When debugging notification links, check `notifications.service.ts`:
+   - It must perform a Mongo lookup on the Ideas/Challenges collections using `fk_id`.
+   - For Ideas, it must perform a *secondary* lookup to find the `challengeId` and then fetch that challenge's `virtualId`.
+4. **DTO & Swagger Parity**: If the frontend receives `undefined` for routing fields, verify `notification-response.dto.ts`. The `linkedEntityDetails` property must be explicitly decorated with `@ApiProperty()` to ensure NestJS serializes it and Swagger documents it correctly.
+
+### Scenario 6: Activity and Notification Logic Integration
 1. **Understand Tracking vs Notification**: *Activities* are logged for the user *performing* the action. *Notifications* are dispatched to *other* users affected by the action (e.g., subscribers, owners).
 2. **Prevent Self-Notifications**: Always ensure the `dispatchToMany` method in the backend `NotificationsService` filters out the initiator user ID. No user should receive a notification for an action they performed themselves.
 3. **Handle Subscription Propagation**: 
