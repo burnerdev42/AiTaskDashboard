@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idea Details – Innovation Pipeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-yellow: #ffee58;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px;
+      transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .header-right .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Main Container ──────────────────── */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 36px;
+    }
+
+    /* ── Breadcrumb ──────────────────────── */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .breadcrumb a:hover { color: var(--accent-teal); }
+    .breadcrumb .sep { color: var(--text-muted); }
+    .breadcrumb .current { color: var(--text-primary); }
+
+    /* ── Page Layout ─────────────────────── */
+    .page-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+    }
+
+    /* ── Page Header ─────────────────────── */
+    .page-header {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      border-top: 3px solid var(--accent-teal);
+    }
+    .page-header-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .page-header-right {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .idea-id {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .idea-id .icon {
+      font-size: 16px;
+    }
+    .page-title {
+      font-size: 28px; font-weight: 700; margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .page-title.edit-mode {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 24px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: none;
+      min-height: 60px;
+    }
+    .page-title.edit-mode:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .page-subtitle.edit-mode {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+    }
+    .page-subtitle.edit-mode:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+    .header-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ── Status Badge ────────────────────── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-badge.active {
+      background: rgba(102,187,106,.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(102,187,106,.3);
+    }
+    .status-badge.pilot {
+      background: rgba(232,167,88,.12);
+      color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.3);
+    }
+    .status-badge.parked {
+      background: rgba(107,110,138,.12);
+      color: var(--text-muted);
+      border: 1px solid rgba(107,110,138,.3);
+    }
+    .status-badge.active-status {
+      background: rgba(102,187,106,.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(102,187,106,.3);
+    }
+    .status-badge.pending-status {
+      background: rgba(255,238,88,.12);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(255,238,88,.3);
+    }
+    .status-badge.declined-status {
+      background: rgba(239,83,80,.12);
+      color: var(--accent-red);
+      border: 1px solid rgba(239,83,80,.3);
+    }
+
+    /* ── Content Sections ────────────────── */
+    .content-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 16px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title .icon {
+      font-size: 18px;
+    }
+    .section-content {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .section-content p {
+      margin-bottom: 12px;
+    }
+    .section-content p:last-child {
+      margin-bottom: 0;
+    }
+    .section-content.edit-mode {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      width: 100%;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 150px;
+    }
+    .section-content.edit-mode:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+    }
+
+    /* ── Sidebar ─────────────────────────── */
+    .sidebar-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .stat-value.teal { color: var(--accent-teal); }
+    .stat-value.green { color: var(--accent-green); }
+    .stat-value.blue { color: var(--accent-blue); }
+    .stat-value.orange { color: var(--accent-orange); }
+
+    /* ── Owner Info ──────────────────────── */
+    .owner-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+    }
+    .owner-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #0d0f1a;
+      flex-shrink: 0;
+    }
+    .owner-details {
+      flex: 1;
+    }
+    .owner-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .owner-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Linked Challenge ────────────────── */
+    .linked-challenge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .linked-challenge:hover {
+      border-color: var(--accent-teal);
+      background: var(--bg-card-hover);
+    }
+    .challenge-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(232,167,88,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .challenge-info {
+      flex: 1;
+    }
+    .challenge-id-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-teal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .challenge-title {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* ── Tags ────────────────────────────── */
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(232,167,88,.1);
+      color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.2);
+    }
+
+    /* ── Activity Feed ───────────────────── */
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:first-child { padding-top: 0; }
+    .activity-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: #0d0f1a;
+      flex-shrink: 0;
+    }
+    .activity-content {
+      flex: 1;
+    }
+    .activity-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .activity-author {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .activity-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .activity-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* ── Action Buttons ──────────────────── */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: inherit;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(232,167,88,.3);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 20px 36px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+    .footer a {
+      color: var(--accent-teal);
+      text-decoration: none;
+    }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 1024px) {
+      .page-layout {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-header {
+        padding: 20px 20px;
+      }
+      .content-section {
+        padding: 20px 18px;
+      }
+      .page-title {
+        font-size: 22px;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment"><i data-lucide="message-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ MAIN CONTENT ══════════════════════════ -->
+<div class="container">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="home.html">Home</a>
+    <span class="sep">›</span>
+    <a href="challenge-cards.html">Challenges</a>
+    <span class="sep">›</span>
+    <a href="challenge-detail.html">CHG-001</a>
+    <span class="sep">›</span>
+    <span class="current">IDX-003</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-top">
+      <div>
+        <div class="idea-id">
+          <span class="icon"><i data-lucide="lightbulb"></i></span>
+          <span>IDX-003</span>
+        </div>
+        <h1 class="page-title" id="pageTitle">AI-powered document verification</h1>
+        <p class="page-subtitle" id="pageSubtitle">
+          Automate customer onboarding document verification using computer vision and NLP to reduce processing time from 48 hours to under 5 minutes.
+        </p>
+        <div class="header-badges">
+          <span class="status-badge pilot" id="ideaStatusBadge"><i data-lucide="rocket"></i> In Pilot</span>
+          <span class="tag">Document AI</span>
+          <span class="tag">Computer Vision</span>
+          <span class="tag">Automation</span>
+        </div>
+      </div>
+      <div class="page-header-right">
+        <button class="btn btn-secondary" id="editBtn" onclick="toggleEditMode()"><i data-lucide="pencil"></i> Edit</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="toggleEditMode()" style="display:none;"><i data-lucide="save"></i> Save</button>
+        <button class="btn btn-secondary" id="cancelBtn" onclick="cancelEdit()" style="display:none;"><i data-lucide="x"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="page-layout">
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      
+      <!-- Problem Statement -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="icon"><i data-lucide="triangle-alert"></i></span>
+            <span>Problem Statement</span>
+          </div>
+        </div>
+        <div class="section-content" id="problemContent">
+          <p>
+            Current customer onboarding requires manual verification of identity documents (passport, driver's license, utility bills). 
+            This manual process takes 48+ hours and requires 3 staff members to cross-verify information, leading to:
+          </p>
+          <ul style="margin-left: 24px; margin-top: 12px;">
+            <li>High operational costs (~$8 per verification)</li>
+            <li>Customer drop-off rate of 22% due to long wait times</li>
+            <li>Human error in 3-5% of verifications</li>
+            <li>Inability to scale during peak periods</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Proposed Solution -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="icon"><i data-lucide="lightbulb"></i></span>
+            <span>Proposed Solution</span>
+          </div>
+        </div>
+        <div class="section-content" id="solutionContent">
+          <p>
+            Implement an AI-powered document verification system that combines:
+          </p>
+          <ul style="margin-left: 24px; margin-top: 12px;">
+            <li><strong>Computer Vision:</strong> Extract text and validate document authenticity using deep learning models trained on 500K+ documents</li>
+            <li><strong>NLP Processing:</strong> Parse and validate extracted information against government databases and fraud detection systems</li>
+            <li><strong>Real-time Processing:</strong> Process documents in under 5 minutes with 99.2% accuracy rate</li>
+            <li><strong>Flagging System:</strong> Flag suspicious documents for manual review (estimated 2-3% of total)</li>
+          </ul>
+          <p style="margin-top: 16px;">
+            The system will integrate with existing CRM and onboarding workflows via REST APIs, requiring minimal changes to current processes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Expected Impact -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="icon"><i data-lucide="trending-up"></i></span>
+            <span>Expected Impact</span>
+          </div>
+        </div>
+        <div class="section-content" id="impactContent">
+          <ul style="margin-left: 24px;">
+            <li><strong>Processing Time:</strong> Reduce from 48 hours to 5 minutes (576x faster)</li>
+            <li><strong>Cost Savings:</strong> $420K annually by reducing manual verification staff from 9 to 3 FTE</li>
+            <li><strong>Accuracy:</strong> Improve to 99.2% (vs. current 96%)</li>
+            <li><strong>Customer Experience:</strong> Reduce drop-off from 22% to estimated 8%</li>
+            <li><strong>Scalability:</strong> Handle 10x current volume without additional staff</li>
+            <li><strong>Compliance:</strong> Enhanced audit trails and regulatory compliance documentation</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Implementation Plan -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="icon"><i data-lucide="wrench"></i></span>
+            <span>Implementation Approach</span>
+          </div>
+        </div>
+        <div class="section-content" id="implementationContent">
+          <p><strong>Phase 1 - Prototype (Weeks 1-4):</strong></p>
+          <ul style="margin-left: 24px; margin-bottom: 12px;">
+            <li>Build MVP with Azure Form Recognizer + Custom Vision</li>
+            <li>Test with 1,000 historical documents</li>
+            <li>Validate accuracy and edge cases</li>
+          </ul>
+          
+          <p><strong>Phase 2 - Pilot (Weeks 5-8):</strong></p>
+          <ul style="margin-left: 24px; margin-bottom: 12px;">
+            <li>Deploy to single market (UK subsidiary)</li>
+            <li>Process 500 real customer documents in parallel with manual verification</li>
+            <li>Collect feedback and fine-tune models</li>
+          </ul>
+          
+          <p><strong>Phase 3 - Scale (Weeks 9-16):</strong></p>
+          <ul style="margin-left: 24px;">
+            <li>Roll out to all markets</li>
+            <li>Train operations staff on flagged case handling</li>
+            <li>Monitor and optimize performance</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Activity & Comments -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="icon"><i data-lucide="message-circle"></i></span>
+            <span>Activity & Comments</span>
+          </div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-avatar" style="background: var(--accent-green)">MS</div>
+          <div class="activity-content">
+            <div class="activity-header">
+              <span class="activity-author">Meera Singh</span>
+              <span class="activity-time">• 2 days ago</span>
+            </div>
+            <div class="activity-text">
+              Great idea! Have you considered using Azure AI Document Intelligence instead of Form Recognizer? It has better accuracy for identity documents and built-in fraud detection features.
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-item">
+          <div class="activity-avatar" style="background: var(--accent-teal)">AB</div>
+          <div class="activity-content">
+            <div class="activity-header">
+              <span class="activity-author">Ananya Basu</span>
+              <span class="activity-time">• 3 days ago</span>
+            </div>
+            <div class="activity-text">
+              This aligns perfectly with our digital transformation roadmap. Flagged this for pilot consideration in Q1. Can you prepare a detailed cost-benefit analysis?
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-item">
+          <div class="activity-avatar" style="background: var(--accent-blue)">SB</div>
+          <div class="activity-content">
+            <div class="activity-header">
+              <span class="activity-author">Siddharth Banerjee</span>
+              <span class="activity-time">• 5 days ago</span>
+            </div>
+            <div class="activity-text">
+              Excellent proposal! The 576x speedup is impressive. What's the plan for handling documents in multiple languages across our global markets?
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-primary"><i data-lucide="message-circle"></i> Add Comment</button>
+          <button class="btn btn-secondary"><i data-lucide="thumbs-up"></i> Appreciate (12)</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      
+      <!-- Quick Stats -->
+      <div class="sidebar-section">
+        <div class="sidebar-title"><i data-lucide="bar-chart-2"></i> Metrics</div>
+        <div class="stat-row">
+          <span class="stat-label">Appreciations</span>
+          <span class="stat-value green">12</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Comments</span>
+          <span class="stat-value blue">8</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Views</span>
+          <span class="stat-value teal">247</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Expected Savings</span>
+          <span class="stat-value orange">$420K</span>
+        </div>
+      </div>
+
+      <!-- Metadata -->
+      <div class="sidebar-section">
+        <div class="sidebar-title"><i data-lucide="info"></i> Details</div>
+        <div class="stat-row">
+          <span class="stat-label">Status</span>
+          <span class="status-badge pilot" style="padding: 3px 10px; font-size: 10px;">Pilot</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Submitted</span>
+          <span style="font-size: 13px; color: var(--text-secondary);">18 Jan 2026</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Last Updated</span>
+          <span style="font-size: 13px; color: var(--text-secondary);">10 Feb 2026</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Impact Level</span>
+          <span style="font-size: 13px; font-weight: 700; color: var(--accent-orange);">High</span>
+        </div>
+      </div>
+
+      <!-- Submitted By -->
+      <div class="sidebar-section">
+        <div class="sidebar-title"><i data-lucide="user"></i> Submitted By</div>
+        <div class="owner-info">
+          <div class="owner-avatar" style="background: var(--accent-blue)">AB</div>
+          <div class="owner-details">
+            <div class="owner-name">Ananya Basu</div>
+            <div class="owner-role">AI/ML Engineer</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linked Challenge -->
+      <div class="sidebar-section">
+        <div class="sidebar-title"><i data-lucide="link"></i> Related Challenge</div>
+        <a href="challenge-detail.html" class="linked-challenge">
+          <div class="challenge-icon"><i data-lucide="flag"></i></div>
+          <div class="challenge-info">
+            <div class="challenge-id-text">CHG-001</div>
+            <div class="challenge-title">Reduce customer onboarding time by 40%</div>
+          </div>
+        </a>
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.ananta.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The Innovation engineering LAB</strong>, Kolkata ODC.
+</footer>
+
+<script>
+let isEditMode = false;
+let originalContent = {};
+
+function toggleEditMode() {
+  isEditMode = !isEditMode;
+  
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  
+  const pageTitle = document.getElementById('pageTitle');
+  const pageSubtitle = document.getElementById('pageSubtitle');
+  const problemContent = document.getElementById('problemContent');
+  const solutionContent = document.getElementById('solutionContent');
+  const impactContent = document.getElementById('impactContent');
+  const implementationContent = document.getElementById('implementationContent');
+  
+  if (isEditMode) {
+    // Enter edit mode
+    editBtn.style.display = 'none';
+    saveBtn.style.display = 'inline-flex';
+    cancelBtn.style.display = 'inline-flex';
+    
+    // Store original content
+    originalContent = {
+      title: pageTitle.textContent,
+      subtitle: pageSubtitle.textContent,
+      problem: problemContent.innerHTML,
+      solution: solutionContent.innerHTML,
+      impact: impactContent.innerHTML,
+      implementation: implementationContent.innerHTML
+    };
+    
+    // Convert title to textarea
+    const titleValue = pageTitle.textContent;
+    const titleTextarea = document.createElement('textarea');
+    titleTextarea.className = 'page-title edit-mode';
+    titleTextarea.id = 'pageTitle';
+    titleTextarea.value = titleValue;
+    pageTitle.replaceWith(titleTextarea);
+    
+    // Convert subtitle to textarea
+    const subtitleValue = pageSubtitle.textContent.trim();
+    const subtitleTextarea = document.createElement('textarea');
+    subtitleTextarea.className = 'page-subtitle edit-mode';
+    subtitleTextarea.id = 'pageSubtitle';
+    subtitleTextarea.value = subtitleValue;
+    pageSubtitle.replaceWith(subtitleTextarea);
+    
+    // Convert content sections to textareas
+    convertToTextarea(problemContent, 'problemContent');
+    convertToTextarea(solutionContent, 'solutionContent');
+    convertToTextarea(impactContent, 'impactContent');
+    convertToTextarea(implementationContent, 'implementationContent');
+    
+  } else {
+    // Save and exit edit mode
+    editBtn.style.display = 'inline-flex';
+    saveBtn.style.display = 'none';
+    cancelBtn.style.display = 'none';
+    
+    // Convert title back
+    const titleTextarea = document.getElementById('pageTitle');
+    const titleValue = titleTextarea.value;
+    const titleH1 = document.createElement('h1');
+    titleH1.className = 'page-title';
+    titleH1.id = 'pageTitle';
+    titleH1.textContent = titleValue;
+    titleTextarea.replaceWith(titleH1);
+    
+    // Convert subtitle back
+    const subtitleTextarea = document.getElementById('pageSubtitle');
+    const subtitleValue = subtitleTextarea.value;
+    const subtitleP = document.createElement('p');
+    subtitleP.className = 'page-subtitle';
+    subtitleP.id = 'pageSubtitle';
+    subtitleP.textContent = subtitleValue;
+    subtitleTextarea.replaceWith(subtitleP);
+    
+    // Convert content sections back
+    convertToDiv(document.getElementById('problemContent'), 'problemContent');
+    convertToDiv(document.getElementById('solutionContent'), 'solutionContent');
+    convertToDiv(document.getElementById('impactContent'), 'impactContent');
+    convertToDiv(document.getElementById('implementationContent'), 'implementationContent');
+  }
+}
+
+function convertToTextarea(element, id) {
+  const content = element.innerHTML;
+  const textarea = document.createElement('textarea');
+  textarea.className = 'section-content edit-mode';
+  textarea.id = id;
+  textarea.value = stripHtml(content);
+  element.replaceWith(textarea);
+}
+
+function convertToDiv(textarea, id) {
+  const content = textarea.value;
+  const div = document.createElement('div');
+  div.className = 'section-content';
+  div.id = id;
+  div.innerHTML = content.replace(/\n/g, '<br>');
+  textarea.replaceWith(div);
+}
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function cancelEdit() {
+  isEditMode = false;
+  
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  
+  editBtn.style.display = 'inline-flex';
+  saveBtn.style.display = 'none';
+  cancelBtn.style.display = 'none';
+  
+  // Restore original content
+  const pageTitle = document.getElementById('pageTitle');
+  const titleH1 = document.createElement('h1');
+  titleH1.className = 'page-title';
+  titleH1.id = 'pageTitle';
+  titleH1.textContent = originalContent.title;
+  pageTitle.replaceWith(titleH1);
+  
+  const pageSubtitle = document.getElementById('pageSubtitle');
+  const subtitleP = document.createElement('p');
+  subtitleP.className = 'page-subtitle';
+  subtitleP.id = 'pageSubtitle';
+  subtitleP.textContent = originalContent.subtitle;
+  pageSubtitle.replaceWith(subtitleP);
+  
+  // Restore sections
+  restoreSection('problemContent', originalContent.problem);
+  restoreSection('solutionContent', originalContent.solution);
+  restoreSection('impactContent', originalContent.impact);
+  restoreSection('implementationContent', originalContent.implementation);
+}
+
+function restoreSection(id, content) {
+  const element = document.getElementById(id);
+  const div = document.createElement('div');
+  div.className = 'section-content';
+  div.id = id;
+  div.innerHTML = content;
+  element.replaceWith(div);
+}
+
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+
+// ═══ DYNAMIC STATUS BADGE BASED ON IDEA STATE ═══ //
+(function updateIdeaStatus() {
+  const badge = document.getElementById('ideaStatusBadge');
+  if (!badge) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const ideaId = params.get('id') || document.querySelector('.idea-id span:last-child')?.textContent?.trim();
+  if (!ideaId) return;
+
+  const currentUser = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  const currentEmail = (currentUser.email || '').toLowerCase();
+  const isAdmin = localStorage.getItem('ananta-admin') === '1';
+  const pageHeader = document.querySelector('.page-header');
+
+  // Check rejected
+  const rejected = JSON.parse(localStorage.getItem('ip_rejected_ideas') || '[]');
+  const rejectedMatch = rejected.find(i => i.id === ideaId);
+  if (rejectedMatch) {
+    badge.className = 'status-badge declined-status';
+    badge.innerHTML = '<i data-lucide="x-circle"></i> Request Declined';
+    if (pageHeader) pageHeader.style.borderTopColor = 'var(--accent-red)';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    return;
+  }
+
+  // Check pending
+  const pending = JSON.parse(localStorage.getItem('ip_pending_ideas') || '[]');
+  const pendingMatch = pending.find(i => i.id === ideaId);
+  if (pendingMatch) {
+    badge.className = 'status-badge pending-status';
+    badge.innerHTML = '<i data-lucide="clock"></i> Pending Approval';
+    if (pageHeader) pageHeader.style.borderTopColor = 'var(--accent-yellow)';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    return;
+  }
+
+  // Check approved
+  const approved = JSON.parse(localStorage.getItem('ip_approved_ideas') || '[]');
+  const approvedMatch = approved.find(i => i.id === ideaId);
+  if (approvedMatch) {
+    badge.className = 'status-badge active-status';
+    badge.innerHTML = '<i data-lucide="check-circle"></i> Currently Active';
+    if (pageHeader) pageHeader.style.borderTopColor = 'var(--accent-green)';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    return;
+  }
+
+  // Static/hardcoded ideas keep their default badge
+})();
+</script>
+
+<script src="dynamic-notifications.js"></script>
+<script src="admin-toggle.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

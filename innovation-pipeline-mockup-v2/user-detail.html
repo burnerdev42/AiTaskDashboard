@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline — User Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-gold:   #ffd54f;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .notification-wrapper { position: relative; }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .2s; font-size: 18px;
+      text-decoration: none;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute; top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+      text-decoration: none; border: 2px solid var(--accent-teal);
+    }
+
+    /* ── Container ──────────────────────────── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    /* ── Back Link ────────────────────────────── */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--accent-teal); text-decoration: none;
+      font-size: 13px; font-weight: 600; margin-bottom: 28px;
+      padding: 6px 14px; border-radius: 8px;
+      transition: all .2s;
+    }
+    .back-link:hover {
+      background: rgba(232,167,88,.1);
+    }
+
+    /* ── User Header Card ────────────────────── */
+    .user-header-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex; align-items: center; gap: 28px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .user-header-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue), var(--accent-purple));
+    }
+    .user-avatar-large {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px; font-weight: 700; color: #0d0f1a;
+      flex-shrink: 0;
+      border: 3px solid var(--accent-teal);
+      box-shadow: 0 4px 20px rgba(232,167,88,.25);
+    }
+    .user-header-info { flex: 1; }
+    .user-header-info h1 {
+      font-size: 26px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .user-header-info .user-email {
+      font-size: 14px; color: var(--accent-teal);
+      margin-bottom: 12px;
+    }
+    .user-meta-pills {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .meta-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px; font-weight: 500; color: var(--text-secondary);
+    }
+    .meta-pill .pill-icon { font-size: 14px; }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      position: absolute; top: 20px; right: 24px;
+    }
+    .status-badge.pending {
+      background: rgba(255,167,38,.12);
+      border: 1px solid rgba(255,167,38,.35);
+      color: var(--accent-orange);
+    }
+    .status-badge.approved {
+      background: rgba(102,187,106,.12);
+      border: 1px solid rgba(102,187,106,.35);
+      color: var(--accent-green);
+    }
+    .status-badge.rejected {
+      background: rgba(239,83,80,.12);
+      border: 1px solid rgba(239,83,80,.35);
+      color: var(--accent-red);
+    }
+
+    /* ── Info Sections ────────────────────────── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .detail-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .detail-card h3 {
+      font-size: 14px; font-weight: 700;
+      color: var(--accent-teal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(42,69,96,.4);
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label {
+      font-size: 12px; font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .detail-value {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    /* ── Full-width card ─────────────────────── */
+    .detail-card.full {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Interest Tags ────────────────────────── */
+    .interest-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 4px;
+    }
+    .interest-tag {
+      padding: 5px 14px;
+      border-radius: 16px;
+      background: rgba(232,167,88,.08);
+      border: 1px solid rgba(232,167,88,.2);
+      color: var(--accent-teal);
+      font-size: 12px; font-weight: 500;
+    }
+
+    /* ── Activity Timeline ───────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 20px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute;
+      left: -24px; top: 4px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-teal);
+      background: var(--bg-primary);
+    }
+    .timeline-dot.active {
+      background: var(--accent-teal);
+      box-shadow: 0 0 8px rgba(232,167,88,.4);
+    }
+    .timeline-content h4 {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .timeline-content p {
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    /* ── Action Bar ────────────────────────────── */
+    .action-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 28px;
+    }
+    .action-bar-text {
+      font-size: 14px; font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .action-bar-text span {
+      color: var(--accent-orange);
+    }
+    .action-bar-buttons {
+      display: flex; gap: 12px;
+    }
+    .btn {
+      padding: 10px 24px; border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: all .2s;
+    }
+    .btn-approve {
+      background: var(--accent-green); color: #0d0f1a;
+    }
+    .btn-approve:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(102,187,106,.35); }
+    .btn-reject {
+      background: rgba(239,83,80,.15); color: var(--accent-red);
+      border: 1px solid rgba(239,83,80,.3);
+    }
+    .btn-reject:hover { background: var(--accent-red); color: #fff; }
+
+    /* ── Toast ────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: -60px; left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 28px; border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      z-index: 1000; transition: bottom .4s ease;
+    }
+    .toast.show { bottom: 32px; }
+    .toast.success { background: rgba(102,187,106,.15); border: 1px solid var(--accent-green); color: var(--accent-green); }
+    .toast.error { background: rgba(239,83,80,.15); border: 1px solid var(--accent-red); color: var(--accent-red); }
+
+    /* ── Footer ────────────────────────────────── */
+    .footer {
+      text-align: center; padding: 24px 36px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--text-muted);
+      margin-top: 48px;
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <a href="notifications.html" class="notification-bell">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge">9</span>
+      </a>
+    </div>
+    <a href="profile.html" class="avatar" title="Admin">A</a>
+  </div>
+</header>
+
+<!-- ═══ MAIN ══════════════════════════════════ -->
+<div class="container">
+
+  <a href="admin-dashboard.html" class="back-link">← Back to Control Center</a>
+
+  <!-- ── User Header ── -->
+  <div class="user-header-card">
+    <div class="user-avatar-large">PS</div>
+    <div class="user-header-info">
+      <h1>Priya Sharma</h1>
+      <div class="user-email"><i data-lucide="mail"></i> priya.sharma@tcs.com</div>
+      <div class="user-meta-pills">
+        <span class="meta-pill"><span class="pill-icon"><i data-lucide="globe"></i></span> TCS — India</span>
+        <span class="meta-pill"><span class="pill-icon"><i data-lucide="building-2"></i></span> Retail &amp; CPG</span>
+        <span class="meta-pill"><span class="pill-icon"><i data-lucide="calendar"></i></span> Applied: Feb 24, 2026</span>
+      </div>
+    </div>
+    <span class="status-badge pending">⏳ Pending Review</span>
+  </div>
+
+  <!-- ── Detail Grid ── -->
+  <div class="detail-grid">
+
+    <!-- Personal Information -->
+    <div class="detail-card">
+      <h3><i data-lucide="user"></i> Personal Information</h3>
+      <div class="detail-row">
+        <span class="detail-label">Full Name</span>
+        <span class="detail-value">Priya Sharma</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Contact Email</span>
+        <span class="detail-value">priya.sharma@tcs.com</span>
+      </div>
+    </div>
+
+    <!-- Registration Details -->
+    <div class="detail-card">
+      <h3><i data-lucide="building-2"></i> Registration Details</h3>
+      <div class="detail-row">
+        <span class="detail-label">OpCo</span>
+        <span class="detail-value">TCS — India</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Platform / Business Unit</span>
+        <span class="detail-value">Retail &amp; CPG</span>
+      </div>
+    </div>
+
+    <!-- Areas of Interest -->
+    <div class="detail-card full">
+      <h3><i data-lucide="brain"></i> Areas of Interest</h3>
+      <div class="interest-tags">
+        <span class="interest-tag">Customer Experience</span>
+        <span class="interest-tag">Supply Chain</span>
+        <span class="interest-tag">Retail Ops</span>
+      </div>
+    </div>
+
+    <!-- Registration Timeline -->
+    <div class="detail-card full">
+      <h3><i data-lucide="clipboard-list"></i> Registration Timeline</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-content">
+            <h4>Registration Submitted</h4>
+            <p>Feb 24, 2026 · 10:15 AM — Application form completed</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-content">
+            <h4>Email Verification</h4>
+            <p>Feb 24, 2026 · 10:16 AM — Corporate email verified</p>
+          </div>
+        </div>
+        <div class="timeline-item" id="timeline-review">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h4>Awaiting Admin Review</h4>
+            <p>Pending — Waiting for admin approval</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Action Bar ── -->
+  <div class="action-bar">
+    <div class="action-bar-text">
+      This registration is <span>pending review</span>. Take an action below.
+    </div>
+    <div class="action-bar-buttons">
+      <button class="btn btn-approve" onclick="handleAction('approve')"><i data-lucide="circle-check"></i> Approve Registration</button>
+      <button class="btn btn-reject" onclick="handleAction('reject')"><i data-lucide="circle-x"></i> Reject Registration</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TOAST ═════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<div class="footer">
+  <p>Ananta Lab · Admin Panel · Built with brain, neurons, love &amp; GPUs</p>
+</div>
+
+<script>
+function handleAction(action) {
+  const badge = document.querySelector('.status-badge');
+  const bar = document.querySelector('.action-bar');
+
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    + ' · ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const reviewItem = document.getElementById('timeline-review');
+
+  if (action === 'approve') {
+    badge.className = 'status-badge approved';
+    badge.innerHTML = '<i data-lucide="circle-check"></i> Approved';
+    bar.querySelector('.action-bar-text').innerHTML = 'Registration <span style="color: var(--accent-green);">approved</span>. The user has been notified.';
+    bar.querySelector('.action-bar-buttons').innerHTML = '<span style="color: var(--accent-green); font-weight: 600;"><i data-lucide="circle-check"></i> Done</span>';
+    showToast('success', 'Registration approved — Priya Sharma has been notified.');
+
+    // Update timeline
+    reviewItem.querySelector('.timeline-dot').classList.add('active');
+    reviewItem.querySelector('.timeline-dot').style.borderColor = 'var(--accent-green)';
+    reviewItem.querySelector('.timeline-dot').style.background = 'var(--accent-green)';
+    reviewItem.querySelector('.timeline-dot').style.boxShadow = '0 0 8px rgba(102,187,106,.4)';
+    reviewItem.querySelector('h4').textContent = 'Registration Approved';
+    reviewItem.querySelector('h4').style.color = 'var(--accent-green)';
+    reviewItem.querySelector('p').textContent = timeStr + ' — Approved by Admin';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } else {
+    badge.className = 'status-badge rejected';
+    badge.innerHTML = '<i data-lucide="circle-x"></i> Rejected';
+    bar.querySelector('.action-bar-text').innerHTML = 'Registration <span style="color: var(--accent-red);">rejected</span>.';
+    bar.querySelector('.action-bar-buttons').innerHTML = '<span style="color: var(--accent-red); font-weight: 600;"><i data-lucide="circle-x"></i> Done</span>';
+    showToast('error', 'Registration rejected — Priya Sharma has been notified.');
+
+    // Update timeline
+    reviewItem.querySelector('.timeline-dot').classList.add('active');
+    reviewItem.querySelector('.timeline-dot').style.borderColor = 'var(--accent-red)';
+    reviewItem.querySelector('.timeline-dot').style.background = 'var(--accent-red)';
+    reviewItem.querySelector('.timeline-dot').style.boxShadow = '0 0 8px rgba(239,83,80,.4)';
+    reviewItem.querySelector('h4').textContent = 'Registration Rejected';
+    reviewItem.querySelector('h4').style.color = 'var(--accent-red)';
+    reviewItem.querySelector('p').textContent = timeStr + ' — Rejected by Admin';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+function showToast(type, message) {
+  const toast = document.getElementById('toast');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+</script>
+<script src="admin-toggle.js"></script>
+
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline – Swim Lane</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-yellow: #ffee58;
+      --accent-gold:   #ffd54f;
+      --accent-grey:   #78909c;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; text-transform: none; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px;
+      transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .header-right .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ────────────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Flow Direction Arrow Banner ─────── */
+    .flow-banner {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 36px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 12px; color: var(--text-muted);
+      letter-spacing: 1px; text-transform: uppercase; font-weight: 600;
+    }
+    .flow-arrow {
+      flex: 1; height: 2px;
+      background: linear-gradient(90deg, var(--accent-red), var(--accent-orange), var(--accent-yellow), var(--accent-blue), var(--accent-green), var(--accent-gold));
+      border-radius: 1px; position: relative;
+    }
+    .flow-arrow::after {
+      content: '▶'; position: absolute; right: -14px; top: -8px;
+      font-size: 14px; color: var(--accent-green);
+    }
+
+    /* ── Swim Lanes Container ────────────── */
+    .lanes-wrapper {
+      display: flex;
+      gap: 0;
+      padding: 20px 16px;
+      overflow-x: auto;
+      min-height: calc(100vh - 160px);
+    }
+    .lanes-wrapper::-webkit-scrollbar { height: 6px; }
+    .lanes-wrapper::-webkit-scrollbar-track { background: var(--bg-secondary); border-radius: 3px; }
+    .lanes-wrapper::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    /* ── Single Lane ─────────────────────── */
+    .lane {
+      display: flex; flex-direction: column;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 0 6px;
+      overflow: hidden;
+      transition: box-shadow .25s;
+      flex: 1;
+      min-width: 200px;
+    }
+    .lane:hover { box-shadow: 0 0 30px rgba(0,0,0,.3); }
+
+    /* width classes matching whiteboard proportions */
+    .lane.w-sm  { flex: 0.8; min-width: 180px; }  /* narrower lanes */
+    .lane.w-md  { flex: 1; min-width: 200px; }    /* standard lanes */
+
+    /* ── Lane Header ─────────────────────── */
+    .lane-header {
+      padding: 16px 14px 14px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .lane-header .stage-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 10px; font-size: 18px;
+    }
+    .lane-header h3 {
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.8px;
+      line-height: 1.4;
+    }
+    .lane-header .width-tag {
+      display: inline-block; margin-top: 8px;
+      font-size: 10px; color: var(--text-muted);
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 2px 10px; border-radius: 10px; font-weight: 500;
+    }
+
+    /* ── Lane Body ───────────────────────── */
+    .lane-body {
+      flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 10px;
+      overflow-y: auto;
+    }
+    .lane-body::-webkit-scrollbar { width: 3px; }
+    .lane-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── Lane Footer ─────────────────────── */
+    .lane-footer {
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px;
+    }
+    .lane-footer .max-label {
+      color: var(--text-muted); font-weight: 500; text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+    .lane-footer .count-badge {
+      padding: 3px 12px; border-radius: 12px; font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* ── Card ─────────────────────────────── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      cursor: pointer;
+      transition: all .2s ease;
+      position: relative;
+    }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .card a.card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .card .card-title {
+      font-size: 12.5px; font-weight: 600; line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .card .card-desc {
+      font-size: 11px; color: var(--text-secondary); line-height: 1.5;
+    }
+    .card .card-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; font-size: 10px; color: var(--text-muted);
+    }
+    .card .card-id {
+      font-weight: 600; letter-spacing: .5px;
+    }
+    .card .card-owner {
+      font-weight: 500; color: var(--text-secondary);
+    }
+    .card .card-priority {
+      width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+      margin-right: 5px;
+    }
+
+    /* ── Special Card Variants ───────────── */
+    /* Eval Card */
+    .card.eval-card {
+      border: 1px dashed var(--accent-orange);
+      background: rgba(255,167,38,.05);
+    }
+    .card.eval-card .eval-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      background: rgba(255,167,38,.15); color: var(--accent-orange);
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .card.eval-card .score-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px;
+    }
+    .card.eval-card .score-item {
+      font-size: 10px; color: var(--text-secondary);
+    }
+    .card.eval-card .score-item span {
+      font-weight: 700; color: var(--text-primary);
+    }
+
+    /* Progress Card */
+    .card.progress-card .progress-wrap {
+      margin-top: 10px;
+    }
+    .card.progress-card .progress-label {
+      display: flex; justify-content: space-between; font-size: 10px;
+      color: var(--text-secondary); margin-bottom: 4px;
+    }
+    .progress-bar {
+      width: 100%; height: 8px; background: var(--bg-primary);
+      border-radius: 4px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; border-radius: 4px;
+      transition: width .6s ease;
+    }
+
+    /* Pilot Plan Card */
+    .card.pilot-card {
+      border-left: 3px solid var(--accent-green);
+    }
+    .card.pilot-card .pilot-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      background: rgba(102,187,106,.15); color: var(--accent-green);
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .card.pilot-card .pilot-details {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+      margin-top: 8px; font-size: 10px; color: var(--text-secondary);
+    }
+    .card.pilot-card .pilot-details span { font-weight: 600; color: var(--text-primary); }
+
+    /* Value Card */
+    .card.value-card {
+      border-left: 3px solid var(--accent-gold);
+    }
+    .card.value-card .value-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      background: rgba(255,213,79,.12); color: var(--accent-gold);
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .card.value-card .value-grid {
+      display: grid; grid-template-columns: 1fr; gap: 4px;
+      margin-top: 8px;
+    }
+    .card.value-card .val-row {
+      display: flex; justify-content: space-between;
+      font-size: 10px; color: var(--text-secondary);
+    }
+    .card.value-card .val-row span { font-weight: 700; color: var(--accent-gold); }
+
+    /* Parked (dimmed) */
+    .lane.parking .card { opacity: .65; }
+    .lane.parking .card:hover { opacity: .85; }
+
+    /* ── Lane accent colors (top border) ── */
+    .lane.challenge  { border-top: 3px solid var(--accent-red);    }
+    .lane.ideation   { border-top: 3px solid var(--accent-yellow); }
+    .lane.evaluation { border-top: 3px solid var(--accent-orange); }
+    .lane.prototype  { border-top: 3px solid var(--accent-blue);   }
+    .lane.pilot      { border-top: 3px solid var(--accent-green);  }
+    .lane.production { border-top: 3px solid var(--accent-gold);   }
+    .lane.parking    { border-top: 3px solid var(--accent-grey);   }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center; padding: 18px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Empty slot ───────────────────────── */
+    .empty-slot {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .empty-slot:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+      background: rgba(232,167,88,.04);
+    }
+
+    /* ── Drag & Drop ──────────────────────── */
+    .card[draggable="true"] { cursor: grab; }
+    .card[draggable="true"]:active { cursor: grabbing; }
+    .card.dragging {
+      opacity: .35;
+      transform: scale(.96) rotate(1deg);
+      box-shadow: 0 0 0 2px var(--accent-teal);
+    }
+    .lane-body.drag-over {
+      background: rgba(232,167,88,.06);
+      border: 2px dashed var(--accent-teal);
+      border-radius: var(--radius-sm);
+    }
+    .card.drag-preview {
+      border: 2px dashed var(--accent-teal);
+      background: rgba(232,167,88,.04);
+      min-height: 40px;
+      border-radius: var(--radius-sm);
+      pointer-events: none;
+    }
+    .card-drag-handle {
+      position: absolute; top: 6px; right: 6px;
+      width: 20px; height: 20px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--text-muted);
+      opacity: 0; transition: opacity .2s;
+    }
+    .card:hover .card-drag-handle { opacity: 1; }
+    .card { position: relative; }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 1200px) {
+      .lane { min-width: 160px; }
+      .lane.w-sm { min-width: 140px; }
+      .lane.w-md { min-width: 160px; }
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link active">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment"><i data-lucide="message-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ FLOW DIRECTION BANNER ════════════════ -->
+<div class="flow-banner">
+  <span>Flow Direction</span>
+  <div class="flow-arrow"></div>
+</div>
+
+<!-- ═══ SWIM LANES ═══════════════════════════ -->
+<div class="lanes-wrapper">
+
+  <!-- ───── 1. CHALLENGE SUBMITTED ────── -->
+  <div class="lane challenge w-sm">
+    <div class="lane-header">
+      <div class="stage-icon" style="background:var(--accent-red)"><i data-lucide="circle"></i></div>
+      <h3>Challenge<br/>Submitted</h3>
+      <span class="width-tag">0.4 m wide</span>
+    </div>
+    <div class="lane-body">
+      <div class="card">
+        <a href="challenge-detail.html" class="card-link">
+          <div class="card-title">Reduce Customer Churn</div>
+          <div class="card-desc">High-value segment losing 8% QoQ.</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:var(--accent-red)"></span>CH-01</span>
+            <span class="card-owner">R. Patel</span>
+          </div>
+        </a>
+      </div>
+      <div class="card">
+        <a href="challenge-detail.html" class="card-link">
+          <div class="card-title">Automate Invoice Reconciliation</div>
+          <div class="card-desc">Manual process consuming 200+ hrs/month.</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>CH-02</span>
+            <span class="card-owner">M. Singh</span>
+          </div>
+        </a>
+      </div>
+      <div class="card">
+        <a href="challenge-detail.html" class="card-link">
+          <div class="card-title">Improve Warehouse Throughput</div>
+          <div class="card-desc">Bottleneck causing shipping delays.</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:var(--accent-red)"></span>CH-03</span>
+            <span class="card-owner">A. Basu</span>
+          </div>
+        </a>
+      </div>
+      <div class="empty-slot">+ Add Challenge</div>
+    </div>
+    <div class="lane-footer">
+      <span class="max-label">Max 6 cards</span>
+      <span class="count-badge" style="background:rgba(239,83,80,.15); color:var(--accent-red);">3</span>
+    </div>
+  </div>
+
+  <!-- ───── 2. IDEATION & EVALUATION ──────────────── -->
+  <div class="lane ideation-evaluation w-md">
+    <div class="lane-header">
+      <div class="stage-icon" style="background:var(--accent-yellow)"><i data-lucide="circle"></i></div>
+      <h3>Ideation &<br/>Evaluation</h3>
+      <span class="width-tag">0.5 m wide</span>
+    </div>
+    <div class="lane-body">
+      <div class="card">
+        <div class="card-title">AI Churn Prediction Model</div>
+        <div class="card-desc">ML model using signals to flag at-risk accounts.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>ID-01</span>
+          <span class="card-owner">S. Banerjee</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Smart Invoice OCR</div>
+        <div class="card-desc">AI to extract and auto-match invoices to POs.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>ID-02</span>
+          <span class="card-owner">A. Basu</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Dynamic Slot Allocation</div>
+        <div class="card-desc">Real-time warehouse bay assignment engine.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>ID-03</span>
+          <span class="card-owner">R. Patel</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Gamified Onboarding</div>
+        <div class="card-desc">Interactive tutorials for new customers.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>ID-04</span>
+          <span class="card-owner">M. Singh</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Personalised Retention Offers</div>
+        <div class="card-desc">Context-aware discount engine for customer retention.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>EV-01</span>
+          <span class="card-owner">S. Banerjee</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Robotic Picking Arms</div>
+        <div class="card-desc">Feasibility study for robotic high-shelf picking.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-red)"></span>EV-02</span>
+          <span class="card-owner">A. Basu</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Voice-Based Order Entry</div>
+        <div class="card-desc">Hands-free order capture for warehouse staff.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>EV-03</span>
+          <span class="card-owner">R. Patel</span>
+        </div>
+      </div>
+      <div class="empty-slot">+ Add Idea/Evaluation</div>
+    </div>
+    <div class="lane-footer">
+      <span class="max-label">Max 15 cards</span>
+      <span class="count-badge" style="background:rgba(255,238,88,.12); color:var(--accent-yellow);">7</span>
+    </div>
+  </div>
+
+  <!-- ───── 3. POC & PILOT ───────── -->
+  <div class="lane poc-pilot w-md">
+    <div class="lane-header">
+      <div class="stage-icon" style="background:var(--accent-blue)"><i data-lucide="circle"></i></div>
+      <h3>POC &<br/>Pilot</h3>
+      <span class="width-tag">0.5 m wide</span>
+    </div>
+    <div class="lane-body">
+      <div class="card">
+        <div class="card-title">AI Churn Prediction – v0.3</div>
+        <div class="card-desc">Prototype model with 12 months data.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>POC-01</span>
+          <span class="card-owner">S. Banerjee</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Invoice OCR Engine</div>
+        <div class="card-desc">Document AI pipeline MVP.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>POC-02</span>
+          <span class="card-owner">A. Basu</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Smart Warehouse Routing</div>
+        <div class="card-desc">Pilot in Kolkata DC with autonomous forklifts.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>PLT-01</span>
+          <span class="card-owner">R. Patel</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Digital Twin – Factory</div>
+        <div class="card-desc">Real-time 3D simulation pilot at Plant #4.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>PLT-02</span>
+          <span class="card-owner">A. Basu</span>
+        </div>
+      </div>
+      <div class="empty-slot">+ Add POC/Pilot</div>
+    </div>
+    <div class="lane-footer">
+      <span class="max-label">Max 8 cards</span>
+      <span class="count-badge" style="background:rgba(240,184,112,.15); color:var(--accent-blue);">4</span>
+    </div>
+  </div>
+
+  <!-- ───── 4. DEPLOYED ────────────── -->
+  <div class="lane deployed w-md">
+    <div class="lane-header">
+      <div class="stage-icon" style="background:var(--accent-gold)"><i data-lucide="star"></i></div>
+      <h3>Deployed</h3>
+      <span class="width-tag">0.5 m wide</span>
+    </div>
+    <div class="lane-body">
+      <div class="card">
+        <div class="card-title">Unified Customer 360</div>
+        <div class="card-desc">Live in 12 markets with unified customer view.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>PRD-01</span>
+          <span class="card-owner">S. Banerjee</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Predictive Maintenance</div>
+        <div class="card-desc">Deployed across 6 plants with 10K+ sensors.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-green)"></span>PRD-02</span>
+          <span class="card-owner">A. Basu</span>
+        </div>
+      </div>
+      <div class="empty-slot">+ Add Deployment</div>
+    </div>
+    <div class="lane-footer">
+      <span class="max-label">Max 8 cards</span>
+      <span class="count-badge" style="background:rgba(255,213,79,.12); color:var(--accent-gold);">2</span>
+    </div>
+  </div>
+
+  <!-- ───── 5. PARKING LOT ──────────── -->
+  <div class="lane parking w-sm">
+    <div class="lane-header">
+      <div class="stage-icon" style="background:var(--accent-grey)"><i data-lucide="circle"></i></div>
+      <h3>Parking<br/>Lot</h3>
+      <span class="width-tag">0.4 m wide</span>
+    </div>
+    <div class="lane-body">
+      <div class="card">
+        <div class="card-title">AR Field Service</div>
+        <div class="card-desc">Paused — awaiting hardware.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-grey)"></span>PK-01</span>
+          <span class="card-owner">M. Singh</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Drone Inventory Scan</div>
+        <div class="card-desc">Approval pending.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-grey)"></span>PK-02</span>
+          <span class="card-owner">R. Patel</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Blockchain Traceability</div>
+        <div class="card-desc">Cost/benefit under review.</div>
+        <div class="card-meta">
+          <span class="card-id"><span class="card-priority" style="background:var(--accent-grey)"></span>PK-03</span>
+          <span class="card-owner">S. Banerjee</span>
+        </div>
+      </div>
+      <div class="empty-slot">+ Park Item</div>
+    </div>
+    <div class="lane-footer">
+      <span class="max-label">Max 8 cards</span>
+      <span class="count-badge" style="background:rgba(120,144,156,.15); color:var(--accent-grey);">3</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.tcs.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The TCS-Ahold Delhaize engineering LABS</strong>, Kolkata ODC (Gitanjali Park – L14).
+</footer>
+
+<script>
+(function() {
+  function initDragDrop() {
+    const lanes = document.querySelectorAll('.lane-body');
+    const cards = document.querySelectorAll('.lane-body > .card');
+    let draggedCard = null;
+    let placeholder = null;
+
+    cards.forEach(card => {
+      card.setAttribute('draggable', 'true');
+      const handle = document.createElement('span');
+      handle.className = 'card-drag-handle';
+      handle.textContent = '⠿';
+      card.appendChild(handle);
+
+      card.addEventListener('dragstart', e => {
+        draggedCard = card;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '');
+        placeholder = document.createElement('div');
+        placeholder.className = 'card drag-preview';
+        placeholder.style.height = card.offsetHeight + 'px';
+        setTimeout(() => card.style.display = 'none', 0);
+      });
+
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        card.style.display = '';
+        if (placeholder && placeholder.parentNode) {
+          placeholder.parentNode.insertBefore(card, placeholder);
+          placeholder.remove();
+        }
+        placeholder = null;
+        draggedCard = null;
+        lanes.forEach(l => l.classList.remove('drag-over'));
+        updateCounts();
+      });
+    });
+
+    lanes.forEach(lane => {
+      lane.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        lane.classList.add('drag-over');
+
+        const afterEl = getDragAfterElement(lane, e.clientY);
+        if (placeholder) {
+          if (afterEl) {
+            lane.insertBefore(placeholder, afterEl);
+          } else {
+            // Insert before empty-slot if exists, otherwise append
+            const emptySlot = lane.querySelector('.empty-slot');
+            if (emptySlot) {
+              lane.insertBefore(placeholder, emptySlot);
+            } else {
+              lane.appendChild(placeholder);
+            }
+          }
+        }
+      });
+
+      lane.addEventListener('dragleave', e => {
+        if (!lane.contains(e.relatedTarget)) {
+          lane.classList.remove('drag-over');
+        }
+      });
+
+      lane.addEventListener('drop', e => {
+        e.preventDefault();
+        lane.classList.remove('drag-over');
+      });
+    });
+  }
+
+  function getDragAfterElement(container, y) {
+    const els = [...container.querySelectorAll('.card:not(.dragging):not(.drag-preview)')];
+    return els.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, element: child };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+
+  function updateCounts() {
+    document.querySelectorAll('.lane').forEach(lane => {
+      const count = lane.querySelectorAll('.lane-body > .card:not(.drag-preview)').length;
+      // Update footer count badge
+      const footerBadge = lane.querySelector('.lane-footer .count-badge');
+      if (footerBadge) footerBadge.textContent = count;
+      // Update header count badge
+      const headerBadge = lane.querySelector('.lane-header .count');
+      if (headerBadge) headerBadge.textContent = count;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Only admins can drag cards between lanes
+    if (localStorage.getItem('ananta-admin') === '1') {
+      initDragDrop();
+    } else {
+      // Remove drag handles & cursors for non-admin users
+      document.querySelectorAll('.lane-body > .card').forEach(function(card) {
+        card.removeAttribute('draggable');
+        card.style.cursor = 'default';
+      });
+    }
+  });
+})();
+
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+
+// ═══ PENDING CHALLENGES & IDEAS IN SWIM LANE ═══ //
+(function renderPendingInSwimLane() {
+  const currentUser = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  const currentEmail = (currentUser.email || '').toLowerCase();
+  const isAdmin = localStorage.getItem('ananta-admin') === '1';
+
+  // --- Pending Challenges → "Challenge Submitted" lane ---
+  const pendingCh = JSON.parse(localStorage.getItem('ip_pending_challenges') || '[]');
+  const myPendingCh = pendingCh.filter(ch => isAdmin || ch.authorEmail === currentEmail);
+
+  if (myPendingCh.length > 0) {
+    const challengeLane = document.querySelector('.lane.challenge .lane-body');
+    if (challengeLane) {
+      const emptySlot = challengeLane.querySelector('.empty-slot');
+      myPendingCh.forEach(ch => {
+        const impactColors = {
+          critical: 'var(--accent-red)', high: 'var(--accent-orange)',
+          medium: 'var(--accent-yellow)', low: 'var(--accent-green)'
+        };
+        const dotColor = impactColors[ch.impact] || 'var(--accent-yellow)';
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.position = 'relative';
+        card.style.opacity = '0.75';
+        card.style.borderLeft = '3px solid var(--accent-orange)';
+        card.innerHTML = `
+          <div style="position:absolute;top:4px;right:6px;
+            background:rgba(255,167,38,.18);color:var(--accent-orange);
+            font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;
+            text-transform:uppercase;letter-spacing:.3px;">Pending</div>
+          <div class="card-title">${ch.title}</div>
+          <div class="card-desc">${ch.problemDesc ? ch.problemDesc.substring(0, 60) + '...' : ''}</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:${dotColor}"></span>${ch.id}</span>
+            <span class="card-owner">${ch.authorName}</span>
+          </div>
+        `;
+        if (emptySlot) {
+          challengeLane.insertBefore(card, emptySlot);
+        } else {
+          challengeLane.appendChild(card);
+        }
+      });
+      // Update count badge
+      const footerBadge = document.querySelector('.lane.challenge .lane-footer .count-badge');
+      if (footerBadge) {
+        const total = challengeLane.querySelectorAll('.card').length;
+        footerBadge.textContent = total;
+      }
+    }
+  }
+
+  // --- Pending Ideas → "Ideation & Evaluation" lane ---
+  const pendingId = JSON.parse(localStorage.getItem('ip_pending_ideas') || '[]');
+  const myPendingId = pendingId.filter(idea => isAdmin || idea.authorEmail === currentEmail);
+
+  if (myPendingId.length > 0) {
+    const ideaLane = document.querySelector('.lane.ideation-evaluation .lane-body');
+    if (ideaLane) {
+      const emptySlot = ideaLane.querySelector('.empty-slot');
+      myPendingId.forEach(idea => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.position = 'relative';
+        card.style.opacity = '0.75';
+        card.style.borderLeft = '3px solid var(--accent-orange)';
+        card.innerHTML = `
+          <div style="position:absolute;top:4px;right:6px;
+            background:rgba(255,167,38,.18);color:var(--accent-orange);
+            font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;
+            text-transform:uppercase;letter-spacing:.3px;">Pending</div>
+          <div class="card-title">${idea.title}</div>
+          <div class="card-desc">${idea.description ? idea.description.substring(0, 60) + '...' : ''}</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:var(--accent-orange)"></span>${idea.id}</span>
+            <span class="card-owner">${idea.authorName}</span>
+          </div>
+        `;
+        if (emptySlot) {
+          ideaLane.insertBefore(card, emptySlot);
+        } else {
+          ideaLane.appendChild(card);
+        }
+      });
+      const footerBadge = document.querySelector('.lane.ideation-evaluation .lane-footer .count-badge');
+      if (footerBadge) {
+        const total = ideaLane.querySelectorAll('.card').length;
+        footerBadge.textContent = total;
+      }
+    }
+  }
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+})();
+
+// ═══ APPROVED CHALLENGES & IDEAS IN SWIM LANE (visible to all) ═══ //
+(function renderApprovedInSwimLane() {
+  // --- Approved Challenges → "Challenge Submitted" lane ---
+  const approvedCh = JSON.parse(localStorage.getItem('ip_approved_challenges') || '[]');
+  if (approvedCh.length > 0) {
+    const challengeLane = document.querySelector('.lane.challenge .lane-body');
+    if (challengeLane) {
+      const emptySlot = challengeLane.querySelector('.empty-slot');
+      approvedCh.forEach(ch => {
+        const impactColors = {
+          critical: 'var(--accent-red)', high: 'var(--accent-orange)',
+          medium: 'var(--accent-yellow)', low: 'var(--accent-green)'
+        };
+        const dotColor = impactColors[ch.impact] || 'var(--accent-yellow)';
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.cursor = 'pointer';
+        card.setAttribute('data-nav', 'challenge-detail.html');
+        card.innerHTML = `
+          <div class="card-title">${ch.title}</div>
+          <div class="card-desc">${ch.problemDesc ? ch.problemDesc.substring(0, 60) + '...' : ''}</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:${dotColor}"></span>${ch.id}</span>
+            <span class="card-owner">${ch.authorName}</span>
+          </div>
+        `;
+        if (emptySlot) { emptySlot.before(card); } else { challengeLane.appendChild(card); }
+      });
+      const footerBadge = document.querySelector('.lane.challenge .lane-footer .count-badge');
+      if (footerBadge) footerBadge.textContent = challengeLane.querySelectorAll('.card').length;
+    }
+  }
+
+  // --- Approved Ideas → "Ideation & Evaluation" lane ---
+  const approvedId = JSON.parse(localStorage.getItem('ip_approved_ideas') || '[]');
+  if (approvedId.length > 0) {
+    const ideaLane = document.querySelector('.lane.ideation-evaluation .lane-body');
+    if (ideaLane) {
+      const emptySlot = ideaLane.querySelector('.empty-slot');
+      approvedId.forEach(idea => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.cursor = 'pointer';
+        card.setAttribute('data-nav', 'idea-detail.html');
+        card.innerHTML = `
+          <div class="card-title">${idea.title}</div>
+          <div class="card-desc">${idea.description ? idea.description.substring(0, 60) + '...' : ''}</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:var(--accent-blue)"></span>${idea.id}</span>
+            <span class="card-owner">${idea.authorName}</span>
+          </div>
+        `;
+        if (emptySlot) { emptySlot.before(card); } else { ideaLane.appendChild(card); }
+      });
+      const footerBadge = document.querySelector('.lane.ideation-evaluation .lane-footer .count-badge');
+      if (footerBadge) footerBadge.textContent = ideaLane.querySelectorAll('.card').length;
+    }
+  }
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+})();
+
+// ═══ REJECTED CHALLENGES & IDEAS – visible only to author ═══ //
+(function renderRejectedInSwimLane() {
+  const currentUser = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  const currentEmail = (currentUser.email || '').toLowerCase();
+
+  // --- Rejected Challenges → "Challenge Submitted" lane ---
+  const rejCh = JSON.parse(localStorage.getItem('ip_rejected_challenges') || '[]');
+  const myRejCh = rejCh.filter(ch => ch.authorEmail === currentEmail);
+  if (myRejCh.length > 0) {
+    const challengeLane = document.querySelector('.lane.challenge .lane-body');
+    if (challengeLane) {
+      const emptySlot = challengeLane.querySelector('.empty-slot');
+      myRejCh.forEach(ch => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.position = 'relative';
+        card.style.opacity = '0.5';
+        card.style.borderLeft = '3px solid #ef5350';
+        card.innerHTML = `
+          <div style="position:absolute;top:4px;right:6px;
+            background:rgba(239,83,80,.15);color:#ef5350;
+            font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;
+            text-transform:uppercase;letter-spacing:.3px;">Rejected</div>
+          <div class="card-title">${ch.title}</div>
+          <div class="card-desc">${ch.problemDesc ? ch.problemDesc.substring(0, 60) + '...' : ''}</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:#ef5350"></span>${ch.id}</span>
+            <span class="card-owner">${ch.authorName}</span>
+          </div>
+        `;
+        if (emptySlot) { emptySlot.before(card); } else { challengeLane.appendChild(card); }
+      });
+    }
+  }
+
+  // --- Rejected Ideas → "Ideation & Evaluation" lane ---
+  const rejId = JSON.parse(localStorage.getItem('ip_rejected_ideas') || '[]');
+  const myRejId = rejId.filter(idea => idea.authorEmail === currentEmail);
+  if (myRejId.length > 0) {
+    const ideaLane = document.querySelector('.lane.ideation-evaluation .lane-body');
+    if (ideaLane) {
+      const emptySlot = ideaLane.querySelector('.empty-slot');
+      myRejId.forEach(idea => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.position = 'relative';
+        card.style.opacity = '0.5';
+        card.style.borderLeft = '3px solid #ef5350';
+        card.innerHTML = `
+          <div style="position:absolute;top:4px;right:6px;
+            background:rgba(239,83,80,.15);color:#ef5350;
+            font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;
+            text-transform:uppercase;letter-spacing:.3px;">Rejected</div>
+          <div class="card-title">${idea.title}</div>
+          <div class="card-desc">${idea.description ? idea.description.substring(0, 60) + '...' : ''}</div>
+          <div class="card-meta">
+            <span class="card-id"><span class="card-priority" style="background:#ef5350"></span>${idea.id}</span>
+            <span class="card-owner">${idea.authorName}</span>
+          </div>
+        `;
+        if (emptySlot) { emptySlot.before(card); } else { ideaLane.appendChild(card); }
+      });
+    }
+  }
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+})();
+</script>
+
+<script src="dynamic-notifications.js"></script>
+<script src="admin-toggle.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

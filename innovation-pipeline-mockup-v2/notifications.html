@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Notifications - Ananta Innovation Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg-primary: #0a1929;
+      --bg-secondary: #0f2744;
+      --bg-card: #1a3a5a;
+      --bg-card-hover: #234a6f;
+      --text-primary: #e8eaf0;
+      --text-secondary: #b8c5d8;
+      --text-muted: #7a90a8;
+      --border: #2a4a6a;
+      --border-light: #3a5a7a;
+      --accent-teal: #e8a758;
+      --accent-blue: #66b2ff;
+      --accent-orange: #ffa726;
+      --accent-red: #f44336;
+      --accent-green: #66bb6a;
+      --accent-gold: #f0b870;
+      --accent-yellow: #ffd43b;
+      --accent-purple: #ab47bc;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px;
+      height: 48px;
+      background: transparent;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 300;
+      font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px;
+      color: #f0b870;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: none;
+      margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .header-right .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+      text-decoration: none;
+    }
+
+
+
+
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper { position: relative; }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active { display: flex; }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px; color: var(--accent-teal);
+      cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: all .2s;
+    }
+    .mark-all-read:hover { background: rgba(232,167,88,.1); }
+    .notification-list {
+      overflow-y: auto; max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar { width: 6px; }
+    .notification-list::-webkit-scrollbar-track { background: var(--bg-card); }
+    .notification-list::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: all .2s;
+      display: flex; gap: 12px;
+    }
+    .notification-item:hover { background: var(--bg-card-hover); }
+    .notification-item.unread { background: rgba(232,167,88,.05); }
+    .notification-item:last-child { border-bottom: none; }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .notification-icon.challenge { background: rgba(255,167,38,.15); color: var(--accent-orange); }
+    .notification-icon.idea { background: rgba(232,167,88,.15); color: var(--accent-teal); }
+    .notification-icon.comment { background: rgba(240,184,112,.15); color: var(--accent-blue); }
+    .notification-icon.status { background: rgba(102,187,106,.15); color: var(--accent-green); }
+    .notification-content { flex: 1; }
+    .notification-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+    .notification-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .notification-time { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .notification-footer {
+      padding: 12px 20px; border-top: 1px solid var(--border); text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px; color: var(--accent-teal); text-decoration: none;
+      font-weight: 600; transition: all .2s;
+    }
+    .view-all-link:hover { color: var(--accent-blue); }
+
+    /* ── Main Container ──────────────────── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 36px 60px;
+    }
+
+    /* ── Page Header ─────────────────────── */
+    .page-header {
+      margin-bottom: 32px;
+    }
+    .page-header h1 {
+      font-size: 32px; font-weight: 800; margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #f0b870);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-header p {
+      font-size: 14px; color: var(--text-secondary);
+      transition: all .3s;
+    }
+
+    /* ── Filter Tabs ─────────────────────── */
+    .filter-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .filter-tab {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-tab:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+      color: var(--text-primary);
+    }
+    .filter-tab.active {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+      color: #0d0f1a;
+    }
+    .filter-tab .count {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(0,0,0,.2);
+      font-size: 10px;
+    }
+
+    /* ── Notifications List ──────────────── */
+    .notifications-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .notif-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      cursor: pointer;
+      transition: all .25s;
+    }
+    .notif-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+      transform: translateX(4px);
+    }
+    .notif-card.unread {
+      background: rgba(232,167,88,.05);
+      border-left: 4px solid var(--accent-teal);
+    }
+    .notif-icon {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .notif-icon.challenge { background: rgba(255,167,38,.15); color: var(--accent-orange); }
+    .notif-icon.idea { background: rgba(232,167,88,.15); color: var(--accent-teal); }
+    .notif-icon.comment { background: rgba(240,184,112,.15); color: var(--accent-blue); }
+    .notif-icon.status { background: rgba(102,187,106,.15); color: var(--accent-green); }
+    .notif-icon.registration { background: rgba(171,71,188,.15); color: var(--accent-purple); }
+    .notif-icon.approval { background: rgba(102,187,106,.15); color: var(--accent-green); }
+    .notif-icon.rejection { background: rgba(244,67,54,.15); color: var(--accent-red); }
+
+    .notif-body { flex: 1; }
+    .notif-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .notif-title {
+      font-size: 16px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 4px;
+    }
+    .notif-time {
+      font-size: 12px; color: var(--text-muted); white-space: nowrap;
+    }
+    .notif-desc {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.6; margin-bottom: 8px;
+    }
+    .notif-meta {
+      display: flex; gap: 12px; font-size: 12px;
+      color: var(--text-muted); align-items: center; flex-wrap: wrap;
+    }
+    .notif-badge {
+      display: inline-block; padding: 4px 10px; border-radius: 12px;
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .notif-badge.challenge { background: rgba(255,167,38,.15); color: var(--accent-orange); }
+    .notif-badge.idea { background: rgba(232,167,88,.15); color: var(--accent-teal); }
+    .notif-badge.comment { background: rgba(240,184,112,.15); color: var(--accent-blue); }
+    .notif-badge.status { background: rgba(102,187,106,.15); color: var(--accent-green); }
+    .notif-badge.registration { background: rgba(171,71,188,.15); color: var(--accent-purple); }
+    .notif-badge.approved { background: rgba(102,187,106,.15); color: var(--accent-green); }
+    .notif-badge.rejected { background: rgba(244,67,54,.15); color: var(--accent-red); }
+
+    /* ── Admin-specific Notification Styles ── */
+    .notif-card.action-needed {
+      border-left: 4px solid var(--accent-red);
+      background: rgba(244,67,54,.04);
+    }
+    .notif-badge.action-tag {
+      background: rgba(244,67,54,.12); color: var(--accent-red);
+      border: 1px solid rgba(244,67,54,.25);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+
+    /* ── Date Group ──────────────────────── */
+    .date-group {
+      font-size: 12px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-muted);
+      padding: 16px 0 8px; border-bottom: 1px solid var(--border);
+      margin-bottom: 12px; margin-top: 12px;
+    }
+    .date-group:first-child { margin-top: 0; }
+
+    /* ── View Panels ─────────────────────── */
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
+
+    /* ── Transition Effect ────────────────── */
+    .view-panel {
+      animation: fadeIn .35s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Empty State ─────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+    .empty-state h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p id="headerSubtitle">Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment"><i data-lucide="message-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ MAIN CONTAINER ════════════════════════ -->
+<div class="container">
+  
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 id="pageTitle"><i data-lucide="bell"></i> All Notifications</h1>
+    <p id="pageSubtitle">Stay updated on challenges, ideas, comments, and status changes across the innovation pipeline.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ═══ USER VIEW ═════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="userView" class="view-panel active">
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs" id="userFilterTabs">
+      <button class="filter-tab active" data-filter="all">All <span class="count">15</span></button>
+      <button class="filter-tab" data-filter="challenge">Challenges <span class="count">5</span></button>
+      <button class="filter-tab" data-filter="idea">Ideas <span class="count">4</span></button>
+      <button class="filter-tab" data-filter="comment">Comments <span class="count">3</span></button>
+      <button class="filter-tab" data-filter="status">Status <span class="count">3</span></button>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="notifications-grid" id="userNotifGrid">
+      
+      <!-- Notification 1 -->
+      <div class="notif-card unread" data-type="challenge" onclick="navigateToNotification('challenge-detail.html', 1)">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Challenge Submitted</div>
+              <div class="notif-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Reduce Customer Churn</strong> has been submitted by R. Patel. The challenge focuses on high-value segment losing 8% QoQ and needs review from the innovation team.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="user"></i> R. Patel</span>
+            <span><i data-lucide="flag"></i> CH-01</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 2 -->
+      <div class="notif-card unread" data-type="idea" onclick="navigateToNotification('idea-detail.html', 2)">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Idea Proposed</div>
+              <div class="notif-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>AI-Powered Retention Model</strong> has been proposed by S. Kumar and linked to challenge CH-01. The idea suggests using machine learning to predict customer churn risk.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="user"></i> S. Kumar</span>
+            <span><i data-lucide="lightbulb"></i> ID-01</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 3 -->
+      <div class="notif-card unread" data-type="comment" onclick="navigateToNotification('challenge-detail.html', 3)">
+        <div class="notif-icon comment"><i data-lucide="message-circle"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Comment on Challenge</div>
+              <div class="notif-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            S. Kumar commented on <strong>Automate Invoice Reconciliation</strong>: "We should consider integrating with our existing ERP system for better data syncing."
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge comment">Comment</span>
+            <span><i data-lucide="user"></i> S. Kumar</span>
+            <span><i data-lucide="flag"></i> CH-02</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 4 -->
+      <div class="notif-card unread" data-type="status" onclick="navigateToNotification('idea-detail.html', 4)">
+        <div class="notif-icon status"><i data-lucide="trending-up"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Status Update</div>
+              <div class="notif-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Predictive Inventory Restocking</strong> has been moved from Idea Submitted to Evaluation stage. The innovation team will assess feasibility and impact.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge status">Status</span>
+            <span><i data-lucide="lightbulb"></i> ID-03</span>
+            <span><i data-lucide="bar-chart-2"></i> Evaluation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 5 -->
+      <div class="notif-card unread" data-type="challenge" onclick="navigateToNotification('challenge-detail.html', 5)">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Challenge Updated</div>
+              <div class="notif-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            The impact level for <strong>Optimize Warehouse Layout</strong> has been changed from Medium to High by the innovation team after reviewing the business case.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="flag"></i> CH-03</span>
+            <span><i data-lucide="circle"></i> High Impact</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 6 -->
+      <div class="notif-card" data-type="status" onclick="navigateToNotification('detail-dashboard.html', 6)">
+        <div class="notif-icon status"><i data-lucide="trending-up"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Milestone Achieved</div>
+              <div class="notif-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            Congratulations! The innovation team has reached <strong>50 ideas submitted</strong> this quarter. This is a 40% increase from last quarter.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge status">Milestone</span>
+            <span><i data-lucide="party-popper"></i> Achievement</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 7 -->
+      <div class="notif-card" data-type="idea" onclick="navigateToNotification('idea-detail.html', 7)">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Your Idea Approved for Pilot</div>
+              <div class="notif-time">1 day ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            Your idea <strong>Voice-Based Order Entry</strong> has been approved for pilot testing. The pilot will start next month with the warehouse team.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="lightbulb"></i> EV-03</span>
+            <span><i data-lucide="rocket"></i> Pilot</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 8 -->
+      <div class="notif-card" data-type="challenge" onclick="navigateToNotification('challenge-detail.html', 8)">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Challenge Closed</div>
+              <div class="notif-time">1 day ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Streamline Onboarding</strong> has been closed after selecting the winning idea "Digital Onboarding Kit". Implementation begins next sprint.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="flag"></i> CH-04</span>
+            <span><i data-lucide="circle-check"></i> Closed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 9 -->
+      <div class="notif-card" data-type="comment" onclick="navigateToNotification('idea-detail.html', 9)">
+        <div class="notif-icon comment"><i data-lucide="message-circle"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Comment on Your Idea</div>
+              <div class="notif-time">2 days ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            A. Basu commented on <strong>Robotic Picking Arms</strong>: "This looks promising! Can we schedule a demo with potential vendors?"
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge comment">Comment</span>
+            <span><i data-lucide="user"></i> A. Basu</span>
+            <span><i data-lucide="lightbulb"></i> EV-02</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 10 -->
+      <div class="notif-card" data-type="idea" onclick="navigateToNotification('idea-detail.html', 10)">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Idea Submitted</div>
+              <div class="notif-time">2 days ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            M. Singh submitted <strong>Smart Shelf Sensors</strong> linked to challenge CH-03. The idea proposes IoT sensors for real-time inventory tracking.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="user"></i> M. Singh</span>
+            <span><i data-lucide="lightbulb"></i> ID-04</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 11 -->
+      <div class="notif-card" data-type="status" onclick="navigateToNotification('idea-detail.html', 11)">
+        <div class="notif-icon status"><i data-lucide="trending-up"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Pilot Results Available</div>
+              <div class="notif-time">3 days ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            The pilot for <strong>Chatbot Customer Support</strong> has completed. Results show 35% improvement in response time. Full report available in the dashboard.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge status">Status</span>
+            <span><i data-lucide="lightbulb"></i> PP-01</span>
+            <span><i data-lucide="bar-chart-2"></i> Results</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 12 -->
+      <div class="notif-card" data-type="challenge" onclick="navigateToNotification('challenge-detail.html', 12)">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Challenge: Data Security</div>
+              <div class="notif-time">3 days ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            N. Sharma submitted <strong>Enhance Data Security Compliance</strong>. The challenge addresses new regulatory requirements and seeks innovative security solutions.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="user"></i> N. Sharma</span>
+            <span><i data-lucide="flag"></i> CH-05</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 13 -->
+      <div class="notif-card" data-type="comment" onclick="navigateToNotification('challenge-detail.html', 13)">
+        <div class="notif-icon comment"><i data-lucide="message-circle"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Reply to Your Comment</div>
+              <div class="notif-time">4 days ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            R. Patel replied to your comment on <strong>Reduce Customer Churn</strong>: "Great suggestion! Let's schedule a meeting to discuss implementation details."
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge comment">Comment</span>
+            <span><i data-lucide="user"></i> R. Patel</span>
+            <span><i data-lucide="flag"></i> CH-01</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 14 -->
+      <div class="notif-card" data-type="idea" onclick="navigateToNotification('idea-detail.html', 14)">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Idea Evaluation Completed</div>
+              <div class="notif-time">5 days ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            Evaluation for <strong>Personalised Retention Offers</strong> is complete. Score: 8.5/10. Moving forward to pilot planning stage.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="lightbulb"></i> EV-01</span>
+            <span><i data-lucide="star"></i> 8.5/10</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 15 -->
+      <div class="notif-card" data-type="challenge" onclick="navigateToNotification('challenge-detail.html', 15)">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Challenge Deadline Extended</div>
+              <div class="notif-time">1 week ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            The submission deadline for <strong>Optimize Warehouse Layout</strong> has been extended by 2 weeks to allow more time for comprehensive ideas.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="flag"></i> CH-03</span>
+            <span><i data-lucide="calendar"></i> Extended</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ═══ ADMIN VIEW ════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="adminView" class="view-panel">
+
+    <!-- Admin Filter Tabs -->
+    <div class="filter-tabs" id="adminFilterTabs">
+      <button class="filter-tab active" data-filter="all">All <span class="count">15</span></button>
+      <button class="filter-tab" data-filter="action"><i data-lucide="zap"></i> Action Needed <span class="count">5</span></button>
+      <button class="filter-tab" data-filter="challenge"><i data-lucide="flag"></i> Challenges <span class="count">6</span></button>
+      <button class="filter-tab" data-filter="idea"><i data-lucide="lightbulb"></i> Ideas <span class="count">4</span></button>
+      <button class="filter-tab" data-filter="comment"><i data-lucide="message-circle"></i> Comments <span class="count">1</span></button>
+      <button class="filter-tab" data-filter="status"><i data-lucide="bar-chart-2"></i> Status <span class="count">2</span></button>
+    </div>
+
+    <div class="notifications-grid" id="adminNotifGrid">
+
+      <!-- A1 — Registration pending -->
+      <div class="notif-card action-needed" data-type="registration action" onclick="window.location.href='admin-dashboard.html'">
+        <div class="notif-icon registration"><i data-lucide="user"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Registration — Priya Nair</div>
+              <div class="notif-time">10 minutes ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Priya Nair</strong> (priya.nair@company.com) from Supply Chain has registered and is awaiting your approval to access the portal.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge registration">Registration</span>
+            <span class="notif-badge action-tag"><i data-lucide="zap"></i> Action Needed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- A2 — Registration pending -->
+      <div class="notif-card action-needed" data-type="registration action" onclick="window.location.href='admin-dashboard.html'">
+        <div class="notif-icon registration"><i data-lucide="user"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Registration — Vikram Desai</div>
+              <div class="notif-time">45 minutes ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Vikram Desai</strong> (vikram.desai@company.com) from Finance has registered. Confirm identity and grant access.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge registration">Registration</span>
+            <span class="notif-badge action-tag"><i data-lucide="zap"></i> Action Needed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- A3 — Challenge pending -->
+      <div class="notif-card action-needed" data-type="challenge action" onclick="window.location.href='admin-dashboard.html'">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Challenge Submitted — Reduce Manual Data Entry Errors</div>
+              <div class="notif-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>R. Patel</strong> submitted challenge <strong>CH-06</strong>. Marked as High Impact. Needs your approval before it goes live on the portal.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span class="notif-badge action-tag"><i data-lucide="zap"></i> Action Needed</span>
+            <span><i data-lucide="flag"></i> CH-06</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- A4 — Idea pending -->
+      <div class="notif-card action-needed" data-type="idea action" onclick="window.location.href='admin-dashboard.html'">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Idea Submitted — AI Document Parser for Invoice Matching</div>
+              <div class="notif-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>S. Kumar</strong> submitted idea <strong>ID-05</strong> linked to CH-02. Requires approval to appear in the ideas board.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span class="notif-badge action-tag"><i data-lucide="zap"></i> Action Needed</span>
+            <span><i data-lucide="lightbulb"></i> ID-05</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- A5 — Challenge pending -->
+      <div class="notif-card action-needed" data-type="challenge action" onclick="window.location.href='admin-dashboard.html'">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Challenge Submitted — Improve Cross-Team Knowledge Sharing</div>
+              <div class="notif-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>A. Basu</strong> submitted challenge <strong>CH-07</strong>. Medium Impact. Review the business case and approve or reject.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span class="notif-badge action-tag"><i data-lucide="zap"></i> Action Needed</span>
+            <span><i data-lucide="flag"></i> CH-07</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E1 — New challenge submitted -->
+      <div class="notif-card" data-type="challenge" onclick="window.location.href='challenge-detail.html'">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Challenge Submitted</div>
+              <div class="notif-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>R. Patel</strong> submitted <strong>Reduce Customer Churn</strong> — focuses on high-value segment losing 8% QoQ. Needs innovation team review.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="user"></i> R. Patel</span>
+            <span><i data-lucide="flag"></i> CH-01</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E2 — New idea proposed -->
+      <div class="notif-card" data-type="idea" onclick="window.location.href='idea-detail.html'">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Idea Proposed</div>
+              <div class="notif-time">6 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>S. Kumar</strong> proposed <strong>AI-Powered Retention Model</strong> linked to CH-01. Uses machine learning to predict customer churn risk.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="user"></i> S. Kumar</span>
+            <span><i data-lucide="lightbulb"></i> ID-01</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E3 — Comment on challenge -->
+      <div class="notif-card" data-type="comment" onclick="window.location.href='challenge-detail.html'">
+        <div class="notif-icon comment"><i data-lucide="message-circle"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Comment on Challenge</div>
+              <div class="notif-time">7 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>S. Kumar</strong> commented on <strong>Automate Invoice Reconciliation</strong>: “We should consider integrating with our existing ERP system for better data syncing.”
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge comment">Comment</span>
+            <span><i data-lucide="user"></i> S. Kumar</span>
+            <span><i data-lucide="flag"></i> CH-02</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E4 — Status change -->
+      <div class="notif-card" data-type="status" onclick="window.location.href='idea-detail.html'">
+        <div class="notif-icon status"><i data-lucide="trending-up"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Idea Stage Changed</div>
+              <div class="notif-time">Yesterday, 3:10 PM</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Predictive Inventory Restocking</strong> moved from Idea Submitted to Evaluation stage. The innovation team is assessing feasibility and impact.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge status">Status</span>
+            <span><i data-lucide="lightbulb"></i> ID-03</span>
+            <span><i data-lucide="bar-chart-2"></i> Evaluation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E5 — Challenge impact upgraded -->
+      <div class="notif-card" data-type="challenge" onclick="window.location.href='challenge-detail.html'">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Challenge Impact Updated</div>
+              <div class="notif-time">Yesterday, 11:00 AM</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            Impact level for <strong>Optimize Warehouse Layout</strong> changed from Medium to High after reviewing the business case.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="flag"></i> CH-03</span>
+            <span><i data-lucide="circle"></i> High Impact</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E6 — Challenge closed -->
+      <div class="notif-card" data-type="challenge" onclick="window.location.href='challenge-detail.html'">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Challenge Closed</div>
+              <div class="notif-time">Feb 20, 2026</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>Streamline Onboarding</strong> closed after selecting the winning idea “Digital Onboarding Kit”. Implementation begins next sprint.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="flag"></i> CH-04</span>
+            <span><i data-lucide="circle-check"></i> Closed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E7 — New idea submitted -->
+      <div class="notif-card" data-type="idea" onclick="window.location.href='idea-detail.html'">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">New Idea Submitted</div>
+              <div class="notif-time">Feb 19, 2026</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            <strong>M. Singh</strong> submitted <strong>Smart Shelf Sensors</strong> linked to CH-03. Proposes IoT sensors for real-time inventory tracking.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="user"></i> M. Singh</span>
+            <span><i data-lucide="lightbulb"></i> ID-04</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E8 — Idea evaluation completed -->
+      <div class="notif-card" data-type="idea" onclick="window.location.href='idea-detail.html'">
+        <div class="notif-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Idea Evaluation Completed</div>
+              <div class="notif-time">Feb 18, 2026</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            Evaluation for <strong>Personalised Retention Offers</strong> is complete. Score: 8.5/10. Moving forward to pilot planning.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge idea">Idea</span>
+            <span><i data-lucide="lightbulb"></i> EV-01</span>
+            <span><i data-lucide="star"></i> 8.5/10</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E9 — Challenge deadline extended -->
+      <div class="notif-card" data-type="challenge" onclick="window.location.href='challenge-detail.html'">
+        <div class="notif-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Challenge Deadline Extended</div>
+              <div class="notif-time">Feb 17, 2026</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            Submission deadline for <strong>Optimize Warehouse Layout</strong> extended by 2 weeks to allow more time for comprehensive ideas.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge challenge">Challenge</span>
+            <span><i data-lucide="flag"></i> CH-03</span>
+            <span><i data-lucide="calendar"></i> Extended</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- E10 — Milestone -->
+      <div class="notif-card" data-type="status" onclick="window.location.href='detail-dashboard.html'">
+        <div class="notif-icon status"><i data-lucide="trending-up"></i></div>
+        <div class="notif-body">
+          <div class="notif-header">
+            <div>
+              <div class="notif-title">Milestone Achieved</div>
+              <div class="notif-time">Feb 16, 2026</div>
+            </div>
+          </div>
+          <div class="notif-desc">
+            The innovation pipeline has reached <strong>50 ideas submitted</strong> this quarter — a 40% increase from last quarter.
+          </div>
+          <div class="notif-meta">
+            <span class="notif-badge status">Milestone</span>
+            <span><i data-lucide="party-popper"></i> Achievement</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="admin-toggle.js"></script>
+<script>
+// ═══ PANEL SWITCHING VIA ROLE (set at sign-in) ═══ //
+(function () {
+  var userView     = document.getElementById('userView');
+  var adminView    = document.getElementById('adminView');
+  var pageTitle    = document.getElementById('pageTitle');
+  var pageSubtitle = document.getElementById('pageSubtitle');
+
+  function applyPanel(isAdmin) {
+    if (isAdmin) {
+      userView.classList.remove('active');
+      adminView.classList.add('active');
+      pageTitle.innerHTML = '<i data-lucide="bell"></i> All Notifications';
+      pageSubtitle.textContent = 'Pending actions, challenge updates, idea activity, and engagement — everything across the pipeline.';
+      adminView.style.animation = 'none'; adminView.offsetHeight; adminView.style.animation = '';
+    } else {
+      adminView.classList.remove('active');
+      userView.classList.add('active');
+      pageTitle.innerHTML = '<i data-lucide="bell"></i> All Notifications';
+      pageSubtitle.textContent = 'Stay updated on challenges, ideas, comments, and status changes across the innovation pipeline.';
+      userView.style.animation = 'none'; userView.offsetHeight; userView.style.animation = '';
+    }
+  }
+
+  if (window.anantaToggle) {
+    applyPanel(window.anantaToggle.isAdmin());
+  }
+})();
+
+// ═══ NOTIFICATION BELL FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+
+// ═══ USER VIEW FILTER ═══ //
+document.querySelectorAll('#userFilterTabs .filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#userFilterTabs .filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter = tab.dataset.filter;
+    document.querySelectorAll('#userNotifGrid .notif-card').forEach(card => {
+      if (filter === 'all' || card.dataset.type === filter) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// ═══ ADMIN VIEW FILTER ═══ //
+document.querySelectorAll('#adminFilterTabs .filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#adminFilterTabs .filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter = tab.dataset.filter;
+    const cards = document.querySelectorAll('#adminNotifGrid .notif-card');
+    const dateGroups = document.querySelectorAll('#adminNotifGrid .date-group');
+
+    cards.forEach(card => {
+      const types = card.dataset.type || '';
+      if (filter === 'all') {
+        card.style.display = 'flex';
+      } else if (types.includes(filter)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Hide empty date groups
+    dateGroups.forEach(dg => {
+      let next = dg.nextElementSibling;
+      let hasVisible = false;
+      while (next && !next.classList.contains('date-group')) {
+        if (next.classList.contains('notif-card') && next.style.display !== 'none') {
+          hasVisible = true;
+          break;
+        }
+        next = next.nextElementSibling;
+      }
+      dg.style.display = hasVisible ? '' : 'none';
+    });
+  });
+});
+
+// ═══ NAVIGATION FUNCTION ═══ //
+function navigateToNotification(url, id) {
+  const card = document.querySelector(`.notif-card[onclick*="${id}"]`);
+  if (card && card.classList.contains('unread')) {
+    card.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    if (badge) {
+      let count = parseInt(badge.textContent) - 1;
+      if (count < 0) count = 0;
+      badge.textContent = count;
+      if (count === 0) badge.style.display = 'none';
+    }
+  }
+  window.location.href = url;
+}
+</script>
+
+<script src="dynamic-notifications.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

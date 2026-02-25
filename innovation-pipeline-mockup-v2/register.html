@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline — Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; text-transform: none; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+      text-decoration: none;
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Page Container ──────────────────────── */
+    .page-container {
+      max-width: 640px;
+      margin: 60px auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Form Card ──────────────────────────── */
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 44px 40px 40px;
+      box-shadow: var(--shadow);
+    }
+    .form-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .form-header .icon-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(232,167,88,.12); display: flex;
+      align-items: center; justify-content: center;
+      margin: 0 auto 18px; font-size: 28px;
+    }
+    .form-header h2 {
+      font-size: 24px; font-weight: 700; margin-bottom: 6px;
+    }
+    .form-header p {
+      font-size: 14px; color: var(--text-secondary);
+    }
+
+    /* ── Form Fields ──────────────────────────── */
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--text-secondary); margin-bottom: 8px;
+      letter-spacing: .4px;
+    }
+    .form-group label .req { color: var(--accent-red); margin-left: 2px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit; font-size: 14px;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .form-group input::placeholder,
+    .form-group select option,
+    .form-group textarea::placeholder {
+      color: var(--text-muted);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.15);
+    }
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%239a9dba' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+      cursor: pointer;
+    }
+    .form-group select option {
+      background: var(--bg-card);
+      color: var(--text-primary);
+    }
+    .form-group .helper {
+      font-size: 12px; color: var(--text-muted); margin-top: 6px;
+    }
+
+    /* ── Interest Chips ──────────────────────── */
+    .interest-chips {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px;
+    }
+    .interest-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 20px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all .2s; user-select: none;
+    }
+    .interest-chip:hover {
+      border-color: var(--accent-teal); color: var(--accent-teal);
+    }
+    .interest-chip.selected {
+      background: rgba(232,167,88,.12); border-color: var(--accent-teal);
+      color: var(--accent-teal); font-weight: 600;
+    }
+    .interest-chip .chip-check {
+      width: 16px; height: 16px; border-radius: 4px;
+      border: 1.5px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; transition: all .2s;
+    }
+    .interest-chip.selected .chip-check {
+      background: var(--accent-teal); border-color: var(--accent-teal);
+      color: #0d0f1a;
+    }
+
+    /* ── Buttons ──────────────────────────── */
+    .form-actions {
+      display: flex; gap: 12px; margin-top: 32px;
+    }
+    .btn {
+      flex: 1; padding: 14px 24px; border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .25s; border: none;
+      text-align: center; text-decoration: none; display: inline-block;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(232,167,88,.35);
+    }
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .btn-secondary:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
+
+    /* ── Form Footer ──────────────────────── */
+    .form-footer {
+      text-align: center; margin-top: 24px;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .form-footer a {
+      color: var(--accent-teal); text-decoration: none; font-weight: 600;
+    }
+    .form-footer a:hover { text-decoration: underline; }
+
+    /* ── Password Strength ──────────────── */
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 44px; }
+    .toggle-pass {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 16px; padding: 4px;
+    }
+    .strength-bar {
+      display: flex; gap: 4px; margin-top: 8px;
+    }
+    .strength-bar span {
+      flex: 1; height: 3px; border-radius: 3px; background: var(--border);
+      transition: background .3s;
+    }
+    .strength-bar.s1 span:nth-child(1) { background: var(--accent-red); }
+    .strength-bar.s2 span:nth-child(-n+2) { background: var(--accent-orange); }
+    .strength-bar.s3 span:nth-child(-n+3) { background: var(--accent-teal); }
+    .strength-bar.s4 span { background: var(--accent-green); }
+
+    /* ── Divider ──────────────────────── */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 28px 0; color: var(--text-muted); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center; padding: 20px 36px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Pending Approval Overlay ───────── */
+    .pending-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(10,25,41,.92); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center;
+    }
+    .pending-overlay.show { display: flex; }
+    .pending-card {
+      background: var(--bg-card); border: 1px solid var(--border-light);
+      border-radius: var(--radius); padding: 48px 40px; max-width: 480px;
+      text-align: center; box-shadow: var(--shadow);
+      animation: pendingSlide .5s ease;
+    }
+    @keyframes pendingSlide {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .pending-icon {
+      width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 24px;
+      background: rgba(255,167,38,.12); display: flex; align-items: center;
+      justify-content: center; color: var(--accent-orange);
+    }
+    .pending-icon svg { width: 40px; height: 40px; }
+    .pending-card h2 {
+      font-size: 22px; font-weight: 700; margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff, var(--accent-teal));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .pending-card p {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .pending-card .pending-email {
+      display: inline-block; background: rgba(232,167,88,.1);
+      border: 1px solid rgba(232,167,88,.25); border-radius: 6px;
+      padding: 6px 16px; margin: 12px 0 20px; font-size: 13px;
+      color: var(--accent-teal); font-weight: 600;
+    }
+    .pending-card .pending-steps {
+      text-align: left; margin: 20px 0 28px; padding: 0;
+      list-style: none; display: flex; flex-direction: column; gap: 12px;
+    }
+    .pending-card .pending-steps li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .pending-card .pending-steps .step-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      background: rgba(232,167,88,.12); color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.3);
+    }
+    .pending-card .pending-steps .step-num.done {
+      background: rgba(102,187,106,.15); color: var(--accent-green);
+      border-color: rgba(102,187,106,.3);
+    }
+    .pending-card .btn-signin {
+      display: inline-block; padding: 14px 36px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a; font-weight: 700; font-size: 14px;
+      text-decoration: none; transition: all .25s; border: none; cursor: pointer;
+    }
+    .pending-card .btn-signin:hover {
+      transform: translateY(-2px); box-shadow: 0 6px 24px rgba(232,167,88,.35);
+    }
+    .pending-card .redirect-note {
+      font-size: 11px; color: var(--text-muted); margin-top: 14px;
+    }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 600px) {
+      .form-card { padding: 28px 20px; }
+      .page-container { margin: 30px auto; }
+      .interest-chips { gap: 6px; }
+      .header-right .nav-link { display: none; }
+      .pending-card { margin: 20px; padding: 32px 24px; }
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ REGISTRATION FORM ══════════════════════ -->
+<div class="page-container">
+  <div class="form-card">
+
+    <div class="form-header">
+      <div class="icon-circle"><i data-lucide="rocket"></i></div>
+      <h2>Join the Innovation Pipeline</h2>
+      <p>Register to submit challenges, share ideas, and drive impact</p>
+    </div>
+
+    <form id="registerForm" onsubmit="handleRegister(event)">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="regName" placeholder="e.g. Priya Sharma" required />
+      </div>
+
+      <!-- OpCo -->
+      <div class="form-group">
+        <label>OpCo (Operating Company) <span class="req">*</span></label>
+        <select id="regOpco" required>
+          <option value="" disabled selected>Select your OpCo</option>
+          <option>TCS — North America</option>
+          <option>TCS — Europe</option>
+          <option>TCS — UK &amp; Ireland</option>
+          <option>TCS — Asia Pacific</option>
+          <option>TCS — Latin America</option>
+          <option>TCS — Middle East &amp; Africa</option>
+          <option>TCS — India</option>
+          <option>TCS — Japan</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <!-- Platform -->
+      <div class="form-group">
+        <label>Platform / Business Unit <span class="req">*</span></label>
+        <select id="regPlatform" required>
+          <option value="" disabled selected>Select your platform</option>
+          <option>BFSI</option>
+          <option>Retail &amp; CPG</option>
+          <option>Manufacturing</option>
+          <option>Life Sciences &amp; Healthcare</option>
+          <option>Communications &amp; Media</option>
+          <option>Technology &amp; Services</option>
+          <option>Energy, Resources &amp; Utilities</option>
+          <option>Government &amp; Public Services</option>
+          <option>Travel &amp; Hospitality</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <!-- Contact Email -->
+      <div class="form-group">
+        <label>Contact Email <span class="req">*</span></label>
+        <input type="email" id="regEmail" placeholder="priya.sharma@tcs.com" required />
+        <div class="helper">Use your corporate email address</div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label>Password <span class="req">*</span></label>
+        <div class="password-wrapper">
+          <input type="password" id="regPassword" placeholder="Min 8 characters" required minlength="8" />
+          <button type="button" class="toggle-pass" onclick="togglePassword()"><i data-lucide="eye"></i></button>
+        </div>
+        <div class="strength-bar" id="strengthBar">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- Area of Interest -->
+      <div class="form-group">
+        <label>Area of Interest <span class="req">*</span></label>
+        <p class="helper" style="margin-top:0;margin-bottom:10px;">Select one or more problem categories you're interested in</p>
+        <div class="interest-chips" id="interestChips">
+          <div class="interest-chip" data-value="Customer Experience" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Customer Experience
+          </div>
+          <div class="interest-chip" data-value="Finance & Ops" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Finance &amp; Ops
+          </div>
+          <div class="interest-chip" data-value="Supply Chain" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Supply Chain
+          </div>
+          <div class="interest-chip" data-value="Product & Data" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Product &amp; Data
+          </div>
+          <div class="interest-chip" data-value="Manufacturing" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Manufacturing
+          </div>
+          <div class="interest-chip" data-value="Sustainability" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Sustainability
+          </div>
+          <div class="interest-chip" data-value="Logistics" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Logistics
+          </div>
+          <div class="interest-chip" data-value="Retail Ops" onclick="toggleChip(this)">
+            <span class="chip-check"><i data-lucide="check"></i></span> Retail Ops
+          </div>
+        </div>
+      </div>
+
+      <div class="divider">or</div>
+
+      <!-- Quick SSO -->
+      <button type="button" class="btn btn-secondary" style="width:100%; margin-bottom:8px;" onclick="alert('SSO integration placeholder')">
+        <i data-lucide="lock-keyhole"></i>&nbsp;&nbsp;Register with Corporate SSO
+      </button>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <a href="signin.html" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </div>
+    </form>
+
+    <div class="form-footer">
+      Already have an account? <a href="signin.html">Sign in here</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PENDING APPROVAL OVERLAY ══════════════ -->
+<div class="pending-overlay" id="pendingOverlay">
+  <div class="pending-card">
+    <div class="pending-icon"><i data-lucide="clock"></i></div>
+    <h2>Registration Submitted!</h2>
+    <p>Your account request has been received. An admin will review and approve your registration.</p>
+    <div class="pending-email" id="pendingEmail"></div>
+    <ul class="pending-steps">
+      <li><span class="step-num done"><i data-lucide="check" style="width:14px;height:14px"></i></span> Registration form submitted</li>
+      <li><span class="step-num">2</span> Admin reviews your request</li>
+      <li><span class="step-num">3</span> You'll receive approval &amp; can sign in</li>
+    </ul>
+    <a href="signin.html" class="btn-signin">Go to Sign In</a>
+    <div class="redirect-note">You will be redirected to Sign In in <span id="countdown">10</span>s</div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══════════════════════════════ -->
+<footer class="footer">
+  Innovation Pipeline Mockup — TCS Tensor Workshop &nbsp;|&nbsp;
+  <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Help</a>
+</footer>
+
+<script>
+  // Toggle interest chips
+  function toggleChip(el) {
+    el.classList.toggle('selected');
+  }
+
+  // Toggle password visibility
+  function togglePassword() {
+    const inp = document.getElementById('regPassword');
+    const btn = document.querySelector('.toggle-pass');
+    if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i data-lucide="eye-off"></i>'; }
+    else { inp.type = 'password'; btn.innerHTML = '<i data-lucide="eye"></i>'; }
+    if (typeof lucide !== "undefined") lucide.createIcons();
+    if (typeof lucide !== "undefined") lucide.createIcons();
+
+  }
+
+  // Password strength meter
+  document.getElementById('regPassword').addEventListener('input', function() {
+    const bar = document.getElementById('strengthBar');
+    const v = this.value;
+    let s = 0;
+    if (v.length >= 8) s++;
+    if (/[A-Z]/.test(v)) s++;
+    if (/[0-9]/.test(v)) s++;
+    if (/[^A-Za-z0-9]/.test(v)) s++;
+    bar.className = 'strength-bar' + (s ? ' s' + s : '');
+  });
+
+  // Registration handler — stores as pending, does NOT log in
+  function handleRegister(e) {
+    e.preventDefault();
+    const selected = [...document.querySelectorAll('.interest-chip.selected')].map(c => c.dataset.value);
+    if (selected.length === 0) {
+      alert('Please select at least one Area of Interest');
+      return;
+    }
+    const data = {
+      name: document.getElementById('regName').value,
+      opco: document.getElementById('regOpco').value,
+      platform: document.getElementById('regPlatform').value,
+      email: document.getElementById('regEmail').value.trim().toLowerCase(),
+      interests: selected,
+      status: 'pending',
+      registeredAt: new Date().toISOString()
+    };
+
+    // Add to pending registrations list in localStorage
+    const pending = JSON.parse(localStorage.getItem('ip_pending_registrations') || '[]');
+    // Prevent duplicate registration
+    if (pending.some(u => u.email === data.email)) {
+      alert('This email has already been registered and is awaiting admin approval.');
+      return;
+    }
+    pending.push(data);
+    localStorage.setItem('ip_pending_registrations', JSON.stringify(pending));
+
+    // Show pending-approval overlay (do NOT set ip_loggedIn)
+    document.getElementById('pendingEmail').textContent = data.email;
+    document.getElementById('pendingOverlay').classList.add('show');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Auto-redirect countdown
+    let sec = 10;
+    const cdEl = document.getElementById('countdown');
+    const timer = setInterval(() => {
+      sec--;
+      cdEl.textContent = sec;
+      if (sec <= 0) { clearInterval(timer); window.location.href = 'signin.html'; }
+    }, 1000);
+  }
+
+</script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

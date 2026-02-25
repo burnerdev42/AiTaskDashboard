@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit New Challenge – Innovation Pipeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-yellow: #ffee58;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px;
+      transition: all .2s;
+    }
+    .header-right .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .header-right .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .header-right .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .header-right .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .header-right .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Main Container ──────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 36px 60px;
+    }
+
+    /* ── Page Header ─────────────────────── */
+    .page-header {
+      margin-bottom: 32px;
+    }
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .page-header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Form Card ───────────────────────── */
+    .form-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 40px;
+      border-top: 3px solid var(--accent-teal);
+    }
+
+    /* ── Form Section ────────────────────── */
+    .form-section {
+      margin-bottom: 32px;
+    }
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--accent-teal);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .icon {
+      font-size: 20px;
+    }
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-teal), transparent);
+      margin-bottom: 24px;
+    }
+
+    /* ── Form Fields ─────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-label .required {
+      color: var(--accent-red);
+      font-size: 14px;
+    }
+    .form-label .hint {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+    .form-select {
+      cursor: pointer;
+    }
+
+    /* ── Character Counter ───────────────── */
+    .char-counter {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: -4px;
+    }
+    .char-counter.warning {
+      color: var(--accent-orange);
+    }
+    .char-counter.limit {
+      color: var(--accent-red);
+    }
+
+    /* ── Tags Input ──────────────────────── */
+    .tags-input-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 48px;
+      align-items: center;
+      transition: all .2s;
+    }
+    .tags-input-wrapper:focus-within {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .tag-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .tag-item .remove-tag {
+      cursor: pointer;
+      font-weight: 700;
+      opacity: 0.7;
+      transition: opacity .2s;
+    }
+    .tag-item .remove-tag:hover {
+      opacity: 1;
+    }
+    .tags-input {
+      flex: 1;
+      min-width: 120px;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 14px;
+      padding: 4px 0;
+      outline: none;
+      font-family: inherit;
+    }
+    .tags-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* ── Impact Selector ─────────────────── */
+    .impact-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .impact-option {
+      position: relative;
+    }
+    .impact-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .impact-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center;
+    }
+    .impact-option label:hover {
+      border-color: var(--accent-teal);
+      transform: translateY(-2px);
+    }
+    .impact-option input:checked + label {
+      border-color: var(--accent-teal);
+      background: rgba(232,167,88,.08);
+    }
+    .impact-icon {
+      font-size: 24px;
+    }
+    .impact-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Form Actions ────────────────────── */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232,167,88,.4);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+    }
+
+    /* ── Help Text ───────────────────────── */
+    .help-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* ── Success Message ─────────────────── */
+    .success-message {
+      display: none;
+      background: rgba(102,187,106,.15);
+      border: 2px solid var(--accent-green);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      align-items: center;
+      gap: 12px;
+    }
+    .success-message.show {
+      display: flex;
+    }
+    .success-message .icon {
+      font-size: 32px;
+    }
+    .success-message .content {
+      flex: 1;
+    }
+    .success-message .title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-green);
+      margin-bottom: 4px;
+    }
+    .success-message .text {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .impact-selector {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment"><i data-lucide="message-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ MAIN CONTAINER ════════════════════════ -->
+<div class="container">
+  
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1><i data-lucide="flag"></i> Submit New Challenge</h1>
+    <p>Share a business problem or opportunity that needs an innovative solution. Your challenge will be reviewed and added to the innovation pipeline.</p>
+  </div>
+
+  <!-- Success Message -->
+  <div class="success-message" id="successMessage">
+    <span class="icon"><i data-lucide="clock"></i></span>
+    <div class="content">
+      <div class="title">Challenge Submitted — Pending Admin Approval</div>
+      <div class="text">Your challenge has been submitted and is awaiting admin review. You can track it on the Challenges page. Once approved, it will be visible to all users and appear in the Swim Lane.</div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form id="challengeForm">
+      
+      <!-- Basic Information -->
+      <div class="form-section">
+        <h2 class="section-title">
+          <span class="icon"><i data-lucide="file-pen"></i></span>
+          Basic Information
+        </h2>
+        <div class="section-divider"></div>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">
+              Challenge Title <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-input" 
+              placeholder="e.g., Reduce Customer Churn by 15%" 
+              maxlength="100"
+              id="challengeTitle"
+              required
+            />
+            <div class="char-counter" id="titleCounter">0 / 100</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Business Unit <span class="required">*</span>
+            </label>
+            <select class="form-select" id="businessUnit" required>
+              <option value="">Select business unit</option>
+              <option value="customer-experience">Customer Experience</option>
+              <option value="finance-ops">Finance & Operations</option>
+              <option value="supply-chain">Supply Chain</option>
+              <option value="manufacturing">Manufacturing</option>
+              <option value="product-data">Product & Data</option>
+              <option value="it-infrastructure">IT & Infrastructure</option>
+              <option value="hr-people">HR & People</option>
+              <option value="sustainability">Sustainability</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Department <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-input" 
+              placeholder="e.g., Customer Success" 
+              id="department"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Problem Statement -->
+      <div class="form-section">
+        <h2 class="section-title">
+          <span class="icon"><i data-lucide="circle-alert"></i></span>
+          Problem Statement
+        </h2>
+        <div class="section-divider"></div>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">
+              Describe the Problem <span class="required">*</span>
+              <span class="hint">(Be specific about pain points, metrics, and impact)</span>
+            </label>
+            <textarea 
+              class="form-textarea" 
+              placeholder="Describe the business problem in detail. Include current metrics, pain points, and why this needs to be solved now..."
+              maxlength="1000"
+              id="problemDesc"
+              required
+            ></textarea>
+            <div class="char-counter" id="problemCounter">0 / 1000</div>
+            <div class="help-text">
+              <i data-lucide="lightbulb"></i> Tip: Include specific data points, affected stakeholders, and current workarounds if any.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expected Outcome -->
+      <div class="form-section">
+        <h2 class="section-title">
+          <span class="icon"><i data-lucide="flag"></i></span>
+          Expected Outcome
+        </h2>
+        <div class="section-divider"></div>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">
+              What Success Looks Like <span class="required">*</span>
+              <span class="hint">(Define measurable outcomes and KPIs)</span>
+            </label>
+            <textarea 
+              class="form-textarea" 
+              placeholder="Describe the desired outcome, success metrics, and expected benefits..."
+              maxlength="800"
+              id="outcomeDesc"
+              required
+            ></textarea>
+            <div class="char-counter" id="outcomeCounter">0 / 800</div>
+            <div class="help-text">
+              <i data-lucide="lightbulb"></i> Tip: Use SMART criteria - Specific, Measurable, Achievable, Relevant, Time-bound.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Expected Timeline
+            </label>
+            <select class="form-select" id="timeline">
+              <option value="">Select timeline</option>
+              <option value="1-3-months">1-3 months</option>
+              <option value="3-6-months">3-6 months</option>
+              <option value="6-12-months">6-12 months</option>
+              <option value="12-months-plus">12+ months</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Estimated Budget Range
+            </label>
+            <select class="form-select" id="budget">
+              <option value="">Select budget range</option>
+              <option value="under-50k">Under €50K</option>
+              <option value="50k-100k">€50K - €100K</option>
+              <option value="100k-250k">€100K - €250K</option>
+              <option value="250k-500k">€250K - €500K</option>
+              <option value="500k-plus">€500K+</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact & Priority -->
+      <div class="form-section">
+        <h2 class="section-title">
+          <span class="icon"><i data-lucide="bar-chart-2"></i></span>
+          Impact & Priority
+        </h2>
+        <div class="section-divider"></div>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">
+              Business Impact Level <span class="required">*</span>
+            </label>
+            <div class="impact-selector">
+              <div class="impact-option">
+                <input type="radio" name="impact" value="critical" id="impact-critical" required>
+                <label for="impact-critical">
+                  <div class="impact-icon"><i data-lucide="circle"></i></div>
+                  <div class="impact-label">Critical</div>
+                </label>
+              </div>
+              <div class="impact-option">
+                <input type="radio" name="impact" value="high" id="impact-high">
+                <label for="impact-high">
+                  <div class="impact-icon"><i data-lucide="circle"></i></div>
+                  <div class="impact-label">High</div>
+                </label>
+              </div>
+              <div class="impact-option">
+                <input type="radio" name="impact" value="medium" id="impact-medium">
+                <label for="impact-medium">
+                  <div class="impact-icon"><i data-lucide="circle"></i></div>
+                  <div class="impact-label">Medium</div>
+                </label>
+              </div>
+              <div class="impact-option">
+                <input type="radio" name="impact" value="low" id="impact-low">
+                <label for="impact-low">
+                  <div class="impact-icon"><i data-lucide="circle"></i></div>
+                  <div class="impact-label">Low</div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Annual Revenue Impact
+            </label>
+            <input 
+              type="text" 
+              class="form-input" 
+              placeholder="e.g., €2M revenue retention" 
+              id="revenueImpact"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Cost Savings Potential
+            </label>
+            <input 
+              type="text" 
+              class="form-input" 
+              placeholder="e.g., €500K annual savings" 
+              id="costSavings"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Context -->
+      <div class="form-section">
+        <h2 class="section-title">
+          <span class="icon"><i data-lucide="paperclip"></i></span>
+          Additional Context
+        </h2>
+        <div class="section-divider"></div>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">
+              Tags
+              <span class="hint">(Press Enter or comma to add tags)</span>
+            </label>
+            <div class="tags-input-wrapper" id="tagsWrapper">
+              <input 
+                type="text" 
+                class="tags-input" 
+                placeholder="Add tags..." 
+                id="tagsInput"
+              />
+            </div>
+            <div class="help-text">
+              <i data-lucide="lightbulb"></i> Suggested tags: Customer Experience, Digital Transformation, AI/ML, Automation, Analytics, etc.
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">
+              Current Workarounds or Constraints
+            </label>
+            <textarea 
+              class="form-textarea" 
+              placeholder="Describe any current workarounds, constraints, or previous attempts to solve this problem..."
+              style="min-height: 80px;"
+              id="constraints"
+            ></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">
+              Stakeholders or Teams Involved
+            </label>
+            <input 
+              type="text" 
+              class="form-input" 
+              placeholder="e.g., Customer Success team, Product team, IT Infrastructure" 
+              id="stakeholders"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+          <i data-lucide="x"></i> Cancel
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+          <i data-lucide="save"></i> Save Draft
+        </button>
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="rocket"></i> Submit Challenge
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.tcs.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The TCS-Ahold Delhaize engineering LABS</strong>, Kolkata ODC (Gitanjali Park – L14).
+</footer>
+
+<script>
+// Character counters
+const counters = {
+  challengeTitle: { max: 100, element: 'titleCounter' },
+  problemDesc: { max: 1000, element: 'problemCounter' },
+  outcomeDesc: { max: 800, element: 'outcomeCounter' }
+};
+
+Object.keys(counters).forEach(fieldId => {
+  const field = document.getElementById(fieldId);
+  const counter = counters[fieldId];
+  
+  field.addEventListener('input', () => {
+    const length = field.value.length;
+    const counterEl = document.getElementById(counter.element);
+    counterEl.textContent = `${length} / ${counter.max}`;
+    
+    // Update counter color based on usage
+    counterEl.classList.remove('warning', 'limit');
+    if (length > counter.max * 0.9) {
+      counterEl.classList.add('warning');
+    }
+    if (length === counter.max) {
+      counterEl.classList.add('limit');
+    }
+  });
+});
+
+// Tags functionality
+const tagsInput = document.getElementById('tagsInput');
+const tagsWrapper = document.getElementById('tagsWrapper');
+const tags = [];
+
+function addTag(tagText) {
+  const trimmedTag = tagText.trim();
+  if (trimmedTag && !tags.includes(trimmedTag)) {
+    tags.push(trimmedTag);
+    renderTags();
+    tagsInput.value = '';
+  }
+}
+
+function removeTag(tagText) {
+  const index = tags.indexOf(tagText);
+  if (index > -1) {
+    tags.splice(index, 1);
+    renderTags();
+  }
+}
+
+function renderTags() {
+  // Remove existing tag elements
+  const existingTags = tagsWrapper.querySelectorAll('.tag-item');
+  existingTags.forEach(tag => tag.remove());
+  
+  // Add tag elements
+  tags.forEach(tag => {
+    const tagEl = document.createElement('span');
+    tagEl.className = 'tag-item';
+    tagEl.innerHTML = `${tag} <span class="remove-tag" onclick="removeTag('${tag}')">×</span>`;
+    tagsWrapper.insertBefore(tagEl, tagsInput);
+  });
+}
+
+tagsInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    addTag(tagsInput.value);
+  }
+});
+
+tagsInput.addEventListener('blur', () => {
+  if (tagsInput.value.trim()) {
+    addTag(tagsInput.value);
+  }
+});
+
+// Form submission
+document.getElementById('challengeForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  // Validate required fields
+  const title = document.getElementById('challengeTitle').value.trim();
+  const businessUnit = document.getElementById('businessUnit').value;
+  const department = document.getElementById('department').value.trim();
+  const problemDesc = document.getElementById('problemDesc').value.trim();
+  const outcomeDesc = document.getElementById('outcomeDesc').value.trim();
+  const impact = document.querySelector('input[name="impact"]:checked');
+  
+  if (!title || !businessUnit || !department || !problemDesc || !outcomeDesc || !impact) {
+    alert('Please fill in all required fields (marked with *)');
+    return;
+  }
+  
+  // Collect form data
+  const formData = {
+    title,
+    businessUnit,
+    department,
+    problemDesc,
+    outcomeDesc,
+    timeline: document.getElementById('timeline').value,
+    budget: document.getElementById('budget').value,
+    impact: impact.value,
+    revenueImpact: document.getElementById('revenueImpact').value,
+    costSavings: document.getElementById('costSavings').value,
+    tags,
+    constraints: document.getElementById('constraints').value,
+    stakeholders: document.getElementById('stakeholders').value,
+    submittedAt: new Date().toISOString()
+  };
+  
+  console.log('Challenge submitted:', formData);
+
+  // Add author info and status
+  const user = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  formData.authorEmail = (user.email || '').toLowerCase();
+  formData.authorName = user.name || 'Unknown';
+  formData.id = 'CH-' + String(Date.now()).slice(-4);
+
+  const isAdmin = localStorage.getItem('ananta-admin') === '1';
+  if (isAdmin) {
+    // Admin-submitted challenges are auto-approved
+    formData.status = 'approved';
+    const approved = JSON.parse(localStorage.getItem('ip_approved_challenges') || '[]');
+    approved.push(formData);
+    localStorage.setItem('ip_approved_challenges', JSON.stringify(approved));
+  } else {
+    formData.status = 'pending';
+    const pending = JSON.parse(localStorage.getItem('ip_pending_challenges') || '[]');
+    pending.push(formData);
+    localStorage.setItem('ip_pending_challenges', JSON.stringify(pending));
+  }
+  
+  // Toast notification
+  if (isAdmin) {
+    showToast({ type: 'success', title: 'Challenge Auto-Approved', message: 'As an admin, your challenge is now live and visible to all users in the pipeline.' });
+  } else {
+    showToast({ type: 'pending', title: 'Awaiting Admin Approval', message: 'Your challenge has been submitted and is pending admin review. You will be notified once approved.' });
+  }
+
+  // Show success message (dynamic text for admin vs non-admin)
+  const successEl = document.getElementById('successMessage');
+  if (isAdmin) {
+    successEl.querySelector('.icon').innerHTML = '<i data-lucide="check-circle"></i>';
+    successEl.querySelector('.title').textContent = 'Challenge Submitted — Auto-Approved';
+    successEl.querySelector('.text').textContent = 'As an admin, your challenge has been auto-approved and is now visible to all users in the pipeline.';
+  }
+  successEl.classList.add('show');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // Reset form
+  setTimeout(() => {
+    document.getElementById('challengeForm').reset();
+    tags.length = 0;
+    renderTags();
+    
+    // Reset counters
+    Object.keys(counters).forEach(fieldId => {
+      document.getElementById(counters[fieldId].element).textContent = `0 / ${counters[fieldId].max}`;
+      document.getElementById(counters[fieldId].element).classList.remove('warning', 'limit');
+    });
+    
+    // Redirect after delay
+    setTimeout(() => {
+      window.location.href = 'challenge-cards.html';
+    }, 2500);
+  }, 100);
+});
+
+function saveDraft() {
+  const formData = {
+    title: document.getElementById('challengeTitle').value,
+    businessUnit: document.getElementById('businessUnit').value,
+    department: document.getElementById('department').value,
+    problemDesc: document.getElementById('problemDesc').value,
+    outcomeDesc: document.getElementById('outcomeDesc').value,
+    timeline: document.getElementById('timeline').value,
+    budget: document.getElementById('budget').value,
+    impact: document.querySelector('input[name="impact"]:checked')?.value,
+    revenueImpact: document.getElementById('revenueImpact').value,
+    costSavings: document.getElementById('costSavings').value,
+    tags,
+    constraints: document.getElementById('constraints').value,
+    stakeholders: document.getElementById('stakeholders').value,
+    savedAt: new Date().toISOString()
+  };
+  
+  localStorage.setItem('challenge_draft', JSON.stringify(formData));
+  alert('Draft saved successfully! You can continue editing later.');
+}
+
+// Load draft on page load
+window.addEventListener('load', () => {
+  const draft = localStorage.getItem('challenge_draft');
+  if (draft && confirm('Found a saved draft. Would you like to continue editing?')) {
+    const data = JSON.parse(draft);
+    
+    document.getElementById('challengeTitle').value = data.title || '';
+    document.getElementById('businessUnit').value = data.businessUnit || '';
+    document.getElementById('department').value = data.department || '';
+    document.getElementById('problemDesc').value = data.problemDesc || '';
+    document.getElementById('outcomeDesc').value = data.outcomeDesc || '';
+    document.getElementById('timeline').value = data.timeline || '';
+    document.getElementById('budget').value = data.budget || '';
+    if (data.impact) {
+      document.getElementById(`impact-${data.impact}`).checked = true;
+    }
+    document.getElementById('revenueImpact').value = data.revenueImpact || '';
+    document.getElementById('costSavings').value = data.costSavings || '';
+    document.getElementById('constraints').value = data.constraints || '';
+    document.getElementById('stakeholders').value = data.stakeholders || '';
+    
+    if (data.tags) {
+      tags.push(...data.tags);
+      renderTags();
+    }
+    
+    // Trigger counter updates
+    ['challengeTitle', 'problemDesc', 'outcomeDesc'].forEach(id => {
+      document.getElementById(id).dispatchEvent(new Event('input'));
+    });
+    
+    localStorage.removeItem('challenge_draft');
+  }
+});
+
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+</script>
+
+<script src="toast.js"></script>
+<script src="dynamic-notifications.js"></script>
+<script src="admin-toggle.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

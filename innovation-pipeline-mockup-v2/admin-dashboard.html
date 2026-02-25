@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control Center — Ananta Innovation Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* ── Reset & Base ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1; filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px; text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; margin-top: 4px;
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px; transition: all .2s;
+    }
+    .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px; padding: 6px 18px;
+      font-weight: 700; letter-spacing: 0.5px; color: #e0b0ff;
+      overflow: hidden; animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px; margin-right: 5px; font-size: 12px;
+      display: inline-block; animation: floatIcon 2s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::after {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6); color: #fff; transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer { 0% { left: -100%; } 60% { left: 100%; } 100% { left: 100%; } }
+    @keyframes floatIcon { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-2px) scale(1.15); } }
+
+    .notification-wrapper { position: relative; }
+    .notification-bell {
+      position: relative; width: 38px; height: 38px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .2s; font-size: 18px;
+      text-decoration: none;
+    }
+    .notification-bell:hover { background: var(--bg-card-hover); border-color: var(--accent-teal); }
+    .notification-badge {
+      position: absolute; top: -4px; right: -4px;
+      width: 18px; height: 18px; background: var(--accent-red);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: #fff; border: 2px solid var(--bg-primary);
+    }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-red); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #fff; text-decoration: none;
+    }
+
+    /* ── Container ──────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 36px 60px; }
+
+    /* ── Page Header ──────────────────────────── */
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .page-header h1 {
+      font-size: 32px; font-weight: 800; margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #f0b870);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .page-header p { font-size: 14px; color: var(--text-secondary); }
+
+    /* ── Summary Stat Cards ──────────────────── */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .stat-icon {
+      width: 50px; height: 50px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stat-icon.pending  { background: rgba(255,167,38,.15); }
+    .stat-icon.approved { background: rgba(102,187,106,.15); }
+    .stat-icon.rejected { background: rgba(239,83,80,.15); }
+    .stat-icon.users    { background: rgba(171,71,188,.15); }
+    .stat-info h3 { font-size: 28px; font-weight: 800; }
+    .stat-info h3.orange { color: var(--accent-orange); }
+    .stat-info h3.green  { color: var(--accent-green); }
+    .stat-info h3.red    { color: var(--accent-red); }
+    .stat-info h3.purple { color: var(--accent-purple); }
+    .stat-info span { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── Section Tabs ──────────────────────────── */
+    .section-tabs {
+      display: flex; gap: 0; margin-bottom: 0;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-tab {
+      padding: 14px 28px; font-size: 14px; font-weight: 600;
+      color: var(--text-muted); background: transparent; border: none;
+      cursor: pointer; position: relative; transition: all .2s; letter-spacing: 0.5px;
+    }
+    .section-tab:hover { color: var(--text-primary); }
+    .section-tab.active { color: var(--accent-teal); }
+    .section-tab.active::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 2px; background: var(--accent-teal); border-radius: 2px 2px 0 0;
+    }
+    .section-tab .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-left: 8px; min-width: 20px; height: 20px;
+      padding: 0 6px; border-radius: 10px;
+      font-size: 11px; font-weight: 700;
+      background: rgba(255,167,38,.15); color: var(--accent-orange);
+    }
+    .section-tab.active .badge { background: rgba(232,167,88,.15); color: var(--accent-teal); }
+
+    /* ── Tab Content ──────────────────────────── */
+    .tab-content { display: none; padding-top: 24px; }
+    .tab-content.active { display: block; }
+
+    /* ── Action Card ──────────────────────────── */
+    .action-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .action-card {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      display: flex; align-items: center; gap: 20px;
+      transition: all .25s; cursor: pointer;
+    }
+    .action-card:hover { border-color: var(--accent-teal); background: var(--bg-card); }
+    .action-card.pending { border-left: 4px solid var(--accent-orange); }
+    .action-card.done    { border-left: 4px solid var(--accent-green); opacity: 0.7; }
+    .action-card.rejected-card { border-left: 4px solid var(--accent-red); opacity: 0.7; }
+
+    .action-type-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .action-type-icon.reg { background: rgba(171,71,188,.15); color: var(--accent-purple); }
+    .action-type-icon.challenge { background: rgba(255,167,38,.15); color: var(--accent-orange); }
+    .action-type-icon.idea { background: rgba(232,167,88,.15); color: var(--accent-teal); }
+
+    .action-body { flex: 1; min-width: 0; }
+    .action-title {
+      font-size: 15px; font-weight: 700; margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .action-meta {
+      font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .action-meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .action-time { font-size: 12px; color: var(--text-muted); }
+
+    .action-status {
+      padding: 4px 10px; border-radius: 4px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase; flex-shrink: 0;
+      background: rgba(255,255,255,.03); border: none;
+      border-left: 3px solid; min-width: 64px; text-align: center;
+    }
+    .action-status.pending-status {
+      border-left-color: var(--accent-orange); color: var(--accent-orange);
+      opacity: .65;
+    }
+    .action-status.approved-status {
+      border-left-color: var(--accent-green); color: var(--accent-green);
+    }
+    .action-status.rejected-status {
+      border-left-color: var(--accent-red); color: var(--accent-red);
+    }
+
+    .action-buttons { display: flex; gap: 8px; flex-shrink: 0; margin-left: 4px; }
+    .action-buttons .btn { position: relative; z-index: 2; }
+
+    /* ── Sub-filter pills ──────────────────── */
+    .sub-filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .sub-filter {
+      padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--border); background: transparent; color: var(--text-secondary);
+      cursor: pointer; transition: all .2s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .sub-filter:hover { border-color: var(--accent-teal); color: var(--text-primary); }
+    .sub-filter.active { background: rgba(232,167,88,.12); border-color: var(--accent-teal); color: var(--accent-teal); }
+
+    .btn {
+      padding: 10px 22px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+      border: none; cursor: pointer; transition: all .25s ease; text-transform: uppercase;
+    }
+    .btn-approve {
+      background: var(--accent-green); color: #0d0f1a;
+      box-shadow: 0 2px 12px rgba(102,187,106,.25);
+    }
+    .btn-approve:hover {
+      filter: brightness(1.12);
+      box-shadow: 0 4px 18px rgba(102,187,106,.4);
+      transform: translateY(-1px);
+    }
+    .btn-reject {
+      background: rgba(239,83,80,.18); color: var(--accent-red);
+      border: 1px solid rgba(239,83,80,.35);
+    }
+    .btn-reject:hover {
+      background: var(--accent-red); color: #fff;
+      box-shadow: 0 4px 18px rgba(239,83,80,.35);
+      transform: translateY(-1px);
+    }
+
+    /* ── Modal ──────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+      width: 480px; max-width: 90vw;
+      box-shadow: 0 16px 60px rgba(0,0,0,.5);
+    }
+    .modal h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .modal p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
+    .modal-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 14px 18px;
+      margin: 16px 0; font-size: 14px;
+    }
+    .modal-item strong { color: var(--accent-teal); }
+    .modal textarea {
+      width: 100%; height: 80px; margin-top: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px;
+      color: var(--text-primary); font-family: inherit; font-size: 13px; resize: vertical;
+    }
+    .modal textarea::placeholder { color: var(--text-muted); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .btn-cancel {
+      background: transparent; color: var(--text-secondary);
+      border: 1px solid var(--border); padding: 10px 22px;
+      border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-cancel:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+    .btn-confirm {
+      padding: 10px 22px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 700; border: none; cursor: pointer; transition: all .2s;
+    }
+    .btn-confirm.approve { background: var(--accent-green); color: #0d0f1a; }
+    .btn-confirm.approve:hover { filter: brightness(1.1); }
+    .btn-confirm.reject { background: var(--accent-red); color: #fff; }
+    .btn-confirm.reject:hover { filter: brightness(1.1); }
+
+    /* ── Toast ──────────────────────────── */
+    .toast {
+      position: fixed; bottom: 30px; right: 30px;
+      padding: 16px 24px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,.4);
+      z-index: 600; transform: translateY(100px); opacity: 0;
+      transition: all .4s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: var(--accent-green); color: #0d0f1a; }
+    .toast.error   { background: var(--accent-red); color: #fff; }
+
+    /* ── Outlined Icon Sizing ────────────── */
+    .stat-icon svg { width: 24px; height: 24px; stroke-width: 1.5; }
+    .stat-icon.pending svg  { color: var(--accent-orange); }
+    .stat-icon.approved svg { color: var(--accent-green); }
+    .stat-icon.rejected svg { color: var(--accent-red); }
+    .stat-icon.users svg    { color: var(--accent-purple); }
+
+    .action-type-icon svg { width: 22px; height: 22px; stroke-width: 1.5; }
+
+    .action-meta svg {
+      width: 14px; height: 14px; stroke-width: 1.5;
+      display: inline; vertical-align: -2px;
+    }
+
+    .sub-filter svg {
+      width: 14px; height: 14px; stroke-width: 1.5;
+    }
+
+    .page-header h1 svg {
+      width: 28px; height: 28px; stroke-width: 1.5;
+      color: var(--accent-teal);
+    }
+
+    .notification-bell svg { width: 18px; height: 18px; stroke-width: 1.5; color: var(--text-primary); }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center; padding: 24px 36px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--text-muted);
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- HEADER -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">&infin;</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <a href="notifications.html" class="notification-bell">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge">9</span>
+      </a>
+    </div>
+    <a href="profile.html" class="avatar" title="Admin">A</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1><i data-lucide="zap"></i> Control Center</h1>
+      <p>Review and manage registrations, challenges, and ideas &mdash; all pending actions at a glance.</p>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-icon pending"><i data-lucide="clock"></i></div>
+      <div class="stat-info">
+        <h3 class="orange">5</h3>
+        <span>Pending Actions</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon approved"><i data-lucide="circle-check"></i></div>
+      <div class="stat-info">
+        <h3 class="green">18</h3>
+        <span>Approved</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon rejected"><i data-lucide="circle-x"></i></div>
+      <div class="stat-info">
+        <h3 class="red">3</h3>
+        <span>Rejected</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon users"><i data-lucide="users"></i></div>
+      <div class="stat-info">
+        <h3 class="purple">24</h3>
+        <span>Registered Users</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="section-tabs">
+    <button class="section-tab active" data-tab="pending" onclick="switchTab('pending')">
+      Pending Review <span class="badge">5</span>
+    </button>
+    <button class="section-tab" data-tab="registrations" onclick="switchTab('registrations')">
+      Registrations <span class="badge">2</span>
+    </button>
+    <button class="section-tab" data-tab="challenges" onclick="switchTab('challenges')">
+      Challenges <span class="badge">2</span>
+    </button>
+    <button class="section-tab" data-tab="ideas" onclick="switchTab('ideas')">
+      Ideas <span class="badge">1</span>
+    </button>
+    <button class="section-tab" data-tab="history" onclick="switchTab('history')">
+      History
+    </button>
+  </div>
+
+  <!-- TAB: Pending Review (All pending) -->
+  <div class="tab-content active" id="tab-pending">
+    <div class="action-list">
+
+      <!-- Pending Registration 1 -->
+      <div class="action-card pending" id="card-reg-1" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">New User Registration &mdash; Priya Nair</div>
+          <div class="action-meta">
+            <span><i data-lucide="mail"></i> priya.nair@company.com</span>
+            <span><i data-lucide="building-2"></i> Supply Chain</span>
+          </div>
+          <div class="action-time">Submitted 10 minutes ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Registration','Priya Nair','reg-1')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Registration','Priya Nair','reg-1')">Reject</button>
+        </div>
+      </div>
+
+      <!-- Pending Registration 2 -->
+      <div class="action-card pending" id="card-reg-2" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">New User Registration &mdash; Vikram Desai</div>
+          <div class="action-meta">
+            <span><i data-lucide="mail"></i> vikram.desai@company.com</span>
+            <span><i data-lucide="building-2"></i> Finance</span>
+          </div>
+          <div class="action-time">Submitted 45 minutes ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Registration','Vikram Desai','reg-2')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Registration','Vikram Desai','reg-2')">Reject</button>
+        </div>
+      </div>
+
+      <!-- Pending Challenge 1 -->
+      <div class="action-card pending" id="card-ch-1" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">New Challenge &mdash; Reduce Manual Data Entry Errors</div>
+          <div class="action-meta">
+            <span><i data-lucide="user"></i> R. Patel</span>
+            <span><i data-lucide="flag"></i> CH-06</span>
+            <span><i data-lucide="circle-alert"></i> High Impact</span>
+          </div>
+          <div class="action-time">Submitted 1 hour ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Challenge','Reduce Manual Data Entry Errors','ch-1')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Challenge','Reduce Manual Data Entry Errors','ch-1')">Reject</button>
+        </div>
+      </div>
+
+      <!-- Pending Challenge 2 -->
+      <div class="action-card pending" id="card-ch-2" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">New Challenge &mdash; Improve Cross-Team Knowledge Sharing</div>
+          <div class="action-meta">
+            <span><i data-lucide="user"></i> A. Basu</span>
+            <span><i data-lucide="flag"></i> CH-07</span>
+            <span><i data-lucide="triangle-alert"></i> Medium Impact</span>
+          </div>
+          <div class="action-time">Submitted 3 hours ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Challenge','Improve Cross-Team Knowledge Sharing','ch-2')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Challenge','Improve Cross-Team Knowledge Sharing','ch-2')">Reject</button>
+        </div>
+      </div>
+
+      <!-- Pending Idea 1 -->
+      <div class="action-card pending" id="card-id-1" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">New Idea &mdash; AI Document Parser for Invoice Matching</div>
+          <div class="action-meta">
+            <span><i data-lucide="user"></i> S. Kumar</span>
+            <span><i data-lucide="lightbulb"></i> ID-05</span>
+            <span><i data-lucide="link"></i> Linked to CH-02</span>
+          </div>
+          <div class="action-time">Submitted 2 hours ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Idea','AI Document Parser for Invoice Matching','id-1')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Idea','AI Document Parser for Invoice Matching','id-1')">Reject</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB: Registrations -->
+  <div class="tab-content" id="tab-registrations">
+    <div class="sub-filters">
+      <button class="sub-filter active" data-status="all">All (5)</button>
+      <button class="sub-filter" data-status="pending"><i data-lucide="clock"></i> Pending (2)</button>
+      <button class="sub-filter" data-status="done"><i data-lucide="circle-check"></i> Approved (2)</button>
+      <button class="sub-filter" data-status="rejected-card"><i data-lucide="circle-x"></i> Rejected (1)</button>
+    </div>
+    <div class="action-list">
+      <div class="action-card pending" id="card-reg-1b" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">Priya Nair</div>
+          <div class="action-meta">
+            <span><i data-lucide="mail"></i> priya.nair@company.com</span>
+            <span><i data-lucide="building-2"></i> Supply Chain</span>
+            <span><i data-lucide="briefcase"></i> Analyst</span>
+          </div>
+          <div class="action-time">10 minutes ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Registration','Priya Nair','reg-1b')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Registration','Priya Nair','reg-1b')">Reject</button>
+        </div>
+      </div>
+      <div class="action-card pending" id="card-reg-2b" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">Vikram Desai</div>
+          <div class="action-meta">
+            <span><i data-lucide="mail"></i> vikram.desai@company.com</span>
+            <span><i data-lucide="building-2"></i> Finance</span>
+            <span><i data-lucide="briefcase"></i> Manager</span>
+          </div>
+          <div class="action-time">45 minutes ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Registration','Vikram Desai','reg-2b')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Registration','Vikram Desai','reg-2b')">Reject</button>
+        </div>
+      </div>
+      <!-- Already processed -->
+      <div class="action-card done" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">R. Patel</div>
+          <div class="action-meta"><span><i data-lucide="mail"></i> r.patel@company.com</span><span><i data-lucide="building-2"></i> Operations</span></div>
+          <div class="action-time">2 days ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">S. Kumar</div>
+          <div class="action-meta"><span><i data-lucide="mail"></i> s.kumar@company.com</span><span><i data-lucide="building-2"></i> Engineering</span></div>
+          <div class="action-time">3 days ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card rejected-card" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">Unknown User</div>
+          <div class="action-meta"><span><i data-lucide="mail"></i> test@external.com</span><span><i data-lucide="building-2"></i> N/A</span></div>
+          <div class="action-time">5 days ago</div>
+        </div>
+        <span class="action-status rejected-status">Rejected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Challenges -->
+  <div class="tab-content" id="tab-challenges">
+    <div class="sub-filters">
+      <button class="sub-filter active" data-status="all">All (5)</button>
+      <button class="sub-filter" data-status="pending"><i data-lucide="clock"></i> Pending (2)</button>
+      <button class="sub-filter" data-status="done"><i data-lucide="circle-check"></i> Approved (2)</button>
+      <button class="sub-filter" data-status="rejected-card"><i data-lucide="circle-x"></i> Rejected (1)</button>
+    </div>
+    <div class="action-list">
+      <div class="action-card pending" id="card-ch-1b" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Reduce Manual Data Entry Errors</div>
+          <div class="action-meta">
+            <span><i data-lucide="user"></i> R. Patel</span><span><i data-lucide="flag"></i> CH-06</span><span><i data-lucide="circle-alert"></i> High Impact</span>
+          </div>
+          <div class="action-time">1 hour ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Challenge','Reduce Manual Data Entry Errors','ch-1b')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Challenge','Reduce Manual Data Entry Errors','ch-1b')">Reject</button>
+        </div>
+      </div>
+      <div class="action-card pending" id="card-ch-2b" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Improve Cross-Team Knowledge Sharing</div>
+          <div class="action-meta">
+            <span><i data-lucide="user"></i> A. Basu</span><span><i data-lucide="flag"></i> CH-07</span><span><i data-lucide="triangle-alert"></i> Medium Impact</span>
+          </div>
+          <div class="action-time">3 hours ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Challenge','Improve Cross-Team Knowledge Sharing','ch-2b')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Challenge','Improve Cross-Team Knowledge Sharing','ch-2b')">Reject</button>
+        </div>
+      </div>
+      <!-- History -->
+      <div class="action-card done" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Reduce Customer Churn</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> R. Patel</span><span><i data-lucide="flag"></i> CH-01</span></div>
+          <div class="action-time">1 week ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Automate Invoice Reconciliation</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> S. Kumar</span><span><i data-lucide="flag"></i> CH-02</span></div>
+          <div class="action-time">1 week ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card rejected-card" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Free Lunch Fridays</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Anonymous</span><span><i data-lucide="flag"></i> CH-05</span></div>
+          <div class="action-time">2 weeks ago</div>
+        </div>
+        <span class="action-status rejected-status">Rejected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Ideas -->
+  <div class="tab-content" id="tab-ideas">
+    <div class="sub-filters">
+      <button class="sub-filter active" data-status="all">All (4)</button>
+      <button class="sub-filter" data-status="pending"><i data-lucide="clock"></i> Pending (1)</button>
+      <button class="sub-filter" data-status="done"><i data-lucide="circle-check"></i> Approved (2)</button>
+      <button class="sub-filter" data-status="rejected-card"><i data-lucide="circle-x"></i> Rejected (1)</button>
+    </div>
+    <div class="action-list">
+      <div class="action-card pending" id="card-id-1b" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">AI Document Parser for Invoice Matching</div>
+          <div class="action-meta">
+            <span><i data-lucide="user"></i> S. Kumar</span><span><i data-lucide="lightbulb"></i> ID-05</span><span><i data-lucide="link"></i> CH-02</span>
+          </div>
+          <div class="action-time">2 hours ago</div>
+        </div>
+        <span class="action-status pending-status">Pending</span>
+        <div class="action-buttons">
+          <button class="btn btn-approve" onclick="showModal('approve','Idea','AI Document Parser for Invoice Matching','id-1b')">Approve</button>
+          <button class="btn btn-reject" onclick="showModal('reject','Idea','AI Document Parser for Invoice Matching','id-1b')">Reject</button>
+        </div>
+      </div>
+      <!-- History -->
+      <div class="action-card done" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">AI-Powered Retention Model</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> S. Kumar</span><span><i data-lucide="lightbulb"></i> ID-01</span></div>
+          <div class="action-time">5 days ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">Predictive Inventory Restocking</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> M. Singh</span><span><i data-lucide="lightbulb"></i> ID-03</span></div>
+          <div class="action-time">1 week ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card rejected-card" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">Replace All Meetings with Emails</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Anonymous</span><span><i data-lucide="lightbulb"></i> ID-04</span></div>
+          <div class="action-time">2 weeks ago</div>
+        </div>
+        <span class="action-status rejected-status">Rejected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: History -->
+  <div class="tab-content" id="tab-history">
+    <div class="sub-filters">
+      <button class="sub-filter active" data-status="all">All (8)</button>
+      <button class="sub-filter" data-status="registration"><i data-lucide="user"></i> Registrations (2)</button>
+      <button class="sub-filter" data-status="challenge"><i data-lucide="flag"></i> Challenges (3)</button>
+      <button class="sub-filter" data-status="idea"><i data-lucide="lightbulb"></i> Ideas (3)</button>
+    </div>
+    <div class="action-list">
+      <div class="action-card done" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">AI-Powered Retention Model &mdash; Approved</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Approved by Admin</span><span><i data-lucide="lightbulb"></i> ID-01</span></div>
+          <div class="action-time">5 days ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Reduce Customer Churn &mdash; Approved</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Approved by Admin</span><span><i data-lucide="flag"></i> CH-01</span></div>
+          <div class="action-time">1 week ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Automate Invoice Reconciliation &mdash; Approved</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Approved by Admin</span><span><i data-lucide="flag"></i> CH-02</span></div>
+          <div class="action-time">1 week ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">Predictive Inventory Restocking &mdash; Approved</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Approved by Admin</span><span><i data-lucide="lightbulb"></i> ID-03</span></div>
+          <div class="action-time">1 week ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card done" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">R. Patel &mdash; Registration Approved</div>
+          <div class="action-meta"><span><i data-lucide="mail"></i> r.patel@company.com</span></div>
+          <div class="action-time">2 weeks ago</div>
+        </div>
+        <span class="action-status approved-status">Approved</span>
+      </div>
+      <div class="action-card rejected-card" data-nav="challenge-detail.html" data-item-type="challenge">
+        <div class="action-type-icon challenge"><i data-lucide="flag"></i></div>
+        <div class="action-body">
+          <div class="action-title">Free Lunch Fridays &mdash; Rejected</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Rejected by Admin</span><span>Reason: Not innovation-related</span></div>
+          <div class="action-time">2 weeks ago</div>
+        </div>
+        <span class="action-status rejected-status">Rejected</span>
+      </div>
+      <div class="action-card rejected-card" data-nav="idea-detail.html" data-item-type="idea">
+        <div class="action-type-icon idea"><i data-lucide="lightbulb"></i></div>
+        <div class="action-body">
+          <div class="action-title">Replace All Meetings with Emails &mdash; Rejected</div>
+          <div class="action-meta"><span><i data-lucide="user"></i> Rejected by Admin</span><span>Reason: Not feasible</span></div>
+          <div class="action-time">2 weeks ago</div>
+        </div>
+        <span class="action-status rejected-status">Rejected</span>
+      </div>
+      <div class="action-card rejected-card" data-nav="user-detail.html" data-item-type="registration">
+        <div class="action-type-icon reg"><i data-lucide="user"></i></div>
+        <div class="action-body">
+          <div class="action-title">Unknown User &mdash; Registration Rejected</div>
+          <div class="action-meta"><span><i data-lucide="mail"></i> test@external.com</span><span>Reason: External email</span></div>
+          <div class="action-time">3 weeks ago</div>
+        </div>
+        <span class="action-status rejected-status">Rejected</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Confirm Action</h3>
+    <p id="modalDesc">Are you sure you want to proceed?</p>
+    <div class="modal-item" id="modalItem"></div>
+    <textarea id="modalReason" placeholder="Add a note or reason (optional)..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="hideModal()">Cancel</button>
+      <button class="btn-confirm" id="modalConfirmBtn" onclick="confirmAction()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Ananta Lab &middot; Admin Panel &middot; Built with brain, neurons, love &amp; GPUs</p>
+</div>
+
+<script>
+// TAB SWITCHING
+function switchTab(tabId) {
+  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+// MODAL
+let currentAction = {};
+
+function showModal(action, type, name, cardId) {
+  currentAction = { action, type, name, cardId };
+  const overlay = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+  const desc = document.getElementById('modalDesc');
+  const item = document.getElementById('modalItem');
+  const btn = document.getElementById('modalConfirmBtn');
+  const reason = document.getElementById('modalReason');
+
+  if (action === 'approve') {
+    title.textContent = `Approve ${type}`;
+    desc.textContent = `You are about to approve this ${type.toLowerCase()}. The submitter will be notified.`;
+    btn.className = 'btn-confirm approve';
+    btn.textContent = 'Approve';
+    reason.placeholder = 'Add a welcome note (optional)...';
+  } else {
+    title.textContent = `Reject ${type}`;
+    desc.textContent = `You are about to reject this ${type.toLowerCase()}. Please provide a reason.`;
+    btn.className = 'btn-confirm reject';
+    btn.textContent = 'Reject';
+    reason.placeholder = 'Reason for rejection...';
+  }
+
+  item.innerHTML = `<strong>${type}:</strong> ${name}`;
+  reason.value = '';
+  overlay.classList.add('active');
+}
+
+function hideModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  currentAction = {};
+}
+
+function confirmAction() {
+  const { action, type, name, cardId } = currentAction;
+  const card = document.getElementById('card-' + cardId);
+
+  if (card) {
+    const statusEl = card.querySelector('.action-status');
+    const buttonsEl = card.querySelector('.action-buttons');
+    if (action === 'approve') {
+      card.classList.remove('pending');
+      card.classList.add('done');
+      if (statusEl) { statusEl.className = 'action-status approved-status'; statusEl.textContent = 'Approved'; }
+      if (buttonsEl) buttonsEl.remove();
+    } else {
+      card.classList.remove('pending');
+      card.classList.add('rejected-card');
+      if (statusEl) { statusEl.className = 'action-status rejected-status'; statusEl.textContent = 'Rejected'; }
+      if (buttonsEl) buttonsEl.remove();
+    }
+
+    // If this is a registration action, update localStorage pending list
+    if (type === 'Registration') {
+      const pending = JSON.parse(localStorage.getItem('ip_pending_registrations') || '[]');
+      // Find and remove the user from pending list (match by name)
+      const emailEl = card.querySelector('.action-meta [data-lucide="mail"]');
+      let email = '';
+      if (emailEl && emailEl.parentElement) {
+        email = emailEl.parentElement.textContent.trim();
+      }
+      const updated = pending.filter(u => {
+        if (email) return u.email !== email;
+        return u.name !== name;
+      });
+      localStorage.setItem('ip_pending_registrations', JSON.stringify(updated));
+
+      // If approved, store user profile so they can sign in
+      if (action === 'approve' && email) {
+        const user = pending.find(u => u.email === email) || pending.find(u => u.name === name);
+        if (user) {
+          const approved = JSON.parse(localStorage.getItem('ip_approved_users') || '[]');
+          user.status = 'approved';
+          approved.push(user);
+          localStorage.setItem('ip_approved_users', JSON.stringify(approved));
+        }
+      }
+    }
+
+    // Challenge approval / rejection — update ip_pending_challenges
+    if (type === 'Challenge') {
+      const pendingCh = JSON.parse(localStorage.getItem('ip_pending_challenges') || '[]');
+      const chIdEl = card.querySelector('.action-meta [data-lucide="flag"]');
+      let chId = '';
+      if (chIdEl && chIdEl.parentElement) { chId = chIdEl.parentElement.textContent.trim(); }
+      const updatedCh = pendingCh.filter(ch => {
+        if (chId) return ch.id !== chId;
+        return ch.title !== name;
+      });
+      localStorage.setItem('ip_pending_challenges', JSON.stringify(updatedCh));
+      const chItem = pendingCh.find(ch => chId ? ch.id === chId : ch.title === name);
+      if (action === 'approve') {
+        if (chItem) {
+          chItem.status = 'approved';
+          const list = JSON.parse(localStorage.getItem('ip_approved_challenges') || '[]');
+          list.push(chItem);
+          localStorage.setItem('ip_approved_challenges', JSON.stringify(list));
+        }
+      } else if (action === 'reject') {
+        if (chItem) {
+          chItem.status = 'rejected';
+          chItem.rejectedAt = new Date().toISOString();
+          const rList = JSON.parse(localStorage.getItem('ip_rejected_challenges') || '[]');
+          rList.push(chItem);
+          localStorage.setItem('ip_rejected_challenges', JSON.stringify(rList));
+          // Push notification for the author
+          const notifs = JSON.parse(localStorage.getItem('ip_notifications') || '[]');
+          notifs.unshift({ id: 'notif-' + Date.now(), type: 'rejection', itemType: 'Challenge', itemId: chItem.id, title: chItem.title, recipientEmail: chItem.authorEmail, message: 'Your challenge "' + chItem.title + '" (' + chItem.id + ') has been rejected by admin.', createdAt: new Date().toISOString(), read: false });
+          localStorage.setItem('ip_notifications', JSON.stringify(notifs));
+        }
+      }
+    }
+
+    // Idea approval / rejection — update ip_pending_ideas
+    if (type === 'Idea') {
+      const pendingId = JSON.parse(localStorage.getItem('ip_pending_ideas') || '[]');
+      const idEl = card.querySelector('.action-meta [data-lucide="lightbulb"]');
+      let ideaId = '';
+      if (idEl && idEl.parentElement) { ideaId = idEl.parentElement.textContent.trim(); }
+      const updatedId = pendingId.filter(idea => {
+        if (ideaId) return idea.id !== ideaId;
+        return idea.title !== name;
+      });
+      localStorage.setItem('ip_pending_ideas', JSON.stringify(updatedId));
+      const idItem = pendingId.find(idea => ideaId ? idea.id === ideaId : idea.title === name);
+      if (action === 'approve') {
+        if (idItem) {
+          idItem.status = 'approved';
+          const list = JSON.parse(localStorage.getItem('ip_approved_ideas') || '[]');
+          list.push(idItem);
+          localStorage.setItem('ip_approved_ideas', JSON.stringify(list));
+        }
+      } else if (action === 'reject') {
+        if (idItem) {
+          idItem.status = 'rejected';
+          idItem.rejectedAt = new Date().toISOString();
+          const rList = JSON.parse(localStorage.getItem('ip_rejected_ideas') || '[]');
+          rList.push(idItem);
+          localStorage.setItem('ip_rejected_ideas', JSON.stringify(rList));
+          const notifs = JSON.parse(localStorage.getItem('ip_notifications') || '[]');
+          notifs.unshift({ id: 'notif-' + Date.now(), type: 'rejection', itemType: 'Idea', itemId: idItem.id, title: idItem.title, recipientEmail: idItem.authorEmail, message: 'Your idea "' + idItem.title + '" (' + idItem.id + ') has been rejected by admin.', createdAt: new Date().toISOString(), read: false });
+          localStorage.setItem('ip_notifications', JSON.stringify(notifs));
+        }
+      }
+    }
+  }
+
+  hideModal();
+  showToast(
+    action === 'approve' ? 'success' : 'error',
+    `${type} "${name}" has been ${action === 'approve' ? 'approved' : 'rejected'}.`
+  );
+
+  // Update pending count
+  const pendingCount = document.querySelectorAll('.action-card.pending').length;
+  const pendingBadge = document.querySelector('[data-tab="pending"] .badge');
+  if (pendingBadge) pendingBadge.textContent = pendingCount;
+}
+
+// TOAST
+function showToast(type, message) {
+  const toast = document.getElementById('toast');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) hideModal();
+});
+
+// CARD CLICK NAVIGATION
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.action-card');
+  if (!card || !card.dataset.nav) return;
+  if (e.target.closest('button')) return;
+  window.location.href = card.dataset.nav;
+});
+
+// SUB-FILTER LOGIC
+document.querySelectorAll('.sub-filters').forEach(filterBar => {
+  filterBar.addEventListener('click', function(e) {
+    const btn = e.target.closest('.sub-filter');
+    if (!btn) return;
+
+    filterBar.querySelectorAll('.sub-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const status = btn.dataset.status;
+    const list = filterBar.nextElementSibling;
+    const cards = list.querySelectorAll('.action-card');
+
+    cards.forEach(card => {
+      if (status === 'all') {
+        card.style.display = '';
+      } else if (status === 'pending' || status === 'done' || status === 'rejected-card') {
+        card.style.display = card.classList.contains(status) ? '' : 'none';
+      } else {
+        card.style.display = card.dataset.itemType === status ? '' : 'none';
+      }
+    });
+  });
+});
+
+// Initialize Lucide icons
+lucide.createIcons();
+</script>
+<script src="admin-toggle.js"></script>
+
+</body>
+</html>
