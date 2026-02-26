@@ -14,6 +14,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
 import { WhatsNext } from './pages/WhatsNext';
+import { AdminControlPanel } from './pages/AdminControlPanel';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
@@ -23,18 +24,24 @@ function App() {
         <Router>
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/swimlanes" element={<SwimLanes />} />
-              <Route path="/challenges" element={<IdeaSolutionCards />} />
-              <Route path="/challenges/submit" element={<ProtectedRoute><SubmitChallenge /></ProtectedRoute>} />
-              <Route path="/challenges/:id" element={<ChallengeDetail />} />
-              <Route path="/challenges/:challengeId/ideas/:ideaId" element={<IdeaDetail />} />
-              <Route path="/metrics" element={<Metrics />} />
-              <Route path="/whats-next" element={<WhatsNext />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/profile" element={<Profile />} />
+              {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/swimlanes" element={<SwimLanes />} />
+                <Route path="/challenges" element={<IdeaSolutionCards />} />
+                <Route path="/challenges/submit" element={<SubmitChallenge />} />
+                <Route path="/challenges/:id" element={<ChallengeDetail />} />
+                <Route path="/challenges/:challengeId/ideas/:ideaId" element={<IdeaDetail />} />
+                <Route path="/metrics" element={<Metrics />} />
+                <Route path="/whats-next" element={<WhatsNext />} />
+                <Route path="/notifications" element={<Notifications />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/admin" element={<AdminControlPanel />} />
+              </Route>
             </Route>
           </Routes>
         </Router>

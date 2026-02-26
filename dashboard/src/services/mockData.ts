@@ -2,6 +2,20 @@ import { type Challenge, type Notification, type SwimLaneCard, type User } from 
 
 export const MOCK_USERS: User[] = [
     {
+        id: 'u-admin',
+        name: 'Ananta Admin',
+        email: 'admin@ananta.tcs.com',
+        role: 'Admin',
+        avatar: 'AD',
+    },
+    {
+        id: 'u-priya',
+        name: 'Priya Sharma',
+        email: 'priya.sharma@tcs.com',
+        role: 'Contributor',
+        avatar: 'PS',
+    },
+    {
         id: 'u1',
         name: 'Asmi 2',
         email: 'admin@ananta.azurewebsites.net',

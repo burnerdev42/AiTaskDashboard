@@ -9,7 +9,10 @@ const STORAGE_KEYS = {
     SWIMLANES: 'app_swimlanes_v2',
     CURRENT_USER: 'app_current_user_v2',
     CHALLENGE_DETAILS: 'app_challenge_details_v2',
-    IDEA_DETAILS: 'app_idea_details_v2'
+    IDEA_DETAILS: 'app_idea_details_v2',
+    PENDING_REGISTRATIONS: 'ip_pending_registrations',
+    REJECTED_REGISTRATIONS: 'ip_rejected_registrations',
+    ADMIN_LOGS: 'app_admin_logs_v2'
 };
 
 export const storage = {
@@ -29,8 +32,22 @@ export const storage = {
                 }
             });
 
-            if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+            const existingUsersJson = localStorage.getItem(STORAGE_KEYS.USERS);
+            if (!existingUsersJson) {
                 localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(MOCK_USERS));
+            } else {
+                // Ensure new mock users (like admin@ananta.tcs.com) are added even if storage already exists
+                const existingUsers: User[] = JSON.parse(existingUsersJson);
+                let updated = false;
+                MOCK_USERS.forEach(mockUser => {
+                    if (!existingUsers.find(u => u.email.toLowerCase() === mockUser.email.toLowerCase())) {
+                        existingUsers.push(mockUser);
+                        updated = true;
+                    }
+                });
+                if (updated) {
+                    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(existingUsers));
+                }
             }
 
             if (!localStorage.getItem(STORAGE_KEYS.CHALLENGES)) {
@@ -154,6 +171,76 @@ export const storage = {
         const currentUser = storage.getCurrentUser();
         if (currentUser && currentUser.email === email) {
             storage.setCurrentUser(null);
+        }
+        return true;
+    },
+
+    getPendingRegistrations: (): any[] => {
+        try {
+            const data = localStorage.getItem(STORAGE_KEYS.PENDING_REGISTRATIONS);
+            return data ? JSON.parse(data) : [];
+        } catch {
+            return [];
+        }
+    },
+
+    getRejectedRegistrations: (): any[] => {
+        try {
+            const data = localStorage.getItem(STORAGE_KEYS.REJECTED_REGISTRATIONS);
+            return data ? JSON.parse(data) : [];
+        } catch {
+            return [];
+        }
+    },
+
+    addPendingRegistration: (data: any) => {
+        const pending = storage.getPendingRegistrations();
+        if (!pending.find(p => p.email.toLowerCase() === data.email.toLowerCase())) {
+            pending.push(data);
+            localStorage.setItem(STORAGE_KEYS.PENDING_REGISTRATIONS, JSON.stringify(pending));
+            return true;
+        }
+        return false;
+    },
+
+    isEmailPending: (email: string): boolean => {
+        const pending = storage.getPendingRegistrations();
+        return pending.some(p => p.email.toLowerCase() === email.toLowerCase());
+    },
+
+    approveRegistration: (email: string) => {
+        const pending = storage.getPendingRegistrations();
+        const userToApprove = pending.find(p => p.email.toLowerCase() === email.toLowerCase());
+
+        if (userToApprove) {
+            // 1. Remove from pending
+            const updatedPending = pending.filter(p => p.email.toLowerCase() !== email.toLowerCase());
+            localStorage.setItem(STORAGE_KEYS.PENDING_REGISTRATIONS, JSON.stringify(updatedPending));
+
+            // 2. Add to active users
+            const users = storage.getUsers();
+            const newUser: User = {
+                ...userToApprove,
+                status: 'active',
+                id: userToApprove.id || Date.now().toString()
+            };
+            users.push(newUser);
+            localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+            return true;
+        }
+        return false;
+    },
+
+    rejectRegistration: (email: string) => {
+        const pending = storage.getPendingRegistrations();
+        const rejectedReg = pending.find(r => r.email.toLowerCase() === email.toLowerCase());
+        const updatedPending = pending.filter(p => p.email.toLowerCase() !== email.toLowerCase());
+        localStorage.setItem(STORAGE_KEYS.PENDING_REGISTRATIONS, JSON.stringify(updatedPending));
+
+        if (rejectedReg) {
+            const rejected = storage.getRejectedRegistrations();
+            rejected.push({ ...rejectedReg, rejectedAt: new Date().toISOString() });
+            localStorage.setItem(STORAGE_KEYS.REJECTED_REGISTRATIONS, JSON.stringify(rejected));
         }
         return true;
     },
@@ -357,5 +444,118 @@ export const storage = {
         };
         swimlanes.push(swimlaneCard);
         localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(swimlanes));
+    },
+
+    getAdminLogs: (): any[] => {
+        try {
+            const data = localStorage.getItem(STORAGE_KEYS.ADMIN_LOGS);
+            return data ? JSON.parse(data) : [];
+        } catch {
+            return [];
+        }
+    },
+
+    addAdminLog: (log: any) => {
+        const logs = storage.getAdminLogs();
+        logs.unshift({
+            ...log,
+            id: Date.now().toString(),
+            timestamp: new Date().toISOString()
+        });
+        localStorage.setItem(STORAGE_KEYS.ADMIN_LOGS, JSON.stringify(logs.slice(0, 100))); // Keep last 100
+    },
+
+    approveChallenge: (id: string, adminName: string) => {
+        const challenges = storage.getChallenges();
+        const index = challenges.findIndex(c => c.id === id);
+        if (index !== -1) {
+            challenges[index].approvalStatus = 'Approved';
+            localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
+
+            // Also update detailed data if it exists
+            const details = storage.getChallengeDetails();
+            const detailIndex = details.findIndex(d => d.id === id);
+            if (detailIndex !== -1) {
+                details[detailIndex].approvalStatus = 'Approved';
+                localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
+            }
+
+            storage.addAdminLog({
+                action: 'Approved Challenge',
+                itemType: 'Challenge',
+                itemName: challenges[index].title,
+                adminName,
+                status: 'Approved'
+            });
+            return true;
+        }
+        return false;
+    },
+
+    rejectChallenge: (id: string, adminName: string) => {
+        const challenges = storage.getChallenges();
+        const index = challenges.findIndex(c => c.id === id);
+        if (index !== -1) {
+            challenges[index].approvalStatus = 'Rejected';
+            localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
+
+            // Also update detailed data
+            const details = storage.getChallengeDetails();
+            const detailIndex = details.findIndex(d => d.id === id);
+            if (detailIndex !== -1) {
+                details[detailIndex].approvalStatus = 'Rejected';
+                localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
+            }
+
+            storage.addAdminLog({
+                action: 'Rejected Challenge',
+                itemType: 'Challenge',
+                itemName: challenges[index].title,
+                adminName,
+                status: 'Rejected'
+            });
+            return true;
+        }
+        return false;
+    },
+
+    approveIdea: (id: string, adminName: string) => {
+        const ideas = storage.getIdeaDetails();
+        const index = ideas.findIndex(i => i.id === id);
+        if (index !== -1) {
+            ideas[index].approvalStatus = 'Approved';
+            ideas[index].status = 'Accepted';
+            localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
+
+            storage.addAdminLog({
+                action: 'Approved Idea',
+                itemType: 'Idea',
+                itemName: ideas[index].title,
+                adminName,
+                status: 'Approved'
+            });
+            return true;
+        }
+        return false;
+    },
+
+    rejectIdea: (id: string, adminName: string) => {
+        const ideas = storage.getIdeaDetails();
+        const index = ideas.findIndex(i => i.id === id);
+        if (index !== -1) {
+            ideas[index].approvalStatus = 'Rejected';
+            ideas[index].status = 'Declined';
+            localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
+
+            storage.addAdminLog({
+                action: 'Rejected Idea',
+                itemType: 'Idea',
+                itemName: ideas[index].title,
+                adminName,
+                status: 'Rejected'
+            });
+            return true;
+        }
+        return false;
     }
 };

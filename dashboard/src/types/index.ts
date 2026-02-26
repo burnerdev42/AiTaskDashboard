@@ -39,6 +39,7 @@ export interface Challenge {
     tags?: string[]; // e.g., ["Highlighted", "Most Appreciated"]
     team?: { name: string; avatar: string; avatarColor: string }[];
     impact?: 'Critical' | 'High' | 'Medium' | 'Low';
+    approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
 }
 
 export interface Notification {
@@ -102,6 +103,18 @@ export interface Idea {
     submittedDate?: string;
     lastUpdated?: string;
     activity?: ActivityItem[];
+    approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
+}
+
+export interface AdminLog {
+    id: string;
+    action: string;
+    itemType: 'Registration' | 'Challenge' | 'Idea';
+    itemName: string;
+    adminName: string;
+    timestamp: string;
+    status: 'Approved' | 'Rejected';
+    details?: string;
 }
 
 export interface ChallengeCardData {

@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { storage } from '../../services/storage';
 import { type Notification } from '../../types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, Bell, Lightbulb, MessageSquare, TrendingUp, Sparkles, Heart, ThumbsUp } from 'lucide-react';
+import { Menu, X, Bell, Lightbulb, MessageSquare, TrendingUp, Sparkles, Heart, ThumbsUp, Zap } from 'lucide-react';
 
 export const Header: React.FC = () => {
     const { user, isAuthenticated } = useAuth();
@@ -56,13 +56,29 @@ export const Header: React.FC = () => {
             {mobileNavOpen && <div className="mobile-nav-backdrop" onClick={closeMobileNav} />}
 
             <div className={`header-right ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
-                <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Home</NavLink>
-                <NavLink to="/swimlanes" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Swim Lane</NavLink>
-                <NavLink to="/challenges" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Challenges</NavLink>
-                <NavLink to="/metrics" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Metrics</NavLink>
-                <NavLink to="/whats-next" className={({ isActive }) => `nav-link whats-next-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Sparkles size={16} /> What's Next</NavLink>
+                {isAuthenticated && (
+                    <>
+                        <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Home</NavLink>
+                        <NavLink to="/swimlanes" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Swim Lane</NavLink>
+                        <NavLink to="/challenges" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Challenges</NavLink>
+                        <NavLink to="/metrics" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav}>Metrics</NavLink>
+                        <NavLink to="/whats-next" className={({ isActive }) => `nav-link whats-next-link ${isActive ? 'active' : ''}`} onClick={closeMobileNav} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Sparkles size={16} /> What's Next</NavLink>
+                    </>
+                )}
 
                 <div className="header-user-controls">
+                    {/* Admin Control Zap */}
+                    {user?.role === 'Admin' && (
+                        <NavLink
+                            to="/admin"
+                            className={({ isActive }) => `admin-control-btn ${isActive ? 'active' : ''}`}
+                            title="Control Center"
+                            onClick={closeMobileNav}
+                        >
+                            <Zap size={20} />
+                        </NavLink>
+                    )}
+
                     {/* Notification Bell */}
                     {isAuthenticated && (
                         <div className="notification-wrapper" ref={notificationRef}>
@@ -160,12 +176,10 @@ export const Header: React.FC = () => {
                         </div>
                     )}
 
-                    {user ? (
+                    {user && (
                         <div className="avatar" title={user.name} onClick={() => { navigate('/profile'); closeMobileNav(); }} style={{ cursor: 'pointer' }}>
                             {user.avatar}
                         </div>
-                    ) : (
-                        <NavLink to="/login" className="login-btn" onClick={closeMobileNav}>Login</NavLink>
                     )}
                 </div>
             </div>

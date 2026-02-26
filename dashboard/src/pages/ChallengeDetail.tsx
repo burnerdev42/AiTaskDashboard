@@ -49,7 +49,7 @@ export const ChallengeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const { showToast } = useToast();
     const [searchParams] = useSearchParams();
     const [challenge, setChallenge] = useState<ChallengeDetailData | null>(null);
@@ -474,7 +474,7 @@ export const ChallengeDetail: React.FC = () => {
                             </>
                         )}
                     </div>
-                    {isAuthenticated && challenge.owner.name === 'Current User' && (
+                    {isAuthenticated && (challenge.owner.name === 'Current User' || user?.role === 'Admin') && (
                         <div className="detail-page-header-right">
                             {editMode ? (
                                 <>
@@ -482,7 +482,12 @@ export const ChallengeDetail: React.FC = () => {
                                     <button className="btn-cancel btn-sm" onClick={cancelEdit}>Cancel</button>
                                 </>
                             ) : (
-                                <button className="btn-secondary btn-sm" onClick={toggleEdit}>Edit</button>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <button className="btn-secondary btn-sm" onClick={toggleEdit}>Edit</button>
+                                    {user?.role === 'Admin' && (
+                                        <button className="btn-secondary btn-sm" style={{ color: 'var(--accent-red)', borderColor: 'rgba(239, 83, 80, 0.2)' }} onClick={handleDelete}>Delete</button>
+                                    )}
+                                </div>
                             )}
                         </div>
                     )}
@@ -757,7 +762,7 @@ export const ChallengeDetail: React.FC = () => {
                                                     <div style={{ fontSize: '11px', color: 'var(--accent-green)', fontWeight: '600', background: 'rgba(76, 175, 80, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
                                                         {idea.appreciations} <span style={{ fontSize: '10px' }}>likes</span>
                                                     </div>
-                                                    {isAuthenticated && idea.author === 'Current User' && (
+                                                    {isAuthenticated && (idea.author === 'Current User' || user?.role === 'Admin') && (
                                                         <button
                                                             className="idea-delete-action-btn"
                                                             title="Delete Idea"
