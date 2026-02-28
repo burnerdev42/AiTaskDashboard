@@ -487,7 +487,7 @@ export const storage = {
     addIdea: (challengeId: string, idea: Idea) => {
         // Update Idea Details (for global idea list / detail view)
         const ideas = storage.getIdeaDetails();
-        ideas.push({ ...idea, approvalStatus: 'Pending' });
+        ideas.push({ ...idea, approvalStatus: idea.approvalStatus || 'Pending' });
         localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
 
         // Update specific challenge's idea list
@@ -544,8 +544,8 @@ export const storage = {
     },
 
     addChallenge: (challenge: ChallengeDetailData) => {
-        // Ensure new challenges are Pending by default
-        const newChallenge = { ...challenge, approvalStatus: 'Pending' as const };
+        // Ensure new challenges logic respects passed setting or is Pending by default
+        const newChallenge = { ...challenge, approvalStatus: challenge.approvalStatus || 'Pending' as const };
 
         // 1. Update Detailed Data
         const details = storage.getChallengeDetails();
@@ -566,7 +566,7 @@ export const storage = {
             tags: newChallenge.challengeTags,
             team: newChallenge.team,
             impact: newChallenge.priority as any,
-            approvalStatus: 'Pending'
+            approvalStatus: newChallenge.approvalStatus as any
         };
         challenges.push(basicChallenge);
         localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
@@ -674,6 +674,21 @@ export const storage = {
             ideas[index].status = 'Accepted';
             localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
 
+            const challengeDetails = storage.getChallengeDetails();
+            let detailsUpdated = false;
+            challengeDetails.forEach(challenge => {
+                if (challenge.ideas) {
+                    const ideaIndex = challenge.ideas.findIndex((i: any) => i.id.toLowerCase() === id.toLowerCase());
+                    if (ideaIndex !== -1) {
+                        challenge.ideas[ideaIndex].status = 'Accepted';
+                        detailsUpdated = true;
+                    }
+                }
+            });
+            if (detailsUpdated) {
+                localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(challengeDetails));
+            }
+
             storage.addAdminLog({
                 action: 'Approved Idea',
                 itemType: 'Idea',
@@ -695,6 +710,21 @@ export const storage = {
             ideas[index].status = 'Declined';
             if (reason) ideas[index].rejectionReason = reason;
             localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
+
+            const challengeDetails = storage.getChallengeDetails();
+            let detailsUpdated = false;
+            challengeDetails.forEach(challenge => {
+                if (challenge.ideas) {
+                    const ideaIndex = challenge.ideas.findIndex((i: any) => i.id.toLowerCase() === id.toLowerCase());
+                    if (ideaIndex !== -1) {
+                        challenge.ideas[ideaIndex].status = 'Declined';
+                        detailsUpdated = true;
+                    }
+                }
+            });
+            if (detailsUpdated) {
+                localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(challengeDetails));
+            }
 
             storage.addAdminLog({
                 action: 'Rejected Idea',
