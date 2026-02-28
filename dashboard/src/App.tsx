@@ -17,6 +17,7 @@ import { WhatsNext } from './pages/WhatsNext';
 import { AdminControlPanel } from './pages/AdminControlPanel';
 import { UserDetail } from './pages/UserDetail';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { AiAssistant } from './components/AiAssistant';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               </Route>
             </Route>
           </Routes>
+          <AiAssistant />
         </Router>
       </ToastProvider>
     </AuthProvider>
