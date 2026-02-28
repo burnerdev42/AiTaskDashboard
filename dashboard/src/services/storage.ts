@@ -3,16 +3,16 @@ import { MOCK_CHALLENGES, MOCK_NOTIFICATIONS, MOCK_SWIMLANES, MOCK_USERS } from 
 import { challengeDetails as MOCK_CHALLENGE_DETAILS, ideaDetails as MOCK_IDEA_DETAILS } from '../data/challengeData';
 
 const STORAGE_KEYS = {
-    USERS: 'app_users_v2',
-    CHALLENGES: 'app_challenges_v2',
-    NOTIFICATIONS: 'app_notifications_v2',
-    SWIMLANES: 'app_swimlanes_v2',
-    CURRENT_USER: 'app_current_user_v2',
-    CHALLENGE_DETAILS: 'app_challenge_details_v2',
-    IDEA_DETAILS: 'app_idea_details_v2',
-    PENDING_REGISTRATIONS: 'ip_pending_registrations',
-    REJECTED_REGISTRATIONS: 'ip_rejected_registrations',
-    ADMIN_LOGS: 'app_admin_logs_v2'
+    USERS: 'app_users_v3',
+    CHALLENGES: 'app_challenges_v3',
+    NOTIFICATIONS: 'app_notifications_v3',
+    SWIMLANES: 'app_swimlanes_v3',
+    CURRENT_USER: 'app_current_user_v3',
+    CHALLENGE_DETAILS: 'app_challenge_details_v3',
+    IDEA_DETAILS: 'app_idea_details_v3',
+    PENDING_REGISTRATIONS: 'ip_pending_registrations_v3',
+    REJECTED_REGISTRATIONS: 'ip_rejected_registrations_v3',
+    ADMIN_LOGS: 'app_admin_logs_v3'
 };
 
 export const storage = {

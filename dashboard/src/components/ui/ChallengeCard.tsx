@@ -93,14 +93,24 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
             <div className="challenge-top">
                 <div className="challenge-top-info">
                     <div className="challenge-badge-row">
-                        {challenge.tags?.filter(tag => tag !== 'Pilot').slice(0, 1).map(tag => (
-                            <span key={tag} className={`challenge-badge ${tag === 'Highlighted' ? 'highlighted' : tag === 'Most Appreciated' ? 'appreciated' : 'top-voted'}`}>
-                                {tag === 'Highlighted' && <StarIcon />}
-                                {tag === 'Most Appreciated' && <MedalIcon />}
-                                {tag === 'Top Voted' && <TrophyIcon />}
-                                {' ' + tag}
-                            </span>
-                        ))}
+                        {challenge.tags?.filter(tag => tag !== 'Pilot').map(tag => {
+                            const isSpecial = ['Highlighted', 'Most Appreciated', 'Top Voted'].includes(tag);
+                            if (isSpecial) {
+                                return (
+                                    <span key={tag} className={`challenge-badge ${tag === 'Highlighted' ? 'highlighted' : tag === 'Most Appreciated' ? 'appreciated' : 'top-voted'}`}>
+                                        {tag === 'Highlighted' && <StarIcon />}
+                                        {tag === 'Most Appreciated' && <MedalIcon />}
+                                        {tag === 'Top Voted' && <TrophyIcon />}
+                                        {' ' + tag}
+                                    </span>
+                                );
+                            }
+                            return (
+                                <span key={tag} className="challenge-tag-pill">
+                                    {tag}
+                                </span>
+                            );
+                        })}
                         <span
                             className="challenge-stage-badge"
                             data-stage={challenge.stage.toLowerCase()}

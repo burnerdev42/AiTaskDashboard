@@ -6,6 +6,11 @@
         "outcome": "Create dynamic dashboard on demand using natural language",
         "status": "Pilot",
         "ownerId": "u-asmit",
+        "challengeTags": [
+            "GenAI",
+            "SQL",
+            "AdTech"
+        ],
         "ideas": [
             {
                 "id": "ID-0001",
@@ -23,6 +28,11 @@
         "outcome": "Parties can be planned just by stating requirement to ai agents with optimized food and drinks order.",
         "status": "Parking Lot",
         "ownerId": "u-asmit",
+        "challengeTags": [
+            "AI Agents",
+            "Azure AI",
+            "Vision"
+        ],
         "ideas": [
             {
                 "id": "ID-0002",
@@ -40,6 +50,11 @@
         "outcome": "Implementing a GenAI-based, fully autonomous Co-Pilot solution will streamline fulfillment by reducing manual effort and eliminating dependency on specific tools or engineering support. Users will be able to access insights, retrieve relevant data, and complete requests independently through a conversational interface. This will accelerate turnaround times, minimize iterations, improve clarity, and empower teams with direct, intelligent access to information—ultimately increasing efficiency, transparency, and scalability across operations.",
         "status": "Pilot",
         "ownerId": "u-pritam",
+        "challengeTags": [
+            "GenAI",
+            "Data Insights",
+            "Azure"
+        ],
         "ideas": [
             {
                 "id": "ID-0003",
@@ -57,6 +72,11 @@
         "outcome": "The pilot will demonstrate how an AI assistant chatbot can streamline issue troubleshooting by consolidating scattered knowledge and logs, reducing SME dependency, and accelerating resolution times.",
         "status": "Pilot",
         "ownerId": "u-indrani",
+        "challengeTags": [
+            "AIOps",
+            "Automation",
+            "LLM"
+        ],
         "ideas": [
             {
                 "id": "ID-0004",
@@ -74,6 +94,11 @@
         "outcome": "Advertisers should be able to create/update campaigns and view reports using an AI assistant.",
         "status": "Pilot",
         "ownerId": "u-asmit",
+        "challengeTags": [
+            "Agents",
+            "LlamaIndex",
+            "MCP"
+        ],
         "ideas": [
             {
                 "id": "ID-0005",
@@ -91,6 +116,11 @@
         "outcome": "By implementing AH360 as a Chain Observability solution, the organization gains a 360° real-time, end-to-end view of Distribution Centre operations. Business processes are seamlessly mapped to supporting technology services and applications, enabling faster root cause analysis, improved impact assessment, and proactive issue resolution. This enhanced visibility strengthens operational stability, improves cross-team collaboration, and ensures technology performance is directly aligned with business outcomes.",
         "status": "Pilot",
         "ownerId": "u-pragya",
+        "challengeTags": [
+            "Observability",
+            "Conversational AI",
+            "Retail"
+        ],
         "ideas": [
             {
                 "id": "ID-0006",
@@ -108,6 +138,11 @@
         "outcome": "IGuru will serve as a centralized knowledge hub, providing instant, source-cited answers to developer queries. By reducing search time and dependency on SMEs, it will accelerate onboarding, improve productivity, and ensure consistent knowledge sharing across the organization.",
         "status": "Pilot",
         "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "Knowledge Base",
+            "Semantic Search",
+            "RAG"
+        ],
         "ideas": [
             {
                 "id": "ID-0007",
@@ -125,6 +160,11 @@
         "outcome": "Retailers should be able to automatically generate and maintain accurate promotion inclusion and exclusion rules using an AI agent, reducing manual effort while ensuring consistent and error-free execution.",
         "status": "Evaluation",
         "ownerId": "u-smriti",
+        "challengeTags": [
+            "Retail",
+            "Pricing",
+            "AI Rules"
+        ],
         "ideas": [
             {
                 "id": "ID-0008",
@@ -142,6 +182,11 @@
         "outcome": "Users should be able to automate web-based tasks using natural language prompts, enabling faster RPA development, simplified automation, and automated remediation through AI-enhanced frameworks.",
         "status": "Modernization",
         "ownerId": "u-smriti",
+        "challengeTags": [
+            "RPA",
+            "Low Code",
+            "Azure OpenAI"
+        ],
         "ideas": [
             {
                 "id": "ID-0009",
@@ -159,6 +204,11 @@
         "outcome": "Successfully migrate all Terraform repositories to Azure AVM within one year, improving standardization, governance, and achieving up to $1M in cost savings.",
         "status": "Modernization",
         "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "Terraform",
+            "AVM",
+            "Infrastructure"
+        ],
         "ideas": [
             {
                 "id": "ID-0010",
@@ -176,6 +226,11 @@
         "outcome": "Establish a centralized observability platform to proactively monitor technical and business KPIs, preventing incidents and improving operational resilience and customer experience.",
         "status": "Modernization",
         "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "Grafana",
+            "KPIs",
+            "Observability"
+        ],
         "ideas": [
             {
                 "id": "ID-0011",
@@ -193,6 +248,11 @@
         "outcome": "Automate access provisioning service requests to reduce MTTR, improve response times, and enhance overall customer experience.",
         "status": "AMS",
         "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "PowerShell",
+            "Automation",
+            "IAM"
+        ],
         "ideas": [
             {
                 "id": "ID-0012",
@@ -210,6 +270,11 @@
         "outcome": "Accelerate test delivery by automatically generating high-quality, comprehensive test cases in Jira from Jira stories and Figma designs, improving coverage, consistency, and speed in the Software Quality Assurance process.",
         "status": "Modernization",
         "ownerId": "u-chandan",
+        "challengeTags": [
+            "QA Automation",
+            "GPT-4",
+            "Jira"
+        ],
         "ideas": [
             {
                 "id": "ID-0013",
@@ -227,6 +292,11 @@
         "outcome": "Automate sprint planning by intelligently selecting user stories based on team availability and defining sprint goals, while recommending story assignments aligned with team members’ skills to improve efficiency and accuracy.",
         "status": "Submitted",
         "ownerId": "u-chandan",
+        "challengeTags": [
+            "Agile",
+            "Sprint Planning",
+            "AI Assistant"
+        ],
         "ideas": [
             {
                 "id": "ID-0014",

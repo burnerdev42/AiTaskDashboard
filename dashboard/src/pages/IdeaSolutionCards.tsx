@@ -225,6 +225,17 @@ export const IdeaSolutionCards: React.FC = () => {
                                 <div className="idea-card-solution-body">
                                     <div className="idea-card-solution-title">{card.title}</div>
                                     <p className="challenge-card-desc">{card.description}</p>
+
+                                    {/* Tags Row */}
+                                    {card.tags && card.tags.length > 0 && (
+                                        <div className="challenge-tags-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px', marginBottom: '4px' }}>
+                                            {card.tags.map(tag => (
+                                                <span key={tag} className="challenge-tag-pill">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Meta Footer */}
