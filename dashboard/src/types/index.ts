@@ -44,12 +44,14 @@ export interface Challenge {
 
 export interface Notification {
     id: string;
-    type: 'challenge' | 'idea' | 'comment' | 'status' | 'like' | 'vote';
+    type: 'challenge' | 'idea' | 'comment' | 'status' | 'like' | 'vote' | 'registration';
     title: string;
     text: string;
     time: string;
     unread: boolean;
     link: string;
+    actionNeeded?: boolean;
+    meta?: { type: string; text: string }[];
 }
 
 export interface SwimLaneCard {

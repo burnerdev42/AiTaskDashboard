@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Zap, Clock, CheckCircle, XCircle, Users,
-    User, Mail, Building2, Shield, Search,
-    Flag, Lightbulb, History, Filter, AlertCircle, AlertTriangle
+    User, Mail, Building2, Shield,
+    Flag, Lightbulb, History, Link, AlertCircle, AlertTriangle
 } from 'lucide-react';
 import { storage } from '../services/storage';
 import { useToast } from '../context/ToastContext';
@@ -12,15 +13,18 @@ import { type User as UserType, type Challenge, type Idea, type AdminLog } from 
 export const AdminControlPanel: React.FC = () => {
     const { showToast } = useToast();
     const { user: currentUser } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'pending' | 'registrations' | 'challenges' | 'ideas' | 'history'>('pending');
     const [subFilter, setSubFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+    const [historyFilter, setHistoryFilter] = useState<'all' | 'registration' | 'challenge' | 'idea'>('all');
+    const [pendingTypeFilter, setPendingTypeFilter] = useState<'all' | 'registration' | 'challenge' | 'idea'>('all');
     const [pendingRegs, setPendingRegs] = useState<any[]>([]);
     const [rejectedRegs, setRejectedRegs] = useState<any[]>([]);
     const [allUsers, setAllUsers] = useState<UserType[]>([]);
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [ideas, setIdeas] = useState<Idea[]>([]);
     const [adminLogs, setAdminLogs] = useState<AdminLog[]>([]);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm] = useState('');
     const [stats, setStats] = useState({
         pending: 0,
         approved: 0,
@@ -63,15 +67,24 @@ export const AdminControlPanel: React.FC = () => {
         setIdeas(ideList);
         setAdminLogs(logs);
 
-        // Calculate global stats
-        const pChalls = challs.filter((c: Challenge) => !c.approvalStatus || c.approvalStatus === 'Pending').length;
-        const pIdeas = ideList.filter((i: Idea) => !i.approvalStatus || i.approvalStatus === 'Pending').length;
+        // Calculate global stats using resolved status
+        const pChalls = challs.filter((c: Challenge) => c.approvalStatus === 'Pending').length;
+        const pIdeas = ideList.filter((i: Idea) => {
+            if (i.approvalStatus) return i.approvalStatus === 'Pending';
+            return i.status === 'In Review' || i.status === 'Pending';
+        }).length;
 
-        const aChalls = challs.filter((c: Challenge) => c.approvalStatus === 'Approved').length;
-        const aIdeas = ideList.filter((i: Idea) => i.approvalStatus === 'Approved').length;
+        const aChalls = challs.filter((c: Challenge) => !c.approvalStatus || c.approvalStatus === 'Approved').length;
+        const aIdeas = ideList.filter((i: Idea) => {
+            if (i.approvalStatus) return i.approvalStatus === 'Approved';
+            return i.status === 'Accepted' || (!i.status || (i.status !== 'Declined' && i.status !== 'In Review' && i.status !== 'Pending'));
+        }).length;
 
         const rChalls = challs.filter((c: Challenge) => c.approvalStatus === 'Rejected').length;
-        const rIdeas = ideList.filter((i: Idea) => i.approvalStatus === 'Rejected').length;
+        const rIdeas = ideList.filter((i: Idea) => {
+            if (i.approvalStatus) return i.approvalStatus === 'Rejected';
+            return i.status === 'Declined';
+        }).length;
 
         setStats({
             pending: pRegs.length + pChalls + pIdeas,
@@ -93,121 +106,165 @@ export const AdminControlPanel: React.FC = () => {
     };
 
     const handleConfirmAction = () => {
-        const { action, type, itemId, itemName, reason } = modalConfig;
+        const { action, type, itemId, reason } = modalConfig;
 
         if (action === 'approve') {
-            if (type === 'registration') handleApproveRegistration(itemId);
-            else if (type === 'challenge') handleApproveChallenge(itemId);
-            else if (type === 'idea') handleApproveIdea(itemId);
+            if (type === 'registration') handleApproveRegistration(itemId, reason);
+            else if (type === 'challenge') handleApproveChallenge(itemId, reason);
+            else if (type === 'idea') handleApproveIdea(itemId, reason);
         } else {
-            if (type === 'registration') handleRejectRegistration(itemId);
-            else if (type === 'challenge') handleRejectChallenge(itemId);
-            else if (type === 'idea') handleRejectIdea(itemId);
-        }
-
-        // Log the reason if provided
-        if (reason.trim()) {
-            storage.addAdminLog({
-                action: `${action === 'approve' ? 'Approved' : 'Rejected'} with Note`,
-                itemType: type.charAt(0).toUpperCase() + type.slice(1) as any,
-                itemName: `${itemName} (Note: ${reason})`,
-                adminName: currentUser?.name || 'Admin',
-                status: action === 'approve' ? 'Approved' : 'Rejected'
-            });
+            if (type === 'registration') handleRejectRegistration(itemId, reason);
+            else if (type === 'challenge') handleRejectChallenge(itemId, reason);
+            else if (type === 'idea') handleRejectIdea(itemId, reason);
         }
 
         setModalConfig(prev => ({ ...prev, isOpen: false }));
     };
 
-    const handleApproveRegistration = (email: string) => {
+    const handleApproveRegistration = (email: string, reason: string) => {
         if (storage.approveRegistration(email)) {
             storage.addAdminLog({
                 action: 'Approved Registration',
                 itemType: 'Registration',
                 itemName: email,
                 adminName: currentUser?.name || 'Admin',
-                status: 'Approved'
+                status: 'Approved',
+                details: reason
             });
             showToast(`Registration for ${email} has been approved.`);
-            loadData();
         }
+        loadData();
     };
 
-    const handleRejectRegistration = (email: string) => {
+    const handleRejectRegistration = (email: string, reason: string) => {
         if (storage.rejectRegistration(email)) {
             storage.addAdminLog({
                 action: 'Rejected Registration',
                 itemType: 'Registration',
                 itemName: email,
                 adminName: currentUser?.name || 'Admin',
-                status: 'Rejected'
+                status: 'Rejected',
+                details: reason
             });
             showToast(`Registration for ${email} has been rejected.`, 'error');
-            loadData();
         }
+        loadData();
     };
 
-    const handleApproveChallenge = (id: string) => {
+    const handleApproveChallenge = (id: string, _reason: string) => {
         if (storage.approveChallenge(id, currentUser?.name || 'Admin')) {
             showToast('Challenge approved successfully.');
-            loadData();
         }
+        loadData();
     };
 
-    const handleRejectChallenge = (id: string) => {
+    const handleRejectChallenge = (id: string, _reason: string) => {
         if (storage.rejectChallenge(id, currentUser?.name || 'Admin')) {
             showToast('Challenge rejected.', 'error');
-            loadData();
         }
+        loadData();
     };
 
-    const handleApproveIdea = (id: string) => {
+    const handleApproveIdea = (id: string, _reason: string) => {
         if (storage.approveIdea(id, currentUser?.name || 'Admin')) {
             showToast('Idea approved successfully.');
-            loadData();
         }
+        loadData();
     };
 
-    const handleRejectIdea = (id: string) => {
+    const handleRejectIdea = (id: string, _reason: string) => {
         if (storage.rejectIdea(id, currentUser?.name || 'Admin')) {
             showToast('Idea rejected.', 'error');
-            loadData();
         }
+        loadData();
     };
 
-    // Filtering logic
+    // ── Helper: resolve the effective approval status for an item ──
+    const resolveChallengeStatus = (c: Challenge): 'Pending' | 'Approved' | 'Rejected' => {
+        if (c.approvalStatus) return c.approvalStatus;
+        // Pre-existing challenges without explicit approvalStatus are Approved
+        return 'Approved';
+    };
+
+    const resolveIdeaStatus = (i: Idea): 'Pending' | 'Approved' | 'Rejected' => {
+        if (i.approvalStatus) return i.approvalStatus;
+        // Map from legacy status field
+        if (i.status === 'Accepted') return 'Approved';
+        if (i.status === 'Declined') return 'Rejected';
+        if (i.status === 'In Review' || i.status === 'Pending') return 'Pending';
+        // Default: pre-existing ideas without explicit status are Approved
+        return 'Approved';
+    };
+
+    // ── Per-tab badge counts ──
+    const getTabCounts = () => {
+        const regCount = pendingRegs.length + allUsers.filter(u => u.role !== 'Admin').length + rejectedRegs.length;
+        const challCount = challenges.length;
+        const ideaCount = ideas.length;
+        return { registrations: regCount, challenges: challCount, ideas: ideaCount };
+    };
+    const tabCounts = getTabCounts();
+
+    // ── Filtering logic ──
     const getFilteredItems = () => {
         const lowerSearch = searchTerm.toLowerCase();
         let items: any[] = [];
 
         switch (activeTab) {
-            case 'pending':
-                const pRegs = pendingRegs.map(r => ({ ...r, type: 'registration', approvalStatus: 'Pending' }));
-                const pChalls = challenges.filter(c => !c.approvalStatus || c.approvalStatus === 'Pending').map(c => ({ ...c, type: 'challenge', approvalStatus: 'Pending' }));
-                const pIdeas = ideas.filter(i => !i.approvalStatus || i.approvalStatus === 'Pending').map(i => ({ ...i, type: 'idea', approvalStatus: 'Pending' }));
-                items = [...pRegs, ...pChalls, ...pIdeas];
+            case 'pending': {
+                // Only include items that are explicitly Pending
+                const pRegs = pendingRegs.map(r => ({ ...r, type: 'registration', approvalStatus: 'Pending' as const }));
+                const pChalls = challenges
+                    .filter(c => resolveChallengeStatus(c) === 'Pending')
+                    .map(c => ({ ...c, type: 'challenge', approvalStatus: 'Pending' as const }));
+                const pIdeas = ideas
+                    .filter(i => resolveIdeaStatus(i) === 'Pending')
+                    .map(i => ({ ...i, type: 'idea', approvalStatus: 'Pending' as const }));
+                let allPending = [...pRegs, ...pChalls, ...pIdeas];
+                // Apply pending type filter
+                if (pendingTypeFilter !== 'all') {
+                    allPending = allPending.filter(item => item.type === pendingTypeFilter);
+                }
+                items = allPending;
                 break;
+            }
 
-            case 'registrations':
-                const regPend = pendingRegs.map(r => ({ ...r, type: 'registration', approvalStatus: 'Pending' }));
-                const regApp = allUsers.filter(u => u.role !== 'Admin').map(u => ({ ...u, type: 'registration', approvalStatus: 'Approved' }));
-                const regRej = rejectedRegs.map(r => ({ ...r, type: 'registration', approvalStatus: 'Rejected' }));
+            case 'registrations': {
+                const regPend = pendingRegs.map(r => ({ ...r, type: 'registration', approvalStatus: 'Pending' as const }));
+                const regApp = allUsers.filter(u => u.role !== 'Admin').map(u => ({ ...u, type: 'registration', approvalStatus: 'Approved' as const }));
+                const regRej = rejectedRegs.map(r => ({ ...r, type: 'registration', approvalStatus: 'Rejected' as const }));
                 items = [...regPend, ...regApp, ...regRej];
                 break;
+            }
 
             case 'challenges':
-                items = challenges.map(c => ({ ...c, type: 'challenge', approvalStatus: c.approvalStatus || 'Pending' }));
+                items = challenges.map(c => ({ ...c, type: 'challenge', approvalStatus: resolveChallengeStatus(c) }));
                 break;
 
             case 'ideas':
-                items = ideas.map(i => ({ ...i, type: 'idea', approvalStatus: i.approvalStatus || 'Pending' }));
+                items = ideas.map(i => ({ ...i, type: 'idea', approvalStatus: resolveIdeaStatus(i) }));
                 break;
 
-            case 'history':
-                return adminLogs.filter(log =>
-                    log.action.toLowerCase().includes(lowerSearch) ||
-                    log.itemName.toLowerCase().includes(lowerSearch)
-                ).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+            case 'history': {
+                let logs = adminLogs
+                    .filter(log =>
+                        log.action.toLowerCase().includes(lowerSearch) ||
+                        log.itemName.toLowerCase().includes(lowerSearch)
+                    )
+                    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+                // Apply history type filter
+                if (historyFilter !== 'all') {
+                    const typeMap: Record<string, string> = {
+                        'registration': 'Registration',
+                        'challenge': 'Challenge',
+                        'idea': 'Idea'
+                    };
+                    logs = logs.filter(log => log.itemType === typeMap[historyFilter]);
+                }
+
+                return logs;
+            }
         }
 
         return items.filter(item => {
@@ -225,7 +282,7 @@ export const AdminControlPanel: React.FC = () => {
     const filteredItems = getFilteredItems();
 
     const getSubFilterCounts = () => {
-        let currentTabItems: any[] = [];
+        let currentTabItems: { approvalStatus: string }[] = [];
         switch (activeTab) {
             case 'registrations':
                 currentTabItems = [
@@ -235,10 +292,10 @@ export const AdminControlPanel: React.FC = () => {
                 ];
                 break;
             case 'challenges':
-                currentTabItems = challenges.map(c => ({ approvalStatus: c.approvalStatus || 'Pending' }));
+                currentTabItems = challenges.map(c => ({ approvalStatus: resolveChallengeStatus(c) }));
                 break;
             case 'ideas':
-                currentTabItems = ideas.map(i => ({ approvalStatus: i.approvalStatus || 'Pending' }));
+                currentTabItems = ideas.map(i => ({ approvalStatus: resolveIdeaStatus(i) }));
                 break;
             default: return { all: 0, pending: 0, approved: 0, rejected: 0 };
         }
@@ -253,182 +310,405 @@ export const AdminControlPanel: React.FC = () => {
 
     const subCounts = getSubFilterCounts();
 
+    // ── History filter counts ──
+    const getHistoryFilterCounts = () => {
+        const allLogs = adminLogs;
+        return {
+            all: allLogs.length,
+            registration: allLogs.filter(l => l.itemType === 'Registration').length,
+            challenge: allLogs.filter(l => l.itemType === 'Challenge').length,
+            idea: allLogs.filter(l => l.itemType === 'Idea').length
+        };
+    };
+    const historyCounts = getHistoryFilterCounts();
+
+    // ── Helper: get card CSS class based on status ──
+    const getCardClass = (item: any) => {
+        const status = item.approvalStatus || item.status;
+        if (status === 'Approved' || status === 'Accepted') return 'done';
+        if (status === 'Rejected' || status === 'Declined') return 'rejected-card';
+        return 'pending';
+    };
+
+    // ── Helper: get type icon for a type string ──
+    const renderTypeIcon = (type: string) => {
+        if (type === 'registration') return <User size={22} />;
+        if (type === 'challenge') return <Flag size={22} />;
+        if (type === 'idea') return <Lightbulb size={22} />;
+        return <History size={22} />;
+    };
+
+    // ── Helper: get type icon CSS class ──
+    const getTypeIconClass = (type: string) => {
+        if (type === 'registration') return 'reg';
+        if (type === 'challenge') return 'challenge';
+        if (type === 'idea') return 'idea';
+        return '';
+    };
+
+    // ── Render a single action card for items (not history) ──
+    const renderItemCard = (item: any, idx: number) => {
+        const type = item.type || 'unknown';
+        const cardClass = getCardClass(item);
+        const isPending = item.approvalStatus === 'Pending';
+        const displayStatus = item.approvalStatus || 'Pending';
+        const statusClass = displayStatus === 'Approved' ? 'approved-status' : displayStatus === 'Rejected' ? 'rejected-status' : 'pending-status';
+
+        let navUrl = '';
+        if (type === 'registration' && item.email) {
+            navUrl = `/control-center/user/${encodeURIComponent(item.email)}`;
+        } else if (type === 'challenge' && item.id) {
+            navUrl = `/challenges/${item.id}`;
+        } else if (type === 'idea' && item.id && item.linkedChallenge?.id) {
+            navUrl = `/challenges/${item.linkedChallenge.id}/ideas/${item.id}`;
+        }
+
+        return (
+            <div
+                key={`${type}-${item.id || item.email || idx}`}
+                className={`action-card ${cardClass}`}
+                style={{
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px',
+                    cursor: navUrl ? 'pointer' : 'default',
+                    transition: 'all 0.2s ease',
+                    position: 'relative',
+                    zIndex: 1
+                }}
+                onClick={() => {
+                    if (navUrl) navigate(navUrl);
+                }}
+                onMouseEnter={(e) => {
+                    if (navUrl) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                        e.currentTarget.style.borderColor = 'var(--accent-teal)';
+                    }
+                }}
+                onMouseLeave={(e) => {
+                    if (navUrl) {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = 'var(--border)';
+                    }
+                }}
+            >
+                <div className={`action-type-icon ${getTypeIconClass(type)}`} style={{
+                    width: '48px', height: '48px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                }}>
+                    {renderTypeIcon(type)}
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {item.name || item.title}
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                        {/* Registration metadata */}
+                        {type === 'registration' && item.email && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Mail size={14} /> {item.email}</span>
+                        )}
+                        {type === 'registration' && item.opco && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Building2 size={14} /> {item.opco}</span>
+                        )}
+
+                        {/* Challenge metadata */}
+                        {type === 'challenge' && item.owner?.name && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><User size={14} /> {item.owner.name}</span>
+                        )}
+                        {type === 'challenge' && item.id && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Flag size={14} /> {item.id}</span>
+                        )}
+                        {type === 'challenge' && item.impact && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><AlertCircle size={14} /> {item.impact} Impact</span>
+                        )}
+
+                        {/* Idea metadata */}
+                        {type === 'idea' && item.owner?.name && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><User size={14} /> {item.owner.name}</span>
+                        )}
+                        {type === 'idea' && item.id && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Lightbulb size={14} /> {item.id}</span>
+                        )}
+                        {type === 'idea' && item.linkedChallenge?.id && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Link size={14} /> {item.linkedChallenge.id}</span>
+                        )}
+                        {type === 'idea' && item.impactLevel && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><AlertTriangle size={14} /> {item.impactLevel} Impact</span>
+                        )}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                        {item.timestamp ? new Date(item.timestamp).toLocaleString() : item.rejectedAt ? new Date(item.rejectedAt).toLocaleString() : item.submittedDate ? new Date(item.submittedDate).toLocaleString() : 'Recently'}
+                    </div>
+                </div>
+
+                <span className={`action-status ${statusClass}`}>
+                    {displayStatus}
+                </span>
+
+                {isPending && (
+                    <div style={{ display: 'flex', gap: '8px', flexShrink: 0, marginLeft: '4px', position: 'relative', zIndex: 2 }}>
+                        <button
+                            className="btn-approve-vivid"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                openModal('approve', type as any, item.name || item.title || item.email, type === 'registration' ? item.email : item.id);
+                            }}
+                        >Approve</button>
+                        <button
+                            className="btn-reject-vivid"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                openModal('reject', type as any, item.name || item.title || item.email, type === 'registration' ? item.email : item.id);
+                            }}
+                        >Reject</button>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    // ── Render a history log card ──
+    const renderHistoryCard = (log: AdminLog) => {
+        const isApproved = log.status === 'Approved';
+        const cardClass = isApproved ? 'done' : 'rejected-card';
+        const statusClass = isApproved ? 'approved-status' : 'rejected-status';
+        const itemType = (log.itemType || '').toLowerCase();
+        const iconClass = getTypeIconClass(itemType);
+
+        // Extract reason from itemName if present (format: "name (Note: reason)")
+        let displayName = log.itemName;
+        let reason = '';
+        const noteMatch = log.itemName.match(/^(.*?)\s*\(Note:\s*(.*?)\)$/);
+        if (noteMatch) {
+            displayName = noteMatch[1];
+            reason = noteMatch[2];
+        }
+
+        let navUrl = '';
+        if (itemType === 'registration') {
+            // Find user email safely
+            const user = allUsers.find(u => u.name === displayName || u.email === displayName) ||
+                pendingRegs.find(u => u.name === displayName || u.email === displayName) ||
+                rejectedRegs.find(u => u.name === displayName || u.email === displayName);
+            if (user?.email) navUrl = `/control-center/user/${encodeURIComponent(user.email)}`;
+        } else if (itemType === 'challenge') {
+            const ch = challenges.find(c => c.title === displayName);
+            if (ch?.id) navUrl = `/challenges/${ch.id}`;
+        } else if (itemType === 'idea') {
+            const idea = ideas.find(i => i.title === displayName);
+            if (idea?.id && idea.linkedChallenge?.id) navUrl = `/challenges/${idea.linkedChallenge.id}/ideas/${idea.id}`;
+        }
+
+        return (
+            <div
+                key={log.id}
+                className={`action-card ${cardClass}`}
+                style={{
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px',
+                    cursor: navUrl ? 'pointer' : 'default',
+                    transition: 'all 0.2s ease',
+                    position: 'relative',
+                    zIndex: 1
+                }}
+                onClick={() => {
+                    if (navUrl) navigate(navUrl);
+                }}
+                onMouseEnter={(e) => {
+                    if (navUrl) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                        e.currentTarget.style.borderColor = 'var(--accent-teal)';
+                    }
+                }}
+                onMouseLeave={(e) => {
+                    if (navUrl) {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = 'var(--border)';
+                    }
+                }}
+            >
+                <div className={`action-type-icon ${iconClass}`} style={{
+                    width: '48px', height: '48px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                }}>
+                    {renderTypeIcon(itemType)}
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {displayName} — {log.status}
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <User size={14} /> {log.status === 'Approved' ? 'Approved' : 'Rejected'} by {log.adminName}
+                        </span>
+                        {reason && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                Reason: {reason}
+                            </span>
+                        )}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                        {new Date(log.timestamp).toLocaleString()}
+                    </div>
+                </div>
+
+                <span className={`action-status ${statusClass}`}>
+                    {log.status}
+                </span>
+            </div>
+        );
+    };
+
     return (
         <div className="page-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 36px 60px' }}>
             <div className="page-header" style={{ marginBottom: '32px' }}>
-                <h1 style={{ fontSize: '32px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '12px', background: 'linear-gradient(135deg, #fff, var(--accent-teal))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    <Zap size={28} style={{ color: 'var(--accent-teal)' }} /> Control Center
-                </h1>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h1>Control Center</h1>
+                </div>
                 <p style={{ color: 'var(--text-secondary)', marginTop: '8px', fontSize: '14px' }}>
                     Review and manage registrations, challenges, and ideas — all pending actions at a glance.
                 </p>
             </div>
 
             {/* Summary Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '32px' }}>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(232, 167, 88, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-orange)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(255, 167, 38, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-orange)', flexShrink: 0 }}>
                         <Clock size={24} />
                     </div>
                     <div>
                         <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-orange)' }}>{stats.pending}</div>
-                        <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Pending Actions</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Pending Actions</div>
                     </div>
                 </div>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(102, 187, 106, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-green)' }}>
+                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(102, 187, 106, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-green)', flexShrink: 0 }}>
                         <CheckCircle size={24} />
                     </div>
                     <div>
                         <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-green)' }}>{stats.approved}</div>
-                        <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Total Approved</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Approved</div>
                     </div>
                 </div>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(239, 83, 80, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)' }}>
+                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(239, 83, 80, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)', flexShrink: 0 }}>
                         <XCircle size={24} />
                     </div>
                     <div>
                         <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-red)' }}>{stats.rejected}</div>
-                        <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Rejected</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Rejected</div>
                     </div>
                 </div>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(171, 71, 188, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-purple)' }}>
+                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(171, 71, 188, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-purple)', flexShrink: 0 }}>
                         <Users size={24} />
                     </div>
                     <div>
                         <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-purple)' }}>{stats.totalUsers}</div>
-                        <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Registered Users</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Registered Users</div>
                     </div>
                 </div>
             </div>
 
-            {/* Main Tabs */}
-            <div style={{ borderBottom: '2px solid var(--border)', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', gap: '32px' }}>
-                    {[
-                        { id: 'pending', label: 'Pending Review', count: stats.pending },
-                        { id: 'registrations', label: 'Registrations' },
-                        { id: 'challenges', label: 'Challenges' },
-                        { id: 'ideas', label: 'Ideas' },
-                        { id: 'history', label: 'History' }
-                    ].map(tab => (
-                        <button
-                            key={tab.id}
-                            onClick={() => { setActiveTab(tab.id as any); setSubFilter('all'); }}
-                            style={{
-                                padding: '16px 4px',
-                                background: 'none',
-                                border: 'none',
-                                color: activeTab === tab.id ? 'var(--accent-teal)' : 'var(--text-muted)',
-                                fontWeight: 600,
-                                fontSize: '14px',
-                                cursor: 'pointer',
-                                borderBottom: activeTab === tab.id ? '2px solid var(--accent-teal)' : '2px solid transparent',
-                                marginBottom: '-2px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px'
-                            }}
-                        >
-                            {tab.label}
-                            {tab.count !== undefined && tab.count > 0 && <span className="badge-v2">{tab.count}</span>}
-                        </button>
-                    ))}
-                </div>
-
-                <div style={{ position: 'relative', width: '280px', marginBottom: '10px' }}>
-                    <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                    <input
-                        type="text"
-                        placeholder="Search control center..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        style={{ width: '100%', padding: '10px 12px 10px 38px', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', color: '#fff', fontSize: '13px' }}
-                    />
-                </div>
+            {/* Section Tabs */}
+            <div className="section-tabs" style={{ display: 'flex', gap: 0, marginBottom: 0, borderBottom: '2px solid var(--border)' }}>
+                {[
+                    { id: 'pending', label: 'Pending Review', count: stats.pending },
+                    { id: 'registrations', label: 'Registrations', count: tabCounts.registrations },
+                    { id: 'challenges', label: 'Challenges', count: tabCounts.challenges },
+                    { id: 'ideas', label: 'Ideas', count: tabCounts.ideas },
+                    { id: 'history', label: 'History' }
+                ].map(tab => (
+                    <button
+                        key={tab.id}
+                        className={`section-tab ${activeTab === tab.id ? 'active' : ''}`}
+                        onClick={() => { setActiveTab(tab.id as any); setSubFilter('all'); setHistoryFilter('all'); setPendingTypeFilter('all'); }}
+                        style={{
+                            padding: '14px 28px',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            color: activeTab === tab.id ? 'var(--accent-teal)' : 'var(--text-muted)',
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            position: 'relative',
+                            transition: 'all 0.2s',
+                            letterSpacing: '0.5px'
+                        }}
+                    >
+                        {tab.label}
+                        {tab.count !== undefined && tab.count > 0 && <span className="badge-v2">{tab.count}</span>}
+                        {activeTab === tab.id && (
+                            <span style={{
+                                position: 'absolute', bottom: '-2px', left: 0, right: 0,
+                                height: '2px', background: 'var(--accent-teal)', borderRadius: '2px 2px 0 0'
+                            }} />
+                        )}
+                    </button>
+                ))}
             </div>
 
-            {/* Sub Filters */}
-            {activeTab !== 'pending' && activeTab !== 'history' && (
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
-                    <button onClick={() => setSubFilter('all')} className={`sub-filter ${subFilter === 'all' ? 'active' : ''}`}>All ({subCounts.all})</button>
-                    <button onClick={() => setSubFilter('pending')} className={`sub-filter ${subFilter === 'pending' ? 'active' : ''}`}><Clock size={14} /> Pending ({subCounts.pending})</button>
-                    <button onClick={() => setSubFilter('approved')} className={`sub-filter ${subFilter === 'approved' ? 'active' : ''}`}><CheckCircle size={14} /> Approved ({subCounts.approved})</button>
-                    <button onClick={() => setSubFilter('rejected')} className={`sub-filter ${subFilter === 'rejected' ? 'active' : ''}`}><XCircle size={14} /> Rejected ({subCounts.rejected})</button>
-                </div>
-            )}
+            {/* Tab Content */}
+            <div style={{ paddingTop: '24px' }}>
 
-            {/* Action Cards List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {filteredItems.length > 0 ? (
-                    filteredItems.map((item: any) => (
-                        <div key={item.id || item.email} className={`action-card ${item.approvalStatus === 'Approved' ? 'approved' :
-                            item.approvalStatus === 'Rejected' ? 'rejected' : 'pending'
-                            }`} style={{
-                                background: 'var(--bg-secondary)',
-                                border: '1px solid var(--border)',
-                                borderRadius: '12px',
-                                padding: '20px 24px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '20px'
-                            }}>
-                            <div className={`action-type-icon ${(item.type || activeTab).slice(0, 3)}`} style={{
-                                width: '48px', height: '48px', borderRadius: '50%',
-                                background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                color: (item.type || activeTab) === 'registration' ? 'var(--accent-purple)' :
-                                    (item.type || activeTab) === 'challenge' ? 'var(--accent-orange)' : 'var(--accent-teal)'
-                            }}>
-                                {(item.type || activeTab) === 'registration' && <User size={22} />}
-                                {(item.type || activeTab) === 'challenge' && <Flag size={22} />}
-                                {(item.type || activeTab) === 'idea' && <Lightbulb size={22} />}
-                                {activeTab === 'history' && <History size={22} />}
-                            </div>
-
-                            <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px' }}>
-                                    {activeTab === 'history' ? item.action : (item.name || item.title)}
-                                </div>
-                                <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                                    {item.email && <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Mail size={14} /> {item.email}</span>}
-                                    {item.opco && <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Building2 size={14} /> {item.opco}</span>}
-                                    {item.itemName && <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Filter size={14} /> {item.itemName}</span>}
-                                    {(item.type === 'challenge' || activeTab === 'challenges') && item.impact && <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14} /> {item.impact}</span>}
-                                    {(item.type === 'idea' || activeTab === 'ideas') && item.impactLevel && <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={14} /> {item.impactLevel}</span>}
-                                </div>
-                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                                    {item.timestamp ? new Date(item.timestamp).toLocaleString() : item.rejectedAt ? new Date(item.rejectedAt).toLocaleString() : 'Recently'}
-                                </div>
-                            </div>
-
-                            <div className={`action-status ${(item.approvalStatus || item.status) === 'Approved' || (item.status === 'Accepted') ? 'approved-status' :
-                                (item.approvalStatus || item.status) === 'Rejected' || (item.status === 'Declined') ? 'rejected-status' : 'pending-status'
-                                }`}>
-                                {item.approvalStatus || (item.status === 'Accepted' ? 'Approved' : item.status === 'Declined' ? 'Rejected' : 'Pending')}
-                            </div>
-
-                            {(!item.approvalStatus || item.approvalStatus === 'Pending') && activeTab !== 'history' && (
-                                <div style={{ display: 'flex', gap: '8px', marginLeft: '12px' }}>
-                                    <button
-                                        className="btn-approve-vivid"
-                                        onClick={() => openModal('approve', item.type || (activeTab as any), item.name || item.title || item.email, item.id || item.email)}
-                                    >Approve</button>
-                                    <button
-                                        className="btn-reject-vivid"
-                                        onClick={() => openModal('reject', item.type || (activeTab as any), item.name || item.title || item.email, item.id || item.email)}
-                                    >Reject</button>
-                                </div>
-                            )}
-                        </div>
-                    ))
-                ) : (
-                    <div style={{ textAlign: 'center', padding: '80px', background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border)', color: 'var(--text-muted)' }}>
-                        <Shield size={48} style={{ opacity: 0.2, marginBottom: '16px' }} />
-                        <p>No {activeTab} items found matching your filter.</p>
+                {/* Sub Filters for pending review — by type */}
+                {activeTab === 'pending' && (
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                        <button onClick={() => setPendingTypeFilter('all')} className={`sub-filter ${pendingTypeFilter === 'all' ? 'active' : ''}`}>All ({pendingRegs.length + challenges.filter(c => resolveChallengeStatus(c) === 'Pending').length + ideas.filter(i => resolveIdeaStatus(i) === 'Pending').length})</button>
+                        <button onClick={() => setPendingTypeFilter('registration')} className={`sub-filter ${pendingTypeFilter === 'registration' ? 'active' : ''}`}><User size={14} /> Registrations ({pendingRegs.length})</button>
+                        <button onClick={() => setPendingTypeFilter('challenge')} className={`sub-filter ${pendingTypeFilter === 'challenge' ? 'active' : ''}`}><Flag size={14} /> Challenges ({challenges.filter(c => resolveChallengeStatus(c) === 'Pending').length})</button>
+                        <button onClick={() => setPendingTypeFilter('idea')} className={`sub-filter ${pendingTypeFilter === 'idea' ? 'active' : ''}`}><Lightbulb size={14} /> Ideas ({ideas.filter(i => resolveIdeaStatus(i) === 'Pending').length})</button>
                     </div>
                 )}
+
+                {/* Sub Filters for registrations / challenges / ideas */}
+                {(activeTab === 'registrations' || activeTab === 'challenges' || activeTab === 'ideas') && (
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                        <button onClick={() => setSubFilter('all')} className={`sub-filter ${subFilter === 'all' ? 'active' : ''}`}>All ({subCounts.all})</button>
+                        <button onClick={() => setSubFilter('pending')} className={`sub-filter ${subFilter === 'pending' ? 'active' : ''}`}><Clock size={14} /> Pending ({subCounts.pending})</button>
+                        <button onClick={() => setSubFilter('approved')} className={`sub-filter ${subFilter === 'approved' ? 'active' : ''}`}><CheckCircle size={14} /> Approved ({subCounts.approved})</button>
+                        <button onClick={() => setSubFilter('rejected')} className={`sub-filter ${subFilter === 'rejected' ? 'active' : ''}`}><XCircle size={14} /> Rejected ({subCounts.rejected})</button>
+                    </div>
+                )}
+
+                {/* Sub Filters for history — by type */}
+                {activeTab === 'history' && (
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                        <button onClick={() => setHistoryFilter('all')} className={`sub-filter ${historyFilter === 'all' ? 'active' : ''}`}>All ({historyCounts.all})</button>
+                        <button onClick={() => setHistoryFilter('registration')} className={`sub-filter ${historyFilter === 'registration' ? 'active' : ''}`}><User size={14} /> Registrations ({historyCounts.registration})</button>
+                        <button onClick={() => setHistoryFilter('challenge')} className={`sub-filter ${historyFilter === 'challenge' ? 'active' : ''}`}><Flag size={14} /> Challenges ({historyCounts.challenge})</button>
+                        <button onClick={() => setHistoryFilter('idea')} className={`sub-filter ${historyFilter === 'idea' ? 'active' : ''}`}><Lightbulb size={14} /> Ideas ({historyCounts.idea})</button>
+                    </div>
+                )}
+
+                {/* Action Cards List */}
+                <div key={activeTab + '-' + subFilter + '-' + historyFilter + '-' + pendingTypeFilter} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {filteredItems.length > 0 ? (
+                        activeTab === 'history'
+                            ? (filteredItems as AdminLog[]).map(log => renderHistoryCard(log))
+                            : filteredItems.map((item: any, idx: number) => renderItemCard(item, idx))
+                    ) : (
+                        <div style={{ textAlign: 'center', padding: '80px', background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border)', color: 'var(--text-muted)' }}>
+                            <Shield size={48} style={{ opacity: 0.2, marginBottom: '16px' }} />
+                            <p>No {activeTab} items found matching your filter.</p>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Confirmation Modal */}
@@ -442,11 +722,22 @@ export const AdminControlPanel: React.FC = () => {
                             <strong>{modalConfig.type.charAt(0).toUpperCase() + modalConfig.type.slice(1)}:</strong> {modalConfig.itemName}
                         </div>
 
+                        <div style={{ marginBottom: '4px' }}>
+                            <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                                Comment <span style={{ color: 'var(--accent-red, #ef5350)' }}>*</span>
+                            </label>
+                        </div>
                         <textarea
-                            placeholder="Add a note or reason (optional)..."
+                            placeholder="Add a note or reason (required)..."
                             value={modalConfig.reason}
                             onChange={(e) => setModalConfig(prev => ({ ...prev, reason: e.target.value }))}
+                            style={{ borderColor: !modalConfig.reason.trim() ? 'var(--accent-red, #ef5350)' : undefined }}
                         />
+                        {!modalConfig.reason.trim() && (
+                            <p style={{ fontSize: '12px', color: 'var(--accent-red, #ef5350)', margin: '4px 0 0' }}>
+                                A comment is required to proceed.
+                            </p>
+                        )}
 
                         <div className="modal-actions">
                             <button
@@ -458,6 +749,8 @@ export const AdminControlPanel: React.FC = () => {
                             <button
                                 className={`btn-confirm-${modalConfig.action}`}
                                 onClick={handleConfirmAction}
+                                disabled={!modalConfig.reason.trim()}
+                                style={{ opacity: !modalConfig.reason.trim() ? 0.5 : 1, cursor: !modalConfig.reason.trim() ? 'not-allowed' : 'pointer' }}
                             >
                                 {modalConfig.action === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
                             </button>

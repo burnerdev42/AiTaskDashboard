@@ -1,13 +1,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, Rocket, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 export const Register: React.FC = () => {
     const navigate = useNavigate();
-    const { register } = useAuth();
+    const { register, isAuthenticated } = useAuth();
     const { showToast } = useToast();
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
     const [formData, setFormData] = useState({
         name: '',
         opco: '',

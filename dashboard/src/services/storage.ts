@@ -1,5 +1,5 @@
 import { type Idea, type ChallengeDetailData, type Challenge, type ChallengeStage, type Notification, type SwimLaneCard, type User } from '../types';
-import { MOCK_CHALLENGES, MOCK_NOTIFICATIONS, MOCK_SWIMLANES, MOCK_USERS } from './mockData';
+import { MOCK_ADMIN_LOGS, MOCK_CHALLENGES, MOCK_NOTIFICATIONS, MOCK_PENDING_IDEAS, MOCK_PENDING_REGISTRATIONS, MOCK_SWIMLANES, MOCK_USERS } from './mockData';
 import { challengeDetails as MOCK_CHALLENGE_DETAILS, ideaDetails as MOCK_IDEA_DETAILS } from '../data/challengeData';
 
 const STORAGE_KEYS = {
@@ -12,7 +12,14 @@ const STORAGE_KEYS = {
     IDEA_DETAILS: 'app_idea_details_v2',
     PENDING_REGISTRATIONS: 'ip_pending_registrations',
     REJECTED_REGISTRATIONS: 'ip_rejected_registrations',
-    ADMIN_LOGS: 'app_admin_logs_v2'
+    ADMIN_LOGS: 'app_admin_logs_v2',
+    READ_ACTION_ITEMS: 'app_read_action_items_v2'
+};
+
+const notifyUpdate = () => {
+    if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('storage-updated'));
+    }
 };
 
 export const storage = {
@@ -52,6 +59,22 @@ export const storage = {
 
             if (!localStorage.getItem(STORAGE_KEYS.CHALLENGES)) {
                 localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(MOCK_CHALLENGES));
+            } else {
+                // Merge approvalStatus from mock data into existing challenges
+                const existingChallenges: Challenge[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.CHALLENGES)!);
+                let challUpdated = false;
+                MOCK_CHALLENGES.forEach(mockCh => {
+                    if (mockCh.approvalStatus) {
+                        const existing = existingChallenges.find(c => c.id === mockCh.id);
+                        if (existing && !existing.approvalStatus) {
+                            existing.approvalStatus = mockCh.approvalStatus;
+                            challUpdated = true;
+                        }
+                    }
+                });
+                if (challUpdated) {
+                    localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(existingChallenges));
+                }
             }
 
             if (!localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS)) {
@@ -68,6 +91,61 @@ export const storage = {
 
             if (!localStorage.getItem(STORAGE_KEYS.IDEA_DETAILS) && MOCK_IDEA_DETAILS && MOCK_IDEA_DETAILS.length > 0) {
                 localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(MOCK_IDEA_DETAILS));
+            }
+
+            // Seed pending registrations
+            const existingPendingJson = localStorage.getItem(STORAGE_KEYS.PENDING_REGISTRATIONS);
+            const pendingRegsList = existingPendingJson ? JSON.parse(existingPendingJson) : [];
+            const usersList = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            const rejectedRegsList = JSON.parse(localStorage.getItem(STORAGE_KEYS.REJECTED_REGISTRATIONS) || '[]');
+
+            let pendUpdated = false;
+            MOCK_PENDING_REGISTRATIONS.forEach(mockReg => {
+                const isPending = pendingRegsList.some((p: any) => p.email.toLowerCase() === mockReg.email.toLowerCase());
+                const isUser = usersList.some((u: any) => u.email.toLowerCase() === mockReg.email.toLowerCase());
+                const isRejected = rejectedRegsList.some((r: any) => r.email.toLowerCase() === mockReg.email.toLowerCase());
+
+                if (!isPending && !isUser && !isRejected) {
+                    pendingRegsList.push(mockReg);
+                    pendUpdated = true;
+                }
+            });
+
+            if (pendUpdated || !existingPendingJson) {
+                localStorage.setItem(STORAGE_KEYS.PENDING_REGISTRATIONS, JSON.stringify(pendingRegsList));
+            }
+
+            // Seed pending ideas
+            const existingIdeasJson = localStorage.getItem(STORAGE_KEYS.IDEA_DETAILS);
+            const ideasList = existingIdeasJson ? JSON.parse(existingIdeasJson) : [];
+            let ideasUpdated = false;
+            MOCK_PENDING_IDEAS.forEach(mockIdea => {
+                const exists = ideasList.some((i: any) => i.id === mockIdea.id);
+                if (!exists) {
+                    ideasList.push(mockIdea);
+                    ideasUpdated = true;
+                }
+            });
+            if (ideasUpdated || !existingIdeasJson) {
+                localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideasList));
+            }
+
+            const existingLogsJson = localStorage.getItem(STORAGE_KEYS.ADMIN_LOGS);
+            if (!existingLogsJson || existingLogsJson === '[]') {
+                localStorage.setItem(STORAGE_KEYS.ADMIN_LOGS, JSON.stringify(MOCK_ADMIN_LOGS));
+            } else {
+                const existingLogs = JSON.parse(existingLogsJson);
+                let updated = false;
+                MOCK_ADMIN_LOGS.forEach(mockLog => {
+                    if (!existingLogs.find((l: any) => l.id === mockLog.id)) {
+                        existingLogs.push(mockLog);
+                        updated = true;
+                    }
+                });
+                if (updated) {
+                    existingLogs.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+                    localStorage.setItem(STORAGE_KEYS.ADMIN_LOGS, JSON.stringify(existingLogs));
+                }
             }
         } catch (e) {
             console.error('Failed to initialize storage:', e);
@@ -125,6 +203,22 @@ export const storage = {
 
     getNotifications: (): Notification[] => {
         return JSON.parse(localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS) || '[]');
+    },
+
+    getUserDetailByEmail: (email: string): { user: any; status: 'Pending' | 'Approved' | 'Rejected' } | null => {
+        const pending = storage.getPendingRegistrations();
+        const pendingUser = pending.find(p => p.email.toLowerCase() === email.toLowerCase());
+        if (pendingUser) return { user: pendingUser, status: 'Pending' };
+
+        const users = storage.getUsers();
+        const activeUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+        if (activeUser) return { user: activeUser, status: 'Approved' };
+
+        const rejected = storage.getRejectedRegistrations();
+        const rejectedUser = rejected.find(r => r.email.toLowerCase() === email.toLowerCase());
+        if (rejectedUser) return { user: rejectedUser, status: 'Rejected' };
+
+        return null;
     },
 
     getCurrentUser: (): User | null => {
@@ -226,6 +320,7 @@ export const storage = {
             };
             users.push(newUser);
             localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+            notifyUpdate();
             return true;
         }
         return false;
@@ -242,6 +337,7 @@ export const storage = {
             rejected.push({ ...rejectedReg, rejectedAt: new Date().toISOString() });
             localStorage.setItem(STORAGE_KEYS.REJECTED_REGISTRATIONS, JSON.stringify(rejected));
         }
+        notifyUpdate();
         return true;
     },
 
@@ -282,13 +378,31 @@ export const storage = {
         }
         return false;
     },
+    getReadActionItems: (): string[] => {
+        try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.READ_ACTION_ITEMS) || '[]');
+        } catch {
+            return [];
+        }
+    },
 
     markNotificationRead: (id: string) => {
+        if (id.startsWith('action-')) {
+            const readItems = storage.getReadActionItems();
+            if (!readItems.includes(id)) {
+                readItems.push(id);
+                localStorage.setItem(STORAGE_KEYS.READ_ACTION_ITEMS, JSON.stringify(readItems));
+                notifyUpdate();
+            }
+            return;
+        }
+
         const notifications = storage.getNotifications();
         const index = notifications.findIndex(n => n.id === id);
         if (index !== -1) {
             notifications[index].unread = false;
             localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
+            notifyUpdate();
         }
     },
 
@@ -296,12 +410,34 @@ export const storage = {
         const notifications = storage.getNotifications();
         notifications.forEach(n => n.unread = false);
         localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
+
+        // Mark current action items as read
+        const pendingRegs = storage.getPendingRegistrations();
+        const challenges = storage.getChallenges();
+        const ideas = storage.getIdeaDetails();
+        const actionItemIds = [
+            ...pendingRegs.map(r => `action-reg-${r.email}`),
+            ...challenges.filter(c => c.approvalStatus === 'Pending').map(c => `action-chall-${c.id}`),
+            ...ideas.filter(i => {
+                if (i.approvalStatus) return i.approvalStatus === 'Pending';
+                return i.status === 'In Review' || i.status === 'Pending';
+            }).map(i => `action-idea-${i.id}`)
+        ];
+
+        if (actionItemIds.length > 0) {
+            const readItems = new Set(storage.getReadActionItems());
+            actionItemIds.forEach(id => readItems.add(id));
+            localStorage.setItem(STORAGE_KEYS.READ_ACTION_ITEMS, JSON.stringify(Array.from(readItems)));
+        }
+
+        notifyUpdate();
     },
 
     deleteNotification: (id: string) => {
         const notifications = storage.getNotifications();
         const updatedNotifications = notifications.filter(n => n.id !== id);
         localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(updatedNotifications));
+        notifyUpdate();
     },
 
     deleteChallenge: (id: string) => {
@@ -449,9 +585,9 @@ export const storage = {
     getAdminLogs: (): any[] => {
         try {
             const data = localStorage.getItem(STORAGE_KEYS.ADMIN_LOGS);
-            return data ? JSON.parse(data) : [];
+            return data ? JSON.parse(data) : MOCK_ADMIN_LOGS;
         } catch {
-            return [];
+            return MOCK_ADMIN_LOGS;
         }
     },
 
@@ -487,6 +623,7 @@ export const storage = {
                 adminName,
                 status: 'Approved'
             });
+            notifyUpdate();
             return true;
         }
         return false;
@@ -514,6 +651,7 @@ export const storage = {
                 adminName,
                 status: 'Rejected'
             });
+            notifyUpdate();
             return true;
         }
         return false;
@@ -534,6 +672,7 @@ export const storage = {
                 adminName,
                 status: 'Approved'
             });
+            notifyUpdate();
             return true;
         }
         return false;
@@ -554,6 +693,7 @@ export const storage = {
                 adminName,
                 status: 'Rejected'
             });
+            notifyUpdate();
             return true;
         }
         return false;

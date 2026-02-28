@@ -5,10 +5,13 @@ import { type Notification } from '../types';
 import { Lightbulb, MessageSquare, TrendingUp, Heart, ThumbsUp } from 'lucide-react';
 import { ConfirmationModal } from '../components/ui/ConfirmationModal';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
+import { Zap, User as UserIcon } from 'lucide-react';
 
 export const Notifications: React.FC = () => {
     const navigate = useNavigate();
-    const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status' | 'like'>('all');
+    const { user } = useAuth();
+    const [activeFilter, setActiveFilter] = useState<'all' | 'challenge' | 'idea' | 'comment' | 'status' | 'like' | 'action'>('all');
     const [isLoading, setIsLoading] = useState(true);
 
     React.useEffect(() => {
@@ -30,15 +33,89 @@ export const Notifications: React.FC = () => {
     const [_, setTick] = useState(0);
     const forceUpdate = () => setTick(t => t + 1);
 
-    // Get notifications from storage
-    const allNotifications = storage.getNotifications();
+    React.useEffect(() => {
+        window.addEventListener('storage-updated', forceUpdate);
+        return () => window.removeEventListener('storage-updated', forceUpdate);
+    }, []);
 
-    // Check if we need to filter based on user (optional, seeing all for now as per mock)
-    // In a real app we'd filter by userId
+    // Get notifications from storage
+    let allNotifications = storage.getNotifications();
+
+    const isAdmin = user?.role === 'Admin';
+    let actionItems: Notification[] = [];
+
+    if (isAdmin) {
+        // Fetch pending items
+        const pendingRegs = storage.getPendingRegistrations();
+        const challenges = storage.getChallenges();
+        const ideas = storage.getIdeaDetails();
+
+        const pendingChallenges = challenges.filter(c => c.approvalStatus === 'Pending');
+        const pendingIdeas = ideas.filter(i => {
+            if (i.approvalStatus) return i.approvalStatus === 'Pending';
+            return i.status === 'In Review' || i.status === 'Pending';
+        });
+
+        // Fetch read action items
+        const readActionItems = storage.getReadActionItems();
+
+        // Map pending registrations to notifications
+        const mappedRegs: Notification[] = pendingRegs.map(reg => {
+            const id = `action-reg-${reg.email}`;
+            return {
+                id,
+                type: 'registration',
+                title: `New Registration — ${reg.name}`,
+                text: `${reg.name} (${reg.email}) from ${reg.department} has registered and is awaiting your approval to access the portal.`,
+                time: new Date(reg.date).toLocaleString(),
+                unread: !readActionItems.includes(id),
+                link: '/control-center',
+                actionNeeded: true,
+                meta: [{ type: 'registration', text: 'Registration' }]
+            };
+        });
+
+        // Map pending challenges
+        const mappedChalls: Notification[] = pendingChallenges.map(c => {
+            const id = `action-chall-${c.id}`;
+            return {
+                id,
+                type: 'challenge',
+                title: `New Challenge Submitted — ${c.title}`,
+                text: `${c.owner?.name || 'User'} submitted challenge ${c.id}. Needs your approval before it goes live.`,
+                time: 'Recent',
+                unread: !readActionItems.includes(id),
+                link: '/control-center',
+                actionNeeded: true,
+                meta: [{ type: 'challenge', text: 'Challenge' }, { type: 'id', text: c.id }]
+            };
+        });
+
+        // Map pending ideas
+        const mappedIdeas: Notification[] = pendingIdeas.map(i => {
+            const id = `action-idea-${i.id}`;
+            return {
+                id,
+                type: 'idea',
+                title: `New Idea Submitted — ${i.title}`,
+                text: `${i.owner?.name || 'User'} submitted idea ${i.id}. Requires approval to appear in the ideas board.`,
+                time: i.submittedDate ? new Date(i.submittedDate).toLocaleString() : 'Recent',
+                unread: !readActionItems.includes(id),
+                link: '/control-center',
+                actionNeeded: true,
+                meta: [{ type: 'idea', text: 'Idea' }, { type: 'id', text: i.id }]
+            };
+        });
+
+        actionItems = [...mappedRegs, ...mappedChalls, ...mappedIdeas];
+        // Combine action items at the top
+        allNotifications = [...actionItems, ...allNotifications];
+    }
 
     // Apply type filter
     const filteredNotifications = allNotifications.filter(n => {
         if (activeFilter === 'all') return true;
+        if (activeFilter === 'action') return n.actionNeeded;
         if (activeFilter === 'like') return n.type === 'like' || n.type === 'vote';
         return n.type === activeFilter;
     });
@@ -46,11 +123,12 @@ export const Notifications: React.FC = () => {
     // Calculate counts for tabs
     const counts = {
         all: allNotifications.length,
-        challenge: allNotifications.filter(n => n.type === 'challenge').length,
-        idea: allNotifications.filter(n => n.type === 'idea').length,
-        comment: allNotifications.filter(n => n.type === 'comment').length,
-        status: allNotifications.filter(n => n.type === 'status').length,
-        like: allNotifications.filter(n => n.type === 'like' || n.type === 'vote').length
+        action: actionItems.length,
+        challenge: allNotifications.filter(n => n.type === 'challenge' && !n.actionNeeded).length,
+        idea: allNotifications.filter(n => n.type === 'idea' && !n.actionNeeded).length,
+        comment: allNotifications.filter(n => n.type === 'comment' && !n.actionNeeded).length,
+        status: allNotifications.filter(n => n.type === 'status' && !n.actionNeeded).length,
+        like: allNotifications.filter(n => (n.type === 'like' || n.type === 'vote') && !n.actionNeeded).length
     };
 
     const handleNotificationClick = (notification: Notification) => {
@@ -108,6 +186,7 @@ export const Notifications: React.FC = () => {
             case 'status': return <TrendingUp size={16} />;
             case 'like': return <Heart size={16} />;
             case 'vote': return <ThumbsUp size={16} />;
+            case 'registration': return <UserIcon size={16} />;
             default: return flagIcon;
         }
     };
@@ -121,7 +200,7 @@ export const Notifications: React.FC = () => {
     };
 
     return (
-        <div className="container notifications-page">
+        <div className="container notifications-page" >
             <div className="page-header">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h1>All Notifications</h1>
@@ -138,6 +217,14 @@ export const Notifications: React.FC = () => {
                 >
                     All {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.all}</span>}
                 </button>
+                {isAdmin && (
+                    <button
+                        className={`filter-tab ${activeFilter === 'action' ? 'active' : ''}`}
+                        onClick={() => setActiveFilter('action')}
+                    >
+                        <Zap size={14} style={{ marginRight: '6px' }} /> Action Needed {isLoading ? <span className="count skeleton-text" style={{ width: '20px', height: '14px', margin: 0 }}></span> : <span className="count animate-pop">{counts.action}</span>}
+                    </button>
+                )}
                 <button
                     className={`filter-tab ${activeFilter === 'challenge' ? 'active' : ''}`}
                     onClick={() => setActiveFilter('challenge')}
@@ -202,7 +289,7 @@ export const Notifications: React.FC = () => {
                     filteredNotifications.map(notification => (
                         <div
                             key={notification.id}
-                            className={`notif-card ${notification.unread ? 'unread' : ''} ${animatingIds.has(notification.id) ? 'notif-exit' : ''}`}
+                            className={`notif-card ${notification.unread ? 'unread' : ''} ${animatingIds.has(notification.id) ? 'notif-exit' : ''} ${notification.actionNeeded ? 'action-needed' : ''}`}
                             onClick={() => handleNotificationClick(notification)}
                         >
                             <div className={`notif-icon ${notification.type}`}>
@@ -232,6 +319,11 @@ export const Notifications: React.FC = () => {
                                 </div>
                                 <div className="notif-meta">
                                     {renderBadge(notification.type)}
+                                    {notification.actionNeeded && (
+                                        <span className="notif-badge action-tag">
+                                            <Zap size={12} style={{ marginRight: '4px' }} /> Action Needed
+                                        </span>
+                                    )}
                                     {/* Additional mock meta can be added if available in type */}
                                 </div>
                             </div>
@@ -251,6 +343,6 @@ export const Notifications: React.FC = () => {
                 message="Are you sure you want to delete this notification? This action cannot be undone."
                 confirmText="Delete"
             />
-        </div>
+        </div >
     );
 };

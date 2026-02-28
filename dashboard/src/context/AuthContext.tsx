@@ -16,17 +16,18 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(() => {
+        try {
+            storage.initialize();
+            return storage.getCurrentUser();
+        } catch (e) {
+            console.error('Failed to initialize session:', e);
+            return null;
+        }
+    });
 
     useEffect(() => {
-        storage.initialize();
-        const timer = setTimeout(() => {
-            const currentUser = storage.getCurrentUser();
-            if (currentUser) {
-                setUser(currentUser);
-            }
-        }, 0);
-        return () => clearTimeout(timer);
+        // Initializing storage is synchronously done in the useState initializer
     }, []);
 
     const login = async (email: string): Promise<boolean> => {

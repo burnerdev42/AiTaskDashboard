@@ -15,6 +15,7 @@ import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
 import { WhatsNext } from './pages/WhatsNext';
 import { AdminControlPanel } from './pages/AdminControlPanel';
+import { UserDetail } from './pages/UserDetail';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
@@ -40,7 +41,8 @@ function App() {
                 <Route path="/whats-next" element={<WhatsNext />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/admin" element={<AdminControlPanel />} />
+                <Route path="/control-center" element={<AdminControlPanel />} />
+                <Route path="/control-center/user/:userId" element={<UserDetail />} />
               </Route>
             </Route>
           </Routes>

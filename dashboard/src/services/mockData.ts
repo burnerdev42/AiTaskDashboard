@@ -1,4 +1,100 @@
-import { type Challenge, type Notification, type SwimLaneCard, type User } from '../types';
+import { type Challenge, type Notification, type SwimLaneCard, type User, type AdminLog } from '../types';
+
+export const MOCK_ADMIN_LOGS: AdminLog[] = [
+    {
+        id: 'log-1',
+        action: 'Approved Challenge',
+        itemType: 'Challenge',
+        itemName: 'Unified Customer 360 Platform',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-2',
+        action: 'Approved Challenge',
+        itemType: 'Challenge',
+        itemName: 'Digital Twin – Factory Floor',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-3',
+        action: 'Approved Registration',
+        itemType: 'Registration',
+        itemName: 'priya.sharma@tcs.com',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-4',
+        action: 'Approved Registration',
+        itemType: 'Registration',
+        itemName: 'siddharth@ananta.azurewebsites.net',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-5',
+        action: 'Rejected Registration',
+        itemType: 'Registration',
+        itemName: 'test@external.com',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Rejected',
+        details: 'External email'
+    },
+    {
+        id: 'log-6',
+        action: 'Approved Challenge',
+        itemType: 'Challenge',
+        itemName: 'Conversational Commerce Bot',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-7',
+        action: 'Rejected Challenge',
+        itemType: 'Challenge',
+        itemName: 'Free Lunch Fridays',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Rejected',
+        details: 'Not innovation-related'
+    },
+    {
+        id: 'log-8',
+        action: 'Approved Idea',
+        itemType: 'Idea',
+        itemName: 'AI-Powered Retention Model',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-9',
+        action: 'Approved Idea',
+        itemType: 'Idea',
+        itemName: 'Predictive Inventory Restocking',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Approved'
+    },
+    {
+        id: 'log-10',
+        action: 'Rejected Idea',
+        itemType: 'Idea',
+        itemName: 'Replace All Meetings with Emails',
+        adminName: 'Ananta Admin',
+        timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'Rejected',
+        details: 'Not feasible'
+    }
+];
 
 export const MOCK_USERS: User[] = [
     {
@@ -99,7 +195,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
             { name: 'Siddharth Banerjee', avatar: 'SB', avatarColor: '#ab47bc' },
             { name: 'Priya Desai', avatar: 'PD', avatarColor: '#ef5350' }
         ],
-        impact: 'Medium'
+        impact: 'Medium',
+        approvalStatus: 'Pending'
     },
     {
         id: 'CH-005',
@@ -115,7 +212,65 @@ export const MOCK_CHALLENGES: Challenge[] = [
             { name: 'Amit Basu', avatar: 'AB', avatarColor: '#42a5f5' },
             { name: 'Sutanu Roy', avatar: 'SR', avatarColor: '#66bb6a' }
         ],
-        impact: 'Critical'
+        impact: 'Critical',
+        approvalStatus: 'Pending'
+    }
+];
+
+export const MOCK_PENDING_REGISTRATIONS = [
+    {
+        id: 'pr-1',
+        name: 'Kavita Rao',
+        email: 'kavita.rao@tcs.com',
+        role: 'Contributor',
+        avatar: 'KR',
+        opco: 'TCS Digital',
+        submittedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        id: 'pr-2',
+        name: 'Rajesh Kumar',
+        email: 'rajesh.kumar@tcs.com',
+        role: 'Innovation Lead',
+        avatar: 'RK',
+        opco: 'TCS iON',
+        submittedDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        id: 'pr-3',
+        name: 'Deepa Nair',
+        email: 'deepa.nair@tcs.com',
+        role: 'AI / ML Engineer',
+        avatar: 'DN',
+        opco: 'TCS Research',
+        submittedDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+    }
+];
+
+export const MOCK_PENDING_IDEAS: any[] = [
+    {
+        id: 'IDEA-P1',
+        title: 'Smart Contract Audit Automation',
+        description: 'Leverage LLMs to automatically audit smart contracts for common vulnerabilities and gas optimisation opportunities.',
+        owner: { name: 'Meera Singh', avatar: 'MS', avatarColor: '#42a5f5' },
+        linkedChallenge: { id: 'CH-003', title: 'Smart Warehouse Routing' },
+        status: 'In Review',
+        approvalStatus: 'Pending' as const,
+        impactLevel: 'High',
+        stats: { appreciations: 12, comments: 3, views: 45 },
+        submittedDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        id: 'IDEA-P2',
+        title: 'Voice-Activated Inventory Check',
+        description: 'Allow warehouse staff to query inventory levels via voice commands, reducing manual lookup time by 60%.',
+        owner: { name: 'Rohan Patel', avatar: 'RP', avatarColor: '#66bb6a' },
+        linkedChallenge: { id: 'CH-003', title: 'Smart Warehouse Routing' },
+        status: 'Pending',
+        approvalStatus: 'Pending' as const,
+        impactLevel: 'Medium',
+        stats: { appreciations: 8, comments: 1, views: 22 },
+        submittedDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
     }
 ];
 

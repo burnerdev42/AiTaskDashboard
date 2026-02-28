@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Clock } from 'lucide-react';
 import { storage } from '../services/storage';
 
@@ -10,7 +10,7 @@ export const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isPending, setIsPending] = useState(false);
-    const { login } = useAuth();
+    const { login, isAuthenticated } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,6 +18,10 @@ export const Login: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const from = location.state?.from?.pathname || '/';
+
+    if (isAuthenticated) {
+        return <Navigate to={from} replace />;
+    }
 
     // Standard Password Policy:
     // At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
