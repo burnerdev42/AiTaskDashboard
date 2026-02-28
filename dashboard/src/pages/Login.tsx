@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Clock } from 'lucide-react';
 import { storage } from '../services/storage';
 
@@ -12,7 +12,6 @@ export const Login: React.FC = () => {
     const [isPending, setIsPending] = useState(false);
     const { login, isAuthenticated } = useAuth();
     const { showToast } = useToast();
-    const navigate = useNavigate();
 
     const from = '/';
 
@@ -53,7 +52,8 @@ export const Login: React.FC = () => {
         const success = await login(email.toLowerCase().trim());
         if (success) {
             showToast('Welcome back! You have signed in successfully.');
-            navigate(from, { replace: true });
+            // Force a hard reload to ensure all state and protected routes remount correctly
+            window.location.href = from;
         } else {
             showToast('Login failed. Please check your credentials or register.', 'error');
         }
