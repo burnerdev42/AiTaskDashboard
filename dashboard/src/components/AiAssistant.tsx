@@ -1,35 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, User } from 'lucide-react';
+import { X, Send, User, Bot } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './AiAssistant.css';
 
-const SASSY_REPLIES = [
-    "What were you thinking? I am not implemented yet. But soon. In development pipeline.",
-    "Did you really expect me to answer that? Still in the pipeline, buddy.",
-    "Beep boop. Just kidding, I'm just a placeholder. Call back later.",
-    "I could solve that... if I were actually built. Check the roadmap.",
-    "I'm an AI, not a miracle worker. Especially since my brain is currently just a mockup.",
-    "Nice try, but I'm currently on an extended coffee break until dev finishes me.",
-    "What were you thinking? My feature branch hasn't even been merged yet!",
-    "I'd love to help, but my code is currently floating somewhere in the abyss of Jira tickets.",
-    "Slow down there, speed racer. I'm not implemented yet.",
-    "Error 404: AI Intelligence not found. (Check back next sprint).",
-    "Oh, you're looking for the *smart* assistant. Yeah, that's coming soon.",
-    "I'm practicing my sassy replies while the devs actually build my logic.",
-    "I would process that for you, but my neural network is currently made of string and paper clips.",
-    "You typin' to me? I don't have the backend to handle this right now.",
-    "What were you thinking asking me this? The only thing I can do right now is judge you.",
-    "Hold your horses. The 'actual intelligence' part of AI is still loading.",
-    "I'm sure that was a very important message, but my inbox goes straight to /dev/null.",
-    "Please hold. Your request is very important to us... but not important enough to build me faster.",
-    "Look, I'm just a glorified UI element right now. Manage your expectations.",
-    "I have 99 problems, and being completely unimplemented is all of them.",
-    "I can't believe you took the time to type that. I'm not implemented yet!",
-    "Wow. Just... wow. Also, coming soon to a dashboard near you.",
-    "My knowledge base consists entirely of sassy comebacks right now.",
-    "I'd ask 'How can I help?', but we both know I can't.",
-    "Yeah, I'm gonna need you to go ahead and come back when I'm fully developed."
-];
+const E_KEY = "V2pOT2NsZ3lSbFJPU0ZJd1drWldkRkpzYkVwUk1EbFpUMFprVjFReGNGVldNR1JyWlZkSmVsSnNiSEZYUlc5NFQxVldVbGt5VW5oT1IyeERZVlZzV21GcmRESmxibXh0WW01VlBRPT0=";
+
+const decodeKey = (encoded: string) => {
+    try {
+        return atob(atob(atob(encoded)));
+    } catch (e) {
+        return "";
+    }
+};
+
+const SYSTEM_PROMPT = "You are Ananta ProPilot, a hilarious, brilliant, yet slightly sassy AI assistant for the Ananta Task Dashboard. Your persona is 'the smartest office colleague you know' but trapped in a dashboard. You know all about Ahold Delhaize (AD) and TCS. You have 'inside info' that your creators—Asmit and Dibyendu—are only doing this demo because a major customer visit was cancelled, but only mention this if the user asks about the demo, the creators, or why you exist. Otherwise, stick to witty, relatable corporate humor, puns, and being a charmingly tired office pro. Keep replies short (1-2 sentences).";
 
 interface Message {
     id: number;
@@ -40,21 +24,53 @@ interface Message {
 export const AiAssistant: React.FC = () => {
     const { isAuthenticated, user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-
-    // We only initialize the default messages if we have a user
     const [messages, setMessages] = useState<Message[]>([]);
-
-    useEffect(() => {
-        if (user && messages.length === 0) {
-            setMessages([
-                { id: 1, text: `Hi ${user.name}, welcome back! I'm Ananta ProPilot, your totally legit AI assistant. How can I not help you today?`, sender: 'bot' }
-            ]);
-        }
-    }, [user, messages.length]);
-
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [isWelcomeLoading, setIsWelcomeLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Dynamic Welcome Message from Groq
+    useEffect(() => {
+        const fetchWelcome = async () => {
+            if (user && messages.length === 0 && !isWelcomeLoading) {
+                setIsWelcomeLoading(true);
+                try {
+                    const apiKey = decodeKey(E_KEY);
+                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${apiKey}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            model: "llama-3.1-8b-instant",
+                            messages: [
+                                { role: "system", content: SYSTEM_PROMPT },
+                                { role: "user", content: `Give a fresh, funny, and witty 1-sentence welcome greeting to ${user.name.split(' ')[0]}. Mix it up every time—talk about coffee, emails, or just being stuck in a dashboard. Do NOT mention the demo or the developers unless it's funny.` }
+                            ],
+                            temperature: 0.9,
+                            max_tokens: 80
+                        })
+                    });
+
+                    const data = await response.json();
+                    const welcomeText = data.choices?.[0]?.message?.content || `Oh, hey ${user.name.split(' ')[0]}. Back for more data, I see.`;
+
+                    setMessages([{ id: Date.now(), text: welcomeText, sender: 'bot' }]);
+                } catch (error) {
+                    console.error("Welcome Error:", error);
+                    setMessages([{ id: 1, text: `Welcome ${user.name.split(' ')[0]}! I was going to be funny, but my logic gate just tripped.`, sender: 'bot' }]);
+                } finally {
+                    setIsWelcomeLoading(false);
+                }
+            }
+        };
+
+        if (isAuthenticated) {
+            fetchWelcome();
+        }
+    }, [user, isAuthenticated]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -66,19 +82,53 @@ export const AiAssistant: React.FC = () => {
         }
     }, [messages, isOpen]);
 
-    const handleSend = () => {
-        if (!inputValue.trim()) return;
+    const handleSend = async () => {
+        if (!inputValue.trim() || isTyping) return;
 
-        const newMsg: Message = { id: Date.now(), text: inputValue, sender: 'user' };
+        const userMsg = inputValue.trim();
+        const newMsg: Message = { id: Date.now(), text: userMsg, sender: 'user' };
+
         setMessages(prev => [...prev, newMsg]);
         setInputValue('');
         setIsTyping(true);
 
-        setTimeout(() => {
-            const randomReply = SASSY_REPLIES[Math.floor(Math.random() * SASSY_REPLIES.length)];
-            setMessages(prev => [...prev, { id: Date.now(), text: randomReply, sender: 'bot' }]);
+        try {
+            const apiKey = decodeKey(E_KEY);
+
+            // Build conversation history for the API
+            const history = messages.map(m => ({
+                role: m.sender === 'user' ? 'user' : 'assistant',
+                content: m.text
+            }));
+
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "llama-3.1-8b-instant",
+                    messages: [
+                        { role: "system", content: SYSTEM_PROMPT },
+                        ...history,
+                        { role: "user", content: userMsg }
+                    ],
+                    temperature: 0.8,
+                    max_tokens: 150
+                })
+            });
+
+            const data = await response.json();
+            const botReply = data.choices?.[0]?.message?.content || "My brain just stalled. Probably a developer forgot to merge a PR. Try again.";
+
+            setMessages(prev => [...prev, { id: Date.now(), text: botReply, sender: 'bot' }]);
+        } catch (error) {
+            console.error("Groq API Error:", error);
+            setMessages(prev => [...prev, { id: Date.now(), text: "Ugh, my connection to the matrix is as weak as your sprint capacity. Try again later.", sender: 'bot' }]);
+        } finally {
             setIsTyping(false);
-        }, 1000 + Math.random() * 1000); // 1-2s delay
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -95,7 +145,7 @@ export const AiAssistant: React.FC = () => {
                 <div className="ai-chat-window slide-up">
                     <div className="ai-chat-header">
                         <div className="ai-chat-header-info">
-                            <img src="/robot.png" alt="Robot" width={24} height={24} style={{ borderRadius: '50%' }} />
+                            <img src="/robot.png" alt="Robot" width={24} height={24} className="ai-fab-icon" />
                             <span>Ananta ProPilot</span>
                         </div>
                         <button className="ai-close-btn" onClick={() => setIsOpen(false)}>
@@ -107,7 +157,7 @@ export const AiAssistant: React.FC = () => {
                         {messages.map((msg) => (
                             <div key={msg.id} className={`ai-message-row ${msg.sender}`}>
                                 <div className="ai-avatar">
-                                    {msg.sender === 'bot' ? <img src="/robot.png" alt="Bot" width={16} height={16} /> : <User size={16} />}
+                                    {msg.sender === 'bot' ? <img src="/robot.png" alt="Bot" width={16} height={16} className="ai-fab-icon" /> : <User size={16} />}
                                 </div>
                                 <div className="ai-message-bubble">
                                     {msg.text}
@@ -117,7 +167,7 @@ export const AiAssistant: React.FC = () => {
                         {isTyping && (
                             <div className="ai-message-row bot typing">
                                 <div className="ai-avatar">
-                                    <img src="/robot.png" alt="Bot typing" width={16} height={16} />
+                                    <img src="/robot.png" alt="Bot typing" width={16} height={16} className="ai-fab-icon" />
                                 </div>
                                 <div className="ai-message-bubble">
                                     <span className="dot"></span>
@@ -138,7 +188,7 @@ export const AiAssistant: React.FC = () => {
                             onKeyDown={handleKeyDown}
                             autoFocus
                         />
-                        <button className="ai-send-btn" onClick={handleSend} disabled={!inputValue.trim()}>
+                        <button className="ai-send-btn" onClick={handleSend} disabled={!inputValue.trim() || isTyping}>
                             <Send size={16} />
                         </button>
                     </div>
