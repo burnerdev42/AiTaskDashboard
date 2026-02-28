@@ -98,127 +98,595 @@ export const MOCK_ADMIN_LOGS: AdminLog[] = [
 
 export const MOCK_USERS: User[] = [
     {
-        id: 'u-admin',
-        name: 'Ananta Admin',
-        email: 'admin@ananta.tcs.com',
-        role: 'Admin',
-        avatar: 'AD',
+        "id": "u-admin",
+        "name": "Sutanu Banerjee",
+        "email": "admin@ananta.com",
+        "role": "ADMIN",
+        "avatar": "SB"
     },
     {
-        id: 'u-priya',
-        name: 'Priya Sharma',
-        email: 'priya.sharma@tcs.com',
-        role: 'Contributor',
-        avatar: 'PS',
+        "id": "u-dibyendu",
+        "name": "Dibyendu Das",
+        "email": "dibyendu@ananta.com",
+        "role": "Member",
+        "avatar": "DD"
     },
     {
-        id: 'u1',
-        name: 'Asmi 2',
-        email: 'admin@ananta.azurewebsites.net',
-        role: 'Admin',
-        avatar: 'A',
+        "id": "u-asmit",
+        "name": "Asmit Basu",
+        "email": "asmit@ananta.com",
+        "role": "Member",
+        "avatar": "AB"
     },
     {
-        id: 'u2',
-        name: 'Siddharth Banerjee',
-        email: 'siddharth@ananta.azurewebsites.net',
-        role: 'Innovation Lead',
-        avatar: 'SB',
+        "id": "u-smriti",
+        "name": "Smriti Kumar",
+        "email": "smriti@ananta.com",
+        "role": "Member",
+        "avatar": "SK"
     },
     {
-        id: 'u3',
-        name: 'Ananya Basu',
-        email: 'ananya@ananta.azurewebsites.net',
-        role: 'AI / ML Engineer',
-        avatar: 'AB',
+        "id": "u-indrani",
+        "name": "Indrani Ghosh",
+        "email": "indrani@ananta.com",
+        "role": "Member",
+        "avatar": "IG"
+    },
+    {
+        "id": "u-nur",
+        "name": "Nur Islam",
+        "email": "nur@ananta.com",
+        "role": "Member",
+        "avatar": "NI"
+    },
+    {
+        "id": "u-pragya",
+        "name": "Pragya Bharati",
+        "email": "pragya@ananta.com",
+        "role": "Member",
+        "avatar": "PB"
+    },
+    {
+        "id": "u-rohan",
+        "name": "Rohan Mondal",
+        "email": "rohan@ananta.com",
+        "role": "Member",
+        "avatar": "RM"
+    },
+    {
+        "id": "u-pritam",
+        "name": "Pritam Ghatak",
+        "email": "pritam@ananta.com",
+        "role": "Member",
+        "avatar": "PG"
+    },
+    {
+        "id": "u-riyal",
+        "name": "Riyal Guha",
+        "email": "riyal@ananta.com",
+        "role": "Member",
+        "avatar": "RG"
+    },
+    {
+        "id": "u-deb",
+        "name": "Debdarsan Roy",
+        "email": "deb@ananta.com",
+        "role": "Member",
+        "avatar": "DR"
+    },
+    {
+        "id": "u-user1",
+        "name": "Arjun Sharma",
+        "email": "arjun.sharma@example.com",
+        "role": "USER",
+        "avatar": "AS"
+    },
+    {
+        "id": "u-user2",
+        "name": "Ishita Verma",
+        "email": "ishita.verma@example.com",
+        "role": "USER",
+        "avatar": "IV"
+    },
+    {
+        "id": "u-user3",
+        "name": "Kabir Malhotra",
+        "email": "kabir.malhotra@example.com",
+        "role": "USER",
+        "avatar": "KM"
+    },
+    {
+        "id": "u-user4",
+        "name": "Deepika Iyer",
+        "email": "deepika.iyer@example.com",
+        "role": "USER",
+        "avatar": "DI"
+    },
+    {
+        "id": "u-user5",
+        "name": "Aditya Rao",
+        "email": "aditya.rao@example.com",
+        "role": "USER",
+        "avatar": "AR"
+    },
+    {
+        "id": "u-user6",
+        "name": "Sanya Gupta",
+        "email": "sanya.gupta@example.com",
+        "role": "USER",
+        "avatar": "SG"
+    },
+    {
+        "id": "u-user7",
+        "name": "Vikram Singh",
+        "email": "vikram.singh@example.com",
+        "role": "USER",
+        "avatar": "VS"
+    },
+    {
+        "id": "u-user8",
+        "name": "Ananya Reddy",
+        "email": "ananya.reddy@example.com",
+        "role": "USER",
+        "avatar": "AR"
+    },
+    {
+        "id": "u-user9",
+        "name": "Varun Joshi",
+        "email": "varun.joshi@example.com",
+        "role": "USER",
+        "avatar": "RJ"
+    },
+    {
+        "id": "u-user10",
+        "name": "Pooja Hegde",
+        "email": "pooja.hegde@example.com",
+        "role": "USER",
+        "avatar": "PH"
+    },
+    {
+        "id": "u-chandan",
+        "name": "Chandan Kumar",
+        "email": "chandan.kumar@example.com",
+        "role": "MEMBER",
+        "avatar": "CK"
     }
 ];
 
 export const MOCK_CHALLENGES: Challenge[] = [
     {
-        id: 'CH-001',
-        title: 'Unified Customer 360 Platform',
-        description: 'Consolidated customer view across CRM, billing, and support — deployed globally in 12 markets. Recognized for transforming customer experience at scale.',
-        stage: 'Scaled & Deployed',
-        accentColor: 'green',
-        owner: { name: 'S. Banerjee', avatar: 'SB', avatarColor: '#66bb6a' },
-        stats: { appreciations: 142, comments: 38, roi: '3.2x', methods: 12, savings: '$4.2M' },
-        summary: 'Consolidated customer view across CRM, billing, and support deployed globally in 12 markets.',
-        tags: ['Cloud', 'Data Analytics', 'CRM Integration', 'Azure'],
-        team: [
-            { name: 'Siddharth Banerjee', avatar: 'SB', avatarColor: '#66bb6a' },
-            { name: 'Ananya Basu', avatar: 'AB', avatarColor: '#42a5f5' },
-            { name: 'Ravi Patel', avatar: 'RP', avatarColor: '#ffa726' }
+        "id": "CH-001",
+        "title": "Aham.ai",
+        "description": "Due to varied and constantly evolving reporting needs from the Ad Tech team, relying on manual SQL querying and static dashboards is no longer viable. There is a strong need to create an AI-backed dynamic SQL query generator and a set of runtime dashboards to support ad-hoc analytics without enginee...",
+        "stage": "POC & Pilot",
+        "owner": {
+            "name": "Asmit Basu",
+            "avatar": "AB",
+            "avatarColor": "var(--accent-teal)"
+        },
+        "accentColor": "teal",
+        "stats": {
+            "appreciations": 41,
+            "comments": 4
+        },
+        "summary": "Implement an AI-backed dynamic SQL query generator and a set of runtime dashboards to support ad-hoc analytics.",
+        "tags": [
+            "GenAI",
+            "SQL",
+            "AdTech"
         ],
-        impact: 'Critical'
+        "team": [
+            {
+                "name": "Asmit Basu",
+                "avatar": "AB",
+                "avatarColor": "var(--accent-teal)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
     },
     {
-        id: 'CH-002',
-        title: 'Conversational Commerce Bot',
-        description: 'GenAI assistant handling product queries, order tracking, and returns for e-commerce. Praised for driving self-service adoption up by 65%.',
-        stage: 'POC & Pilot',
-        accentColor: 'blue',
-        owner: { name: 'A. Basu', avatar: 'AB', avatarColor: '#f0b870' },
-        summary: 'GenAI assistant handling product queries, order tracking, and returns for e-commerce.',
-        tags: ['GenAI', 'NLP', 'Python', 'React'],
-        stats: { appreciations: 189, comments: 54, members: 12, accuracy: '92%', votes: 45 },
-        team: [
-            { name: 'Ananya Basu', avatar: 'AB', avatarColor: '#f0b870' },
-            { name: 'Siddharth Banerjee', avatar: 'SB', avatarColor: '#42a5f5' }
+        "id": "CH-002",
+        "title": "Party Planner",
+        "description": "Planning a party involves complex logistics, and miscalculating attendee consumption often results in a significant amount of food waste the next day. There is currently no intelligent mechanism to optimize food and drink orders beforehand or to repurpose leftovers effectively after the event.",
+        "stage": "Parking Lot",
+        "owner": {
+            "name": "Asmit Basu",
+            "avatar": "AB",
+            "avatarColor": "var(--accent-blue)"
+        },
+        "accentColor": "blue",
+        "stats": {
+            "appreciations": 20,
+            "comments": 14
+        },
+        "summary": "Develop an intelligent, agent-based party planning optimizer to optimize food orders and reduce post-event waste.",
+        "tags": [
+            "AI Agents",
+            "Azure AI",
+            "Vision"
         ],
-        impact: 'High'
+        "team": [
+            {
+                "name": "Asmit Basu",
+                "avatar": "AB",
+                "avatarColor": "var(--accent-blue)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
     },
     {
-        id: 'CH-003',
-        title: 'Smart Warehouse Routing',
-        description: 'IoT-driven warehouse navigation for autonomous forklifts, reducing pick-time by 40%. Voted best innovation challenge of Q4 2025.',
-        stage: 'Ideation & Evaluation',
-        accentColor: 'orange',
-        owner: { name: 'A. Basu', avatar: 'AB', avatarColor: '#ffa726' },
-        summary: 'IoT-driven warehouse navigation for autonomous forklifts, reducing pick-time by 40%.',
-        tags: ['IoT', 'Robotics', 'Edge Computing', 'Digital Twin'],
-        stats: { appreciations: 97, votes: 214, comments: 15, savings: '40%', units: 120 },
-        team: [
-            { name: 'Ananya Basu', avatar: 'AB', avatarColor: '#ffa726' },
-            { name: 'Rohan Patel', avatar: 'RP', avatarColor: '#66bb6a' },
-            { name: 'Meera Singh', avatar: 'MS', avatarColor: '#42a5f5' }
+        "id": "CH-003",
+        "title": "Pallas Data Insights",
+        "description": "The current data fulfillment process is heavily manual, leading to delays and inefficiencies. Requests depend entirely on the IT team, causing multiple back-and-forth iterations before completion. Access to data and its related attributes is limited, restricting insights and slowing decision-making....",
+        "stage": "POC & Pilot",
+        "owner": {
+            "name": "Pritam Ghatak",
+            "avatar": "PG",
+            "avatarColor": "var(--accent-green)"
+        },
+        "accentColor": "green",
+        "stats": {
+            "appreciations": 10,
+            "comments": 16
+        },
+        "summary": "Implement a GenAI-based autonomous Co-Pilot to streamline data fulfillment and reduce engineering dependency.",
+        "tags": [
+            "GenAI",
+            "Data Insights",
+            "Azure"
         ],
-        impact: 'High'
+        "team": [
+            {
+                "name": "Pritam Ghatak",
+                "avatar": "PG",
+                "avatarColor": "var(--accent-green)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
     },
     {
-        id: 'CH-004',
-        title: 'AI-Powered Demand Forecasting',
-        description: 'Use machine learning to predict regional demand patterns and optimize inventory allocation. Highlighted for its potential to save $12M annually.',
-        stage: 'Challenge Submitted',
-        accentColor: 'purple',
-        owner: { name: 'S. Banerjee', avatar: 'SB', avatarColor: '#ab47bc' },
-        summary: 'ML-based regional demand patterns prediction to optimize inventory allocation.',
-        tags: ['ML', 'Forecasting', 'Data Lake', 'Python'],
-        stats: { appreciations: 76, savings: '$12M', votes: 156, accuracy: '94%', comments: 8 },
-        team: [
-            { name: 'Siddharth Banerjee', avatar: 'SB', avatarColor: '#ab47bc' },
-            { name: 'Priya Desai', avatar: 'PD', avatarColor: '#ef5350' }
+        "id": "CH-004",
+        "title": "Ops Copilot AI Agent",
+        "description": "Our IT support and engineering teams lose significant time on repetitive troubleshooting tasks and navigating scattered knowledge sources. This leads to inconsistent issue resolutions, high dependency on subject matter experts, and an elevated L3 Mean Time To Resolve (MTTR) of 1.3 days, ultimately d...",
+        "stage": "POC & Pilot",
+        "owner": {
+            "name": "Indrani Ghosh",
+            "avatar": "IG",
+            "avatarColor": "var(--accent-orange)"
+        },
+        "accentColor": "orange",
+        "stats": {
+            "appreciations": 10,
+            "comments": 13
+        },
+        "summary": "Deploy an AI assistant chatbot to centralize troubleshooting knowledge and significantly reduce L3 MTTR.",
+        "tags": [
+            "AIOps",
+            "Automation",
+            "LLM"
         ],
-        impact: 'Medium',
-        approvalStatus: 'Pending'
+        "team": [
+            {
+                "name": "Indrani Ghosh",
+                "avatar": "IG",
+                "avatarColor": "var(--accent-orange)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
     },
     {
-        id: 'CH-005',
-        title: 'Digital Twin – Factory Floor',
-        description: 'Real-time 3D simulation of production lines for throughput optimization. Appreciated by leadership for cutting simulation costs by 70%.',
-        stage: 'POC & Pilot',
-        accentColor: 'teal',
-        owner: { name: 'R. Patel', avatar: 'RP', avatarColor: '#e8a758' },
-        summary: 'Real-time 3D simulation of production lines for throughput optimization.',
-        tags: ['Digital Twin', '3D Rendering', 'IIoT', 'Simulation'],
-        stats: { appreciations: 118, savings: '70%', comments: 42, active: 3, alerts: 12 },
-        team: [
-            { name: 'Ravi Patel', avatar: 'RP', avatarColor: '#e8a758' },
-            { name: 'Amit Basu', avatar: 'AB', avatarColor: '#42a5f5' },
-            { name: 'Sutanu Roy', avatar: 'SR', avatarColor: '#66bb6a' }
+        "id": "CH-005",
+        "title": "Sponsored Products Agent",
+        "description": "Sponsored Product Campaign management is currently performed entirely via complex UIs, making it a lengthy and error-prone process for advertisers. Setting up, modifying, and tracking campaigns requires multiple manual steps that deter advertisers from scaling their efforts.",
+        "stage": "POC & Pilot",
+        "owner": {
+            "name": "Asmit Basu",
+            "avatar": "AB",
+            "avatarColor": "var(--accent-purple)"
+        },
+        "accentColor": "purple",
+        "stats": {
+            "appreciations": 7,
+            "comments": 18
+        },
+        "summary": "Create an intuitive AI Voice Assistant for advertisers to seamlessly manage campaigns and fetch analytics reports.",
+        "tags": [
+            "Agents",
+            "LlamaIndex",
+            "MCP"
         ],
-        impact: 'Critical',
-        approvalStatus: 'Pending'
+        "team": [
+            {
+                "name": "Asmit Basu",
+                "avatar": "AB",
+                "avatarColor": "var(--accent-purple)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-006",
+        "title": "AH360",
+        "description": "Distribution Centre operations lack a unified, real-time view that connects business processes with their underlying technology services and applications. Without clear observability into how technical components support operational workflows, it becomes difficult to quickly identify root causes, as...",
+        "stage": "POC & Pilot",
+        "owner": {
+            "name": "Pragya Bharati",
+            "avatar": "PB",
+            "avatarColor": "var(--accent-pink)"
+        },
+        "accentColor": "pink",
+        "stats": {
+            "appreciations": 7,
+            "comments": 16
+        },
+        "summary": "Deliver an end-to-end Chain Observability solution mapping business processes to microservices for faster issue resolution.",
+        "tags": [
+            "Observability",
+            "Conversational AI",
+            "Retail"
+        ],
+        "team": [
+            {
+                "name": "Pragya Bharati",
+                "avatar": "PB",
+                "avatarColor": "var(--accent-pink)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-007",
+        "title": "Myguru.ai",
+        "description": "The organization faces severe knowledge management challenges that limit scalability. Critical expertise is concentrated among a few Subject Matter Experts (SMEs), creating bottlenecks and single points of failure. Onboarding new developers is inefficient as information is scattered across Confluenc...",
+        "stage": "POC & Pilot",
+        "owner": {
+            "name": "Dibyendu Das",
+            "avatar": "DD",
+            "avatarColor": "var(--accent-teal)"
+        },
+        "accentColor": "teal",
+        "stats": {
+            "appreciations": 2,
+            "comments": 14
+        },
+        "summary": "Launch an AI-powered knowledge hub to provide instant, source-cited answers to developer queries.",
+        "tags": [
+            "Knowledge Base",
+            "Semantic Search",
+            "RAG"
+        ],
+        "team": [
+            {
+                "name": "Dibyendu Das",
+                "avatar": "DD",
+                "avatarColor": "var(--accent-teal)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-008",
+        "title": "Agentic PromoPilot",
+        "description": "Promotion item inclusion and exclusion lists are heavily maintained through manual spreadsheet processes and outdated legacy rules. This leads to frequent errors, financial losses from incorrect discounts, missed eligible items, and inconsistent execution that heavily impacts overall profitability a...",
+        "stage": "Ideation & Evaluation",
+        "owner": {
+            "name": "Smriti Kumar",
+            "avatar": "SK",
+            "avatarColor": "var(--accent-blue)"
+        },
+        "accentColor": "blue",
+        "stats": {
+            "appreciations": 7,
+            "comments": 19
+        },
+        "summary": "Automate the generation and maintenance of promotion rules using AI to ensure error-free pricing execution.",
+        "tags": [
+            "Retail",
+            "Pricing",
+            "AI Rules"
+        ],
+        "team": [
+            {
+                "name": "Smriti Kumar",
+                "avatar": "SK",
+                "avatarColor": "var(--accent-blue)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-009",
+        "title": "Text-To-Action",
+        "description": "Traditional Robotic Process Automation (RPA) development within our ecosystem is time-consuming, requires specialized engineering skills, and lacks the agility needed for rapid automation of simple web-based tasks. This slows down our modernization efforts and leaves many manual tasks unautomated.",
+        "stage": "Scaled & Deployed",
+        "owner": {
+            "name": "Smriti Kumar",
+            "avatar": "SK",
+            "avatarColor": "var(--accent-green)"
+        },
+        "accentColor": "green",
+        "stats": {
+            "appreciations": 49,
+            "comments": 16
+        },
+        "summary": "Empower business users to automate repetitive web-based tasks using intuitive natural language prompts via AI-enhanced RPA.",
+        "tags": [
+            "RPA",
+            "Low Code",
+            "Azure OpenAI"
+        ],
+        "team": [
+            {
+                "name": "Smriti Kumar",
+                "avatar": "SK",
+                "avatarColor": "var(--accent-green)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-010",
+        "title": "Terraform to AVM Migration",
+        "description": "Ahold Delhaize manages over 8,000 Terraform repositories across various OpCos, creating massive governance, standardization, and cost-control challenges. Without a structured migration to Azure Verified Modules (AVM), we suffer from tech debt, security inconsistencies, and operational bloat.",
+        "stage": "Scaled & Deployed",
+        "owner": {
+            "name": "Dibyendu Das",
+            "avatar": "DD",
+            "avatarColor": "var(--accent-orange)"
+        },
+        "accentColor": "orange",
+        "stats": {
+            "appreciations": 31,
+            "comments": 19
+        },
+        "summary": "Autonomously migrate thousands of Terraform repositories to standardized Azure AVM configurations using an AI agent.",
+        "tags": [
+            "Terraform",
+            "AVM",
+            "Infrastructure"
+        ],
+        "team": [
+            {
+                "name": "Dibyendu Das",
+                "avatar": "DD",
+                "avatarColor": "var(--accent-orange)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-011",
+        "title": "Argus Observability Platform",
+        "description": "The lack of a unified observability platform limits our ability to proactively monitor technical, operational, and business KPIs. This reduces our situational awareness, increasing the risk of major undetected outages and negatively impacting both internal operations and the end-customer experience.",
+        "stage": "Scaled & Deployed",
+        "owner": {
+            "name": "Dibyendu Das",
+            "avatar": "DD",
+            "avatarColor": "var(--accent-purple)"
+        },
+        "accentColor": "purple",
+        "stats": {
+            "appreciations": 32,
+            "comments": 5
+        },
+        "summary": "Establish a centralized observability platform to proactively monitor technical and business KPIs and improve resilience.",
+        "tags": [
+            "Grafana",
+            "KPIs",
+            "Observability"
+        ],
+        "team": [
+            {
+                "name": "Dibyendu Das",
+                "avatar": "DD",
+                "avatarColor": "var(--accent-purple)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-012",
+        "title": "SR Automation",
+        "description": "Service request handling in the identity and access provisioning area remains highly manual and time-intensive. Engineers frequently execute repetitive bash and PowerShell scripts, leading to a higher MTTR, human errors, and a frustrating, inconsistent onboarding experience for new employees.",
+        "stage": "Scaled & Deployed",
+        "owner": {
+            "name": "Dibyendu Das",
+            "avatar": "DD",
+            "avatarColor": "var(--accent-pink)"
+        },
+        "accentColor": "pink",
+        "stats": {
+            "appreciations": 33,
+            "comments": 19
+        },
+        "summary": "Fully automate access provisioning service requests using self-serve portals backed by intelligent scripting.",
+        "tags": [
+            "PowerShell",
+            "Automation",
+            "IAM"
+        ],
+        "team": [
+            {
+                "name": "Dibyendu Das",
+                "avatar": "DD",
+                "avatarColor": "var(--accent-pink)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-013",
+        "title": "AI-Driven Test Design Automation",
+        "description": "Test case creation is largely manual, time-consuming, and heavily dependent on individual QA expertise. This results in inconsistent test coverage and delayed software delivery cycles. There is limited alignment between Jira user stories, Figma UX designs, and the resulting QA artifacts.",
+        "stage": "Scaled & Deployed",
+        "owner": {
+            "name": "Chandan Kumar",
+            "avatar": "CK",
+            "avatarColor": "var(--accent-teal)"
+        },
+        "accentColor": "teal",
+        "stats": {
+            "appreciations": 40,
+            "comments": 0
+        },
+        "summary": "Accelerate QA delivery by introducing an AI tool that automatically generates high-quality test cases directly in Jira.",
+        "tags": [
+            "QA Automation",
+            "GPT-4",
+            "Jira"
+        ],
+        "team": [
+            {
+                "name": "Chandan Kumar",
+                "avatar": "CK",
+                "avatarColor": "var(--accent-teal)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
+    },
+    {
+        "id": "CH-014",
+        "title": "JIRA Sprint Planning Assistant",
+        "description": "Agile Sprint planning is currently repetitive and manual, requiring Scrum Masters to constantly coordinate prioritized epics, user stories, dependencies, and team availability. Matching the correct team members' skills to complicated user story requirements is particularly challenging and often lead...",
+        "stage": "Challenge Submitted",
+        "owner": {
+            "name": "Chandan Kumar",
+            "avatar": "CK",
+            "avatarColor": "var(--accent-blue)"
+        },
+        "accentColor": "blue",
+        "stats": {
+            "appreciations": 26,
+            "comments": 16
+        },
+        "summary": "Automate and optimize the agile sprint planning lifecycle using AI to pull user stories and assign tasks based on skills.",
+        "tags": [
+            "Agile",
+            "Sprint Planning",
+            "AI Assistant"
+        ],
+        "team": [
+            {
+                "name": "Chandan Kumar",
+                "avatar": "CK",
+                "avatarColor": "var(--accent-blue)"
+            }
+        ],
+        "impact": "High",
+        "approvalStatus": "Approved"
     }
 ];
 
@@ -372,42 +840,131 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
     }
 ];
 
-/* ══ Swim-Lane Cards — 5, 8, 6, 4, 4 distribution ══ */
 export const MOCK_SWIMLANES: SwimLaneCard[] = [
-    // ── 1. Challenge Submitted  (5 cards) ──
-    { id: 'CH-001', title: 'Reduce Customer Churn', description: 'High-value B2B segment losing 8% quarter-over-quarter. Root cause analysis points to delayed support response and lack of proactive engagement.', owner: 'R. Patel', priority: 'High', stage: 'Scaled & Deployed', type: 'standard' },
-    { id: 'CH-002', title: 'Automate Invoice Reconciliation', description: 'Finance team spends 200+ person-hours monthly on manual three-way matching between POs, GRNs, and invoices across 14 vendor systems.', owner: 'M. Singh', priority: 'Medium', stage: 'POC & Pilot', type: 'standard' },
-    { id: 'CH-003', title: 'Improve Warehouse Throughput', description: 'Dock gate bottleneck causing 6-hour average shipping delays. Peak season amplifies the problem with 40% capacity overflow.', owner: 'A. Basu', priority: 'High', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'CH-004', title: 'Optimize Cloud Infra Costs', description: 'Cloud spend grew 35% YoY while compute utilisation sits at only 42%. Idle resources and over-provisioned instances need right-sizing.', owner: 'S. Banerjee', priority: 'Medium', stage: 'Challenge Submitted', type: 'standard' },
-    { id: 'CH-005', title: 'Reduce Employee Attrition', description: 'Tech talent turnover reached 22% annually. Exit interviews highlight limited growth paths and outdated tooling as top reasons.', owner: 'D. Ghosh', priority: 'High', stage: 'POC & Pilot', type: 'standard' },
-
-    // ── 2. Ideation & Evaluation  (8 cards) ──
-    { id: 'ID-0001', title: 'AI Churn Prediction Model', description: 'Gradient-boosted ML model leveraging 40+ behavioural signals — login frequency, ticket sentiment, usage drop-off — to flag at-risk accounts 30 days early.', owner: 'S. Banerjee', priority: 'Medium', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'ID-0002', title: 'Smart Invoice OCR', description: 'Document AI pipeline combining layout-aware OCR with entity extraction to auto-match line items to purchase orders with 94% accuracy.', owner: 'A. Basu', priority: 'Low', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'ID-0003', title: 'Dynamic Slot Allocation', description: 'Real-time warehouse bay assignment engine using demand forecast + vehicle ETA to pre-allocate loading docks and cut idle time by 28%.', owner: 'R. Patel', priority: 'Medium', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'ID-0004', title: 'Gamified Onboarding', description: 'Interactive tutorial system with achievement badges and progress tracking, designed to reduce new-user time-to-value from 14 days to 3.', owner: 'M. Singh', priority: 'Low', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'EV-01', title: 'Personalised Retention Offers', description: 'Context-aware discount engine combining purchase history, browsing patterns, and churn risk score to generate tailored offers with 3x conversion lift.', owner: 'S. Banerjee', priority: 'Medium', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'EV-02', title: 'Robotic Picking Arms', description: 'Feasibility study for collaborative robotic arms handling high-shelf inventory picks. Initial simulations show 60% reduction in manual reach tasks.', owner: 'A. Basu', priority: 'High', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'EV-03', title: 'Voice-Based Order Entry', description: 'NLP-powered hands-free order capture for warehouse floor staff, supporting multi-language commands and reducing data entry errors by 45%.', owner: 'R. Patel', priority: 'Low', stage: 'Ideation & Evaluation', type: 'standard' },
-    { id: 'EV-04', title: 'Sentiment Analysis Dashboard', description: 'Real-time CSAT and NPS tracker aggregating feedback from social media, support tickets, and app reviews into a unified executive dashboard.', owner: 'D. Ghosh', priority: 'Medium', stage: 'Ideation & Evaluation', type: 'standard' },
-
-    // ── 3. POC & Pilot  (6 cards) ──
-    { id: 'POC-01', title: 'AI Churn Prediction – v0.3', description: 'Validated prototype against 12 months of historical data. Achieved 87% recall and 0.91 AUC on hold-out set. Ready for controlled A/B pilot.', owner: 'S. Banerjee', priority: 'Medium', stage: 'POC & Pilot', type: 'standard' },
-    { id: 'POC-02', title: 'Invoice OCR Engine', description: 'Document AI pipeline MVP processing 500 invoices/day in sandbox. Accuracy at 94.2% with human-in-the-loop fallback for low-confidence extractions.', owner: 'A. Basu', priority: 'Medium', stage: 'POC & Pilot', type: 'standard' },
-    { id: 'PLT-01', title: 'Smart Warehouse Routing', description: 'Live pilot in Kolkata distribution centre with 8 autonomous forklifts. Pick-time reduced 38% in first two weeks of operation.', owner: 'R. Patel', priority: 'Low', stage: 'POC & Pilot', type: 'standard' },
-    { id: 'PLT-02', title: 'Digital Twin – Factory', description: 'Real-time 3D simulation of Plant #4 production line. Detecting throughput bottlenecks 2 hours before they impact output.', owner: 'A. Basu', priority: 'Medium', stage: 'POC & Pilot', type: 'standard' },
-    { id: 'PLT-03', title: 'Conversational Commerce Bot', description: 'GenAI shopping assistant live on 2 retail partner sites. Handling 12K daily queries with 78% resolution rate and 4.2★ user satisfaction.', owner: 'M. Singh', priority: 'High', stage: 'POC & Pilot', type: 'standard' },
-    { id: 'PLT-04', title: 'Energy Consumption Optimizer', description: 'IoT-driven HVAC scheduling pilot across 3 office buildings. Early results show 18% energy savings and improved occupant comfort scores.', owner: 'D. Ghosh', priority: 'Low', stage: 'POC & Pilot', type: 'standard' },
-
-    // ── 4. Deployed  (4 cards) ──
-    { id: 'PRD-01', title: 'Unified Customer 360', description: 'Consolidated CRM, billing, and support data into a single customer view. Live in 12 global markets, driving $4.2M annual savings in support costs.', owner: 'S. Banerjee', priority: 'Low', stage: 'Scaled & Deployed', type: 'standard' },
-    { id: 'PRD-02', title: 'Predictive Maintenance', description: 'ML-powered anomaly detection deployed across 6 manufacturing plants monitoring 10K+ IoT sensors. Prevented 23 unplanned outages last quarter.', owner: 'A. Basu', priority: 'Low', stage: 'Scaled & Deployed', type: 'standard' },
-    { id: 'PRD-03', title: 'Smart Shelf Replenishment', description: 'Computer vision + weight-sensor system auto-generating restock alerts. Operational in 450+ retail stores, reducing stockouts by 31%.', owner: 'R. Patel', priority: 'Low', stage: 'Scaled & Deployed', type: 'standard' },
-    { id: 'PRD-04', title: 'Automated Quality Inspection', description: 'High-speed camera + deep learning QA system inspecting 1,200 units/hour on 3 production lines. Defect escape rate dropped from 2.1% to 0.3%.', owner: 'D. Ghosh', priority: 'Low', stage: 'Scaled & Deployed', type: 'standard' },
-
-    // ── 5. Parking Lot  (4 cards) ──
-    { id: 'PK-01', title: 'AR Field Service', description: 'Augmented reality guided repairs for on-site technicians. Paused pending availability of enterprise AR headsets from vendor.', owner: 'M. Singh', priority: 'Low', stage: 'Parking Lot', type: 'standard' },
-    { id: 'PK-02', title: 'Drone Inventory Scan', description: 'Autonomous drone-based cycle counting for high-bay warehouses. On hold while regulatory approval for indoor drone ops is finalized.', owner: 'R. Patel', priority: 'Low', stage: 'Parking Lot', type: 'standard' },
-    { id: 'PK-03', title: 'Blockchain Traceability', description: 'Distributed ledger for end-to-end supply chain provenance. Deferred as finance team reviews cost-benefit versus existing EDI integrations.', owner: 'S. Banerjee', priority: 'Low', stage: 'Parking Lot', type: 'standard' },
-    { id: 'PK-04', title: 'Autonomous Delivery Vehicles', description: 'Self-driving last-mile delivery pods for urban zones. Waiting for municipal operating permits and updated insurance framework.', owner: 'A. Basu', priority: 'Low', stage: 'Parking Lot', type: 'standard' },
+    {
+        "id": "CH-001",
+        "title": "Aham.ai",
+        "description": "Due to varied and constantly evolving reporting needs from the Ad Tech team, relying on manual SQL querying and static dashboards is no longer viable. There is a strong need to create an AI-backed dyn...",
+        "owner": "Asmit Basu",
+        "priority": "High",
+        "stage": "POC & Pilot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-002",
+        "title": "Party Planner",
+        "description": "Planning a party involves complex logistics, and miscalculating attendee consumption often results in a significant amount of food waste the next day. There is currently no intelligent mechanism to op...",
+        "owner": "Asmit Basu",
+        "priority": "High",
+        "stage": "Parking Lot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-003",
+        "title": "Pallas Data Insights",
+        "description": "The current data fulfillment process is heavily manual, leading to delays and inefficiencies. Requests depend entirely on the IT team, causing multiple back-and-forth iterations before completion. Acc...",
+        "owner": "Pritam Ghatak",
+        "priority": "High",
+        "stage": "POC & Pilot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-004",
+        "title": "Ops Copilot AI Agent",
+        "description": "Our IT support and engineering teams lose significant time on repetitive troubleshooting tasks and navigating scattered knowledge sources. This leads to inconsistent issue resolutions, high dependency...",
+        "owner": "Indrani Ghosh",
+        "priority": "High",
+        "stage": "POC & Pilot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-005",
+        "title": "Sponsored Products Agent",
+        "description": "Sponsored Product Campaign management is currently performed entirely via complex UIs, making it a lengthy and error-prone process for advertisers. Setting up, modifying, and tracking campaigns requir...",
+        "owner": "Asmit Basu",
+        "priority": "High",
+        "stage": "POC & Pilot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-006",
+        "title": "AH360",
+        "description": "Distribution Centre operations lack a unified, real-time view that connects business processes with their underlying technology services and applications. Without clear observability into how technica...",
+        "owner": "Pragya Bharati",
+        "priority": "High",
+        "stage": "POC & Pilot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-007",
+        "title": "Myguru.ai",
+        "description": "The organization faces severe knowledge management challenges that limit scalability. Critical expertise is concentrated among a few Subject Matter Experts (SMEs), creating bottlenecks and single poin...",
+        "owner": "Dibyendu Das",
+        "priority": "High",
+        "stage": "POC & Pilot",
+        "type": "standard"
+    },
+    {
+        "id": "CH-008",
+        "title": "Agentic PromoPilot",
+        "description": "Promotion item inclusion and exclusion lists are heavily maintained through manual spreadsheet processes and outdated legacy rules. This leads to frequent errors, financial losses from incorrect disco...",
+        "owner": "Smriti Kumar",
+        "priority": "High",
+        "stage": "Ideation & Evaluation",
+        "type": "standard"
+    },
+    {
+        "id": "CH-009",
+        "title": "Text-To-Action",
+        "description": "Traditional Robotic Process Automation (RPA) development within our ecosystem is time-consuming, requires specialized engineering skills, and lacks the agility needed for rapid automation of simple we...",
+        "owner": "Smriti Kumar",
+        "priority": "High",
+        "stage": "Scaled & Deployed",
+        "type": "standard"
+    },
+    {
+        "id": "CH-010",
+        "title": "Terraform to AVM Migration",
+        "description": "Ahold Delhaize manages over 8,000 Terraform repositories across various OpCos, creating massive governance, standardization, and cost-control challenges. Without a structured migration to Azure Verifi...",
+        "owner": "Dibyendu Das",
+        "priority": "High",
+        "stage": "Scaled & Deployed",
+        "type": "standard"
+    },
+    {
+        "id": "CH-011",
+        "title": "Argus Observability Platform",
+        "description": "The lack of a unified observability platform limits our ability to proactively monitor technical, operational, and business KPIs. This reduces our situational awareness, increasing the risk of major u...",
+        "owner": "Dibyendu Das",
+        "priority": "High",
+        "stage": "Scaled & Deployed",
+        "type": "standard"
+    },
+    {
+        "id": "CH-012",
+        "title": "SR Automation",
+        "description": "Service request handling in the identity and access provisioning area remains highly manual and time-intensive. Engineers frequently execute repetitive bash and PowerShell scripts, leading to a higher...",
+        "owner": "Dibyendu Das",
+        "priority": "High",
+        "stage": "Scaled & Deployed",
+        "type": "standard"
+    },
+    {
+        "id": "CH-013",
+        "title": "AI-Driven Test Design Automation",
+        "description": "Test case creation is largely manual, time-consuming, and heavily dependent on individual QA expertise. This results in inconsistent test coverage and delayed software delivery cycles. There is limite...",
+        "owner": "Chandan Kumar",
+        "priority": "High",
+        "stage": "Scaled & Deployed",
+        "type": "standard"
+    },
+    {
+        "id": "CH-014",
+        "title": "JIRA Sprint Planning Assistant",
+        "description": "Agile Sprint planning is currently repetitive and manual, requiring Scrum Masters to constantly coordinate prioritized epics, user stories, dependencies, and team availability. Matching the correct te...",
+        "owner": "Chandan Kumar",
+        "priority": "High",
+        "stage": "Challenge Submitted",
+        "type": "standard"
+    }
 ];

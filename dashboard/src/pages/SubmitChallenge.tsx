@@ -311,6 +311,17 @@ export const SubmitChallenge: React.FC = () => {
                                                     <option value="RBP">RBP</option>
                                                 </>
                                             )}
+                                            {businessUnit === 'GSO' && (
+                                                <>
+                                                    <option value="Global Platform">Global Platform</option>
+                                                    <option value="Analytics">Analytics</option>
+                                                </>
+                                            )}
+                                            {businessUnit === 'BecSee' && (
+                                                <>
+                                                    <option value="Ecommerce">Ecommerce</option>
+                                                </>
+                                            )}
                                         </select>
                                         {formErrors.department && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{formErrors.department}</div>}
                                     </div>
@@ -390,10 +401,10 @@ export const SubmitChallenge: React.FC = () => {
                                         <label className="sc-form-label">Portfolio Option</label>
                                         <select className="sc-form-select" value={budget} onChange={(e) => setBudget(e.target.value)}>
                                             <option value="">Select portfolio option</option>
-                                            <option value="customer-value-driver">Customer Value Driver</option>
-                                            <option value="non-strategic-product-management">Non Strategic Product Management</option>
-                                            <option value="tech-enabler">Tech Enabler</option>
-                                            <option value="maintenance">Maintenance</option>
+                                            <option value="Customer Value Driver">Customer Value Driver</option>
+                                            <option value="Non Strategic Product Management">Non Strategic Product Management</option>
+                                            <option value="Tech Enabler">Tech Enabler</option>
+                                            <option value="Maintenance">Maintenance</option>
                                         </select>
                                     </div>
                                 </div>

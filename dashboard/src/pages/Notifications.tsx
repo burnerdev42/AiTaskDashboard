@@ -41,7 +41,7 @@ export const Notifications: React.FC = () => {
     // Get notifications from storage
     let allNotifications = storage.getNotifications();
 
-    const isAdmin = user?.role === 'Admin';
+    const isAdmin = user?.role?.toUpperCase() === 'ADMIN';
     let actionItems: Notification[] = [];
 
     if (isAdmin) {

@@ -3,17 +3,17 @@ import { MOCK_ADMIN_LOGS, MOCK_CHALLENGES, MOCK_NOTIFICATIONS, MOCK_PENDING_IDEA
 import { challengeDetails as MOCK_CHALLENGE_DETAILS, ideaDetails as MOCK_IDEA_DETAILS } from '../data/challengeData';
 
 const STORAGE_KEYS = {
-    USERS: 'app_users_v4',
-    CHALLENGES: 'app_challenges_v4',
-    NOTIFICATIONS: 'app_notifications_v4',
-    SWIMLANES: 'app_swimlanes_v4',
-    CURRENT_USER: 'app_current_user_v4',
-    CHALLENGE_DETAILS: 'app_challenge_details_v4',
-    IDEA_DETAILS: 'app_idea_details_v4',
-    PENDING_REGISTRATIONS: 'ip_pending_registrations_v4',
-    REJECTED_REGISTRATIONS: 'ip_rejected_registrations_v4',
-    ADMIN_LOGS: 'app_admin_logs_v4',
-    READ_ACTION_ITEMS: 'app_read_action_items_v4'
+    USERS: 'app_users_v7',
+    CHALLENGES: 'app_challenges_v7',
+    NOTIFICATIONS: 'app_notifications_v7',
+    SWIMLANES: 'app_swimlanes_v7',
+    CURRENT_USER: 'app_current_user_v7',
+    CHALLENGE_DETAILS: 'app_challenge_details_v7',
+    IDEA_DETAILS: 'app_idea_details_v7',
+    PENDING_REGISTRATIONS: 'ip_pending_registrations_v7',
+    REJECTED_REGISTRATIONS: 'ip_rejected_registrations_v7',
+    ADMIN_LOGS: 'app_admin_logs_v7',
+    READ_ACTION_ITEMS: 'app_read_action_items_v7'
 };
 
 const notifyUpdate = () => {

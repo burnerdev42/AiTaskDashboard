@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
     const notificationRef = useRef<HTMLDivElement>(null);
     const avatarRef = useRef<HTMLDivElement>(null);
 
-    const isAdmin = user?.role === 'Admin';
+    const isAdmin = user?.role?.toUpperCase() === 'ADMIN';
     if (isAdmin) {
         let actionItems: Notification[] = [];
         const pendingRegs = storage.getPendingRegistrations();
@@ -149,7 +149,7 @@ export const Header: React.FC = () => {
 
                 <div className="header-user-controls">
                     {/* Admin Control Zap */}
-                    {user?.role === 'Admin' && (
+                    {isAdmin && (
                         <NavLink
                             to="/control-center"
                             className={({ isActive }) => `admin-control-btn ${isActive ? 'active' : ''}`}

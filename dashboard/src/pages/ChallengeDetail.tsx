@@ -557,7 +557,7 @@ export const ChallengeDetail: React.FC = () => {
                                 Post Idea
                             </button>
                         )}
-                        {isAuthenticated && (challenge.owner.name === 'Current User' || user?.role === 'Admin') && (
+                        {isAuthenticated && (challenge.owner.name === 'Current User' || user?.role?.toUpperCase() === 'ADMIN') && (
                             <>
                                 {editMode ? (
                                     <>
@@ -567,7 +567,7 @@ export const ChallengeDetail: React.FC = () => {
                                 ) : (
                                     <>
                                         <button className="btn btn-secondary" style={{ height: '38px', padding: '0 20px', fontSize: '13px' }} onClick={toggleEdit}>Edit</button>
-                                        {user?.role === 'Admin' && (
+                                        {user?.role?.toUpperCase() === 'ADMIN' && (
                                             <button className="btn btn-secondary" style={{ height: '38px', padding: '0 20px', fontSize: '13px', color: 'var(--accent-red)', borderColor: 'rgba(239, 83, 80, 0.2)' }} onClick={handleDelete}>Delete</button>
                                         )}
                                     </>
