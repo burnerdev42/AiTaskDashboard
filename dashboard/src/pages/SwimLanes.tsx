@@ -255,7 +255,7 @@ export const SwimLanes: React.FC = () => {
                                             >
                                                 <span className="card-drag-handle">⠿</span>
                                                 <div className="card-title">{card.title}</div>
-                                                <div className="card-desc">{card.description || `Innovation project ${card.id}`}</div>
+                                                <div className="card-desc">{card.summary || card.description || `Innovation project ${card.id}`}</div>
                                                 <div className="card-meta">
                                                     <span className="card-id">
                                                         <span className="card-priority" style={{ background: priorityColor(card.priority) }}></span>

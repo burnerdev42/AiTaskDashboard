@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChallengeCard } from '../components/ui/ChallengeCard';
 import { storage } from '../services/storage';
 import { type Challenge } from '../types';
+import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, Sector, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 import { TeamMember } from '../components/ui/TeamMember';
 import { useAuth } from '../context/AuthContext';
@@ -17,6 +18,59 @@ export const Home: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const isPaused = useRef(false);
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail);
+
+    const PIPELINE_DATA = [
+        { name: 'Challenge Submitted', challenges: 4, ideas: 12, color: 'var(--accent-red)' },
+        { name: 'Ideation & Evaluation', challenges: 2, ideas: 8, color: 'var(--accent-yellow)' },
+        { name: 'POC & Pilot', challenges: 3, ideas: 5, color: 'var(--accent-blue)' },
+        { name: 'Scaled & Deployed', challenges: 1, ideas: 2, color: 'var(--accent-gold)' },
+        { name: 'Parking Lot', challenges: 1, ideas: 3, color: 'var(--accent-grey)' }
+    ];
+
+    const HOME_KPI_DATA = [
+        { label: 'Total Challenges', value: '47', color: 'var(--accent-red)' },
+        { label: 'Ideas Generated', value: '82', color: 'var(--accent-yellow)' },
+        { label: 'Conversion Rate', value: '6.4%', color: 'var(--accent-teal)' },
+        { label: 'Avg. Time to Pilot', value: '67d', color: 'var(--accent-blue)' },
+        { label: 'Total Users', value: '152', color: 'var(--accent-purple)' },
+        { label: 'Active Contributors', value: '64', color: 'var(--accent-green)' },
+    ];
+
+    const THROUGHPUT_DATA = [
+        { name: 'Sep', ideas: 80, challenges: 22 },
+        { name: 'Oct', ideas: 100, challenges: 30 },
+        { name: 'Nov', ideas: 85, challenges: 24 },
+        { name: 'Dec', ideas: 70, challenges: 19 },
+        { name: 'Jan', ideas: 95, challenges: 28 },
+        { name: 'Feb', ideas: 110, challenges: 35 }
+    ];
+
+    const renderActiveShape = (props: any) => {
+        const RADIAN = Math.PI / 180;
+        const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+        const offset = 12; // Increased pop-out distance
+        const sin = Math.sin(-RADIAN * midAngle);
+        const cos = Math.cos(-RADIAN * midAngle);
+        const ox = cx + offset * cos;
+        const oy = cy + offset * sin;
+
+        return (
+            <Sector
+                cx={ox}
+                cy={oy}
+                innerRadius={innerRadius}
+                outerRadius={outerRadius + 4}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                fill={fill}
+                cornerRadius={10}
+                style={{
+                    filter: `drop-shadow(0px 12px 18px ${fill}bf)`,
+                    transition: 'all 0.2s ease-out'
+                }}
+            />
+        );
+    };
 
     const handleSubscribe = (e: React.FormEvent) => {
         e.preventDefault();
@@ -134,20 +188,62 @@ export const Home: React.FC = () => {
                             </div>
                         </>
                     ) : (
-                        <>
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <div className="donut-chart">
-                                    <div className="donut-hole">11</div>
-                                </div>
+                        <div style={{ width: '100%', height: '260px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={PIPELINE_DATA}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={75}
+                                        outerRadius={105}
+                                        paddingAngle={6}
+                                        cornerRadius={8}
+                                        stroke="none"
+                                        dataKey="challenges"
+                                        activeShape={renderActiveShape}
+                                    >
+                                        {PIPELINE_DATA.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={entry.color}
+                                                style={{
+                                                    filter: `drop-shadow(0px 4px 6px ${entry.color}30)`,
+                                                    transition: 'all 0.3s ease',
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                        ))}
+                                    </Pie>
+                                    <RechartsTooltip
+                                        cursor={false}
+                                        isAnimationActive={false}
+                                        wrapperStyle={{ zIndex: 100, pointerEvents: 'none' }}
+                                        content={({ active, payload }) => {
+                                            if (active && payload && payload.length) {
+                                                const data = payload[0].payload;
+                                                return (
+                                                    <div style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px', color: '#fff', fontSize: '13px', minWidth: '180px', boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                                                        <div style={{ fontWeight: '600', marginBottom: '10px', paddingBottom: '6px', borderBottom: '1px solid var(--border)', color: data.color, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: data.color }}></div>
+                                                            {data.name}
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}><span style={{ color: 'var(--text-muted)' }}>Challenges:</span> <strong style={{ fontSize: '14px' }}>{data.challenges}</strong></div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-muted)' }}>Ideas:</span> <strong style={{ fontSize: '14px' }}>{data.ideas}</strong></div>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                            {/* Centered Total Label overlay */}
+                            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+                                <div style={{ fontSize: '32px', fontWeight: '700', lineHeight: '1', color: 'var(--text-primary)' }}>11</div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', fontWeight: '500' }}>Challenges</div>
                             </div>
-                            <div className="legend">
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-red)', flexShrink: 0 }}></span> Challenge Submitted (4)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-yellow)', flexShrink: 0 }}></span> Ideation &amp; Evaluation (2)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-blue)', flexShrink: 0 }}></span> POC &amp; Pilot (3)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-gold)', flexShrink: 0 }}></span> Scaled &amp; Deployed (1)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-grey)', flexShrink: 0 }}></span> Parking Lot (1)</div>
-                            </div>
-                        </>
+                        </div>
                     )}
                 </div>
 
@@ -155,7 +251,7 @@ export const Home: React.FC = () => {
                     <h3><span className="icon" style={{ marginRight: '8px', color: 'var(--accent-blue)', verticalAlign: 'middle' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> Key Metrics</h3>
                     {isLoading ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
-                            {[...Array(2)].map((_, i) => (
+                            {[...Array(6)].map((_, i) => (
                                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <div className="skeleton" style={{ height: '14px', width: '50%', borderRadius: '4px' }}></div>
                                     <div className="skeleton" style={{ height: '20px', width: '40px', borderRadius: '4px' }}></div>
@@ -163,16 +259,14 @@ export const Home: React.FC = () => {
                             ))}
                         </div>
                     ) : (
-                        <>
-                            <div className="metric-row">
-                                <span className="metric-label">Avg. Idea → Pilot</span>
-                                <span className="metric-value teal">42d</span>
-                            </div>
-                            <div className="metric-row">
-                                <span className="metric-label">Pilot Success Rate</span>
-                                <span className="metric-value green">78%</span>
-                            </div>
-                        </>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '20px' }}>
+                            {HOME_KPI_DATA.map((kpi) => (
+                                <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <span style={{ fontSize: '15px', color: 'var(--text-muted)', fontWeight: '500' }}>{kpi.label}</span>
+                                    <span style={{ fontSize: '18px', fontWeight: '700', color: kpi.color }}>{kpi.value}</span>
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
 
@@ -186,38 +280,66 @@ export const Home: React.FC = () => {
                                     <div key={i} className="spark-bar-skeleton skeleton" style={{ height: `${20 + Math.random() * 60}%` }}></div>
                                 ))}
                             </div>
-                            <div style={{ marginTop: '20px' }}>
-                                <div className="skeleton" style={{ height: '14px', width: '100%', marginBottom: '8px', borderRadius: '4px' }}></div>
-                                <div className="skeleton" style={{ height: '14px', width: '100%', borderRadius: '4px' }}></div>
-                            </div>
                         </>
                     ) : (
-                        <>
-                            <div className="spark-bars">
-                                {[
-                                    { i: 80, c: 22 }, { i: 100, c: 30 },
-                                    { i: 85, c: 24 }, { i: 70, c: 19 }, { i: 95, c: 28 }, { i: 110, c: 35 }
-                                ].map((d, idx) => (
-                                    <div key={idx} className="grouped-month">
-                                        <div className="spark-bar ideas" style={{ height: `${d.i / 1.2}%`, animationDelay: `${0.5 + idx * 0.08}s` }}></div>
-                                        <div className="spark-bar challenges" style={{ height: `${d.c * 2}%`, animationDelay: `${0.5 + idx * 0.08 + 0.03}s` }}></div>
-                                    </div>
-                                ))}
+                        <div style={{ width: '100%', height: '220px', marginTop: '10px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={THROUGHPUT_DATA}
+                                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                                    barGap={2}
+                                    barCategoryGap="25%"
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" opacity={0.5} />
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                                        dy={10}
+                                    />
+                                    <YAxis
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                                    />
+                                    <RechartsTooltip
+                                        cursor={{ fill: 'var(--bg-secondary)', opacity: 0.4 }}
+                                        contentStyle={{
+                                            backgroundColor: 'var(--bg-secondary)',
+                                            border: '1px solid var(--border)',
+                                            borderRadius: '8px',
+                                            fontSize: '12px'
+                                        }}
+                                        itemStyle={{ padding: '2px 0' }}
+                                    />
+                                    <Bar
+                                        dataKey="ideas"
+                                        fill="var(--accent-yellow)"
+                                        radius={[4, 4, 0, 0]}
+                                        animationDuration={1500}
+                                    />
+                                    <Bar
+                                        dataKey="challenges"
+                                        fill="var(--accent-orange)"
+                                        radius={[4, 4, 0, 0]}
+                                        animationDuration={1500}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    )}
+                    {!isLoading && (
+                        <div style={{ marginTop: '20px' }}>
+                            <div className="metric-row">
+                                <span className="metric-label dot yellow">Idea Submissions</span>
+                                <span className="metric-value yellow" style={{ fontSize: '18px' }}>110</span>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                                <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+                            <div className="metric-row">
+                                <span className="metric-label dot orange">Challenge Submissions</span>
+                                <span className="metric-value orange" style={{ fontSize: '18px' }}>35</span>
                             </div>
-                            <div style={{ marginTop: '14px' }}>
-                                <div className="metric-row">
-                                    <span className="metric-label dot yellow">Idea Submissions</span>
-                                    <span className="metric-value yellow" style={{ fontSize: '18px' }}>27</span>
-                                </div>
-                                <div className="metric-row">
-                                    <span className="metric-label dot orange">Challenge Submissions</span>
-                                    <span className="metric-value orange" style={{ fontSize: '18px' }}>8</span>
-                                </div>
-                            </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </aside>

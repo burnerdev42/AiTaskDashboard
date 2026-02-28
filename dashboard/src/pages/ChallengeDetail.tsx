@@ -88,6 +88,7 @@ export const ChallengeDetail: React.FC = () => {
                 found = {
                     ...basicChallenge,
                     problemStatement: basicChallenge.description,
+                    summary: basicChallenge.summary || basicChallenge.description.substring(0, 100),
                     expectedOutcome: 'Pending detailed assessment',
                     businessUnit: 'Global',
                     department: 'Cross-functional',
@@ -112,7 +113,7 @@ export const ChallengeDetail: React.FC = () => {
             setChallenge(found || null);
             if (found) {
                 setEditTitle(found.title);
-                setEditSubtitle(found.description);
+                setEditSubtitle(found.summary);
                 setEditProblem(found.problemStatement);
                 setEditOutcome(found.expectedOutcome);
             }
@@ -237,7 +238,7 @@ export const ChallengeDetail: React.FC = () => {
             setChallenge(prev => prev ? {
                 ...prev,
                 title: editTitle,
-                description: editSubtitle,
+                summary: editSubtitle,
                 problemStatement: editProblem,
                 expectedOutcome: editOutcome,
             } : prev);
@@ -247,7 +248,7 @@ export const ChallengeDetail: React.FC = () => {
 
     const cancelEdit = () => {
         setEditTitle(challenge.title);
-        setEditSubtitle(challenge.description);
+        setEditSubtitle(challenge.summary);
         setEditProblem(challenge.problemStatement);
         setEditOutcome(challenge.expectedOutcome);
         setEditMode(false);
@@ -470,7 +471,7 @@ export const ChallengeDetail: React.FC = () => {
                         ) : (
                             <>
                                 <h1 className="detail-page-title">{challenge.title}</h1>
-                                <p className="detail-page-subtitle">{challenge.description}</p>
+                                <p className="detail-page-subtitle">{challenge.summary}</p>
                             </>
                         )}
                     </div>

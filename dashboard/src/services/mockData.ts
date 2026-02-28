@@ -143,7 +143,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
         accentColor: 'green',
         owner: { name: 'S. Banerjee', avatar: 'SB', avatarColor: '#66bb6a' },
         stats: { appreciations: 142, comments: 38, roi: '3.2x', methods: 12, savings: '$4.2M' },
-        tags: ['Highlighted'],
+        summary: 'Consolidated customer view across CRM, billing, and support deployed globally in 12 markets.',
+        tags: ['Cloud', 'Data Analytics', 'CRM Integration', 'Azure'],
         team: [
             { name: 'Siddharth Banerjee', avatar: 'SB', avatarColor: '#66bb6a' },
             { name: 'Ananya Basu', avatar: 'AB', avatarColor: '#42a5f5' },
@@ -158,7 +159,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
         stage: 'POC & Pilot',
         accentColor: 'blue',
         owner: { name: 'A. Basu', avatar: 'AB', avatarColor: '#f0b870' },
-        tags: ['Most Appreciated', 'Pilot'],
+        summary: 'GenAI assistant handling product queries, order tracking, and returns for e-commerce.',
+        tags: ['GenAI', 'NLP', 'Python', 'React'],
         stats: { appreciations: 189, comments: 54, members: 12, accuracy: '92%', votes: 45 },
         team: [
             { name: 'Ananya Basu', avatar: 'AB', avatarColor: '#f0b870' },
@@ -173,7 +175,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
         stage: 'Ideation & Evaluation',
         accentColor: 'orange',
         owner: { name: 'A. Basu', avatar: 'AB', avatarColor: '#ffa726' },
-        tags: ['Top Voted'],
+        summary: 'IoT-driven warehouse navigation for autonomous forklifts, reducing pick-time by 40%.',
+        tags: ['IoT', 'Robotics', 'Edge Computing', 'Digital Twin'],
         stats: { appreciations: 97, votes: 214, comments: 15, savings: '40%', units: 120 },
         team: [
             { name: 'Ananya Basu', avatar: 'AB', avatarColor: '#ffa726' },
@@ -189,7 +192,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
         stage: 'Challenge Submitted',
         accentColor: 'purple',
         owner: { name: 'S. Banerjee', avatar: 'SB', avatarColor: '#ab47bc' },
-        tags: ['Highlighted'],
+        summary: 'ML-based regional demand patterns prediction to optimize inventory allocation.',
+        tags: ['ML', 'Forecasting', 'Data Lake', 'Python'],
         stats: { appreciations: 76, savings: '$12M', votes: 156, accuracy: '94%', comments: 8 },
         team: [
             { name: 'Siddharth Banerjee', avatar: 'SB', avatarColor: '#ab47bc' },
@@ -205,7 +209,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
         stage: 'POC & Pilot',
         accentColor: 'teal',
         owner: { name: 'R. Patel', avatar: 'RP', avatarColor: '#e8a758' },
-        tags: ['Most Appreciated'],
+        summary: 'Real-time 3D simulation of production lines for throughput optimization.',
+        tags: ['Digital Twin', '3D Rendering', 'IIoT', 'Simulation'],
         stats: { appreciations: 118, savings: '70%', comments: 42, active: 3, alerts: 12 },
         team: [
             { name: 'Ravi Patel', avatar: 'RP', avatarColor: '#e8a758' },

@@ -2,7 +2,7 @@ import React from 'react';
 import { Flag, Lightbulb, TrendingUp, Clock, Users, UserCheck } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, CartesianGrid,
-    ScatterChart, Scatter, ZAxis, Legend
+    ScatterChart, Scatter, ZAxis
 } from 'recharts';
 
 /* ── Static Data for Panels 1-3 ──────────────── */
@@ -69,6 +69,7 @@ const KPI_CARDS = [
 
 export const Metrics: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState(true);
+    const [hoveredOpCo, setHoveredOpCo] = React.useState<number | null>(null);
 
     React.useEffect(() => {
         const timer = setTimeout(() => {
@@ -271,7 +272,7 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <ResponsiveContainer width="100%" height={150}>
+                            <ResponsiveContainer width="100%" height={400}>
                                 <AreaChart data={LINE_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="colorRatio" x1="0" y1="0" x2="0" y2="1">
@@ -303,11 +304,29 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <ResponsiveContainer width="100%" height={160}>
-                                <ScatterChart margin={{ top: 20, right: 20, bottom: 0, left: -20 }}>
+                            <ResponsiveContainer width="100%" height={400}>
+                                <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 0 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                                    <XAxis type="number" dataKey="ideas" name="Ideas" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} domain={[0, 'auto']} />
-                                    <YAxis type="number" dataKey="challenges" name="Challenges" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} domain={[0, 25]} />
+                                    <XAxis
+                                        type="number"
+                                        dataKey="ideas"
+                                        name="Ideas"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                                        domain={[0, 'auto']}
+                                        label={{ value: 'Ideas Generated', position: 'insideBottom', offset: -20, fill: 'var(--text-muted)', fontSize: 11, fontWeight: 500 }}
+                                    />
+                                    <YAxis
+                                        type="number"
+                                        dataKey="challenges"
+                                        name="Challenges"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                                        domain={[0, 25]}
+                                        label={{ value: 'Challenges', angle: -90, position: 'insideLeft', offset: 15, fill: 'var(--text-muted)', fontSize: 11, fontWeight: 500 }}
+                                    />
                                     <ZAxis type="number" dataKey="challenges" range={[200, 800]} name="Volume" />
                                     <RechartsTooltip
                                         cursor={{ strokeDasharray: '3 3' }}
@@ -327,10 +346,6 @@ export const Metrics: React.FC = () => {
                                             return null;
                                         }}
                                     />
-                                    <Legend
-                                        wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }}
-                                        iconType="circle"
-                                    />
                                     {PORTFOLIO_DATA.map((entry, index) => (
                                         <Scatter key={`scatter-${index}`} name={entry.name} data={[entry]} fill={entry.color} />
                                     ))}
@@ -346,98 +361,144 @@ export const Metrics: React.FC = () => {
                         <h3>OpCo Radar</h3>
                         <p>Platform Engagement</p>
                     </div>
-                    <div className="m-chart-body">
+                    <div className="m-chart-body" style={{ position: 'relative' }}>
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <svg viewBox="0 0 200 200" className="radar-svg">
-                                <defs>
-                                    <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                        <stop offset="0%" stopColor="var(--accent-gold)" stopOpacity="0.4" />
-                                        <stop offset="100%" stopColor="var(--accent-gold)" stopOpacity="0" />
-                                    </radialGradient>
-                                    <filter id="glow">
-                                        <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                                        <feMerge>
-                                            <feMergeNode in="coloredBlur" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-                                {/* Polygon Web Grids (4 Axis = Square grids) */}
-                                {[0.2, 0.4, 0.6, 0.8, 1.0].map(scale => {
-                                    const r = 75 * scale;
-                                    return (
-                                        <polygon
+                            <div style={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <svg viewBox="120 120 150 150" className="radar-svg" style={{ width: '100%', height: '100%' }}>
+                                    <defs>
+                                        <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                            <stop offset="30%" stopColor="var(--accent-gold)" stopOpacity="0.6" />
+                                            <stop offset="100%" stopColor="var(--accent-gold)" stopOpacity="0.1" />
+                                        </radialGradient>
+                                        <filter id="radarGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feGaussianBlur stdDeviation="3" result="blur" />
+                                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                        </filter>
+                                    </defs>
+
+                                    {/* Circular Grid Lines (Maximized Zoom) */}
+                                    {[0.2, 0.4, 0.6, 0.8, 1.0].map(scale => (
+                                        <circle
                                             key={scale}
-                                            points={RADAR_AXIS.map((_, i) => {
-                                                const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                                return `${100 + Math.cos(angle) * r},${100 + Math.sin(angle) * r}`;
-                                            }).join(' ')}
+                                            cx="200" cy="200"
+                                            r={135 * scale}
                                             fill="none"
                                             stroke="var(--border)"
                                             strokeWidth="0.5"
-                                            strokeDasharray="2"
-                                            opacity={0.5}
+                                            strokeDasharray={scale === 1.0 ? "0" : "3,3"}
+                                            opacity={0.4}
                                         />
-                                    );
-                                })}
-                                {/* Axis Lines */}
-                                {RADAR_AXIS.map((_, i) => {
-                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                    return (
-                                        <line
-                                            key={i}
-                                            x1="100" y1="100"
-                                            x2={100 + Math.cos(angle) * 75}
-                                            y2={100 + Math.sin(angle) * 75}
-                                            stroke="var(--border)"
-                                            strokeWidth="0.5"
-                                        />
-                                    );
-                                })}
+                                    ))}
 
-                                {/* Data Polygon */}
-                                <polygon
-                                    points={RADAR_DATA.map((v, i) => {
+                                    {/* Axis Lines */}
+                                    {RADAR_AXIS.map((_, i) => {
                                         const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                        const r = (v / 100) * 75;
-                                        const x = 100 + Math.cos(angle) * r;
-                                        const y = 100 + Math.sin(angle) * r;
-                                        return `${x},${y}`;
-                                    }).join(' ')}
-                                    fill="url(#radarGrad)"
-                                    stroke="var(--accent-gold)"
-                                    strokeWidth="2"
-                                    filter="url(#glow)"
-                                />
+                                        return (
+                                            <line
+                                                key={i}
+                                                x1="200" y1="200"
+                                                x2={200 + Math.cos(angle) * 135}
+                                                y2={200 + Math.sin(angle) * 135}
+                                                stroke="var(--border)"
+                                                strokeWidth="0.8"
+                                                opacity={0.6}
+                                            />
+                                        );
+                                    })}
 
-                                {/* Data Points & Labels */}
-                                {RADAR_DATA.map((v, i) => {
-                                    const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                    const r = (v / 100) * 75;
-                                    const x = 100 + Math.cos(angle) * r;
-                                    const y = 100 + Math.sin(angle) * r;
-                                    const lx = 100 + Math.cos(angle) * 92;
-                                    const ly = 100 + Math.sin(angle) * 92;
-                                    return (
-                                        <g key={i}>
-                                            <circle cx={x} cy={y} r="3" fill="#fff" stroke="var(--accent-gold)" strokeWidth="2" />
-                                            <text
-                                                x={lx} y={ly}
-                                                fontSize="9"
-                                                fill="var(--text-secondary)"
-                                                textAnchor="middle"
-                                                alignmentBaseline="middle"
-                                                fontWeight="700"
-                                                className="radar-label"
+                                    {/* Data Polygon with Glow */}
+                                    <polygon
+                                        points={RADAR_DATA.map((v, i) => {
+                                            const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                            const r = (v / 100) * 135;
+                                            return `${200 + Math.cos(angle) * r},${200 + Math.sin(angle) * r}`;
+                                        }).join(' ')}
+                                        fill="url(#radarGrad)"
+                                        stroke="var(--accent-gold)"
+                                        strokeWidth="2.5"
+                                        filter="url(#radarGlow)"
+                                        style={{ transition: 'all 0.5s ease-out' }}
+                                    />
+
+                                    {/* Center Point */}
+                                    <circle cx="200" cy="200" r="2.5" fill="var(--accent-gold)" />
+
+                                    {/* Data Points & Labels */}
+                                    {RADAR_DATA.map((v, i) => {
+                                        const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
+                                        const r = (v / 100) * 135;
+                                        const x = 200 + Math.cos(angle) * r;
+                                        const y = 200 + Math.sin(angle) * r;
+                                        const lx = 200 + Math.cos(angle) * 145;
+                                        const ly = 200 + Math.sin(angle) * 145;
+
+                                        const isHovered = hoveredOpCo === i;
+
+                                        return (
+                                            <g
+                                                key={i}
+                                                onMouseEnter={() => setHoveredOpCo(i)}
+                                                onMouseLeave={() => setHoveredOpCo(null)}
+                                                style={{ cursor: 'pointer' }}
                                             >
-                                                {RADAR_AXIS[i]}
-                                            </text>
-                                        </g>
-                                    );
-                                })}
-                            </svg>
+                                                {/* Hidden larger circle for easier hovering */}
+                                                <circle cx={x} cy={y} r="25" fill="transparent" />
+
+                                                <circle
+                                                    cx={x} cy={y} r={isHovered ? 10 : 5}
+                                                    fill={isHovered ? "var(--accent-gold)" : "var(--bg-card)"}
+                                                    stroke="var(--accent-gold)"
+                                                    strokeWidth="2"
+                                                    style={{ transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
+                                                />
+                                                <text
+                                                    x={lx} y={ly}
+                                                    fontSize={isHovered ? "18" : "15"}
+                                                    fill={isHovered ? "var(--accent-gold)" : "var(--text-primary)"}
+                                                    textAnchor="middle"
+                                                    alignmentBaseline="middle"
+                                                    fontWeight={isHovered ? "800" : "600"}
+                                                    style={{
+                                                        textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                >
+                                                    {RADAR_AXIS[i]}
+                                                </text>
+                                            </g>
+                                        );
+                                    })}
+                                </svg>
+
+                                {/* Interactive Tooltip Overlay */}
+                                {hoveredOpCo !== null && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '10px',
+                                        right: '10px',
+                                        backgroundColor: 'var(--bg-secondary)',
+                                        border: '1px solid var(--accent-gold)',
+                                        borderRadius: '8px',
+                                        padding: '12px',
+                                        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                                        pointerEvents: 'none',
+                                        animation: 'fade-in 0.2s ease-out',
+                                        minWidth: '120px',
+                                        zIndex: 10
+                                    }}>
+                                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Operating Co.</div>
+                                        <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--accent-gold)' }}>{RADAR_AXIS[hoveredOpCo]}</div>
+                                        <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <div style={{ flex: 1, height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+                                                <div style={{ width: `${RADAR_DATA[hoveredOpCo]}%`, height: '100%', background: 'var(--accent-gold)' }}></div>
+                                            </div>
+                                            <span style={{ fontSize: '14px', fontWeight: 'bold' }}>{RADAR_DATA[hoveredOpCo]}%</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>

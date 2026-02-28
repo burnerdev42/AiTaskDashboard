@@ -3,17 +3,17 @@ import { MOCK_ADMIN_LOGS, MOCK_CHALLENGES, MOCK_NOTIFICATIONS, MOCK_PENDING_IDEA
 import { challengeDetails as MOCK_CHALLENGE_DETAILS, ideaDetails as MOCK_IDEA_DETAILS } from '../data/challengeData';
 
 const STORAGE_KEYS = {
-    USERS: 'app_users_v2',
-    CHALLENGES: 'app_challenges_v2',
-    NOTIFICATIONS: 'app_notifications_v2',
-    SWIMLANES: 'app_swimlanes_v2',
-    CURRENT_USER: 'app_current_user_v2',
-    CHALLENGE_DETAILS: 'app_challenge_details_v2',
-    IDEA_DETAILS: 'app_idea_details_v2',
-    PENDING_REGISTRATIONS: 'ip_pending_registrations',
-    REJECTED_REGISTRATIONS: 'ip_rejected_registrations',
-    ADMIN_LOGS: 'app_admin_logs_v2',
-    READ_ACTION_ITEMS: 'app_read_action_items_v2'
+    USERS: 'app_users_v4',
+    CHALLENGES: 'app_challenges_v4',
+    NOTIFICATIONS: 'app_notifications_v4',
+    SWIMLANES: 'app_swimlanes_v4',
+    CURRENT_USER: 'app_current_user_v4',
+    CHALLENGE_DETAILS: 'app_challenge_details_v4',
+    IDEA_DETAILS: 'app_idea_details_v4',
+    PENDING_REGISTRATIONS: 'ip_pending_registrations_v4',
+    REJECTED_REGISTRATIONS: 'ip_rejected_registrations_v4',
+    ADMIN_LOGS: 'app_admin_logs_v4',
+    READ_ACTION_ITEMS: 'app_read_action_items_v4'
 };
 
 const notifyUpdate = () => {
@@ -193,6 +193,7 @@ export const storage = {
         return challenges.map(c => ({
             id: c.id,
             title: c.title,
+            summary: c.summary,
             description: c.description,
             owner: c.owner.name,
             priority: (c.impact === 'Critical' ? 'High' : c.impact || 'Medium') as 'High' | 'Medium' | 'Low',
@@ -558,6 +559,7 @@ export const storage = {
             owner: challenge.owner,
             accentColor: challenge.accentColor,
             stats: challenge.stats,
+            summary: challenge.summary,
             tags: challenge.challengeTags,
             team: challenge.team,
             impact: challenge.priority as any
