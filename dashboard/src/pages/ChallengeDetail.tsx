@@ -208,9 +208,8 @@ export const ChallengeDetail: React.FC = () => {
                 </div>
                 <div style={{ padding: '60px 40px', textAlign: 'center', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)', marginTop: '24px', boxShadow: 'var(--shadow-lg)' }}>
                     <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '24px', opacity: 0.8 }}>
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                        <line x1="4" y1="22" x2="4" y2="15" />
                     </svg>
                     <h2 style={{ marginBottom: '12px', fontSize: '24px', fontWeight: '700' }}>Challenge Not Found</h2>
                     <p style={{ color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '400px', marginInline: 'auto' }}>The challenge you are looking for does not exist or has been deleted from our innovation pipeline.</p>
@@ -327,16 +326,18 @@ export const ChallengeDetail: React.FC = () => {
             : 1;
         const newId = `ID-${String(nextIdNumber).padStart(4, '0')}`;
 
+        const isAdmin = user?.role === 'Admin';
+
         const newIdea: Idea = {
             id: newId,
             title: ideaTitle,
             description: ideaDescription,
-            status: 'Pending',
+            status: isAdmin ? 'Accepted' : 'Pending',
             owner: {
                 name: 'Current User',
                 avatar: 'CU',
                 avatarColor: 'var(--accent-purple)',
-                role: 'Contributor'
+                role: isAdmin ? 'Admin' : 'Contributor'
             },
             linkedChallenge: { id: challenge.id, title: challenge.title },
             tags: [],
@@ -347,7 +348,7 @@ export const ChallengeDetail: React.FC = () => {
             submittedDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
             lastUpdated: 'Just now',
             activity: [],
-            approvalStatus: 'Pending'
+            approvalStatus: isAdmin ? 'Approved' : 'Pending'
         };
 
         try {
@@ -375,7 +376,7 @@ export const ChallengeDetail: React.FC = () => {
 
             setShowIdeaModal(false);
             resetIdeaForm();
-            showToast('Idea submitted — waiting for admin approval');
+            showToast(isAdmin ? 'Idea submitted and auto-approved!' : 'Idea submitted — waiting for admin approval');
         } catch {
             showToast('Failed to submit idea. Please try again.', 'error');
         }

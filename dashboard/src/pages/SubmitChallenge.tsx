@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import { type ChallengeDetailData } from '../types';
 
 export const SubmitChallenge: React.FC = () => {
     const navigate = useNavigate();
     const { showToast } = useToast();
+    const { user } = useAuth();
 
     // Form State
     const [title, setTitle] = useState('');
@@ -28,6 +30,18 @@ export const SubmitChallenge: React.FC = () => {
     // Submission success state
     const [submitted, setSubmitted] = useState(false);
     const [submittedChallengeId, setSubmittedChallengeId] = useState('');
+
+    useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
+        if (submitted) {
+            timer = setTimeout(() => {
+                navigate('/challenges');
+            }, 5000); // 5 seconds
+        }
+        return () => {
+            if (timer) clearTimeout(timer);
+        };
+    }, [submitted, navigate]);
 
 
     const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -111,7 +125,7 @@ export const SubmitChallenge: React.FC = () => {
             createdDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
             updatedDate: 'Just now',
             impact: impact as any,
-            approvalStatus: 'Pending'
+            approvalStatus: user?.role === 'Admin' ? 'Approved' : 'Pending'
         };
 
         try {
@@ -161,32 +175,54 @@ export const SubmitChallenge: React.FC = () => {
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
                         </div>
                         <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
-                            Challenge Submitted for Review
+                            Challenge Submitted Successfully
                         </h2>
-                        <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            background: 'rgba(255,238,88,.12)',
-                            color: 'var(--accent-yellow)',
-                            border: '1px solid rgba(255,238,88,.3)',
-                            padding: '6px 16px',
-                            borderRadius: '20px',
-                            fontSize: '12px',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.5px',
-                            margin: '12px 0 20px'
-                        }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                            Waiting for Admin Approval
-                        </div>
+                        {user?.role === 'Admin' ? (
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                background: 'rgba(102,187,106,.12)',
+                                color: 'var(--accent-green)',
+                                border: '1px solid rgba(102,187,106,.3)',
+                                padding: '6px 16px',
+                                borderRadius: '20px',
+                                fontSize: '12px',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
+                                margin: '12px 0 20px'
+                            }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                Auto-Approved
+                            </div>
+                        ) : (
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                background: 'rgba(255,238,88,.12)',
+                                color: 'var(--accent-yellow)',
+                                border: '1px solid rgba(255,238,88,.3)',
+                                padding: '6px 16px',
+                                borderRadius: '20px',
+                                fontSize: '12px',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
+                                margin: '12px 0 20px'
+                            }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                Waiting for Admin Approval
+                            </div>
+                        )}
                         <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '8px' }}>
                             Your challenge <strong style={{ color: 'var(--accent-teal)' }}>{submittedChallengeId}</strong> has been submitted successfully.
-                            An admin will review and approve it before it becomes visible to all team members.
+                            {user?.role !== 'Admin' && ' An admin will review and approve it before it becomes visible to all team members.'}
                         </p>
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '28px' }}>
-                            You'll be notified once the challenge is approved or if any changes are requested.
+                            {user?.role !== 'Admin' ? 'You\'ll be notified once the challenge is approved or if any changes are requested.' : 'The challenge is now live and visible to all users.'}<br /><br />
+                            Redirecting to challenges shortly...
                         </p>
                         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
                             <button
