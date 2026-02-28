@@ -124,7 +124,7 @@
         "problemStatement": "Promotion item lists are manually maintained, leading to frequent errors, financial losses from incorrect discounts, missed eligible items, and inconsistent promotion execution that impacts profitability and customer trust.",
         "outcome": "Retailers should be able to automatically generate and maintain accurate promotion inclusion and exclusion rules using an AI agent, reducing manual effort while ensuring consistent and error-free execution.",
         "status": "Evaluation",
-        "ownerId": "u-dibyendu",
+        "ownerId": "u-smriti",
         "ideas": [
             {
                 "id": "ID-0008",
@@ -165,7 +165,7 @@
                 "ideaTitle": "Agentic AI–Driven Terraform Migration",
                 "proposedSolution": "Leverage Agentic AI to analyze, refactor, and automate migration of Terraform repositories to Azure Verified Modules (AVM).",
                 "ideaDetail": "This initiative focuses on migrating 8K+ Terraform repositories to Azure AVM within a year. Using Agentic AI, the system will assess existing configurations, recommend module mappings, and automate refactoring where possible. The approach improves governance, enhances standardization, and reduces manual effort. Delivered in collaboration with Microsoft ECIF and customer-funded, the program is expected to deliver up to $1M in cost savings while modernizing infrastructure practices.",
-                "userId": "u-deb"
+                "userId": "u-riyal"
             }
         ]
     },
@@ -209,7 +209,7 @@
         "problemStatement": "Test case creation is largely manual, time-consuming, and dependent on individual expertise, leading to inconsistent coverage, slower test cycles, and delays in overall software delivery. There is limited alignment between Jira stories, Figma designs, and QA artifacts, impacting quality and efficiency.",
         "outcome": "Accelerate test delivery by automatically generating high-quality, comprehensive test cases in Jira from Jira stories and Figma designs, improving coverage, consistency, and speed in the Software Quality Assurance process.",
         "status": "Modernization",
-        "ownerId": "u-user11",
+        "ownerId": "u-chandan",
         "ideas": [
             {
                 "id": "ID-0013",
@@ -226,7 +226,7 @@
         "problemStatement": "Sprint planning is repetitive and time-consuming, requiring manual coordination of prioritized epics, user stories, dependencies, and team availability. A major challenge is matching team members' skills to user story requirements for optimal assignment.",
         "outcome": "Automate sprint planning by intelligently selecting user stories based on team availability and defining sprint goals, while recommending story assignments aligned with team members’ skills to improve efficiency and accuracy.",
         "status": "Submitted",
-        "ownerId": "u-dibyendu",
+        "ownerId": "u-chandan",
         "ideas": [
             {
                 "id": "ID-0014",
