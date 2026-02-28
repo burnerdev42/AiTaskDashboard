@@ -224,7 +224,7 @@ export const IdeaSolutionCards: React.FC = () => {
                                 {/* Challenge Body */}
                                 <div className="idea-card-solution-body">
                                     <div className="idea-card-solution-title">{card.title}</div>
-                                    <p className="challenge-card-desc">{card.description}</p>
+                                    <p className="challenge-card-desc">{card.summary}</p>
 
                                     {/* Tags Row */}
                                     {card.tags && card.tags.length > 0 && (

@@ -3,16 +3,16 @@ import { MOCK_CHALLENGES, MOCK_NOTIFICATIONS, MOCK_SWIMLANES, MOCK_USERS } from 
 import { challengeDetails as MOCK_CHALLENGE_DETAILS, ideaDetails as MOCK_IDEA_DETAILS } from '../data/challengeData';
 
 const STORAGE_KEYS = {
-    USERS: 'app_users_v3',
-    CHALLENGES: 'app_challenges_v3',
-    NOTIFICATIONS: 'app_notifications_v3',
-    SWIMLANES: 'app_swimlanes_v3',
-    CURRENT_USER: 'app_current_user_v3',
-    CHALLENGE_DETAILS: 'app_challenge_details_v3',
-    IDEA_DETAILS: 'app_idea_details_v3',
-    PENDING_REGISTRATIONS: 'ip_pending_registrations_v3',
-    REJECTED_REGISTRATIONS: 'ip_rejected_registrations_v3',
-    ADMIN_LOGS: 'app_admin_logs_v3'
+    USERS: 'app_users_v4',
+    CHALLENGES: 'app_challenges_v4',
+    NOTIFICATIONS: 'app_notifications_v4',
+    SWIMLANES: 'app_swimlanes_v4',
+    CURRENT_USER: 'app_current_user_v4',
+    CHALLENGE_DETAILS: 'app_challenge_details_v4',
+    IDEA_DETAILS: 'app_idea_details_v4',
+    PENDING_REGISTRATIONS: 'ip_pending_registrations_v4',
+    REJECTED_REGISTRATIONS: 'ip_rejected_registrations_v4',
+    ADMIN_LOGS: 'app_admin_logs_v4'
 };
 
 export const storage = {
@@ -115,6 +115,7 @@ export const storage = {
         return challenges.map(c => ({
             id: c.id,
             title: c.title,
+            summary: c.summary,
             description: c.description,
             owner: c.owner.name,
             priority: (c.impact === 'Critical' ? 'High' : c.impact || 'Medium') as 'High' | 'Medium' | 'Low',
@@ -422,6 +423,7 @@ export const storage = {
             owner: challenge.owner,
             accentColor: challenge.accentColor,
             stats: challenge.stats,
+            summary: challenge.summary,
             tags: challenge.challengeTags,
             team: challenge.team,
             impact: challenge.priority as any

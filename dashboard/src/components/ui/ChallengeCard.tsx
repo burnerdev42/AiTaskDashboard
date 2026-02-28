@@ -121,7 +121,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                         </span>
                     </div>
                     <h3>{challenge.title}</h3>
-                    <p className="challenge-desc">{challenge.description}</p>
+                    <p className="challenge-desc">{challenge.summary}</p>
                     <div className="challenge-owner">
                         <span className="owner-avatar" style={{ background: challenge.owner.avatarColor }}>{challenge.owner.avatar}</span>
                         <span>{challenge.owner.name} &middot; {`CH-${challenge.id.replace(/\D/g, '')}`}</span>

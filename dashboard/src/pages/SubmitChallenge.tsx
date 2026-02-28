@@ -12,6 +12,7 @@ export const SubmitChallenge: React.FC = () => {
     const [title, setTitle] = useState('');
     const [department, setDepartment] = useState('');
     const [businessUnit, setBusinessUnit] = useState('');
+    const [summary, setSummary] = useState('');
     const [problemStatement, setProblemStatement] = useState('');
     const [expectedOutcome, setExpectedOutcome] = useState('');
     const [timeline, setTimeline] = useState('');
@@ -42,7 +43,7 @@ export const SubmitChallenge: React.FC = () => {
 
     const resetForm = () => {
         setTitle(''); setDepartment(''); setBusinessUnit('');
-        setProblemStatement(''); setExpectedOutcome('');
+        setProblemStatement(''); setSummary(''); setExpectedOutcome('');
         setTimeline(''); setBudget('');
         setImpact('');
         setTags([]); setTagInput('');
@@ -55,6 +56,7 @@ export const SubmitChallenge: React.FC = () => {
         const errors: Record<string, string> = {};
         if (!title.trim()) errors.title = 'Challenge title is required';
         if (!businessUnit) errors.businessUnit = 'OpCo is required';
+        if (!summary.trim()) errors.summary = 'Challenge summary is required';
         if (!department) errors.department = 'Platform is required';
         if (!problemStatement.trim()) errors.problemStatement = 'Problem statement is required';
         if (!expectedOutcome.trim()) errors.expectedOutcome = 'Expected outcome is required';
@@ -79,6 +81,7 @@ export const SubmitChallenge: React.FC = () => {
         const newChallenge: ChallengeDetailData = {
             id: newChallengeId,
             title,
+            summary,
             description: problemStatement,
             stage: 'Challenge Submitted',
             owner: {
@@ -175,6 +178,23 @@ export const SubmitChallenge: React.FC = () => {
                                 />
                                 {formErrors.title && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{formErrors.title}</div>}
                                 <div className={getCharClass(title.length, 100)}>{title.length} / 100</div>
+                            </div>
+                            <div className="sc-form-group sc-full-width">
+                                <label className="sc-form-label">Challenge Summary <span className="sc-required">*</span> <span className="sc-hint">(A concise one-liner for cards and headers)</span></label>
+                                <input
+                                    type="text"
+                                    className="sc-form-input"
+                                    placeholder="e.g., Implementing a GenAI-based, fully autonomous Co-Pilot solution..."
+                                    value={summary}
+                                    onChange={(e) => {
+                                        setSummary(e.target.value);
+                                        if (formErrors.summary) setFormErrors(prev => ({ ...prev, summary: '' }));
+                                    }}
+                                    maxLength={180}
+                                    style={{ borderColor: formErrors.summary ? 'var(--accent-red)' : 'var(--border)' }}
+                                />
+                                {formErrors.summary && <div style={{ color: 'var(--accent-red)', fontSize: '11px', marginTop: '4px' }}>{formErrors.summary}</div>}
+                                <div className={getCharClass(summary.length, 180)}>{summary.length} / 180</div>
                             </div>
                             <div className="sc-form-group">
                                 <label className="sc-form-label">OpCo <span className="sc-required">*</span></label>

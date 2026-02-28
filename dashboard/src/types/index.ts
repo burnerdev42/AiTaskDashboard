@@ -36,6 +36,7 @@ export interface Challenge {
         methods?: number;
         [key: string]: string | number | undefined;
     };
+    summary: string;
     tags?: string[]; // e.g., ["Highlighted", "Most Appreciated"]
     team?: { name: string; avatar: string; avatarColor: string }[];
     impact?: 'Critical' | 'High' | 'Medium' | 'Low';
@@ -55,6 +56,7 @@ export interface Notification {
 export interface SwimLaneCard {
     id: string;
     title: string;
+    summary?: string;
     description?: string;
     owner: string;
     priority: 'High' | 'Medium' | 'Low';
@@ -139,6 +141,7 @@ export interface ChallengeDetailData extends Challenge {
     priority: 'High' | 'Medium' | 'Low';
     estimatedImpact: string;
     challengeTags: string[];
+    summary: string;
     timeline: string;
     portfolioOption: string;
     constraints: string;

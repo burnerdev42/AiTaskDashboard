@@ -10,6 +10,7 @@ export const challengeDetails: ChallengeDetailData[] = [
         accentColor: 'teal',
         stats: { appreciations: 42, comments: 8, votes: 42 },
         tags: ['Highlighted'],
+        summary: 'High-value segment losing 8% QoQ due to poor onboarding experience. Need to identify root causes.',
         problemStatement: `Our premium customer segment (lifetime value >$10K) is experiencing an alarming 8% quarter-over-quarter churn rate. Exit interviews indicate that 63% of departing customers cite frustration with the onboarding process. Competitors are offering smoother digital experiences, and we're losing market share as a result.
 
 Key pain points identified:
