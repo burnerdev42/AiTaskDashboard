@@ -55,8 +55,8 @@ const LINE_DATA = [
 ];
 
 // Radar Data: OpCo Engagement
-const RADAR_AXIS = ['Albert Heijn', 'GSO', 'GET', 'BecSee'];
-const RADAR_DATA = [85, 65, 90, 70]; // % values
+const RADAR_AXIS = ['Albert Heijn', 'GSO', 'BecSee'];
+const RADAR_DATA = [85, 65, 70]; // % values
 
 const KPI_CARDS = [
     { label: 'Total Challenges', value: '47', icon: <Flag size={20} /> },
@@ -272,7 +272,7 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <ResponsiveContainer width="100%" height={400}>
+                            <ResponsiveContainer width="100%" height={280}>
                                 <AreaChart data={LINE_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="colorRatio" x1="0" y1="0" x2="0" y2="1">
@@ -304,7 +304,7 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <ResponsiveContainer width="100%" height={400}>
+                            <ResponsiveContainer width="100%" height={280}>
                                 <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 0 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                                     <XAxis
@@ -365,8 +365,8 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <div style={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <svg viewBox="120 120 150 150" className="radar-svg" style={{ width: '100%', height: '100%' }}>
+                            <div style={{ width: '100%', height: '280px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <svg viewBox="40 40 320 320" className="radar-svg" style={{ width: '100%', height: '100%' }}>
                                     <defs>
                                         <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                                             <stop offset="30%" stopColor="var(--accent-gold)" stopOpacity="0.6" />
@@ -431,8 +431,8 @@ export const Metrics: React.FC = () => {
                                         const r = (v / 100) * 135;
                                         const x = 200 + Math.cos(angle) * r;
                                         const y = 200 + Math.sin(angle) * r;
-                                        const lx = 200 + Math.cos(angle) * 145;
-                                        const ly = 200 + Math.sin(angle) * 145;
+                                        const lx = 200 + Math.cos(angle) * 160;
+                                        const ly = 200 + Math.sin(angle) * 160;
 
                                         const isHovered = hoveredOpCo === i;
 

@@ -101,7 +101,7 @@ export const Register: React.FC = () => {
     ];
 
     const opcos = [
-        "Albert Heijn", "GSO", "GET", "BecSee"
+        "Albert Heijn", "GSO", "BecSee"
     ];
 
     const platforms = [

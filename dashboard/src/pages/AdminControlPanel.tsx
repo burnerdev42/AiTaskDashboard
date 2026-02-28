@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Zap, Clock, CheckCircle, XCircle, Users,
+    Clock, CheckCircle, XCircle, Users,
     User, Mail, Building2, Shield,
     Flag, Lightbulb, History, Link, AlertCircle, AlertTriangle
 } from 'lucide-react';
@@ -9,6 +9,8 @@ import { storage } from '../services/storage';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { type User as UserType, type Challenge, type Idea, type AdminLog } from '../types';
+
+const CountSkeleton = () => <span className="skeleton" style={{ display: 'inline-block', width: '20px', height: '14px', borderRadius: '4px', verticalAlign: 'middle' }} />;
 
 export const AdminControlPanel: React.FC = () => {
     const { showToast } = useToast();
@@ -31,6 +33,7 @@ export const AdminControlPanel: React.FC = () => {
         rejected: 0,
         totalUsers: 0
     });
+    const [isLoading, setIsLoading] = useState(true);
 
     const [modalConfig, setModalConfig] = useState<{
         isOpen: boolean;
@@ -49,7 +52,12 @@ export const AdminControlPanel: React.FC = () => {
     });
 
     useEffect(() => {
-        loadData();
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            loadData();
+            setIsLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer);
     }, []);
 
     const loadData = () => {
@@ -158,8 +166,8 @@ export const AdminControlPanel: React.FC = () => {
         loadData();
     };
 
-    const handleRejectChallenge = (id: string, _reason: string) => {
-        if (storage.rejectChallenge(id, currentUser?.name || 'Admin')) {
+    const handleRejectChallenge = (id: string, reason: string) => {
+        if (storage.rejectChallenge(id, currentUser?.name || 'Admin', reason || undefined)) {
             showToast('Challenge rejected.', 'error');
         }
         loadData();
@@ -172,8 +180,8 @@ export const AdminControlPanel: React.FC = () => {
         loadData();
     };
 
-    const handleRejectIdea = (id: string, _reason: string) => {
-        if (storage.rejectIdea(id, currentUser?.name || 'Admin')) {
+    const handleRejectIdea = (id: string, reason: string) => {
+        if (storage.rejectIdea(id, currentUser?.name || 'Admin', reason || undefined)) {
             showToast('Idea rejected.', 'error');
         }
         loadData();
@@ -578,7 +586,7 @@ export const AdminControlPanel: React.FC = () => {
         <div className="page-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 36px 60px' }}>
             <div className="page-header" style={{ marginBottom: '32px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h1>Control Center</h1>
+                    <h1 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.5px' }}>Control Center</h1>
                 </div>
                 <p style={{ color: 'var(--text-secondary)', marginTop: '8px', fontSize: '14px' }}>
                     Review and manage registrations, challenges, and ideas — all pending actions at a glance.
@@ -587,42 +595,26 @@ export const AdminControlPanel: React.FC = () => {
 
             {/* Summary Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(255, 167, 38, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-orange)', flexShrink: 0 }}>
-                        <Clock size={24} />
+                {[
+                    { label: 'Pending Actions', value: stats.pending, color: 'var(--accent-orange)', icon: <Clock size={24} />, bg: 'rgba(255, 167, 38, 0.15)' },
+                    { label: 'Approved', value: stats.approved, color: 'var(--accent-green)', icon: <CheckCircle size={24} />, bg: 'rgba(102, 187, 106, 0.15)' },
+                    { label: 'Rejected', value: stats.rejected, color: 'var(--accent-red)', icon: <XCircle size={24} />, bg: 'rgba(239, 83, 80, 0.15)' },
+                    { label: 'Registered Users', value: stats.totalUsers, color: 'var(--accent-purple)', icon: <Users size={24} />, bg: 'rgba(171, 71, 188, 0.15)' }
+                ].map((stat, i) => (
+                    <div key={i} className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', textAlign: 'center' }}>
+                        <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0, marginBottom: '4px' }}>
+                            {stat.icon}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'center' }}>
+                            {isLoading ? (
+                                <div className="skeleton" style={{ height: '34px', width: '48px', borderRadius: '6px' }}></div>
+                            ) : (
+                                <div style={{ fontSize: '28px', fontWeight: 800, color: stat.color, lineHeight: 1.2 }}>{stat.value}</div>
+                            )}
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</div>
+                        </div>
                     </div>
-                    <div>
-                        <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-orange)' }}>{stats.pending}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Pending Actions</div>
-                    </div>
-                </div>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(102, 187, 106, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-green)', flexShrink: 0 }}>
-                        <CheckCircle size={24} />
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-green)' }}>{stats.approved}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Approved</div>
-                    </div>
-                </div>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(239, 83, 80, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)', flexShrink: 0 }}>
-                        <XCircle size={24} />
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-red)' }}>{stats.rejected}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Rejected</div>
-                    </div>
-                </div>
-                <div className="stat-card" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '22px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div className="stat-icon" style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(171, 71, 188, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-purple)', flexShrink: 0 }}>
-                        <Users size={24} />
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--accent-purple)' }}>{stats.totalUsers}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Registered Users</div>
-                    </div>
-                </div>
+                ))}
             </div>
 
             {/* Section Tabs */}
@@ -652,7 +644,11 @@ export const AdminControlPanel: React.FC = () => {
                         }}
                     >
                         {tab.label}
-                        {tab.count !== undefined && tab.count > 0 && <span className="badge-v2">{tab.count}</span>}
+                        {isLoading ? (
+                            <span className="skeleton" style={{ display: 'inline-flex', marginLeft: '8px', width: '24px', height: '16px', borderRadius: '10px', verticalAlign: 'middle' }}></span>
+                        ) : (
+                            tab.count !== undefined && tab.count > 0 && <span className="badge-v2">{tab.count}</span>
+                        )}
                         {activeTab === tab.id && (
                             <span style={{
                                 position: 'absolute', bottom: '-2px', left: 0, right: 0,
@@ -669,36 +665,48 @@ export const AdminControlPanel: React.FC = () => {
                 {/* Sub Filters for pending review — by type */}
                 {activeTab === 'pending' && (
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                        <button onClick={() => setPendingTypeFilter('all')} className={`sub-filter ${pendingTypeFilter === 'all' ? 'active' : ''}`}>All ({pendingRegs.length + challenges.filter(c => resolveChallengeStatus(c) === 'Pending').length + ideas.filter(i => resolveIdeaStatus(i) === 'Pending').length})</button>
-                        <button onClick={() => setPendingTypeFilter('registration')} className={`sub-filter ${pendingTypeFilter === 'registration' ? 'active' : ''}`}><User size={14} /> Registrations ({pendingRegs.length})</button>
-                        <button onClick={() => setPendingTypeFilter('challenge')} className={`sub-filter ${pendingTypeFilter === 'challenge' ? 'active' : ''}`}><Flag size={14} /> Challenges ({challenges.filter(c => resolveChallengeStatus(c) === 'Pending').length})</button>
-                        <button onClick={() => setPendingTypeFilter('idea')} className={`sub-filter ${pendingTypeFilter === 'idea' ? 'active' : ''}`}><Lightbulb size={14} /> Ideas ({ideas.filter(i => resolveIdeaStatus(i) === 'Pending').length})</button>
+                        <button onClick={() => setPendingTypeFilter('all')} className={`sub-filter ${pendingTypeFilter === 'all' ? 'active' : ''}`}>All ({isLoading ? <CountSkeleton /> : pendingRegs.length + challenges.filter(c => resolveChallengeStatus(c) === 'Pending').length + ideas.filter(i => resolveIdeaStatus(i) === 'Pending').length})</button>
+                        <button onClick={() => setPendingTypeFilter('registration')} className={`sub-filter ${pendingTypeFilter === 'registration' ? 'active' : ''}`}><User size={14} /> Registrations ({isLoading ? <CountSkeleton /> : pendingRegs.length})</button>
+                        <button onClick={() => setPendingTypeFilter('challenge')} className={`sub-filter ${pendingTypeFilter === 'challenge' ? 'active' : ''}`}><Flag size={14} /> Challenges ({isLoading ? <CountSkeleton /> : challenges.filter(c => resolveChallengeStatus(c) === 'Pending').length})</button>
+                        <button onClick={() => setPendingTypeFilter('idea')} className={`sub-filter ${pendingTypeFilter === 'idea' ? 'active' : ''}`}><Lightbulb size={14} /> Ideas ({isLoading ? <CountSkeleton /> : ideas.filter(i => resolveIdeaStatus(i) === 'Pending').length})</button>
                     </div>
                 )}
 
                 {/* Sub Filters for registrations / challenges / ideas */}
                 {(activeTab === 'registrations' || activeTab === 'challenges' || activeTab === 'ideas') && (
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                        <button onClick={() => setSubFilter('all')} className={`sub-filter ${subFilter === 'all' ? 'active' : ''}`}>All ({subCounts.all})</button>
-                        <button onClick={() => setSubFilter('pending')} className={`sub-filter ${subFilter === 'pending' ? 'active' : ''}`}><Clock size={14} /> Pending ({subCounts.pending})</button>
-                        <button onClick={() => setSubFilter('approved')} className={`sub-filter ${subFilter === 'approved' ? 'active' : ''}`}><CheckCircle size={14} /> Approved ({subCounts.approved})</button>
-                        <button onClick={() => setSubFilter('rejected')} className={`sub-filter ${subFilter === 'rejected' ? 'active' : ''}`}><XCircle size={14} /> Rejected ({subCounts.rejected})</button>
+                        <button onClick={() => setSubFilter('all')} className={`sub-filter ${subFilter === 'all' ? 'active' : ''}`}>All ({isLoading ? <CountSkeleton /> : subCounts.all})</button>
+                        <button onClick={() => setSubFilter('pending')} className={`sub-filter ${subFilter === 'pending' ? 'active' : ''}`}><Clock size={14} /> Pending ({isLoading ? <CountSkeleton /> : subCounts.pending})</button>
+                        <button onClick={() => setSubFilter('approved')} className={`sub-filter ${subFilter === 'approved' ? 'active' : ''}`}><CheckCircle size={14} /> Approved ({isLoading ? <CountSkeleton /> : subCounts.approved})</button>
+                        <button onClick={() => setSubFilter('rejected')} className={`sub-filter ${subFilter === 'rejected' ? 'active' : ''}`}><XCircle size={14} /> Rejected ({isLoading ? <CountSkeleton /> : subCounts.rejected})</button>
                     </div>
                 )}
 
                 {/* Sub Filters for history — by type */}
                 {activeTab === 'history' && (
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                        <button onClick={() => setHistoryFilter('all')} className={`sub-filter ${historyFilter === 'all' ? 'active' : ''}`}>All ({historyCounts.all})</button>
-                        <button onClick={() => setHistoryFilter('registration')} className={`sub-filter ${historyFilter === 'registration' ? 'active' : ''}`}><User size={14} /> Registrations ({historyCounts.registration})</button>
-                        <button onClick={() => setHistoryFilter('challenge')} className={`sub-filter ${historyFilter === 'challenge' ? 'active' : ''}`}><Flag size={14} /> Challenges ({historyCounts.challenge})</button>
-                        <button onClick={() => setHistoryFilter('idea')} className={`sub-filter ${historyFilter === 'idea' ? 'active' : ''}`}><Lightbulb size={14} /> Ideas ({historyCounts.idea})</button>
+                        <button onClick={() => setHistoryFilter('all')} className={`sub-filter ${historyFilter === 'all' ? 'active' : ''}`}>All ({isLoading ? <CountSkeleton /> : historyCounts.all})</button>
+                        <button onClick={() => setHistoryFilter('registration')} className={`sub-filter ${historyFilter === 'registration' ? 'active' : ''}`}><User size={14} /> Registrations ({isLoading ? <CountSkeleton /> : historyCounts.registration})</button>
+                        <button onClick={() => setHistoryFilter('challenge')} className={`sub-filter ${historyFilter === 'challenge' ? 'active' : ''}`}><Flag size={14} /> Challenges ({isLoading ? <CountSkeleton /> : historyCounts.challenge})</button>
+                        <button onClick={() => setHistoryFilter('idea')} className={`sub-filter ${historyFilter === 'idea' ? 'active' : ''}`}><Lightbulb size={14} /> Ideas ({isLoading ? <CountSkeleton /> : historyCounts.idea})</button>
                     </div>
                 )}
 
                 {/* Action Cards List */}
                 <div key={activeTab + '-' + subFilter + '-' + historyFilter + '-' + pendingTypeFilter} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {filteredItems.length > 0 ? (
+                    {isLoading ? (
+                        [...Array(5)].map((_, i) => (
+                            <div key={i} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+                                <div className="skeleton" style={{ width: '48px', height: '48px', borderRadius: '50%', flexShrink: 0 }}></div>
+                                <div style={{ flex: 1 }}>
+                                    <div className="skeleton" style={{ height: '18px', width: '40%', marginBottom: '10px', borderRadius: '4px' }}></div>
+                                    <div className="skeleton" style={{ height: '14px', width: '60%', marginBottom: '6px', borderRadius: '4px' }}></div>
+                                    <div className="skeleton" style={{ height: '12px', width: '20%', borderRadius: '4px' }}></div>
+                                </div>
+                                <div className="skeleton" style={{ width: '80px', height: '24px', borderRadius: '20px' }}></div>
+                            </div>
+                        ))
+                    ) : filteredItems.length > 0 ? (
                         activeTab === 'history'
                             ? (filteredItems as AdminLog[]).map(log => renderHistoryCard(log))
                             : filteredItems.map((item: any, idx: number) => renderItemCard(item, idx))
@@ -724,18 +732,18 @@ export const AdminControlPanel: React.FC = () => {
 
                         <div style={{ marginBottom: '4px' }}>
                             <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                                Comment <span style={{ color: 'var(--accent-red, #ef5350)' }}>*</span>
+                                Comment {modalConfig.action === 'reject' && <span style={{ color: 'var(--accent-red, #ef5350)' }}>*</span>}
                             </label>
                         </div>
                         <textarea
-                            placeholder="Add a note or reason (required)..."
+                            placeholder={modalConfig.action === 'approve' ? 'Add an optional note...' : 'Add a reason for rejection (required)...'}
                             value={modalConfig.reason}
                             onChange={(e) => setModalConfig(prev => ({ ...prev, reason: e.target.value }))}
-                            style={{ borderColor: !modalConfig.reason.trim() ? 'var(--accent-red, #ef5350)' : undefined }}
+                            style={{ borderColor: modalConfig.action === 'reject' && !modalConfig.reason.trim() ? 'var(--accent-red, #ef5350)' : undefined }}
                         />
-                        {!modalConfig.reason.trim() && (
+                        {modalConfig.action === 'reject' && !modalConfig.reason.trim() && (
                             <p style={{ fontSize: '12px', color: 'var(--accent-red, #ef5350)', margin: '4px 0 0' }}>
-                                A comment is required to proceed.
+                                A reason is required to reject.
                             </p>
                         )}
 
@@ -749,8 +757,8 @@ export const AdminControlPanel: React.FC = () => {
                             <button
                                 className={`btn-confirm-${modalConfig.action}`}
                                 onClick={handleConfirmAction}
-                                disabled={!modalConfig.reason.trim()}
-                                style={{ opacity: !modalConfig.reason.trim() ? 0.5 : 1, cursor: !modalConfig.reason.trim() ? 'not-allowed' : 'pointer' }}
+                                disabled={modalConfig.action === 'reject' && !modalConfig.reason.trim()}
+                                style={{ opacity: modalConfig.action === 'reject' && !modalConfig.reason.trim() ? 0.5 : 1, cursor: modalConfig.action === 'reject' && !modalConfig.reason.trim() ? 'not-allowed' : 'pointer' }}
                             >
                                 {modalConfig.action === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
                             </button>

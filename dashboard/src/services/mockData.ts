@@ -287,7 +287,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Ravi Patel submitted "Optimize Cloud Infrastructure Costs"',
         time: '5 minutes ago',
         unread: true,
-        link: '/challenges/CH-001'
+        link: '/challenges/ch-001'
     },
     {
         id: '2',
@@ -296,7 +296,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Meera Singh proposed "Gamified Onboarding Flow" on CH-001',
         time: '22 minutes ago',
         unread: true,
-        link: '/challenges/CH-001/ideas/ID-0003'
+        link: '/challenges/ch-001/ideas/id-0003'
     },
     {
         id: '3',
@@ -305,7 +305,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Siddharth Banerjee commented on "AI-powered document verification"',
         time: '1 hour ago',
         unread: true,
-        link: '/challenges/CH-001/ideas/ID-0003'
+        link: '/challenges/ch-001/ideas/id-0003'
     },
     {
         id: '4',
@@ -314,7 +314,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: '"Reduce Customer Churn" moved to Ideation stage',
         time: '3 hours ago',
         unread: true,
-        link: '/challenges/CH-001'
+        link: '/challenges/ch-001'
     },
     {
         id: '5',
@@ -323,7 +323,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Ananya Basu proposed "Personalized Tutorial System" on CH-001',
         time: '5 hours ago',
         unread: true,
-        link: '/challenges/CH-001/ideas/ID-0003'
+        link: '/challenges/ch-001/ideas/id-0003'
     },
     {
         id: '6',
@@ -332,7 +332,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Priya Desai submitted "Optimize Warehouse Slot Allocation"',
         time: 'Yesterday',
         unread: false,
-        link: '/challenges/CH-001'
+        link: '/challenges/ch-001'
     },
     {
         id: '7',
@@ -341,7 +341,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Rohan Patel commented on "Customer Health Dashboard"',
         time: '2 days ago',
         unread: false,
-        link: '/challenges/CH-001/ideas/ID-0003'
+        link: '/challenges/ch-001/ideas/id-0003'
     },
     {
         id: '8',
@@ -350,7 +350,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: '"Voice-Driven Order Entry" moved to Ideation',
         time: '3 days ago',
         unread: false,
-        link: '/challenges/CH-001'
+        link: '/challenges/ch-001'
     },
     {
         id: '9',
@@ -359,7 +359,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Ananya Basu voted for "Unified Customer 360 Platform"',
         time: 'Just now',
         unread: true,
-        link: '/challenges/CH-001'
+        link: '/challenges/ch-001'
     },
     {
         id: '10',
@@ -368,7 +368,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
         text: 'Siddharth Banerjee liked "Personalized Tutorial System"',
         time: '10 minutes ago',
         unread: true,
-        link: '/challenges/CH-001/ideas/ID-0003'
+        link: '/challenges/ch-001/ideas/id-0003'
     }
 ];
 

@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
         { name: 'Challenge Submitted', challenges: 4, ideas: 12, color: 'var(--accent-red)' },
         { name: 'Ideation & Evaluation', challenges: 2, ideas: 8, color: 'var(--accent-yellow)' },
         { name: 'POC & Pilot', challenges: 3, ideas: 5, color: 'var(--accent-blue)' },
-        { name: 'Scaled & Deployed', challenges: 1, ideas: 2, color: 'var(--accent-gold)' },
+        { name: 'Scaled & Deployed', challenges: 1, ideas: 2, color: 'var(--accent-green)' },
         { name: 'Parking Lot', challenges: 1, ideas: 3, color: 'var(--accent-grey)' }
     ];
 
@@ -190,15 +190,15 @@ export const Home: React.FC = () => {
                             </div>
                         </>
                     ) : (
-                        <div style={{ width: '100%', height: '260px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                        <div style={{ width: '100%', height: '320px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
                                         data={PIPELINE_DATA}
                                         cx="50%"
                                         cy="50%"
-                                        innerRadius={75}
-                                        outerRadius={105}
+                                        innerRadius={110}
+                                        outerRadius={130}
                                         paddingAngle={6}
                                         cornerRadius={8}
                                         stroke="none"

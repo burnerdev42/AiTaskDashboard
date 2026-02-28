@@ -26,11 +26,11 @@ export const IdeaDetail: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     // Get the parent challenge title for breadcrumb
-    const parentChallenge = storage.getChallengeDetails().find(c => c.id === challengeId);
+    const parentChallenge = storage.getChallengeDetails().find(c => c.id.toLowerCase() === challengeId?.toLowerCase());
 
     useEffect(() => {
         const ideas = storage.getIdeaDetails();
-        const found = ideas.find(i => i.id === ideaId) || null;
+        const found = ideas.find(i => i.id.toLowerCase() === ideaId?.toLowerCase()) || null;
 
         // Simulate API loading
         const timer = setTimeout(() => {
@@ -103,7 +103,7 @@ export const IdeaDetail: React.FC = () => {
                     {challengeId && (
                         <>
                             <span className="sep">/</span>
-                            <a onClick={() => navigate(`/challenges/${challengeId}`)}>{challengeId}</a>
+                            <a onClick={() => navigate(`/challenges/${challengeId?.toLowerCase()}`)}>{challengeId}</a>
                         </>
                     )}
                 </div>
@@ -115,7 +115,7 @@ export const IdeaDetail: React.FC = () => {
                     <p style={{ color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '400px', marginInline: 'auto' }}>The idea you are looking for does not exist or has been removed. It may have been deleted along with its parent challenge.</p>
                     <button
                         className="btn btn-primary"
-                        onClick={() => challengeId ? navigate(`/challenges/${challengeId}`) : navigate('/challenges')}
+                        onClick={() => challengeId ? navigate(`/challenges/${challengeId?.toLowerCase()}`) : navigate('/challenges')}
                         style={{
                             minWidth: '200px',
                             height: '42px',
@@ -204,7 +204,7 @@ export const IdeaDetail: React.FC = () => {
             try {
                 storage.deleteIdea(challengeId, idea.id);
                 showToast('Idea deleted successfully');
-                navigate(`/challenges/${challengeId}`);
+                navigate(`/challenges/${challengeId?.toLowerCase()}`);
             } catch {
                 showToast('Failed to delete idea. Please try again.', 'error');
             }
@@ -220,12 +220,78 @@ export const IdeaDetail: React.FC = () => {
                 <span className="sep">/</span>
                 <a onClick={() => navigate('/challenges')}>Challenges</a>
                 <span className="sep">/</span>
-                <a onClick={() => navigate(`/challenges/${challengeId}`)}>
+                <a onClick={() => navigate(`/challenges/${challengeId?.toLowerCase()}`)}>
                     {challengeId}
                 </a>
                 <span className="sep">/</span>
                 <span className="current">{idea.id}</span>
             </div>
+
+            {/* Pending Approval Banner */}
+            {(idea.approvalStatus === 'Pending' || (!idea.approvalStatus && (idea.status === 'Pending' || idea.status === 'In Review'))) && (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    background: 'rgba(255,238,88,.08)',
+                    border: '1px solid rgba(255,238,88,.25)',
+                    borderRadius: '12px',
+                    padding: '14px 20px',
+                    marginBottom: '16px'
+                }}>
+                    <div style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        background: 'rgba(255,238,88,.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                    }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-yellow)', marginBottom: '2px' }}>Pending Admin Approval</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>This idea is waiting for an admin to review and approve it. Some features are limited until then.</div>
+                    </div>
+                </div>
+            )}
+
+            {(idea.approvalStatus === 'Rejected' || (!idea.approvalStatus && idea.status === 'Declined')) && (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    background: 'rgba(239,83,80,.08)',
+                    border: '1px solid rgba(239,83,80,.25)',
+                    borderRadius: '12px',
+                    padding: '14px 20px',
+                    marginBottom: '16px'
+                }}>
+                    <div style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        background: 'rgba(239,83,80,.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                    }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-red)', marginBottom: '2px' }}>Idea Declined</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>This idea has been reviewed and declined by an admin.</div>
+                        {idea.rejectionReason && (
+                            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '6px', padding: '8px 12px', background: 'rgba(239,83,80,.06)', borderRadius: '8px', borderLeft: '3px solid var(--accent-red)' }}>
+                                <strong>Reason:</strong> {idea.rejectionReason}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {/* Page Header */}
             <div className="detail-page-header">
@@ -246,14 +312,6 @@ export const IdeaDetail: React.FC = () => {
                                 <p className="detail-page-subtitle">{idea.description}</p>
                             </>
                         )}
-                        <div className="header-badges">
-                            <span
-                                className="status-badge"
-                                data-status={idea.status.toLowerCase()}
-                            >
-                                {idea.status}
-                            </span>
-                        </div>
                     </div>
                     <div className="detail-page-header-right">
                         {isAuthenticated && idea.owner.name === 'Current User' && (
@@ -320,61 +378,59 @@ export const IdeaDetail: React.FC = () => {
                     </div>
 
                     {/* Activity & Comments */}
-                    <div className="detail-content-section" style={{ marginTop: '24px' }}>
-                        <div className="detail-section-header">
-                            <div className="detail-section-title">
-                                <span className="icon" style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg></span>
-                                <span>Comments</span>
+                    {idea.approvalStatus !== 'Pending' && idea.approvalStatus !== 'Rejected' && idea.status !== 'Declined' && idea.status !== 'In Review' && idea.status !== 'Pending' && (
+                        <div className="detail-content-section" style={{ marginTop: '24px' }}>
+                            <div className="detail-section-header">
+                                <div className="detail-section-title">
+                                    <span className="icon" style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg></span>
+                                    <span>Comments</span>
+                                </div>
+                            </div>
+
+                            <div className="detail-activity-feed">
+                                {idea.activity?.map((act, i) => (
+                                    <div key={i} className="detail-activity-item">
+                                        <div className="detail-activity-avatar" style={{ background: act.avatarColor, color: 'white', cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
+                                        <div className="detail-activity-content">
+                                            <div className="detail-activity-header">
+                                                <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
+                                                <span className="detail-activity-time">{act.time}</span>
+                                            </div>
+                                            <div className="detail-activity-text">{act.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="detail-comment-box">
+                                <textarea
+                                    className="detail-comment-input"
+                                    placeholder="Share your thoughts or feedback..."
+                                    value={comment}
+                                    onChange={e => setComment(e.target.value)}
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            handlePostComment();
+                                        }
+                                    }}
+                                />
+                                <button
+                                    className="btn-save btn-sm"
+                                    style={{
+                                        alignSelf: 'flex-start',
+                                        opacity: !comment.trim() ? 0.5 : 1,
+                                        cursor: !comment.trim() ? 'not-allowed' : 'pointer'
+                                    }}
+                                    onClick={handlePostComment}
+                                    disabled={!comment.trim()}
+                                >
+                                    Post Comment
+                                </button>
                             </div>
                         </div>
-
-                        <div className="detail-activity-feed">
-                            {idea.activity?.map((act, i) => (
-                                <div key={i} className="detail-activity-item">
-                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, color: 'white', cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
-                                    <div className="detail-activity-content">
-                                        <div className="detail-activity-header">
-                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
-                                            <span className="detail-activity-time">{act.time}</span>
-                                        </div>
-                                        <div className="detail-activity-text">{act.text}</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="detail-comment-box">
-                            <textarea
-                                className="detail-comment-input"
-                                placeholder="Share your thoughts or feedback..."
-                                value={comment}
-                                onChange={e => setComment(e.target.value)}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                        e.preventDefault();
-                                        handlePostComment();
-                                    }
-                                }}
-                            />
-                            <button
-                                className="btn-save btn-sm"
-                                style={{
-                                    alignSelf: 'flex-start',
-                                    opacity: !comment.trim() ? 0.5 : 1,
-                                    cursor: !comment.trim() ? 'not-allowed' : 'pointer'
-                                }}
-                                onClick={handlePostComment}
-                                disabled={!comment.trim()}
-                            >
-                                Post Comment
-                            </button>
-                        </div>
-
-                    </div>
+                    )}
                 </div>
-
-
-
                 {/* Right Sidebar */}
                 <aside>
                     {/* Linked Challenge */}
@@ -387,7 +443,7 @@ export const IdeaDetail: React.FC = () => {
                         </div>
                         <a
                             className="detail-linked-challenge"
-                            onClick={() => navigate(`/challenges/${challengeId}`)}
+                            onClick={() => navigate(`/challenges/${challengeId?.toLowerCase()}`)}
                         >
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
                                 <div className="challenge-id-text">{challengeId}</div>
@@ -431,62 +487,64 @@ export const IdeaDetail: React.FC = () => {
 
 
                     {/* Quick Actions */}
-                    <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                            <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                            </span>
-                            Quick Actions
-                        </div>
-                        <div className="detail-quick-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <button
-                                className={`btn btn-secondary btn-sm ${hasLiked ? 'animate-pop' : ''}`}
-                                onClick={handleLike}
-                                key={`like-${hasLiked}`}
-                                style={{
-                                    width: '100%',
-                                    color: hasLiked ? 'var(--accent-teal)' : 'inherit',
-                                    borderColor: hasLiked ? 'var(--accent-teal)' : 'var(--border)'
-                                }}
-                            >
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={hasLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    {idea.approvalStatus !== 'Pending' && idea.approvalStatus !== 'Rejected' && idea.status !== 'Declined' && idea.status !== 'In Review' && idea.status !== 'Pending' && (
+                        <div className="detail-sidebar-section">
+                            <div className="detail-sidebar-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                                 </span>
-                                {hasLiked ? 'Liked' : 'Like Idea'}
-                            </button>
-                            <button
-                                className={`btn btn-secondary btn-sm ${isSubscribed ? 'animate-pop' : ''}`}
-                                onClick={handleSubscribe}
-                                key={`sub-${isSubscribed}`}
-                                style={{
-                                    width: '100%',
-                                    color: isSubscribed ? 'var(--accent-green)' : 'inherit',
-                                    borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)'
-                                }}
-                            >
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    {isSubscribed ? (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
-                                    ) : (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                    )}
-                                </span>
-                                {isSubscribed ? 'Subscribed' : 'Subscribe'}
-                            </button>
-                            {isAuthenticated && idea.owner.name === 'Current User' && (
+                                Quick Actions
+                            </div>
+                            <div className="detail-quick-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 <button
-                                    className="btn btn-danger btn-sm animate-pop"
-                                    onClick={handleDelete}
-                                    style={{ width: '100%' }}
+                                    className={`btn btn-secondary btn-sm ${hasLiked ? 'animate-pop' : ''}`}
+                                    onClick={handleLike}
+                                    key={`like-${hasLiked}`}
+                                    style={{
+                                        width: '100%',
+                                        color: hasLiked ? 'var(--accent-teal)' : 'inherit',
+                                        borderColor: hasLiked ? 'var(--accent-teal)' : 'var(--border)'
+                                    }}
                                 >
                                     <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill={hasLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                                     </span>
-                                    Delete Idea
+                                    {hasLiked ? 'Liked' : 'Like Idea'}
                                 </button>
-                            )}
+                                <button
+                                    className={`btn btn-secondary btn-sm ${isSubscribed ? 'animate-pop' : ''}`}
+                                    onClick={handleSubscribe}
+                                    key={`sub-${isSubscribed}`}
+                                    style={{
+                                        width: '100%',
+                                        color: isSubscribed ? 'var(--accent-green)' : 'inherit',
+                                        borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)'
+                                    }}
+                                >
+                                    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                        {isSubscribed ? (
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
+                                        ) : (
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                        )}
+                                    </span>
+                                    {isSubscribed ? 'Subscribed' : 'Subscribe'}
+                                </button>
+                                {isAuthenticated && idea.owner.name === 'Current User' && (
+                                    <button
+                                        className="btn btn-danger btn-sm animate-pop"
+                                        onClick={handleDelete}
+                                        style={{ width: '100%' }}
+                                    >
+                                        <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        </span>
+                                        Delete Idea
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </aside>
             </div>
 

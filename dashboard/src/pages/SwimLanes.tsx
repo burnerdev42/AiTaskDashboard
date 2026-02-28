@@ -57,7 +57,7 @@ export const SwimLanes: React.FC = () => {
             { id: 'Challenge Submitted', title: 'Challenge<br/>Submitted', max: 6, color: 'var(--accent-red)', laneClass: 'challenge', widthLabel: 'New problems & opportunities', addLabel: 'Add Challenge', footerLabel: 'Challenges submitted', badgeBg: 'rgba(239,83,80,.15)' },
             { id: 'Ideation & Evaluation', title: 'Ideation &<br/>Evaluation', max: 15, color: 'var(--accent-yellow)', laneClass: 'ideation-evaluation', widthLabel: 'Brainstorm & feasibility', addLabel: 'Add Idea/Evaluation', footerLabel: 'To be Evaluated', badgeBg: 'rgba(255,238,88,.12)' },
             { id: 'POC & Pilot', title: 'POC &<br/>Pilot', max: 8, color: 'var(--accent-blue)', laneClass: 'poc-pilot', widthLabel: 'Build & validate prototypes', addLabel: 'Add POC/Pilot', footerLabel: 'Prototypes running', badgeBg: 'rgba(240,184,112,.15)' },
-            { id: 'Scaled & Deployed', title: 'Scaled &<br/>Deployed', max: 8, color: 'var(--accent-gold)', laneClass: 'deployed', widthLabel: 'Live in production', addLabel: 'Add Deployment', footerLabel: 'In production', badgeBg: 'rgba(255,213,79,.12)' },
+            { id: 'Scaled & Deployed', title: 'Scaled &<br/>Deployed', max: 8, color: 'var(--accent-green)', laneClass: 'deployed', widthLabel: 'Live in production', addLabel: 'Add Deployment', footerLabel: 'In production', badgeBg: 'rgba(102,187,106,.15)' },
             { id: 'Parking Lot', title: 'Parking<br/>Lot', max: 8, color: 'var(--accent-grey)', laneClass: 'parking', widthLabel: 'Paused or deferred items', addLabel: 'Park Item', footerLabel: 'Items parked', badgeBg: 'rgba(120,144,156,.15)' },
         ];
 

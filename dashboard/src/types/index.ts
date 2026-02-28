@@ -41,6 +41,7 @@ export interface Challenge {
     team?: { name: string; avatar: string; avatarColor: string }[];
     impact?: 'Critical' | 'High' | 'Medium' | 'Low';
     approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
+    rejectionReason?: string;
 }
 
 export interface Notification {
@@ -108,6 +109,7 @@ export interface Idea {
     lastUpdated?: string;
     activity?: ActivityItem[];
     approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
+    rejectionReason?: string;
 }
 
 export interface AdminLog {

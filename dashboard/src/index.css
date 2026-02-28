@@ -7171,7 +7171,6 @@ svg.icon,
 }
 
 .radar-svg {
-  max-height: 180px;
   align-self: center;
   filter: drop-shadow(0 0 15px rgba(255, 213, 79, 0.15));
 }
@@ -7205,6 +7204,7 @@ svg.icon,
 }
 
 @media (max-width: 1200px) {
+
   .metrics-charts-grid,
   .metrics-charts-grid.bottom-row {
     grid-template-columns: 1fr;
@@ -7227,8 +7227,9 @@ svg.icon,
 }
 
 .notifications-page .page-header h1 {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
+  letter-spacing: -0.5px;
   margin-bottom: 8px;
   color: #ffffff;
 }

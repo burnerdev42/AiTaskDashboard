@@ -203,7 +203,7 @@ export const Notifications: React.FC = () => {
         <div className="container notifications-page" >
             <div className="page-header">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h1>All Notifications</h1>
+                    <h1 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.5px' }}>All Notifications</h1>
                     <button className="btn btn-secondary" onClick={handleMarkAllRead}>Mark all read</button>
                 </div>
                 <p>Stay updated on challenges, ideas, comments, and status changes across the innovation pipeline.</p>

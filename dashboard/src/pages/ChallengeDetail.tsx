@@ -21,7 +21,7 @@ const STAGE_BRANDING: Record<string, { color: string, bg: string, icon: React.Re
         icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
     },
     'Scaled & Deployed': {
-        color: 'var(--accent-gold)', bg: 'rgba(255,213,79,.12)',
+        color: 'var(--accent-green)', bg: 'rgba(102,187,106,.15)',
         icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
     },
     'Parking Lot': {
@@ -73,15 +73,16 @@ export const ChallengeDetail: React.FC = () => {
     // Quick Action States
     const [hasVoted, setHasVoted] = useState(false);
     const [isSubscribed, setIsSubscribed] = useState(false);
+    const [ideaStatusFilter, setIdeaStatusFilter] = useState('Active');
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         const details = storage.getChallengeDetails();
-        let found = details.find(c => c.id === id);
+        let found = details.find(c => c.id.toLowerCase() === id?.toLowerCase());
 
         if (!found) {
             // If the challenge is not in the detailed mock array, try to find it in the basic challenges array
-            const basicChallenge = storage.getChallenges().find(c => c.id === id);
+            const basicChallenge = storage.getChallenges().find(c => c.id.toLowerCase() === id?.toLowerCase());
 
             if (basicChallenge) {
                 // Dynamically construct a ChallengeDetailData object
@@ -317,7 +318,11 @@ export const ChallengeDetail: React.FC = () => {
         const nextIdNumber = currentIdeas.length > 0
             ? Math.max(...currentIdeas.map(i => {
                 const parts = i.id.split('-');
-                return parts.length > 1 ? parseInt(parts[1]) : 0;
+                if (parts.length > 1) {
+                    const parsed = parseInt(parts[1].replace(/\D/g, ''), 10);
+                    return isNaN(parsed) ? 0 : parsed;
+                }
+                return 0;
             })) + 1
             : 1;
         const newId = `ID-${String(nextIdNumber).padStart(4, '0')}`;
@@ -341,7 +346,8 @@ export const ChallengeDetail: React.FC = () => {
             expectedImpact: 'TBD',
             submittedDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
             lastUpdated: 'Just now',
-            activity: []
+            activity: [],
+            approvalStatus: 'Pending'
         };
 
         try {
@@ -369,7 +375,7 @@ export const ChallengeDetail: React.FC = () => {
 
             setShowIdeaModal(false);
             resetIdeaForm();
-            showToast('Idea posted successfully');
+            showToast('Idea submitted — waiting for admin approval');
         } catch {
             showToast('Failed to submit idea. Please try again.', 'error');
         }
@@ -453,6 +459,72 @@ export const ChallengeDetail: React.FC = () => {
                 <span className="current">{challenge.id}</span>
             </div>
 
+            {/* Pending Approval Banner */}
+            {challenge.approvalStatus === 'Pending' && (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    background: 'rgba(255,238,88,.08)',
+                    border: '1px solid rgba(255,238,88,.25)',
+                    borderRadius: '12px',
+                    padding: '14px 20px',
+                    marginBottom: '16px'
+                }}>
+                    <div style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        background: 'rgba(255,238,88,.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                    }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-yellow)', marginBottom: '2px' }}>Pending Admin Approval</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>This challenge is waiting for an admin to review and approve it. Some features are limited until then.</div>
+                    </div>
+                </div>
+            )}
+
+            {challenge.approvalStatus === 'Rejected' && (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    background: 'rgba(239,83,80,.08)',
+                    border: '1px solid rgba(239,83,80,.25)',
+                    borderRadius: '12px',
+                    padding: '14px 20px',
+                    marginBottom: '16px'
+                }}>
+                    <div style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        background: 'rgba(239,83,80,.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                    }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-red)', marginBottom: '2px' }}>Challenge Declined</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>This challenge has been reviewed and declined by an admin.</div>
+                        {(challenge as any).rejectionReason && (
+                            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '6px', padding: '8px 12px', background: 'rgba(239,83,80,.06)', borderRadius: '8px', borderLeft: '3px solid var(--accent-red)' }}>
+                                <strong>Reason:</strong> {(challenge as any).rejectionReason}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {/* Page Header */}
             <div className="detail-page-header">
                 <div className="detail-page-header-top">
@@ -475,23 +547,34 @@ export const ChallengeDetail: React.FC = () => {
                             </>
                         )}
                     </div>
-                    {isAuthenticated && (challenge.owner.name === 'Current User' || user?.role === 'Admin') && (
-                        <div className="detail-page-header-right">
-                            {editMode ? (
-                                <>
-                                    <button className="btn-save btn-sm" onClick={toggleEdit}>Save</button>
-                                    <button className="btn-cancel btn-sm" onClick={cancelEdit}>Cancel</button>
-                                </>
-                            ) : (
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <button className="btn-secondary btn-sm" onClick={toggleEdit}>Edit</button>
-                                    {user?.role === 'Admin' && (
-                                        <button className="btn-secondary btn-sm" style={{ color: 'var(--accent-red)', borderColor: 'rgba(239, 83, 80, 0.2)' }} onClick={handleDelete}>Delete</button>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    )}
+                    <div className="detail-page-header-right" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        {!editMode && challenge.approvalStatus !== 'Pending' && challenge.approvalStatus !== 'Rejected' && (
+                            <button
+                                className="btn btn-primary"
+                                style={{ height: '38px', padding: '0 20px', fontSize: '13px' }}
+                                onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}
+                            >
+                                Post Idea
+                            </button>
+                        )}
+                        {isAuthenticated && (challenge.owner.name === 'Current User' || user?.role === 'Admin') && (
+                            <>
+                                {editMode ? (
+                                    <>
+                                        <button className="btn btn-primary" style={{ height: '38px', padding: '0 20px', fontSize: '13px' }} onClick={toggleEdit}>Save</button>
+                                        <button className="btn btn-secondary" style={{ height: '38px', padding: '0 20px', fontSize: '13px' }} onClick={cancelEdit}>Cancel</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button className="btn btn-secondary" style={{ height: '38px', padding: '0 20px', fontSize: '13px' }} onClick={toggleEdit}>Edit</button>
+                                        {user?.role === 'Admin' && (
+                                            <button className="btn btn-secondary" style={{ height: '38px', padding: '0 20px', fontSize: '13px', color: 'var(--accent-red)', borderColor: 'rgba(239, 83, 80, 0.2)' }} onClick={handleDelete}>Delete</button>
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
                 <div className="detail-meta-row">
                     <div className="detail-meta-item" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }} title="View Profile">
@@ -652,56 +735,58 @@ export const ChallengeDetail: React.FC = () => {
                     </div>
 
                     {/* Activity & Comments */}
-                    <div className="detail-content-section">
-                        <div className="detail-section-header">
-                            <div className="detail-section-title">
-                                <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg></span>
-                                <span>Comments</span>
+                    {challenge.approvalStatus !== 'Pending' && challenge.approvalStatus !== 'Rejected' && (
+                        <div className="detail-content-section">
+                            <div className="detail-section-header">
+                                <div className="detail-section-title">
+                                    <span className="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg></span>
+                                    <span>Comments</span>
+                                </div>
+                            </div>
+
+                            <div className="detail-activity-feed">
+                                {challenge.activity.map((act, i) => (
+                                    <div key={i} className="detail-activity-item">
+                                        <div className="detail-activity-avatar" style={{ background: act.avatarColor, cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
+                                        <div className="detail-activity-content">
+                                            <div className="detail-activity-header">
+                                                <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
+                                                <span className="detail-activity-time">{act.time}</span>
+                                            </div>
+                                            <div className="detail-activity-text">{act.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="detail-comment-box">
+                                <textarea
+                                    className="detail-comment-input"
+                                    placeholder="Add a comment..."
+                                    value={comment}
+                                    onChange={e => setComment(e.target.value)}
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            handlePostComment();
+                                        }
+                                    }}
+                                />
+                                <button
+                                    className="btn btn-primary"
+                                    style={{
+                                        alignSelf: 'flex-start',
+                                        opacity: !comment.trim() ? 0.5 : 1,
+                                        cursor: !comment.trim() ? 'not-allowed' : 'pointer'
+                                    }}
+                                    onClick={handlePostComment}
+                                    disabled={!comment.trim()}
+                                >
+                                    Post Comment
+                                </button>
                             </div>
                         </div>
-
-                        <div className="detail-activity-feed">
-                            {challenge.activity.map((act, i) => (
-                                <div key={i} className="detail-activity-item">
-                                    <div className="detail-activity-avatar" style={{ background: act.avatarColor, cursor: 'pointer' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`}>{act.avatar}</div>
-                                    <div className="detail-activity-content">
-                                        <div className="detail-activity-header">
-                                            <span className="detail-activity-author" style={{ cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/profile')} title={`View ${act.author}'s Profile`} onMouseOver={e => e.currentTarget.style.color = 'var(--accent-blue)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text)'}>{act.author}</span>
-                                            <span className="detail-activity-time">{act.time}</span>
-                                        </div>
-                                        <div className="detail-activity-text">{act.text}</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="detail-comment-box">
-                            <textarea
-                                className="detail-comment-input"
-                                placeholder="Add a comment..."
-                                value={comment}
-                                onChange={e => setComment(e.target.value)}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                        e.preventDefault();
-                                        handlePostComment();
-                                    }
-                                }}
-                            />
-                            <button
-                                className="btn btn-primary"
-                                style={{
-                                    alignSelf: 'flex-start',
-                                    opacity: !comment.trim() ? 0.5 : 1,
-                                    cursor: !comment.trim() ? 'not-allowed' : 'pointer'
-                                }}
-                                onClick={handlePostComment}
-                                disabled={!comment.trim()}
-                            >
-                                Post Comment
-                            </button>
-                        </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Right Sidebar */}
@@ -732,72 +817,133 @@ export const ChallengeDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Related Ideas */}
-                    <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title" style={{ justifyContent: 'space-between' }}>
+                    {/* Submitted Ideas — Highlighted Section */}
+                    <div className="detail-sidebar-section" style={{ background: 'linear-gradient(135deg, rgba(232,167,88,.08), rgba(240,184,112,.05))', border: '2px solid var(--accent-teal)' }}>
+                        <div className="detail-sidebar-title" style={{ justifyContent: 'space-between', color: 'var(--accent-teal)', fontSize: '14px' }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 11.5c.76.76 1.23 1.52 1.41 2.5Z"></path></svg>
                                 </span>
-                                <span>Solution Ideas</span>
+                                <span>Submitted Ideas</span>
                             </div>
-                            <button className="add-idea-btn" onClick={() => { if (!isAuthenticated) { navigate('/login', { state: { from: location } }); return; } setShowIdeaModal(true); }}>Add Idea</button>
+                            <span style={{ background: 'rgba(232,167,88,.2)', color: 'var(--accent-teal)', padding: '4px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 700 }}>{validIdeas.length}</span>
+                        </div>
+                        {/* Idea Filter Tabs */}
+                        <div style={{ display: 'flex', gap: '6px', marginBottom: '14px', flexWrap: 'wrap' }}>
+                            {[
+                                { id: 'All', dot: 'var(--accent-teal)', count: validIdeas.length },
+                                { id: 'Active', dot: 'var(--accent-green)', count: validIdeas.filter(i => i.status === 'Accepted' || i.status === 'In Review').length },
+                                { id: 'Pending', dot: 'var(--accent-yellow)', count: validIdeas.filter(i => i.status === 'Pending').length },
+                                { id: 'Declined', dot: 'var(--accent-red)', count: validIdeas.filter(i => i.status === 'Declined').length }
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setIdeaStatusFilter(tab.id)}
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        padding: '5px 12px',
+                                        borderRadius: '16px',
+                                        fontSize: '11px',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        border: '1px solid ' + (ideaStatusFilter === tab.id ? 'var(--accent-teal)' : 'var(--border)'),
+                                        background: ideaStatusFilter === tab.id ? 'rgba(232,167,88,.12)' : 'var(--bg-card)',
+                                        color: ideaStatusFilter === tab.id ? 'var(--accent-teal)' : 'var(--text-secondary)',
+                                        transition: 'all 0.2s',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px'
+                                    }}
+                                >
+                                    <span style={{ display: 'inline-flex', alignItems: 'center', color: tab.dot }}>
+                                        {tab.id === 'All' && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg>}
+                                        {tab.id === 'Active' && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>}
+                                        {tab.id === 'Pending' && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>}
+                                        {tab.id === 'Declined' && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>}
+                                    </span>
+                                    {tab.id}
+                                    <span style={{ background: 'rgba(255,255,255,.08)', padding: '1px 6px', borderRadius: '8px', fontSize: '10px' }}>{tab.count}</span>
+                                </button>
+                            ))}
                         </div>
                         <div className="detail-ideas-list">
-                            {validIdeas.filter(idea => ['Accepted', 'In Review', 'Pending'].includes(idea.status)).map(idea => {
-                                const isExiting = exitingIdeaIds.includes(idea.id);
-                                const isNew = newIdeaId === idea.id;
+                            {(() => {
+                                const filteredIdeas = validIdeas.filter(idea => {
+                                    if (ideaStatusFilter === 'Active') {
+                                        return idea.status === 'Accepted' || idea.status === 'In Review';
+                                    } else if (ideaStatusFilter === 'Pending') {
+                                        return idea.status === 'Pending';
+                                    } else if (ideaStatusFilter === 'Declined') {
+                                        return idea.status === 'Declined';
+                                    }
+                                    return true;
+                                });
 
-                                return (
-                                    <div
-                                        key={idea.id}
-                                        className={`detail-linked-challenge ${isExiting ? 'idea-exit-animate' : ''} ${isNew ? 'idea-entry-animate' : ''}`}
-                                        style={{ marginBottom: '8px', position: 'relative' }}
-                                    >
-                                        <div onClick={() => navigate(`/challenges/${challenge.id}/ideas/${idea.id}`)} style={{ cursor: 'pointer', width: '100%' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                    <div className="challenge-id-text">{idea.id}</div>
-                                                </div>
-                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                    <div style={{ fontSize: '11px', color: 'var(--accent-green)', fontWeight: '600', background: 'rgba(76, 175, 80, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
-                                                        {idea.appreciations} <span style={{ fontSize: '10px' }}>likes</span>
+                                if (filteredIdeas.length === 0) {
+                                    return (
+                                        <div style={{ textAlign: 'center', padding: '28px 16px', color: 'var(--text-muted)', fontSize: '13px' }}>
+                                            <div style={{ fontSize: '28px', marginBottom: '8px', opacity: 0.5 }}>💡</div>
+                                            <div>{ideaStatusFilter === 'All' ? 'No ideas submitted yet' : `No ${ideaStatusFilter.toLowerCase()} ideas for this challenge`}</div>
+                                        </div>
+                                    );
+                                }
+
+                                return filteredIdeas.map(idea => {
+                                    const isExiting = exitingIdeaIds.includes(idea.id);
+                                    const isNew = newIdeaId === idea.id;
+
+                                    return (
+                                        <div
+                                            key={idea.id}
+                                            className={`detail-linked-challenge ${isExiting ? 'idea-exit-animate' : ''} ${isNew ? 'idea-entry-animate' : ''}`}
+                                            style={{ marginBottom: '8px', position: 'relative' }}
+                                        >
+                                            <div onClick={() => navigate(`/challenges/${challenge.id?.toLowerCase()}/ideas/${idea.id?.toLowerCase()}`)} style={{ cursor: 'pointer', width: '100%' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '4px' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                        <div className="challenge-id-text">{idea.id}</div>
                                                     </div>
-                                                    {isAuthenticated && (idea.author === 'Current User' || user?.role === 'Admin') && (
-                                                        <button
-                                                            className="idea-delete-action-btn"
-                                                            title="Delete Idea"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                handleDeleteIdea(idea.id);
-                                                            }}
-                                                            style={{
-                                                                background: 'none',
-                                                                border: 'none',
-                                                                padding: '4px',
-                                                                cursor: 'pointer',
-                                                                color: 'var(--text-muted)',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                borderRadius: '4px',
-                                                                transition: 'all 0.2s ease'
-                                                            }}
-                                                            onMouseOver={e => e.currentTarget.style.color = 'var(--accent-red)'}
-                                                            onMouseOut={e => e.currentTarget.style.color = 'var(--text-muted)'}
-                                                        >
-                                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                                        </button>
-                                                    )}
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <div style={{ fontSize: '11px', color: 'var(--accent-green)', fontWeight: '600', background: 'rgba(76, 175, 80, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
+                                                            {idea.appreciations} <span style={{ fontSize: '10px' }}>likes</span>
+                                                        </div>
+                                                        {isAuthenticated && (idea.author === 'Current User' || user?.role === 'Admin') && (
+                                                            <button
+                                                                className="idea-delete-action-btn"
+                                                                title="Delete Idea"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleDeleteIdea(idea.id);
+                                                                }}
+                                                                style={{
+                                                                    background: 'none',
+                                                                    border: 'none',
+                                                                    padding: '4px',
+                                                                    cursor: 'pointer',
+                                                                    color: 'var(--text-muted)',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    borderRadius: '4px',
+                                                                    transition: 'all 0.2s ease'
+                                                                }}
+                                                                onMouseOver={e => e.currentTarget.style.color = 'var(--accent-red)'}
+                                                                onMouseOut={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                                                            >
+                                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div style={{ width: '100%' }}>
-                                                <div className="challenge-title-text" style={{ whiteSpace: 'normal', lineHeight: '1.4' }}>{idea.title}</div>
-                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>by {idea.author}</div>
+                                                <div style={{ width: '100%' }}>
+                                                    <div className="challenge-title-text" style={{ whiteSpace: 'normal', lineHeight: '1.4' }}>{idea.title}</div>
+                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>by {idea.author}</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
 
@@ -906,53 +1052,55 @@ export const ChallengeDetail: React.FC = () => {
                         </div>
                     </div>
                     {/* Actions */}
-                    <div className="detail-sidebar-section">
-                        <div className="detail-sidebar-title" style={{ justifyContent: 'flex-start' }}>
-                            <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                            </span>
-                            Quick Actions
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <button
-                                className={`btn btn-secondary ${hasVoted ? 'animate-pop' : ''}`}
-                                onClick={handleVote}
-                                key={`vote-${hasVoted}`}
-                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: hasVoted ? 'var(--accent-blue)' : 'inherit', borderColor: hasVoted ? 'var(--accent-blue)' : 'var(--border)' }}>
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    {hasVoted ? (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-                                    ) : (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-                                    )}
+                    {challenge.approvalStatus !== 'Pending' && challenge.approvalStatus !== 'Rejected' && (
+                        <div className="detail-sidebar-section">
+                            <div className="detail-sidebar-title" style={{ justifyContent: 'flex-start' }}>
+                                <span className="icon" style={{ display: 'inline-flex', alignItems: 'center', marginRight: '6px', color: 'var(--accent-teal)' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                                 </span>
-                                {hasVoted ? 'Voted' : 'Vote for This'}
-                            </button>
-                            <button
-                                className={`btn btn-secondary ${isSubscribed ? 'animate-pop' : ''}`}
-                                onClick={handleSubscribe}
-                                key={`sub-${isSubscribed}`}
-                                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: isSubscribed ? 'var(--accent-green)' : 'inherit', borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)' }}>
-                                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                                    {isSubscribed ? (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
-                                    ) : (
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                    )}
-                                </span>
-                                {isSubscribed ? 'Subscribed' : 'Subscribe'}
-                            </button>
-                            {isAuthenticated && challenge.owner.name === 'Current User' && (
+                                Quick Actions
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 <button
-                                    className="btn btn-danger animate-pop"
-                                    onClick={handleDelete}
-                                    style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></span>
-                                    Delete
+                                    className={`btn btn-secondary ${hasVoted ? 'animate-pop' : ''}`}
+                                    onClick={handleVote}
+                                    key={`vote-${hasVoted}`}
+                                    style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: hasVoted ? 'var(--accent-blue)' : 'inherit', borderColor: hasVoted ? 'var(--accent-blue)' : 'var(--border)' }}>
+                                    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                        {hasVoted ? (
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                                        ) : (
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                                        )}
+                                    </span>
+                                    {hasVoted ? 'Voted' : 'Vote for This'}
                                 </button>
-                            )}
+                                <button
+                                    className={`btn btn-secondary ${isSubscribed ? 'animate-pop' : ''}`}
+                                    onClick={handleSubscribe}
+                                    key={`sub-${isSubscribed}`}
+                                    style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px', color: isSubscribed ? 'var(--accent-green)' : 'inherit', borderColor: isSubscribed ? 'var(--accent-green)' : 'var(--border)' }}>
+                                    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                        {isSubscribed ? (
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M9 11l2 2 4-4"></path></svg>
+                                        ) : (
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                        )}
+                                    </span>
+                                    {isSubscribed ? 'Subscribed' : 'Subscribe'}
+                                </button>
+                                {isAuthenticated && challenge.owner.name === 'Current User' && (
+                                    <button
+                                        className="btn btn-danger animate-pop"
+                                        onClick={handleDelete}
+                                        style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span style={{ display: 'inline-flex', alignItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></span>
+                                        Delete
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </aside>
             </div>
 
@@ -1028,8 +1176,7 @@ export const ChallengeDetail: React.FC = () => {
                 onConfirm={confirmDelete}
                 title="Delete Challenge"
                 message="Are you sure you want to delete this challenge? This action cannot be undone and will remove it from all views."
-                confirmText="Delete Challenge"
             />
-        </div >
+        </div>
     );
 };

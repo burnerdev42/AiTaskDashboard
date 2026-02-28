@@ -65,7 +65,7 @@ export const storage = {
                 let challUpdated = false;
                 MOCK_CHALLENGES.forEach(mockCh => {
                     if (mockCh.approvalStatus) {
-                        const existing = existingChallenges.find(c => c.id === mockCh.id);
+                        const existing = existingChallenges.find(c => c.id.toLowerCase() === mockCh.id.toLowerCase());
                         if (existing && !existing.approvalStatus) {
                             existing.approvalStatus = mockCh.approvalStatus;
                             challUpdated = true;
@@ -120,7 +120,7 @@ export const storage = {
             const ideasList = existingIdeasJson ? JSON.parse(existingIdeasJson) : [];
             let ideasUpdated = false;
             MOCK_PENDING_IDEAS.forEach(mockIdea => {
-                const exists = ideasList.some((i: any) => i.id === mockIdea.id);
+                const exists = ideasList.some((i: any) => i.id.toLowerCase() === mockIdea.id.toLowerCase());
                 if (!exists) {
                     ideasList.push(mockIdea);
                     ideasUpdated = true;
@@ -137,7 +137,7 @@ export const storage = {
                 const existingLogs = JSON.parse(existingLogsJson);
                 let updated = false;
                 MOCK_ADMIN_LOGS.forEach(mockLog => {
-                    if (!existingLogs.find((l: any) => l.id === mockLog.id)) {
+                    if (!existingLogs.find((l: any) => l.id.toLowerCase() === mockLog.id.toLowerCase())) {
                         existingLogs.push(mockLog);
                         updated = true;
                     }
@@ -344,7 +344,7 @@ export const storage = {
 
     updateChallenge: (challenge: Challenge) => {
         const challenges = storage.getChallenges();
-        const index = challenges.findIndex(c => c.id === challenge.id);
+        const index = challenges.findIndex(c => c.id.toLowerCase() === challenge.id.toLowerCase());
         if (index !== -1) {
             challenges[index] = challenge;
             localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
@@ -353,7 +353,7 @@ export const storage = {
 
     updateChallengeDetail: (challengeDetail: ChallengeDetailData) => {
         const details = storage.getChallengeDetails();
-        const index = details.findIndex(d => d.id === challengeDetail.id);
+        const index = details.findIndex(d => d.id.toLowerCase() === challengeDetail.id.toLowerCase());
         if (index !== -1) {
             details[index] = challengeDetail;
             localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
@@ -362,7 +362,7 @@ export const storage = {
 
     updateIdea: (idea: Idea) => {
         const ideas = storage.getIdeaDetails();
-        const index = ideas.findIndex(i => i.id === idea.id);
+        const index = ideas.findIndex(i => i.id.toLowerCase() === idea.id.toLowerCase());
         if (index !== -1) {
             ideas[index] = idea;
             localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
@@ -371,7 +371,7 @@ export const storage = {
 
     updateSwimLaneCardStage: (cardId: string, newStage: string) => {
         const challenges = storage.getChallenges();
-        const index = challenges.findIndex(c => c.id === cardId);
+        const index = challenges.findIndex(c => c.id.toLowerCase() === cardId.toLowerCase());
         if (index !== -1) {
             challenges[index].stage = newStage as ChallengeStage;
             localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
@@ -452,7 +452,7 @@ export const storage = {
 
         // Cascade delete: remove all ideas linked to this challenge
         const details = storage.getChallengeDetails();
-        const challengeDetail = details.find(d => d.id === id);
+        const challengeDetail = details.find(d => d.id.toLowerCase() === id.toLowerCase());
         if (challengeDetail && challengeDetail.ideas && challengeDetail.ideas.length > 0) {
             const ideaIds = challengeDetail.ideas.map((i: any) => i.id);
             const allIdeas = storage.getIdeaDetails();
@@ -475,7 +475,7 @@ export const storage = {
         localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(updatedSwimlanes));
 
         const challengeDetails = storage.getChallengeDetails();
-        const challengeIndex = challengeDetails.findIndex(c => c.id === challengeId);
+        const challengeIndex = challengeDetails.findIndex(c => c.id.toLowerCase() === challengeId.toLowerCase());
         if (challengeIndex !== -1) {
             challengeDetails[challengeIndex].ideas = challengeDetails[challengeIndex].ideas.filter(
                 (i: any) => i.id !== ideaId
@@ -487,12 +487,12 @@ export const storage = {
     addIdea: (challengeId: string, idea: Idea) => {
         // Update Idea Details (for global idea list / detail view)
         const ideas = storage.getIdeaDetails();
-        ideas.push(idea);
+        ideas.push({ ...idea, approvalStatus: 'Pending' });
         localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
 
         // Update specific challenge's idea list
         const challengeDetails = storage.getChallengeDetails();
-        const challengeIndex = challengeDetails.findIndex(c => c.id === challengeId);
+        const challengeIndex = challengeDetails.findIndex(c => c.id.toLowerCase() === challengeId.toLowerCase());
 
         const summaryIdea = {
             id: idea.id,
@@ -513,7 +513,7 @@ export const storage = {
         } else {
             // Handle dynamically constructed challenges that aren't in detailed storage yet
             const basicChallenges = storage.getChallenges();
-            const basicIndex = basicChallenges.findIndex(c => c.id === challengeId);
+            const basicIndex = basicChallenges.findIndex(c => c.id.toLowerCase() === challengeId.toLowerCase());
             if (basicIndex !== -1) {
                 // If it's a basic challenge, we should probably promote it to a detailed one
                 // but for now let's just ensure we have it in detailed storage if we're adding ideas
@@ -544,25 +544,29 @@ export const storage = {
     },
 
     addChallenge: (challenge: ChallengeDetailData) => {
+        // Ensure new challenges are Pending by default
+        const newChallenge = { ...challenge, approvalStatus: 'Pending' as const };
+
         // 1. Update Detailed Data
         const details = storage.getChallengeDetails();
-        details.push(challenge);
+        details.push(newChallenge);
         localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
 
         // 2. Create and update basic challenge list
         const challenges = storage.getChallenges();
         const basicChallenge: Challenge = {
-            id: challenge.id,
-            title: challenge.title,
-            description: challenge.problemStatement.substring(0, 150) + '...',
-            stage: challenge.stage,
-            owner: challenge.owner,
-            accentColor: challenge.accentColor,
-            stats: challenge.stats,
-            summary: challenge.summary,
-            tags: challenge.challengeTags,
-            team: challenge.team,
-            impact: challenge.priority as any
+            id: newChallenge.id,
+            title: newChallenge.title,
+            description: newChallenge.problemStatement.substring(0, 150) + '...',
+            stage: newChallenge.stage,
+            owner: newChallenge.owner,
+            accentColor: newChallenge.accentColor,
+            stats: newChallenge.stats,
+            summary: newChallenge.summary,
+            tags: newChallenge.challengeTags,
+            team: newChallenge.team,
+            impact: newChallenge.priority as any,
+            approvalStatus: 'Pending'
         };
         challenges.push(basicChallenge);
         localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
@@ -570,15 +574,15 @@ export const storage = {
         // 3. Create and update swim lane card
         const swimlanes = storage.getSwimLanes();
         const swimlaneCard: SwimLaneCard = {
-            id: challenge.id,
-            title: challenge.title,
-            description: challenge.problemStatement.substring(0, 100) + '...',
-            owner: challenge.owner.name,
-            priority: challenge.priority as any,
-            stage: challenge.stage,
+            id: newChallenge.id,
+            title: newChallenge.title,
+            description: newChallenge.problemStatement.substring(0, 100) + '...',
+            owner: newChallenge.owner.name,
+            priority: newChallenge.priority as any,
+            stage: newChallenge.stage,
             type: 'standard',
             progress: 0,
-            value: challenge.estimatedImpact
+            value: newChallenge.estimatedImpact
         };
         swimlanes.push(swimlaneCard);
         localStorage.setItem(STORAGE_KEYS.SWIMLANES, JSON.stringify(swimlanes));
@@ -605,14 +609,14 @@ export const storage = {
 
     approveChallenge: (id: string, adminName: string) => {
         const challenges = storage.getChallenges();
-        const index = challenges.findIndex(c => c.id === id);
+        const index = challenges.findIndex(c => c.id.toLowerCase() === id.toLowerCase());
         if (index !== -1) {
             challenges[index].approvalStatus = 'Approved';
             localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
 
             // Also update detailed data if it exists
             const details = storage.getChallengeDetails();
-            const detailIndex = details.findIndex(d => d.id === id);
+            const detailIndex = details.findIndex(d => d.id.toLowerCase() === id.toLowerCase());
             if (detailIndex !== -1) {
                 details[detailIndex].approvalStatus = 'Approved';
                 localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
@@ -631,18 +635,20 @@ export const storage = {
         return false;
     },
 
-    rejectChallenge: (id: string, adminName: string) => {
+    rejectChallenge: (id: string, adminName: string, reason?: string) => {
         const challenges = storage.getChallenges();
-        const index = challenges.findIndex(c => c.id === id);
+        const index = challenges.findIndex(c => c.id.toLowerCase() === id.toLowerCase());
         if (index !== -1) {
             challenges[index].approvalStatus = 'Rejected';
+            if (reason) challenges[index].rejectionReason = reason;
             localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
 
             // Also update detailed data
             const details = storage.getChallengeDetails();
-            const detailIndex = details.findIndex(d => d.id === id);
+            const detailIndex = details.findIndex(d => d.id.toLowerCase() === id.toLowerCase());
             if (detailIndex !== -1) {
                 details[detailIndex].approvalStatus = 'Rejected';
+                if (reason) (details[detailIndex] as any).rejectionReason = reason;
                 localStorage.setItem(STORAGE_KEYS.CHALLENGE_DETAILS, JSON.stringify(details));
             }
 
@@ -651,7 +657,8 @@ export const storage = {
                 itemType: 'Challenge',
                 itemName: challenges[index].title,
                 adminName,
-                status: 'Rejected'
+                status: 'Rejected',
+                details: reason
             });
             notifyUpdate();
             return true;
@@ -661,7 +668,7 @@ export const storage = {
 
     approveIdea: (id: string, adminName: string) => {
         const ideas = storage.getIdeaDetails();
-        const index = ideas.findIndex(i => i.id === id);
+        const index = ideas.findIndex(i => i.id.toLowerCase() === id.toLowerCase());
         if (index !== -1) {
             ideas[index].approvalStatus = 'Approved';
             ideas[index].status = 'Accepted';
@@ -680,12 +687,13 @@ export const storage = {
         return false;
     },
 
-    rejectIdea: (id: string, adminName: string) => {
+    rejectIdea: (id: string, adminName: string, reason?: string) => {
         const ideas = storage.getIdeaDetails();
-        const index = ideas.findIndex(i => i.id === id);
+        const index = ideas.findIndex(i => i.id.toLowerCase() === id.toLowerCase());
         if (index !== -1) {
             ideas[index].approvalStatus = 'Rejected';
             ideas[index].status = 'Declined';
+            if (reason) ideas[index].rejectionReason = reason;
             localStorage.setItem(STORAGE_KEYS.IDEA_DETAILS, JSON.stringify(ideas));
 
             storage.addAdminLog({
@@ -693,7 +701,8 @@ export const storage = {
                 itemType: 'Idea',
                 itemName: ideas[index].title,
                 adminName,
-                status: 'Rejected'
+                status: 'Rejected',
+                details: reason
             });
             notifyUpdate();
             return true;
