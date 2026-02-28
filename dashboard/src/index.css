@@ -419,6 +419,97 @@ body {
   font-size: 15px;
   color: #0d0f1a;
   text-decoration: none;
+  cursor: pointer;
+}
+
+/* ── Avatar dropdown menu ──────────────── */
+.avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  border-radius: 50%;
+}
+
+.avatar-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  z-index: 300;
+  overflow: hidden;
+  animation: menuIn 0.15s ease;
+}
+
+.avatar-menu.open {
+  display: block;
+}
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avatar-menu .menu-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.avatar-menu .menu-header strong {
+  display: block;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.avatar-menu a,
+.avatar-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.avatar-menu a:hover,
+.avatar-menu button:hover {
+  background: rgba(232, 167, 88, 0.08);
+}
+
+.avatar-menu .menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+.avatar-menu .signout {
+  color: var(--accent-red);
+}
+
+.avatar-menu .signout:hover {
+  background: rgba(239, 83, 80, 0.08);
 }
 
 /* ── Notification Bell ──────────────────────── */
@@ -514,6 +605,30 @@ body {
   transition: all .2s;
 }
 
+.notif-card.action-needed {
+  border-left: 4px solid var(--accent-red);
+  background: rgba(244, 67, 54, 0.04);
+}
+
+.notif-badge.action-tag {
+  background: rgba(244, 67, 54, 0.12);
+  color: var(--accent-red);
+  border: 1px solid rgba(244, 67, 54, 0.25);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
 .mark-all-read:hover {
   background: rgba(232, 167, 88, .1);
 }
@@ -571,6 +686,11 @@ body {
 .notification-icon.challenge {
   background: rgba(255, 167, 38, .15);
   color: var(--accent-orange);
+}
+
+.notification-icon.registration {
+  background: rgba(171, 71, 188, 0.15);
+  color: var(--accent-purple);
 }
 
 .notification-icon.idea {
@@ -849,6 +969,25 @@ body {
   background: rgba(102, 187, 106, .12);
   color: var(--accent-green);
   border: 1px solid rgba(102, 187, 106, .25);
+}
+
+.challenge-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(232, 167, 88, 0.08);
+  color: var(--accent-teal);
+  border: 1px solid rgba(232, 167, 88, 0.2);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.idea-solution-card:hover .challenge-tag-pill {
+  border-color: rgba(232, 167, 88, 0.3);
+  background: rgba(232, 167, 88, 0.12);
 }
 
 .challenge-stage-badge {
@@ -3208,8 +3347,8 @@ body {
 }
 
 .detail-tags-list .detail-tag {
-  background: rgba(38, 198, 218, .08);
-  border-color: rgba(38, 198, 218, .2);
+  background: rgba(232, 167, 88, .08);
+  border-color: rgba(232, 167, 88, .2);
   color: var(--accent-teal);
 }
 
@@ -7032,7 +7171,6 @@ svg.icon,
 }
 
 .radar-svg {
-  max-height: 180px;
   align-self: center;
   filter: drop-shadow(0 0 15px rgba(255, 213, 79, 0.15));
 }
@@ -7066,7 +7204,9 @@ svg.icon,
 }
 
 @media (max-width: 1200px) {
-  .metrics-charts-grid {
+
+  .metrics-charts-grid,
+  .metrics-charts-grid.bottom-row {
     grid-template-columns: 1fr;
   }
 
@@ -7087,8 +7227,9 @@ svg.icon,
 }
 
 .notifications-page .page-header h1 {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
+  letter-spacing: -0.5px;
   margin-bottom: 8px;
   color: #ffffff;
 }
@@ -10746,4 +10887,593 @@ svg.icon,
 .toast-close:hover {
   background: var(--bg-secondary);
   color: var(--text-primary);
+}
+
+/* ── Sign-In Footer ───────────────────── */
+.signin-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.signin-footer a {
+  color: var(--accent-teal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.signin-footer a:hover {
+  text-decoration: underline;
+  color: var(--accent-blue);
+}
+
+/* ── Role Hint (Sign-In) ───────────────── */
+.role-hint {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(232, 167, 88, 0.04);
+  border: 1px solid rgba(232, 167, 88, 0.12);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.role-hint strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.role-hint .role-tag {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.role-tag.user-tag {
+  background: rgba(232, 167, 88, 0.12);
+  color: var(--accent-teal);
+}
+
+.role-tag.admin-tag {
+  background: rgba(239, 83, 80, 0.1);
+  color: var(--accent-red);
+}
+
+/* ── Register / Login Pages (Overlays & Components) ── */
+
+.pending-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(10, 25, 41, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.pending-overlay.show {
+  display: flex !important;
+}
+
+.pending-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 48px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+  animation: pendingSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 10001;
+}
+
+@keyframes pendingSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pending-icon-container {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  margin: 0 auto 28px;
+  background: rgba(102, 187, 106, 0.12);
+  border: 1px solid rgba(102, 187, 106, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-green);
+  box-shadow: 0 8px 32px rgba(102, 187, 106, 0.15);
+}
+
+.pending-card h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.pending-card p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.pending-email-badge {
+  display: inline-block;
+  background: rgba(232, 167, 88, 0.1);
+  border: 1px solid rgba(232, 167, 88, 0.3);
+  border-radius: 10px;
+  padding: 8px 20px;
+  margin: 20px 0 32px;
+  font-size: 15px;
+  color: var(--accent-teal);
+  font-weight: 700;
+}
+
+.pending-steps-list {
+  text-align: left;
+  margin: 32px 0;
+  padding: 0;
+  list-style: none;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.pending-steps-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.pending-steps-list li:last-child {
+  margin-bottom: 0;
+}
+
+.pending-steps-list .step-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+}
+
+.pending-steps-list .step-icon.active {
+  background: rgba(232, 167, 88, 0.15);
+  color: var(--accent-teal);
+  border-color: rgba(232, 167, 88, 0.4);
+}
+
+.pending-steps-list .step-icon.complete {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.redirect-timer {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 24px;
+  font-weight: 500;
+}
+
+.redirect-timer b {
+  color: var(--accent-teal);
+  font-weight: 700;
+}
+
+/* ── Admin Control Zap Button (Focused) ────── */
+.admin-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(232, 167, 88, 0.1), rgba(240, 184, 112, 0.15));
+  border: 1.5px solid rgba(232, 167, 88, 0.3);
+  color: var(--accent-teal);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  flex-shrink: 0;
+  position: relative;
+  margin-right: 8px;
+  animation: adminGlowPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes adminGlowPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 4px rgba(232, 167, 88, 0.15);
+    border-color: rgba(232, 167, 88, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 12px rgba(232, 167, 88, 0.4);
+    border-color: rgba(232, 167, 88, 0.6);
+  }
+}
+
+.admin-control-btn:hover {
+  background: linear-gradient(135deg, rgba(232, 167, 88, 0.2), rgba(240, 184, 112, 0.25));
+  border-color: var(--accent-teal);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(232, 167, 88, 0.35);
+}
+
+.admin-control-btn.active {
+  background: linear-gradient(135deg, rgba(232, 167, 88, 0.25), rgba(240, 184, 112, 0.35));
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 15px rgba(232, 167, 88, 0.4);
+}
+
+.admin-control-btn svg {
+  filter: drop-shadow(0 0 2px rgba(232, 167, 88, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.admin-control-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* ── Admin Control Panel Sections (v2 Mockup Match) ────── */
+.sub-filter {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub-filter:hover {
+  border-color: var(--accent-teal);
+  color: var(--text-primary);
+  background: rgba(232, 167, 88, 0.05);
+}
+
+.sub-filter.active {
+  background: rgba(232, 167, 88, 0.12);
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+}
+
+.action-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 4px solid transparent;
+}
+
+.action-card:hover {
+  transform: translateX(4px);
+  background: var(--bg-card) !important;
+  border-color: var(--accent-teal) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.action-card.pending {
+  border-left-color: var(--accent-orange);
+}
+
+.action-card.approved {
+  border-left-color: var(--accent-green);
+  opacity: 0.85;
+}
+
+.action-card.rejected {
+  border-left-color: var(--accent-red);
+  opacity: 0.7;
+}
+
+.action-card.done {
+  border-left-color: var(--accent-green);
+  opacity: 0.85;
+}
+
+.action-card.rejected-card {
+  border-left-color: var(--accent-red);
+  opacity: 0.7;
+}
+
+.action-type-icon.reg {
+  background: rgba(171, 71, 188, 0.15);
+  color: var(--accent-purple);
+}
+
+.action-type-icon.challenge {
+  background: rgba(255, 167, 38, 0.15);
+  color: var(--accent-orange);
+}
+
+.action-type-icon.idea {
+  background: rgba(232, 167, 88, 0.15);
+  color: var(--accent-teal);
+}
+
+.action-status {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid transparent;
+  min-width: 84px;
+  text-align: center;
+}
+
+.action-status.pending-status {
+  border-left-color: var(--accent-orange);
+  color: var(--accent-orange);
+  opacity: 0.8;
+}
+
+.action-status.approved-status {
+  border-left-color: var(--accent-green);
+  color: var(--accent-green);
+}
+
+.action-status.rejected-status {
+  border-left-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+.btn-approve-vivid {
+  background: var(--accent-green);
+  color: #0d1117;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  box-shadow: 0 2px 12px rgba(102, 187, 106, 0.25);
+}
+
+.btn-approve-vivid:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 4px 18px rgba(102, 187, 106, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-reject-vivid {
+  background: rgba(239, 83, 80, 0.15);
+  color: var(--accent-red);
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(239, 83, 80, 0.35);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+}
+
+.btn-reject-vivid:hover {
+  background: var(--accent-red);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(239, 83, 80, 0.35);
+  transform: translateY(-1px);
+}
+
+.badge-v2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 167, 38, 0.15);
+  color: var(--accent-orange);
+}
+
+.section-tab.active .badge-v2 {
+  background: rgba(232, 167, 88, 0.15);
+  color: var(--accent-teal);
+}
+
+/* ── Admin Control Panel Modal ──────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  width: 480px;
+  max-width: 90vw;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease-out;
+}
+
+.modal-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+  margin-top: 0;
+}
+
+.modal-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.modal-item-highlight {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.modal-item-highlight strong {
+  color: var(--accent-teal);
+}
+
+.modal-card textarea {
+  width: 100%;
+  height: 80px;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.modal-card textarea:focus {
+  border-color: var(--accent-teal);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-modal-cancel {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-modal-cancel:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-confirm-approve {
+  background: var(--accent-green);
+  color: #0d0f1a;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-confirm-approve:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 44px 12px rgba(102, 187, 106, 0.3);
+}
+
+.btn-confirm-reject {
+  background: var(--accent-red);
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-confirm-reject:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

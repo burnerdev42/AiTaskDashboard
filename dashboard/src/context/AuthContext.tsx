@@ -16,22 +16,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(() => {
+        try {
+            storage.initialize();
+            return storage.getCurrentUser();
+        } catch (e) {
+            console.error('Failed to initialize session:', e);
+            return null;
+        }
+    });
 
     useEffect(() => {
-        storage.initialize();
-        const timer = setTimeout(() => {
-            const currentUser = storage.getCurrentUser();
-            if (currentUser) {
-                setUser(currentUser);
-            }
-        }, 0);
-        return () => clearTimeout(timer);
+        // Initializing storage is synchronously done in the useState initializer
     }, []);
 
     const login = async (email: string): Promise<boolean> => {
         const users = storage.getUsers();
-        const foundUser = users.find(u => u.email === email);
+        const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
         if (foundUser) {
             setUser(foundUser);
             storage.setCurrentUser(foundUser);
@@ -46,27 +47,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const register = async (userData: Partial<User> & { name: string; email: string }): Promise<boolean> => {
-        // Check if user exists
+        // Check if user exists in active users
         const users = storage.getUsers();
-        if (users.find(u => u.email === userData.email)) {
+        if (users.find(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
             return false;
         }
 
-        const newUser: User = {
+        // Check if already in pending registrations
+        if (storage.isEmailPending(userData.email)) {
+            return false;
+        }
+
+        const pendingUser = {
             id: Date.now().toString(),
             name: userData.name,
-            email: userData.email,
+            email: userData.email.toLowerCase().trim(),
             role: userData.role || 'Contributor',
             avatar: userData.name.substring(0, 2).toUpperCase(),
             opco: userData.opco,
             platform: userData.platform,
             about: userData.about,
             interests: userData.interests,
+            status: 'pending',
+            registeredAt: new Date().toISOString()
         };
-        storage.addUser(newUser);
-        setUser(newUser);
-        storage.setCurrentUser(newUser);
-        return true;
+
+        return storage.addPendingRegistration(pendingUser);
     };
 
     const updateUser = async (updatedData: Partial<User>): Promise<boolean> => {

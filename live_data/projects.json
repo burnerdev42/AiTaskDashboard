@@ -1,0 +1,366 @@
+[
+    {
+        "id": "CH-001",
+        "name": "Aham.ai",
+        "problemStatement": "Due to varied and constantly evolving reporting needs from the Ad Tech team, relying on manual SQL querying and static dashboards is no longer viable. There is a strong need to create an AI-backed dynamic SQL query generator and a set of runtime dashboards to support ad-hoc analytics without engineering dependencies.",
+        "outcome": "Implement a comprehensive conversational interface that empowers users to generate dynamic dashboards and complex SQL queries on demand using natural language, reducing IT dependency and accelerating decision-making.",
+        "status": "Pilot",
+        "ownerId": "u-asmit",
+        "challengeTags": [
+            "GenAI",
+            "SQL",
+            "AdTech"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0001",
+                "ideaTitle": "Multi agent dashboard generator",
+                "proposedSolution": "Design a Multi-Agent architecture using LangChain, giving agents read-only SQL access and data visualization tools to generate dashboards upon receiving natural language requests.",
+                "ideaDetail": "This proposal leverages LangChain, SQL database agents, and advanced LLMs to create a Multi-Agent Dashboard Generator. Users describe their data needs in natural language, and the agents intelligently fetch metadata, formulate complex SQL queries against our data warehouse, and construct dynamic visual dashboards\u2014all without manual coding or DB administration involvement.",
+                "userId": "u-dibyendu"
+            }
+        ],
+        "opco": "GSO",
+        "platform": "Global Platform",
+        "portfolioOption": "Non Strategic Product Management",
+        "summary": "Implement an AI-backed dynamic SQL query generator and a set of runtime dashboards to support ad-hoc analytics."
+    },
+    {
+        "id": "CH-002",
+        "name": "Party Planner",
+        "problemStatement": "Planning a party involves complex logistics, and miscalculating attendee consumption often results in a significant amount of food waste the next day. There is currently no intelligent mechanism to optimize food and drink orders beforehand or to repurpose leftovers effectively after the event.",
+        "outcome": "Develop an intelligent, agent-based party planning optimizer that takes simple voice or text inputs to calculate precise food and drink requirements. Post-event, it uses computer vision to analyze leftovers and suggest creative recipes, minimizing waste.",
+        "status": "Parking Lot",
+        "ownerId": "u-asmit",
+        "challengeTags": [
+            "AI Agents",
+            "Azure AI",
+            "Vision"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0002",
+                "ideaTitle": "Agentic party planner optimizer",
+                "proposedSolution": "Utilize AI planning algorithms and Azure AI voice recognition for pre-party optimization, paired with a Computer Vision recipe generator for post-party food waste reduction.",
+                "ideaDetail": "The Agentic Party Planner Optimizer utilizes Azure AI Speech-to-Text to capture user requirements seamlessly. A backend LLM orchestrator determines guest counts and dietary restrictions, querying grocery APIs to generate optimized shopping lists. Additionally, a Vision AI module analyzes photographs of post-party leftovers to generate creative, personalized recipes, actively reducing food wastage.",
+                "userId": "u-riyal"
+            }
+        ],
+        "opco": "Albert Heijn",
+        "platform": "RBP",
+        "portfolioOption": "Tech Enabler",
+        "summary": "Develop an intelligent, agent-based party planning optimizer to optimize food orders and reduce post-event waste."
+    },
+    {
+        "id": "CH-003",
+        "name": "Pallas Data Insights",
+        "problemStatement": "The current data fulfillment process is heavily manual, leading to delays and inefficiencies. Requests depend entirely on the IT team, causing multiple back-and-forth iterations before completion. Access to data and its related attributes is limited, restricting insights and slowing decision-making. Furthermore, the process requires specialized tool knowledge, preventing business users from operating independently.",
+        "outcome": "Implement a GenAI-based, fully autonomous Co-Pilot solution that streamlines data fulfillment by eliminating dependency on specific tools or engineering support. Users will independently access insights through a conversational interface, accelerating turnaround times and enhancing operational agility.",
+        "status": "Pilot",
+        "ownerId": "u-pritam",
+        "challengeTags": [
+            "GenAI",
+            "Data Insights",
+            "Azure"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0003",
+                "ideaTitle": "Pallas AI Assistance",
+                "proposedSolution": "Deploy an Azure Web App Copilot supported by dedicated AI Query and Database Execution agents, completely separating reasoning layers from data retrieval logic.",
+                "ideaDetail": "We will build a React JS Copilot interface hosted on Azure, powered by Dual Agents (GPT-4.5). The Query Agent interprets user prompts and formulates precise database queries. These are securely executed by the independent DB Agent, which returns structured data directly to the user. This decoupled, agentic architecture guarantees accuracy, robust security, and eliminates engineering bottlenecks.",
+                "userId": "u-indrani"
+            }
+        ],
+        "opco": "BecSee",
+        "platform": "Ecommerce",
+        "portfolioOption": "Non Strategic Product Management",
+        "summary": "Implement a GenAI-based autonomous Co-Pilot to streamline data fulfillment and reduce engineering dependency."
+    },
+    {
+        "id": "CH-004",
+        "name": "Ops Copilot AI Agent",
+        "problemStatement": "Our IT support and engineering teams lose significant time on repetitive troubleshooting tasks and navigating scattered knowledge sources. This leads to inconsistent issue resolutions, high dependency on subject matter experts, and an elevated L3 Mean Time To Resolve (MTTR) of 1.3 days, ultimately degrading service quality.",
+        "outcome": "Deploy an AI assistant chatbot that centralizes scattered troubleshooting knowledge and system logs. This will dramatically reduce SME dependency, accelerate root cause analysis, and bring the L3 MTTR down significantly, improving overall IT productivity.",
+        "status": "Pilot",
+        "ownerId": "u-indrani",
+        "challengeTags": [
+            "AIOps",
+            "Automation",
+            "LLM"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0004",
+                "ideaTitle": "Operation Pilot AI Agent",
+                "proposedSolution": "Implement a unified Operation Pilot AI Agent that integrates runbooks, ticketing historicals, and live telemetry to provide real-time troubleshooting guidance.",
+                "ideaDetail": "Ops Pilot acts as an ultra-scalable digital SME. Integrating securely with our log management systems and Confluence SOPs, it uses Retrieval-Augmented Generation (RAG) to analyze live stack traces and reference past incidents. It provides first-line responders with clear explanations and step-by-step remediation commands, drastically improving resolution consistency across retail systems.",
+                "userId": "u-asmit"
+            }
+        ],
+        "opco": "GSO",
+        "platform": "Global Platform",
+        "portfolioOption": "Maintenance",
+        "summary": "Deploy an AI assistant chatbot to centralize troubleshooting knowledge and significantly reduce L3 MTTR."
+    },
+    {
+        "id": "CH-005",
+        "name": "Sponsored Products Agent",
+        "problemStatement": "Sponsored Product Campaign management is currently performed entirely via complex UIs, making it a lengthy and error-prone process for advertisers. Setting up, modifying, and tracking campaigns requires multiple manual steps that deter advertisers from scaling their efforts.",
+        "outcome": "Enable advertisers to seamlessly create, update, and manage campaigns, as well as fetch detailed analytics reports, using an intuitive AI Voice Assistant, thereby reducing campaign setup time by over 50%.",
+        "status": "Pilot",
+        "ownerId": "u-asmit",
+        "challengeTags": [
+            "Agents",
+            "LlamaIndex",
+            "MCP"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0005",
+                "ideaTitle": "Multi agent sponsored porducts manager",
+                "proposedSolution": "Establish an agentic ecosystem utilizing the Model Context Protocol (MCP) to seamlessly connect AI agents to specialized advertising, reporting, and campaign backend services.",
+                "ideaDetail": "We propose an orchestrated multi-agent system utilizing the Model Context Protocol (MCP). Specialized MCP servers will act as interfaces for Campaign Management, Data Science pricing, Reporting Analytics, and Product Search. A centralized orchestrator agent will delegate natural language user intents (e.g., voice commands) to the relevant MCP sub-systems, automating end-to-end advertiser workflows.",
+                "userId": "u-pragya"
+            }
+        ],
+        "opco": "Albert Heijn",
+        "platform": "RBP",
+        "portfolioOption": "Maintenance",
+        "summary": "Create an intuitive AI Voice Assistant for advertisers to seamlessly manage campaigns and fetch analytics reports."
+    },
+    {
+        "id": "CH-006",
+        "name": "AH360",
+        "problemStatement": "Distribution Centre operations lack a unified, real-time view that connects business processes with their underlying technology services and applications. Without clear observability into how technical components support operational workflows, it becomes difficult to quickly identify root causes, assess impact, and respond to disruptions.",
+        "outcome": "Deliver AH360 as an end-to-end Chain Observability solution. By mapping business processes directly to supporting microservices, the organization will enable faster root-cause analysis, proactive issue resolution, and improved collaboration across Distribution Centre teams.",
+        "status": "Pilot",
+        "ownerId": "u-pragya",
+        "challengeTags": [
+            "Observability",
+            "Conversational AI",
+            "Retail"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0006",
+                "ideaTitle": "AH360 Conversational AI for Operational Impact Visibility",
+                "proposedSolution": "Integrate a conversational AI bot directly into the AH360 observability dashboard to query realtime logs and predict operational impacts using natural language.",
+                "ideaDetail": "AH360 integrates a Conversational AI overlay on top of our existing observability stack. Users can immediately query active incidents or infrastructure health via natural language (e.g., is the payment gateway for Region A degraded?). The AI analyzes patterns across the entire operational chain, predicting downstream business impacts on Distribution Centres before they manifest into critical outages.",
+                "userId": "u-user3"
+            }
+        ],
+        "opco": "BecSee",
+        "platform": "Ecommerce",
+        "portfolioOption": "Customer Value Driver",
+        "summary": "Deliver an end-to-end Chain Observability solution mapping business processes to microservices for faster issue resolution."
+    },
+    {
+        "id": "CH-007",
+        "name": "Myguru.ai",
+        "problemStatement": "The organization faces severe knowledge management challenges that limit scalability. Critical expertise is concentrated among a few Subject Matter Experts (SMEs), creating bottlenecks and single points of failure. Onboarding new developers is inefficient as information is scattered across Confluence, ServiceNow, and numerous codebases, leading to duplicated efforts and slow ramp-up times.",
+        "outcome": "Launch IGuru as a centralized, AI-powered knowledge hub that provides instant, source-cited answers to developer queries. This will reduce search time, alleviate SME bottlenecks, accelerate new hire onboarding, and establish a single source of truth.",
+        "status": "Pilot",
+        "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "Knowledge Base",
+            "Semantic Search",
+            "RAG"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0007",
+                "ideaTitle": "IGuru: Centralized AI Knowledge Assistant",
+                "proposedSolution": "Launch IGuru as a fully centralized AI Knowledge Assistant, relying exclusively on RAG over internal Confluence documentation to generate reliable, cited answers.",
+                "ideaDetail": "Deploy IGuru, an AI assistant strictly grounded in internal documentation using advanced RAG and strict semantic search. When developers ask technical questions, IGuru actively searches Confluence and repo readmes, returning a synthesized answer that strictly cites its sources. By preventing hallucinations and forbidding generic web data, IGuru becomes a highly trusted institutional knowledge oracle.",
+                "userId": "u-user5"
+            }
+        ],
+        "opco": "Albert Heijn",
+        "platform": "RBP",
+        "portfolioOption": "Tech Enabler",
+        "summary": "Launch an AI-powered knowledge hub to provide instant, source-cited answers to developer queries."
+    },
+    {
+        "id": "CH-008",
+        "name": "Agentic PromoPilot",
+        "problemStatement": "Promotion item inclusion and exclusion lists are heavily maintained through manual spreadsheet processes and outdated legacy rules. This leads to frequent errors, financial losses from incorrect discounts, missed eligible items, and inconsistent execution that heavily impacts overall profitability and customer trust.",
+        "outcome": "Automate the generation and maintenance of accurate promotion rules using an intelligent AI agent. Retailers will dramatically reduce manual effort, ensure error-free pricing execution, and completely eliminate margin leakage caused by incorrect discounts.",
+        "status": "Evaluation",
+        "ownerId": "u-smriti",
+        "challengeTags": [
+            "Retail",
+            "Pricing",
+            "AI Rules"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0008",
+                "ideaTitle": "Agentic Promotion Rules Manager",
+                "proposedSolution": "Build a secure, scalable Agentic AI co-pilot focused purely on dissecting catalog metadata to dynamically generate and validate promotion inclusion/exclusion rules.",
+                "ideaDetail": "PromoPilot introduces a suite of AI agents deeply integrated into our promotion lifecycle. It ingests upcoming promotional campaigns and automatically parses product attributes to derive strict inclusion and exclusion logic. It proactively flags missing eligible items or contradictory rules, significantly decreasing the manual QA load required by pricing analysts prior to go-live.",
+                "userId": "u-smriti"
+            }
+        ],
+        "opco": "GSO",
+        "platform": "Global Platform",
+        "portfolioOption": "Non Strategic Product Management",
+        "summary": "Automate the generation and maintenance of promotion rules using AI to ensure error-free pricing execution."
+    },
+    {
+        "id": "CH-009",
+        "name": "Text-To-Action",
+        "problemStatement": "Traditional Robotic Process Automation (RPA) development within our ecosystem is time-consuming, requires specialized engineering skills, and lacks the agility needed for rapid automation of simple web-based tasks. This slows down our modernization efforts and leaves many manual tasks unautomated.",
+        "outcome": "Empower business users and citizen developers to automate repetitive web-based tasks using intuitive natural language prompts, bypassing traditional RPA bottlenecks and accelerating the organization's modernization journey.",
+        "status": "Modernization",
+        "ownerId": "u-smriti",
+        "challengeTags": [
+            "RPA",
+            "Low Code",
+            "Azure OpenAI"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0009",
+                "ideaTitle": "GenAI-Powered RPA Framework",
+                "proposedSolution": "Develop an Azure OpenAI-powered Text-to-Action framework that compiles user-friendly natural language prompts into executable UI automation scripts.",
+                "ideaDetail": "This proposal introduces an AI-enhanced next-generation Web RPA framework powered by Azure OpenAI. Business users can type prompts (e.g., download weekly excel reports from Vendor X and email to Team Y). The framework translates these intents into executable Pyppeteer or Selenium scripts on the fly, dramatically democratizing automation capabilities.",
+                "userId": "u-nur"
+            }
+        ],
+        "opco": "Albert Heijn",
+        "platform": "STP",
+        "portfolioOption": "Tech Enabler",
+        "summary": "Empower business users to automate repetitive web-based tasks using intuitive natural language prompts via AI-enhanced RPA."
+    },
+    {
+        "id": "CH-010",
+        "name": "Terraform to AVM Migration",
+        "problemStatement": "Ahold Delhaize manages over 8,000 Terraform repositories across various OpCos, creating massive governance, standardization, and cost-control challenges. Without a structured migration to Azure Verified Modules (AVM), we suffer from tech debt, security inconsistencies, and operational bloat.",
+        "outcome": "Successfully and completely migrate all 8,000+ Terraform repositories to standardized Azure AVM configurations within one calendar year. This will vastly improve governance, standardize infrastructure as code, and realize up to  in direct cost savings.",
+        "status": "Modernization",
+        "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "Terraform",
+            "AVM",
+            "Infrastructure"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0010",
+                "ideaTitle": "Agentic AI\u2013Driven Terraform Migration",
+                "proposedSolution": "Construct an AI-driven repository crawling agent that identifies legacy Terraform code and automatically generates Azure Verified Module (AVM) replacement PRs.",
+                "ideaDetail": "The Agentic AI Terraform Migration tool will scan all 8,000 repositories, abstracting existing infrastructure definitions. Leveraging specialized LLM capabilities tailored for HCL (HashiCorp Configuration Language), it will automatically generate Pull Requests that refactor the code to utilize approved Azure Verified Modules, ensuring compliance while handling the sheer volume of code autonomously.",
+                "userId": "u-riyal"
+            }
+        ],
+        "opco": "BecSee",
+        "platform": "Ecommerce",
+        "portfolioOption": "Maintenance",
+        "summary": "Autonomously migrate thousands of Terraform repositories to standardized Azure AVM configurations using an AI agent."
+    },
+    {
+        "id": "CH-011",
+        "name": "Argus Observability Platform",
+        "problemStatement": "The lack of a unified observability platform limits our ability to proactively monitor technical, operational, and business KPIs. This reduces our situational awareness, increasing the risk of major undetected outages and negatively impacting both internal operations and the end-customer experience.",
+        "outcome": "Establish Argus as the enterprise-wide centralized observability platform. By proactively monitoring technical and business KPIs, we will preempt incidents, improve system resilience, and deliver a vastly superior customer experience.",
+        "status": "Modernization",
+        "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "Grafana",
+            "KPIs",
+            "Observability"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0011",
+                "ideaTitle": "Enterprise Observability with Grafana",
+                "proposedSolution": "Design and implement the Argus platform built over Grafana Enterprise, serving as a centralized hub to correlate technical telemetry with vital business metrics.",
+                "ideaDetail": "Argus will utilize Grafana Labs enterprise solutions to build a unified pane of glass. By aggregating metrics from Prometheus, Datadog, and internal loggers, Argus correlates technical infrastructure telemetry (CPU/Memory) with business KPIs (Cart Checkout Rates). Intelligent alerting will use machine learning to detect anomalous behavior outside of standard seasonal thresholds.",
+                "userId": "u-user7"
+            }
+        ],
+        "opco": "GSO",
+        "platform": "Analytics",
+        "portfolioOption": "Non Strategic Product Management",
+        "summary": "Establish a centralized observability platform to proactively monitor technical and business KPIs and improve resilience."
+    },
+    {
+        "id": "CH-012",
+        "name": "SR Automation",
+        "problemStatement": "Service request handling in the identity and access provisioning area remains highly manual and time-intensive. Engineers frequently execute repetitive bash and PowerShell scripts, leading to a higher MTTR, human errors, and a frustrating, inconsistent onboarding experience for new employees.",
+        "outcome": "Fully automate access provisioning service requests using self-serve portals backed by intelligent scripting. This will effectively reduce MTTR from days to minutes, ensure zero-defect provisioning, and enhance the overall IT service experience.",
+        "status": "AMS",
+        "ownerId": "u-dibyendu",
+        "challengeTags": [
+            "PowerShell",
+            "Automation",
+            "IAM"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0012",
+                "ideaTitle": "Automated Access Provisioning Engine",
+                "proposedSolution": "Introduce an automated fulfillment pipeline linking ServiceNow tickets to automated TDI and PowerShell runbooks for zero-touch identity and access provisioning.",
+                "ideaDetail": "The Automated Access Provisioning Engine intercepts ServiceNow requests for IAM provisioning. Using a serverless architecture executing secure PowerShell and TDI scripts, it validates the user's departmental context, auto-approves standard access patterns based on RBAC policies, and provisions Active Directory/SaaS permissions instantly without Helpdesk intervention.",
+                "userId": "u-rohan"
+            }
+        ],
+        "opco": "GSO",
+        "platform": "Global Platform",
+        "portfolioOption": "Non Strategic Product Management",
+        "summary": "Fully automate access provisioning service requests using self-serve portals backed by intelligent scripting."
+    },
+    {
+        "id": "CH-013",
+        "name": "AI-Driven Test Design Automation",
+        "problemStatement": "Test case creation is largely manual, time-consuming, and heavily dependent on individual QA expertise. This results in inconsistent test coverage and delayed software delivery cycles. There is limited alignment between Jira user stories, Figma UX designs, and the resulting QA artifacts.",
+        "outcome": "Drastically accelerate QA delivery by introducing an AI tool that automatically generates high-quality, comprehensive test cases directly in Jira by analyzing Jira stories and Figma layouts, boosting coverage and speed.",
+        "status": "Modernization",
+        "ownerId": "u-chandan",
+        "challengeTags": [
+            "QA Automation",
+            "GPT-4",
+            "Jira"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0013",
+                "ideaTitle": "GenAI-Powered Test Case Generator",
+                "proposedSolution": "Create a GenAI-Powered Test Case Generator that cross-references Jira functional requirements against Figma design layers using distinct MCP modules.",
+                "ideaDetail": "We will develop a bidirectional integration utilizing Jira MCP and Figma MCP connected to GPT-4o. The AI automatically ingests user story descriptions and analyzes the linked Figma UI components. It then drafts comprehensive Gherkin-style BDD test cases, validating UI states, edge cases, and functional pathways, publishing them directly to Jira Zephyr/Xray.",
+                "userId": "u-user10"
+            }
+        ],
+        "opco": "BecSee",
+        "platform": "Ecommerce",
+        "portfolioOption": "Maintenance",
+        "summary": "Accelerate QA delivery by introducing an AI tool that automatically generates high-quality test cases directly in Jira."
+    },
+    {
+        "id": "CH-014",
+        "name": "JIRA Sprint Planning Assistant",
+        "problemStatement": "Agile Sprint planning is currently repetitive and manual, requiring Scrum Masters to constantly coordinate prioritized epics, user stories, dependencies, and team availability. Matching the correct team members' skills to complicated user story requirements is particularly challenging and often leads to suboptimal assignments.",
+        "outcome": "Automate and optimize the sprint planning lifecycle using AI to intelligently pull prioritized user stories, resolve dependencies, define concise sprint goals, and recommend story assignments perfectly matched to the team's current skill sets and capacity.",
+        "status": "Submitted",
+        "ownerId": "u-chandan",
+        "challengeTags": [
+            "Agile",
+            "Sprint Planning",
+            "AI Assistant"
+        ],
+        "ideas": [
+            {
+                "id": "ID-0014",
+                "ideaTitle": "AI-Powered Sprint Planner",
+                "proposedSolution": "Develop an AI-powered Sprint Planner plugin for Jira that calculates capacity, maps required expertise, and models optimal user story assignment configurations.",
+                "ideaDetail": "The Jira Sprint Planning Assistant evaluates the backlog using historical team velocity, developer skill matrix mappings, and ticket dependency graphs. It proposes an optimized sprint backlog, auto-generates a cohesive Sprint Goal, and suggests an assignee for each ticket based on past commit history and current capacity, greatly simplifying sprint ceremonies.",
+                "userId": "u-user1"
+            }
+        ],
+        "opco": "Albert Heijn",
+        "platform": "RBP",
+        "portfolioOption": "Customer Value Driver",
+        "summary": "Automate and optimize the agile sprint planning lifecycle using AI to pull user stories and assign tasks based on skills."
+    }
+]

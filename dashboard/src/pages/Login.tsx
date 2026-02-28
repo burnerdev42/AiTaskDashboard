@@ -1,22 +1,23 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Eye, EyeOff, Lock } from 'lucide-react';
+import { Link, Navigate } from 'react-router-dom';
+import { Eye, EyeOff, Lock, Clock } from 'lucide-react';
+import { storage } from '../services/storage';
 
 export const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState('');
-    const { login } = useAuth();
+    const [isPending, setIsPending] = useState(false);
+    const { login, isAuthenticated } = useAuth();
     const { showToast } = useToast();
-    const navigate = useNavigate();
-    const location = useLocation();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const from = location.state?.from?.pathname || '/';
+    const from = '/';
+
+    if (isAuthenticated) {
+        return <Navigate to={from} replace />;
+    }
 
     // Standard Password Policy:
     // At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
@@ -35,19 +36,26 @@ export const Login: React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+        setIsPending(false);
 
         if (!isFormValid) {
-            setError('Please enter a valid email and a valid password.');
+            showToast('Please enter a valid email and a valid password.', 'error');
             return;
         }
 
-        const success = await login(email);
+        // Check for pending registrations dynamically
+        if (storage.isEmailPending(email)) {
+            setIsPending(true);
+            return;
+        }
+
+        const success = await login(email.toLowerCase().trim());
         if (success) {
             showToast('Welcome back! You have signed in successfully.');
-            navigate(from, { replace: true });
+            // Force a hard reload to ensure all state and protected routes remount correctly
+            window.location.href = from;
         } else {
-            setError('Login failed. Please check your credentials or register.');
+            showToast('Login failed. Please check your credentials or register.', 'error');
         }
     };
 
@@ -55,19 +63,29 @@ export const Login: React.FC = () => {
         <div className="register-page-container">
             <div className="form-card">
                 <div className="form-header" style={{ marginBottom: 24 }}>
-                    <div className="icon-circle" style={{
+                    <div className="icon-circle premium-logo" style={{
                         width: 80, height: 80, fontSize: 40, marginBottom: 28,
-                        background: 'linear-gradient(135deg, rgba(240,184,112,0.15), rgba(94,234,212,0.15))',
+                        background: 'transparent',
                         border: '1px solid rgba(255,255,255,0.05)', borderRadius: '50%',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: 'var(--accent-teal)', boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
                         margin: '0 auto 28px auto'
                     }}>∞</div>
                     <h2 style={{ fontSize: 24, marginBottom: 4 }}>Welcome Back</h2>
-                    <p style={{ fontSize: 14 }}>Sign in to continue</p>
+                    <p style={{ fontSize: 14 }}>Sign in to continue to Innovation Pipeline</p>
                 </div>
 
-                {error && <div style={{ color: 'var(--accent-red)', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>{error}</div>}
+                {isPending && (
+                    <div className="pending-banner">
+                        <div className="pending-title">
+                            <Clock size={16} />
+                            <span>Account Pending Approval</span>
+                        </div>
+                        <div className="pending-detail">
+                            Your registration is being reviewed by an admin.<br />
+                            You’ll be able to sign in once your account is approved.
+                        </div>
+                    </div>
+                )}
 
                 <form onSubmit={handleLogin}>
                     <div className="form-group">
@@ -76,8 +94,9 @@ export const Login: React.FC = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="user@example.com"
+                            placeholder="priya.sharma@tcs.com"
                             required
+                            autoFocus
                         />
                         <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
                             Enter the email address associated with your account.
@@ -127,15 +146,11 @@ export const Login: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="btn btn-primary btn-sm"
+                        className="btn btn-primary"
                         style={{
                             width: '100%',
-                            height: '42px',
                             opacity: isFormValid ? 1 : 0.6,
                             cursor: isFormValid ? 'pointer' : 'not-allowed',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
                         }}
                         disabled={!isFormValid}
                     >
@@ -148,7 +163,7 @@ export const Login: React.FC = () => {
                         <button
                             type="button"
                             className="btn sso-btn"
-                            style={{ marginBottom: 0 }}
+                            style={{ width: '100%', marginBottom: 0 }}
                             disabled
                         >
                             <Lock size={16} />
@@ -159,8 +174,14 @@ export const Login: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="form-footer">
-                        Don't have an account? <Link to="/register">Register here</Link>
+                    <div className="signin-footer">
+                        Don't have an account? <Link to="/register">Register now</Link>
+                    </div>
+
+                    <div className="role-hint">
+                        <strong>Mockup Sign-In</strong> — use any valid password<br />
+                        <strong>priya.sharma@tcs.com</strong> <span className="role-tag user-tag">User</span> — standard innovator view<br />
+                        <strong>admin@ananta.tcs.com</strong> <span className="role-tag admin-tag">Admin</span> — admin panel & Control Center
                     </div>
                 </form>
             </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChallengeCard } from '../components/ui/ChallengeCard';
 import { storage } from '../services/storage';
 import { type Challenge } from '../types';
+import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, Sector, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 import { TeamMember } from '../components/ui/TeamMember';
 import { useAuth } from '../context/AuthContext';
@@ -10,6 +11,10 @@ import { useAuth } from '../context/AuthContext';
 export const Home: React.FC = () => {
     const { isAuthenticated, user } = useAuth();
     const [challenges, setChallenges] = useState<Challenge[]>([]);
+    const [teamMembers, setTeamMembers] = useState<any[]>([]);
+    const [pipelineData, setPipelineData] = useState<any[]>([]);
+    const [kpiData, setKpiData] = useState<any[]>([]);
+    const [throughputData, setThroughputData] = useState<any[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const [subscribeSuccess, setSubscribeSuccess] = useState(false);
@@ -17,6 +22,120 @@ export const Home: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const isPaused = useRef(false);
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail);
+
+    const calculateMetrics = () => {
+        const allChallenges = storage.getChallenges();
+        const allIdeaDetails = storage.getIdeaDetails();
+
+        // Pipeline Stage Calculation
+        const stageCounts = {
+            'Challenge Submitted': { c: 0, i: 0 },
+            'Ideation & Evaluation': { c: 0, i: 0 },
+            'POC & Pilot': { c: 0, i: 0 },
+            'Scaled & Deployed': { c: 0, i: 0 },
+            'Parking Lot': { c: 0, i: 0 },
+        };
+
+        allChallenges.forEach(c => {
+            const s = c.stage as keyof typeof stageCounts;
+            if (stageCounts[s]) stageCounts[s].c++;
+        });
+
+        allIdeaDetails.forEach(idea => {
+            // Find which challenge this idea belongs to
+            const chIndex = storage.getChallengeDetails().findIndex(cd =>
+                cd.ideas && cd.ideas.some((i: any) => i.id === idea.id)
+            );
+            if (chIndex !== -1) {
+                const chalId = storage.getChallengeDetails()[chIndex].id;
+                const parentCh = allChallenges.find(c => c.id === chalId);
+                if (parentCh) {
+                    const s = parentCh.stage as keyof typeof stageCounts;
+                    if (stageCounts[s]) stageCounts[s].i++;
+                }
+            }
+        });
+
+        setPipelineData([
+            { name: 'Challenge Submitted', challenges: stageCounts['Challenge Submitted'].c, ideas: stageCounts['Challenge Submitted'].i, color: 'var(--accent-red)' },
+            { name: 'Ideation & Evaluation', challenges: stageCounts['Ideation & Evaluation'].c, ideas: stageCounts['Ideation & Evaluation'].i, color: 'var(--accent-yellow)' },
+            { name: 'POC & Pilot', challenges: stageCounts['POC & Pilot'].c, ideas: stageCounts['POC & Pilot'].i, color: 'var(--accent-blue)' },
+            { name: 'Scaled & Deployed', challenges: stageCounts['Scaled & Deployed'].c, ideas: stageCounts['Scaled & Deployed'].i, color: 'var(--accent-green)' },
+            { name: 'Parking Lot', challenges: stageCounts['Parking Lot'].c, ideas: stageCounts['Parking Lot'].i, color: 'var(--accent-grey)' }
+        ]);
+
+        // Home KPIs Calculation  
+        const users = storage.getUsers();
+        const totalC = allChallenges.length;
+        const totalI = allIdeaDetails.length;
+        const convRate = totalI > 0 ? ((stageCounts['POC & Pilot'].i + stageCounts['Scaled & Deployed'].i) / totalI * 100).toFixed(1) + '%' : '0%';
+
+        // Get unique active contributors from ideas and challenges
+        const activeContributors = new Set();
+        allIdeaDetails.forEach(i => activeContributors.add(i.owner.name));
+        allChallenges.forEach(c => activeContributors.add(c.owner.name));
+
+        // Dynamically get all users and compute their idea/challenge counts
+        const allUsers = storage.getUsers().filter((u: any) => u.role === 'ADMIN' || u.role?.toUpperCase() === 'MEMBER').map((u: any) => {
+            let userChall = 0;
+            let userIdeas = 0;
+            allChallenges.forEach(c => { if (c.owner.name === u.name) userChall++; });
+            allIdeaDetails.forEach(i => { if (i.owner.name === u.name) userIdeas++; });
+
+            return {
+                ...u,
+                stats: { challenges: userChall, ideas: userIdeas, score: (userChall * 5 + userIdeas * 2) }
+            };
+        }).sort((a: any, b: any) => b.stats.score - a.stats.score);
+
+        setTeamMembers(allUsers.slice(0, 10)); // Top 10 contributors
+
+        setKpiData([
+            { label: 'Total Challenges', value: totalC.toString(), color: 'var(--accent-red)' },
+            { label: 'Ideas Generated', value: totalI.toString(), color: 'var(--accent-yellow)' },
+            { label: 'Conversion Rate', value: convRate, color: 'var(--accent-teal)' },
+            { label: 'Avg. Time to Pilot', value: '14d', color: 'var(--accent-blue)' },
+            { label: 'Total Users', value: users.length.toString(), color: 'var(--accent-purple)' },
+            { label: 'Active Contributors', value: activeContributors.size.toString(), color: 'var(--accent-green)' },
+        ]);
+
+        // Mock throughput (In a real app, this would group by actual createdDate arrays)
+        setThroughputData([
+            { name: 'Sep', ideas: Math.floor(totalI * 0.1), challenges: Math.floor(totalC * 0.1) },
+            { name: 'Oct', ideas: Math.floor(totalI * 0.15), challenges: Math.floor(totalC * 0.15) },
+            { name: 'Nov', ideas: Math.floor(totalI * 0.15), challenges: Math.floor(totalC * 0.15) },
+            { name: 'Dec', ideas: Math.floor(totalI * 0.1), challenges: Math.floor(totalC * 0.1) },
+            { name: 'Jan', ideas: Math.floor(totalI * 0.2), challenges: Math.floor(totalC * 0.2) },
+            { name: 'Feb', ideas: Math.floor(totalI * 0.3), challenges: Math.floor(totalC * 0.3) }
+        ]);
+    };
+
+    const renderActiveShape = (props: any) => {
+        const RADIAN = Math.PI / 180;
+        const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+        const offset = 12; // Increased pop-out distance
+        const sin = Math.sin(-RADIAN * midAngle);
+        const cos = Math.cos(-RADIAN * midAngle);
+        const ox = cx + offset * cos;
+        const oy = cy + offset * sin;
+
+        return (
+            <Sector
+                cx={ox}
+                cy={oy}
+                innerRadius={innerRadius}
+                outerRadius={outerRadius + 4}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                fill={fill}
+                cornerRadius={10}
+                style={{
+                    filter: `drop-shadow(0px 12px 18px ${fill}bf)`,
+                    transition: 'all 0.2s ease-out'
+                }}
+            />
+        );
+    };
 
     const handleSubscribe = (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,12 +150,17 @@ export const Home: React.FC = () => {
     };
 
     useEffect(() => {
+        if (!isAuthenticated) return;
+        setIsLoading(true);
         const timer = setTimeout(() => {
-            setChallenges(storage.getChallenges().slice(0, 5));
+            const allChall = storage.getChallenges();
+            // Sort by views or something similar; mock data uses ID for now
+            setChallenges(allChall.slice(0, 5));
+            calculateMetrics();
             setIsLoading(false);
         }, 800); // Small delay for smooth entry
         return () => clearTimeout(timer);
-    }, []);
+    }, [isAuthenticated, user]);
 
     const nextSlide = () => {
         if (challenges.length === 0 || isLoading) return;
@@ -134,20 +258,62 @@ export const Home: React.FC = () => {
                             </div>
                         </>
                     ) : (
-                        <>
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <div className="donut-chart">
-                                    <div className="donut-hole">11</div>
-                                </div>
+                        <div style={{ width: '100%', height: '320px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={pipelineData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={110}
+                                        outerRadius={130}
+                                        paddingAngle={6}
+                                        cornerRadius={8}
+                                        stroke="none"
+                                        dataKey="challenges"
+                                        activeShape={renderActiveShape}
+                                    >
+                                        {pipelineData.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={entry.color}
+                                                style={{
+                                                    filter: `drop-shadow(0px 4px 6px ${entry.color}30)`,
+                                                    transition: 'all 0.3s ease',
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                        ))}
+                                    </Pie>
+                                    <RechartsTooltip
+                                        cursor={false}
+                                        isAnimationActive={false}
+                                        wrapperStyle={{ zIndex: 100, pointerEvents: 'none' }}
+                                        content={({ active, payload }) => {
+                                            if (active && payload && payload.length) {
+                                                const data = payload[0].payload;
+                                                return (
+                                                    <div style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px', color: '#fff', fontSize: '13px', minWidth: '180px', boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                                                        <div style={{ fontWeight: '600', marginBottom: '10px', paddingBottom: '6px', borderBottom: '1px solid var(--border)', color: data.color, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: data.color }}></div>
+                                                            {data.name}
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}><span style={{ color: 'var(--text-muted)' }}>Challenges:</span> <strong style={{ fontSize: '14px' }}>{data.challenges}</strong></div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-muted)' }}>Ideas:</span> <strong style={{ fontSize: '14px' }}>{data.ideas}</strong></div>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                            {/* Centered Total Label overlay */}
+                            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+                                <div style={{ fontSize: '32px', fontWeight: '700', lineHeight: '1', color: 'var(--text-primary)' }}>{storage.getChallenges().length}</div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', fontWeight: '500' }}>Challenges</div>
                             </div>
-                            <div className="legend">
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-red)', flexShrink: 0 }}></span> Challenge Submitted (4)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-yellow)', flexShrink: 0 }}></span> Ideation &amp; Evaluation (2)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-blue)', flexShrink: 0 }}></span> POC &amp; Pilot (3)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-gold)', flexShrink: 0 }}></span> Scaled &amp; Deployed (1)</div>
-                                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent-grey)', flexShrink: 0 }}></span> Parking Lot (1)</div>
-                            </div>
-                        </>
+                        </div>
                     )}
                 </div>
 
@@ -155,7 +321,7 @@ export const Home: React.FC = () => {
                     <h3><span className="icon" style={{ marginRight: '8px', color: 'var(--accent-blue)', verticalAlign: 'middle' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> Key Metrics</h3>
                     {isLoading ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
-                            {[...Array(2)].map((_, i) => (
+                            {[...Array(6)].map((_, i) => (
                                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <div className="skeleton" style={{ height: '14px', width: '50%', borderRadius: '4px' }}></div>
                                     <div className="skeleton" style={{ height: '20px', width: '40px', borderRadius: '4px' }}></div>
@@ -163,16 +329,14 @@ export const Home: React.FC = () => {
                             ))}
                         </div>
                     ) : (
-                        <>
-                            <div className="metric-row">
-                                <span className="metric-label">Avg. Idea → Pilot</span>
-                                <span className="metric-value teal">42d</span>
-                            </div>
-                            <div className="metric-row">
-                                <span className="metric-label">Pilot Success Rate</span>
-                                <span className="metric-value green">78%</span>
-                            </div>
-                        </>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '20px' }}>
+                            {kpiData.map((kpi) => (
+                                <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <span style={{ fontSize: '15px', color: 'var(--text-muted)', fontWeight: '500' }}>{kpi.label}</span>
+                                    <span style={{ fontSize: '18px', fontWeight: '700', color: kpi.color }}>{kpi.value}</span>
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
 
@@ -186,38 +350,66 @@ export const Home: React.FC = () => {
                                     <div key={i} className="spark-bar-skeleton skeleton" style={{ height: `${20 + Math.random() * 60}%` }}></div>
                                 ))}
                             </div>
-                            <div style={{ marginTop: '20px' }}>
-                                <div className="skeleton" style={{ height: '14px', width: '100%', marginBottom: '8px', borderRadius: '4px' }}></div>
-                                <div className="skeleton" style={{ height: '14px', width: '100%', borderRadius: '4px' }}></div>
-                            </div>
                         </>
                     ) : (
-                        <>
-                            <div className="spark-bars">
-                                {[
-                                    { i: 80, c: 22 }, { i: 100, c: 30 },
-                                    { i: 85, c: 24 }, { i: 70, c: 19 }, { i: 95, c: 28 }, { i: 110, c: 35 }
-                                ].map((d, idx) => (
-                                    <div key={idx} className="grouped-month">
-                                        <div className="spark-bar ideas" style={{ height: `${d.i / 1.2}%`, animationDelay: `${0.5 + idx * 0.08}s` }}></div>
-                                        <div className="spark-bar challenges" style={{ height: `${d.c * 2}%`, animationDelay: `${0.5 + idx * 0.08 + 0.03}s` }}></div>
-                                    </div>
-                                ))}
+                        <div style={{ width: '100%', height: '220px', marginTop: '10px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={throughputData}
+                                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                                    barGap={2}
+                                    barCategoryGap="25%"
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" opacity={0.5} />
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                                        dy={10}
+                                    />
+                                    <YAxis
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                                    />
+                                    <RechartsTooltip
+                                        cursor={{ fill: 'var(--bg-secondary)', opacity: 0.4 }}
+                                        contentStyle={{
+                                            backgroundColor: 'var(--bg-secondary)',
+                                            border: '1px solid var(--border)',
+                                            borderRadius: '8px',
+                                            fontSize: '12px'
+                                        }}
+                                        itemStyle={{ padding: '2px 0' }}
+                                    />
+                                    <Bar
+                                        dataKey="ideas"
+                                        fill="var(--accent-yellow)"
+                                        radius={[4, 4, 0, 0]}
+                                        animationDuration={1500}
+                                    />
+                                    <Bar
+                                        dataKey="challenges"
+                                        fill="var(--accent-orange)"
+                                        radius={[4, 4, 0, 0]}
+                                        animationDuration={1500}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    )}
+                    {!isLoading && (
+                        <div style={{ marginTop: '20px' }}>
+                            <div className="metric-row">
+                                <span className="metric-label dot yellow">Idea Submissions</span>
+                                <span className="metric-value yellow" style={{ fontSize: '18px' }}>{storage.getIdeaDetails().length}</span>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                                <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+                            <div className="metric-row">
+                                <span className="metric-label dot orange">Challenge Submissions</span>
+                                <span className="metric-value orange" style={{ fontSize: '18px' }}>{storage.getChallenges().length}</span>
                             </div>
-                            <div style={{ marginTop: '14px' }}>
-                                <div className="metric-row">
-                                    <span className="metric-label dot yellow">Idea Submissions</span>
-                                    <span className="metric-value yellow" style={{ fontSize: '18px' }}>27</span>
-                                </div>
-                                <div className="metric-row">
-                                    <span className="metric-label dot orange">Challenge Submissions</span>
-                                    <span className="metric-value orange" style={{ fontSize: '18px' }}>8</span>
-                                </div>
-                            </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </aside>
@@ -391,16 +583,22 @@ export const Home: React.FC = () => {
                                     color="gold"
                                 />
                             )}
-                            <TeamMember avatar="SB" name="Siddharth Banerjee" role="Innovation Lead" bio="Driving enterprise-scale digital transformation with 15+ years in AI & cloud architecture." stats={{ challenges: 4, ideas: 6, score: 92 }} color="green" />
-                            <TeamMember avatar="AB" name="Ananya Basu" role="AI / ML Engineer" bio="GenAI specialist building conversational AI and intelligent automation solutions." stats={{ challenges: 3, ideas: 5, score: 87 }} color="blue" />
-                            <TeamMember avatar="RP" name="Rohan Patel" role="IoT & Digital Twin Lead" bio="Building real-time simulation platforms for manufacturing and logistics optimization." stats={{ challenges: 2, ideas: 4, score: 81 }} color="teal" />
-                            <TeamMember avatar="MS" name="Meera Singh" role="Data Science Lead" bio="Expert in NLP, document intelligence, and building data-driven decision systems." stats={{ challenges: 2, ideas: 3, score: 78 }} color="purple" />
-                            <TeamMember avatar="DG" name="Debarati Ghosh" role="Full-Stack Developer" bio="Cloud-native architect crafting scalable microservices and real-time data pipelines." stats={{ challenges: 3, ideas: 4, score: 84 }} color="orange" />
-                            <TeamMember avatar="AK" name="Arjun Kumar" role="UX / Design Lead" bio="Human-centered design advocate creating intuitive experiences for enterprise tools." stats={{ challenges: 1, ideas: 3, score: 76 }} color="pink" />
-                            <TeamMember avatar="PD" name="Priya Dasgupta" role="Product Manager" bio="Bridging business strategy with tech execution. 12+ years in enterprise product management." stats={{ challenges: 5, ideas: 7, score: 95 }} color="green" />
-                            <TeamMember avatar="VR" name="Vikram Rao" role="Cloud Architect" bio="Designing resilient multi-cloud infrastructure for mission-critical innovation workloads." stats={{ challenges: 3, ideas: 3, score: 82 }} color="blue" />
-                            <TeamMember avatar="NK" name="Neha Kapoor" role="Data Engineer" bio="Building scalable data lakehouse architectures and real-time streaming pipelines." stats={{ challenges: 2, ideas: 5, score: 88 }} color="teal" />
-                            <TeamMember avatar="SC" name="Sourav Chatterjee" role="DevOps Lead" bio="CI/CD evangelist automating deployment pipelines and infrastructure-as-code at scale." stats={{ challenges: 3, ideas: 4, score: 85 }} color="orange" />
+                            {teamMembers.map((member: any, idx: number) => {
+                                // Skip if it's the current user as that's already rendered first
+                                if (isAuthenticated && user && member.email === user.email) return null;
+
+                                return (
+                                    <TeamMember
+                                        key={member.id}
+                                        avatar={member.avatar || member.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
+                                        name={member.name}
+                                        role={member.role === 'ADMIN' ? 'Innovation Admin' : 'Innovation Member'}
+                                        bio={member.about || `Passionate about contributing to ${member.department || 'innovation'} projects.`}
+                                        stats={member.stats}
+                                        color={idx % 2 === 0 ? "blue" : (idx % 3 === 0 ? "teal" : "orange")}
+                                    />
+                                );
+                            })}
                         </>
                     )}
                 </div>
@@ -486,10 +684,10 @@ export const Home: React.FC = () => {
                         }}
                     >{isSubscribing ? 'Subscribing...' : 'Subscribe'}</button>
                 </form>
-            </section>
+            </section >
 
             {/* Toast Notification */}
-            <div className={`subscribe-toast ${subscribeSuccess ? 'show' : ''}`}>
+            < div className={`subscribe-toast ${subscribeSuccess ? 'show' : ''}`}>
                 <span className="toast-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
@@ -501,8 +699,8 @@ export const Home: React.FC = () => {
                     <span>You'll receive innovation insights in your inbox weekly.</span>
                 </div>
                 <button className="toast-close" onClick={() => setSubscribeSuccess(false)}>&times;</button>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

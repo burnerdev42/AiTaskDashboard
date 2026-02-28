@@ -36,24 +36,30 @@ export interface Challenge {
         methods?: number;
         [key: string]: string | number | undefined;
     };
+    summary: string;
     tags?: string[]; // e.g., ["Highlighted", "Most Appreciated"]
     team?: { name: string; avatar: string; avatarColor: string }[];
     impact?: 'Critical' | 'High' | 'Medium' | 'Low';
+    approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
+    rejectionReason?: string;
 }
 
 export interface Notification {
     id: string;
-    type: 'challenge' | 'idea' | 'comment' | 'status' | 'like' | 'vote';
+    type: 'challenge' | 'idea' | 'comment' | 'status' | 'like' | 'vote' | 'registration';
     title: string;
     text: string;
     time: string;
     unread: boolean;
     link: string;
+    actionNeeded?: boolean;
+    meta?: { type: string; text: string }[];
 }
 
 export interface SwimLaneCard {
     id: string;
     title: string;
+    summary?: string;
     description?: string;
     owner: string;
     priority: 'High' | 'Medium' | 'Low';
@@ -102,6 +108,19 @@ export interface Idea {
     submittedDate?: string;
     lastUpdated?: string;
     activity?: ActivityItem[];
+    approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
+    rejectionReason?: string;
+}
+
+export interface AdminLog {
+    id: string;
+    action: string;
+    itemType: 'Registration' | 'Challenge' | 'Idea';
+    itemName: string;
+    adminName: string;
+    timestamp: string;
+    status: 'Approved' | 'Rejected';
+    details?: string;
 }
 
 export interface ChallengeCardData {
@@ -126,6 +145,7 @@ export interface ChallengeDetailData extends Challenge {
     priority: 'High' | 'Medium' | 'Low';
     estimatedImpact: string;
     challengeTags: string[];
+    summary: string;
     timeline: string;
     portfolioOption: string;
     constraints: string;

@@ -744,10 +744,9 @@ npm run test:e2e
 ### UserRole
 ```typescript
 enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-  MANAGER = 'manager',
-  VIEWER = 'viewer'
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  MEMBER = 'MEMBER',
 }
 ```
 

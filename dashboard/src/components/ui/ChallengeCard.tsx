@@ -13,6 +13,19 @@ const SvgIcon: React.FC<{ size?: number; children: React.ReactNode }> = ({ size 
     </svg>
 );
 
+// Impact Colors
+const IMPACT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+    Critical: { bg: 'rgba(239, 83, 80, .12)', text: '#ef5350', border: 'rgba(239, 83, 80, .25)' },
+    High: { bg: 'rgba(255, 167, 38, .12)', text: '#ffa726', border: 'rgba(255, 167, 38, .25)' },
+    Medium: { bg: 'rgba(255, 238, 88, .12)', text: '#ffee58', border: 'rgba(255, 238, 88, .25)' },
+    Low: { bg: 'rgba(102, 187, 106, .12)', text: '#66bb6a', border: 'rgba(102, 187, 106, .25)' },
+};
+
+const getImpactIcon = (impact: string) => {
+    const color = impact === 'Critical' ? '#ef5350' : impact === 'High' ? '#ffa726' : impact === 'Medium' ? '#ffee58' : '#66bb6a';
+    return <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: color, marginRight: 4 }} />;
+};
+
 // Tags
 const StarIcon = () => <SvgIcon><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></SvgIcon>;
 const MedalIcon = () => <SvgIcon><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" /><path d="M11 12 5.12 2.2" /><path d="m13 12 5.88-9.8" /><path d="M8 7h8" /><circle cx="12" cy="17" r="5" /><path d="M12 18v-2h-.5" /></SvgIcon>;
@@ -33,7 +46,7 @@ const stageConfig: Record<string, { icon: React.ReactNode; color: string }> = {
         icon: <SvgIcon size={11}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></SvgIcon>,
     },
     'Scaled & Deployed': {
-        color: 'var(--accent-gold)',
+        color: 'var(--accent-green)',
         icon: <SvgIcon size={11}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></SvgIcon>,
     },
     'Parking Lot': {
@@ -88,12 +101,12 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
         <div
             className="challenge-card"
             data-accent={challenge.accentColor}
-            onClick={() => navigate(`/challenges/${challenge.id}`)}
+            onClick={() => navigate(`/challenges/${challenge.id?.toLowerCase()}`)}
         >
             <div className="challenge-top">
                 <div className="challenge-top-info">
                     <div className="challenge-badge-row">
-                        {challenge.tags?.filter(tag => tag !== 'Pilot').slice(0, 1).map(tag => (
+                        {challenge.tags?.filter(tag => ['Highlighted', 'Most Appreciated', 'Top Voted'].includes(tag)).map(tag => (
                             <span key={tag} className={`challenge-badge ${tag === 'Highlighted' ? 'highlighted' : tag === 'Most Appreciated' ? 'appreciated' : 'top-voted'}`}>
                                 {tag === 'Highlighted' && <StarIcon />}
                                 {tag === 'Most Appreciated' && <MedalIcon />}
@@ -109,9 +122,41 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                             {stage.icon}
                             {challenge.stage}
                         </span>
+                        {challenge.impact && (
+                            <span
+                                className="challenge-impact-badge"
+                                style={{
+                                    background: (IMPACT_COLORS[challenge.impact] || IMPACT_COLORS.Low).bg,
+                                    color: (IMPACT_COLORS[challenge.impact] || IMPACT_COLORS.Low).text,
+                                    borderColor: (IMPACT_COLORS[challenge.impact] || IMPACT_COLORS.Low).border,
+                                    display: 'inline-flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                {getImpactIcon(challenge.impact)}
+                                {challenge.impact} Impact
+                            </span>
+                        )}
                     </div>
                     <h3>{challenge.title}</h3>
-                    <p className="challenge-desc">{challenge.description}</p>
+                    <p className="challenge-desc">{challenge.summary}</p>
+                    {challenge.tags && challenge.tags.length > 0 && (
+                        <div className="challenge-detail-tags" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px', marginBottom: '16px' }}>
+                            {challenge.tags.filter(tag => !['Highlighted', 'Most Appreciated', 'Top Voted', 'Pilot'].includes(tag)).map(tag => (
+                                <span key={tag} className="tag-pill" style={{
+                                    background: 'rgba(255, 193, 7, 0.1)', // Subtle golden background
+                                    color: 'var(--accent-gold)',
+                                    padding: '5px 12px',
+                                    borderRadius: '100px',
+                                    fontSize: '11.5px',
+                                    fontWeight: 600,
+                                    border: '1px solid rgba(255, 193, 7, 0.3)'
+                                }}>
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                     <div className="challenge-owner">
                         <span className="owner-avatar" style={{ background: challenge.owner.avatarColor }}>{challenge.owner.avatar}</span>
                         <span>{challenge.owner.name} &middot; {`CH-${challenge.id.replace(/\D/g, '')}`}</span>

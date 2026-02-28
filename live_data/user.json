@@ -1,0 +1,156 @@
+[
+    {
+        "id": "u-admin",
+        "name": "Sutanu Banerjee",
+        "email": "admin@ananta.com",
+        "role": "ADMIN",
+        "avatar": "SB"
+    },
+    {
+        "id": "u-dibyendu",
+        "name": "Dibyendu Das",
+        "email": "dibyendu@ananta.com",
+        "role": "Member",
+        "avatar": "DD"
+    },
+    {
+        "id": "u-asmit",
+        "name": "Asmit Basu",
+        "email": "asmit@ananta.com",
+        "role": "Member",
+        "avatar": "AB"
+    },
+    {
+        "id": "u-smriti",
+        "name": "Smriti Kumar",
+        "email": "smriti@ananta.com",
+        "role": "Member",
+        "avatar": "SK"
+    },
+    {
+        "id": "u-indrani",
+        "name": "Indrani Ghosh",
+        "email": "indrani@ananta.com",
+        "role": "Member",
+        "avatar": "IG"
+    },
+    {
+        "id": "u-nur",
+        "name": "Nur Islam",
+        "email": "nur@ananta.com",
+        "role": "Member",
+        "avatar": "NI"
+    },
+    {
+        "id": "u-pragya",
+        "name": "Pragya Bharati",
+        "email": "pragya@ananta.com",
+        "role": "Member",
+        "avatar": "PB"
+    },
+    {
+        "id": "u-rohan",
+        "name": "Rohan Mondal",
+        "email": "rohan@ananta.com",
+        "role": "Member",
+        "avatar": "RM"
+    },
+    {
+        "id": "u-pritam",
+        "name": "Pritam Ghatak",
+        "email": "pritam@ananta.com",
+        "role": "Member",
+        "avatar": "PG"
+    },
+    {
+        "id": "u-riyal",
+        "name": "Riyal Guha",
+        "email": "riyal@ananta.com",
+        "role": "Member",
+        "avatar": "RG"
+    },
+    {
+        "id": "u-deb",
+        "name": "Debdarsan Roy",
+        "email": "deb@ananta.com",
+        "role": "Member",
+        "avatar": "DR"
+    },
+    {
+        "id": "u-user1",
+        "name": "Arjun Sharma",
+        "email": "arjun.sharma@example.com",
+        "role": "USER",
+        "avatar": "AS"
+    },
+    {
+        "id": "u-user2",
+        "name": "Ishita Verma",
+        "email": "ishita.verma@example.com",
+        "role": "USER",
+        "avatar": "IV"
+    },
+    {
+        "id": "u-user3",
+        "name": "Kabir Malhotra",
+        "email": "kabir.malhotra@example.com",
+        "role": "USER",
+        "avatar": "KM"
+    },
+    {
+        "id": "u-user4",
+        "name": "Deepika Iyer",
+        "email": "deepika.iyer@example.com",
+        "role": "USER",
+        "avatar": "DI"
+    },
+    {
+        "id": "u-user5",
+        "name": "Aditya Rao",
+        "email": "aditya.rao@example.com",
+        "role": "USER",
+        "avatar": "AR"
+    },
+    {
+        "id": "u-user6",
+        "name": "Sanya Gupta",
+        "email": "sanya.gupta@example.com",
+        "role": "USER",
+        "avatar": "SG"
+    },
+    {
+        "id": "u-user7",
+        "name": "Vikram Singh",
+        "email": "vikram.singh@example.com",
+        "role": "USER",
+        "avatar": "VS"
+    },
+    {
+        "id": "u-user8",
+        "name": "Ananya Reddy",
+        "email": "ananya.reddy@example.com",
+        "role": "USER",
+        "avatar": "AR"
+    },
+    {
+        "id": "u-user9",
+        "name": "Varun Joshi",
+        "email": "varun.joshi@example.com",
+        "role": "USER",
+        "avatar": "RJ"
+    },
+    {
+        "id": "u-user10",
+        "name": "Pooja Hegde",
+        "email": "pooja.hegde@example.com",
+        "role": "USER",
+        "avatar": "PH"
+    },
+    {
+        "id": "u-chandan",
+        "name": "Chandan Kumar",
+        "email": "chandan.kumar@example.com",
+        "role": "MEMBER",
+        "avatar": "CK"
+    }
+]

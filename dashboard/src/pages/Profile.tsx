@@ -335,7 +335,7 @@ export const Profile: React.FC = () => {
                                     <option value="">Select OpCo</option>
                                     <option value="Albert Heijn">Albert Heijn</option>
                                     <option value="GSO">GSO</option>
-                                    <option value="GET">GET</option>
+
                                     <option value="BecSee">BecSee</option>
                                 </select>
                                 {errors.opco && <span className="error-message">{errors.opco}</span>}
@@ -539,7 +539,7 @@ export const Profile: React.FC = () => {
                                             <td>Feb 18, 2026</td>
                                             <td><span className="status-pill status-ideation">Ideation</span></td>
                                         </tr>
-                                        <tr onClick={() => navigate('/challenges/c1/ideas/ID-0204')} style={{ cursor: 'pointer' }}>
+                                        <tr onClick={() => navigate('/challenges/c1/ideas/id-0204')} style={{ cursor: 'pointer' }}>
                                             <td className="id-col">ID-0204</td>
                                             <td>AI-based Lead Scoring</td>
                                             <td>Feb 16, 2026</td>

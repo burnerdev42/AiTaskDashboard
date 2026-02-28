@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation Pipeline – Challenge Cards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a1929;
+      --bg-secondary:  #0f2744;
+      --bg-card:       #1a3a5a;
+      --bg-card-hover: #214565;
+      --border:        #2a4560;
+      --border-light:  #355070;
+
+      --text-primary:  #e8eaf6;
+      --text-secondary:#9a9dba;
+      --text-muted:    #6b6e8a;
+
+      --accent-teal:   #e8a758;
+      --accent-blue:   #f0b870;
+      --accent-green:  #66bb6a;
+      --accent-orange: #ffa726;
+      --accent-red:    #ef5350;
+      --accent-purple: #ab47bc;
+      --accent-pink:   #ec407a;
+      --accent-yellow: #ffee58;
+      --accent-gold:   #ffd54f;
+      --accent-grey:   #78909c;
+
+      --radius:        14px;
+      --radius-sm:     8px;
+      --shadow:        0 4px 24px rgba(0,0,0,.35);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────── */
+    .header-band {
+      background: linear-gradient(135deg, #1a4d7a 0%, #15395f 40%, #0a1929 100%);
+      border-bottom: 2px solid var(--accent-teal);
+      padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .header-logo {
+      width: 48px; height: 48px; background: transparent;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 300; font-size: 36px;
+      background: linear-gradient(135deg, #ffffff, #f0b870, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(232,167,88,0.3));
+    }
+    .header-titles h1 {
+      font-size: 22px; font-weight: 300; letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0, #e8a758);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(232,167,88,0.2);
+    }
+    .header-titles p {
+      font-size: 13px; font-weight: 500; color: #f0b870;
+      letter-spacing: 3px; text-transform: none; margin-top: 4px;
+      text-shadow: 0 1px 6px rgba(240,184,112,0.4);
+    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none; font-size: 13px;
+      font-weight: 500; padding: 6px 14px; border-radius: 6px;
+      transition: all .2s;
+    }
+    .nav-link:hover { color: var(--accent-teal); background: rgba(232,167,88,.08); }
+    .nav-link.active { color: var(--accent-teal); background: rgba(232,167,88,.12); }
+
+    /* ── What's Next Special Nav ────────────────── */
+    .nav-link.whats-next-link {
+      position: relative;
+      background: linear-gradient(135deg, rgba(171,71,188,.2), rgba(232,167,88,.15));
+      border: 1px solid rgba(171,71,188,.4);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e0b0ff;
+      overflow: hidden;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::before {
+      content: ''; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0b0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: currentColor; width: 12px; height: 12px;
+      margin-right: 5px;
+      font-size: 12px;
+      display: inline-block;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    .nav-link.whats-next-link:hover {
+      background: linear-gradient(135deg, rgba(171,71,188,.35), rgba(232,167,88,.3));
+      border-color: rgba(232,167,88,.6);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(171,71,188,.3), 0 0 12px rgba(232,167,88,.2);
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(171,71,188,.15), 0 0 2px rgba(232,167,88,.1); }
+      50%      { box-shadow: 0 0 14px rgba(171,71,188,.35), 0 0 6px rgba(232,167,88,.2); }
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-2px) scale(1.15); }
+    }
+
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-teal); display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #0d0f1a;
+    }
+
+    /* ── Notification Bell ──────────────── */
+    .notification-wrapper {
+      position: relative;
+    }
+    .notification-bell {
+      position: relative;
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 18px;
+    }
+    .notification-bell:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-teal);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 18px; height: 18px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--bg-primary);
+    }
+    .notification-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+    }
+    .notification-panel.active {
+      display: flex;
+    }
+    .notification-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notification-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mark-all-read {
+      font-size: 11px;
+      color: var(--accent-teal);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    .mark-all-read:hover {
+      background: rgba(232,167,88,.1);
+    }
+    .notification-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .notification-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notification-list::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+    .notification-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .notification-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      gap: 12px;
+    }
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+    .notification-item.unread {
+      background: rgba(232,167,88,.05);
+    }
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+    .notification-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .notification-icon.challenge {
+      background: rgba(255,167,38,.15);
+      color: var(--accent-orange);
+    }
+    .notification-icon.idea {
+      background: rgba(232,167,88,.15);
+      color: var(--accent-teal);
+    }
+    .notification-icon.comment {
+      background: rgba(240,184,112,.15);
+      color: var(--accent-blue);
+    }
+    .notification-icon.status {
+      background: rgba(102,187,106,.15);
+      color: var(--accent-green);
+    }
+    .notification-content {
+      flex: 1;
+    }
+    .notification-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .notification-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .notification-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .notification-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .view-all-link {
+      font-size: 12px;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all .2s;
+    }
+    .view-all-link:hover {
+      color: var(--accent-blue);
+    }
+
+    /* ── Page Toolbar ────────────────────── */
+    .toolbar {
+      padding: 20px 36px;
+      display: flex; flex-direction: column; gap: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .toolbar-top {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .toolbar-left { display: flex; align-items: center; gap: 16px; }
+    .toolbar-left h2 {
+      font-size: 18px; font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toolbar-left .total-badge {
+      font-size: 12px; font-weight: 700; color: var(--accent-red);
+      background: rgba(239,83,80,.12); border: 1px solid rgba(239,83,80,.2);
+      padding: 3px 12px; border-radius: 14px;
+      transition: transform .2s ease;
+    }
+    .toolbar-right { display: flex; gap: 10px; }
+    .btn-new {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      border: none; color: #0d0f1a; padding: 9px 22px; border-radius: 8px;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: all .2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .btn-new:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,167,88,.3); }
+
+    /* ── Filter Bar ──────────────────────── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    }
+    .filter-group {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .filter-group-label {
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-right: 4px; white-space: nowrap;
+    }
+    .filter-divider {
+      width: 1px; height: 28px; background: var(--border); margin: 0 4px;
+    }
+
+    /* Status filter tabs */
+    .status-tab {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: all .25s ease; font-family: inherit;
+      white-space: nowrap;
+    }
+    .status-tab:hover {
+      border-color: var(--accent-teal); color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+    .status-tab.active {
+      color: #fff; transform: translateY(-1px);
+      box-shadow: 0 3px 12px rgba(0,0,0,.25);
+    }
+    .status-tab .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .status-tab .status-count {
+      font-size: 10px; font-weight: 700;
+      padding: 1px 7px; border-radius: 10px;
+      background: rgba(255,255,255,.12);
+      min-width: 20px; text-align: center;
+    }
+    /* All */
+    .status-tab[data-status="all"].active {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      border-color: var(--accent-teal); color: #0d0f1a;
+    }
+    .status-tab[data-status="all"].active .status-count { background: rgba(0,0,0,.15); color: #0d0f1a; }
+    .status-tab[data-status="all"] .status-dot { background: var(--accent-teal); }
+    /* Active */
+    .status-tab[data-status="active"].active {
+      background: linear-gradient(135deg, #43a047, #66bb6a);
+      border-color: #66bb6a;
+    }
+    .status-tab[data-status="active"].active .status-count { background: rgba(255,255,255,.2); }
+    .status-tab[data-status="active"] .status-dot { background: var(--accent-green); }
+    /* Pending */
+    .status-tab[data-status="pending"].active {
+      background: linear-gradient(135deg, #f9a825, #ffee58);
+      border-color: #ffee58; color: #0d0f1a;
+    }
+    .status-tab[data-status="pending"].active .status-count { background: rgba(0,0,0,.12); color: #0d0f1a; }
+    .status-tab[data-status="pending"] .status-dot { background: var(--accent-yellow); }
+    /* Declined */
+    .status-tab[data-status="declined"].active {
+      background: linear-gradient(135deg, #c62828, #ef5350);
+      border-color: #ef5350;
+    }
+    .status-tab[data-status="declined"].active .status-count { background: rgba(255,255,255,.2); }
+    .status-tab[data-status="declined"] .status-dot { background: var(--accent-red); }
+
+    /* Impact filter pills */
+    .filter-btn {
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); padding: 6px 14px; border-radius: 8px;
+      font-size: 11px; font-weight: 500; cursor: pointer;
+      transition: all .2s; font-family: inherit;
+    }
+    .filter-btn:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
+    .filter-btn.active { border-color: var(--accent-teal); color: var(--accent-teal); background: rgba(232,167,88,.08); }
+
+    /* No-results message */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center; padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .no-results .no-results-icon {
+      width: 64px; height: 64px; margin: 0 auto 16px;
+      background: var(--bg-card); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: var(--text-muted);
+    }
+    .no-results h3 {
+      font-size: 16px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;
+    }
+    .no-results p { font-size: 13px; }
+
+    /* ── Cards Grid ──────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+      padding: 28px 36px;
+    }
+
+    /* ── Challenge Card (A5 Portrait Style) ─ */
+    .challenge-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: all .25s ease, opacity .3s ease, transform .3s ease;
+      cursor: pointer;
+      position: relative;
+      opacity: 1;
+    }
+    .challenge-card.hidden {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+    }
+    .challenge-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+
+    /* Left accent stripe */
+    .challenge-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px;
+      border-radius: 14px 0 0 14px;
+    }
+    .challenge-card.impact-critical::before { background: var(--accent-red); }
+    .challenge-card.impact-high::before    { background: var(--accent-orange); }
+    .challenge-card.impact-medium::before  { background: var(--accent-yellow); }
+    .challenge-card.impact-low::before     { background: var(--accent-green); }
+
+    /* Owner identification */
+    .challenge-card.is-mine { border-left: 3px solid var(--accent-teal); }
+    .owner-badge-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 7px;
+      border-radius: 8px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, rgba(232,167,88,.18), rgba(240,184,112,.12));
+      color: var(--accent-teal);
+      border: 1px solid rgba(232,167,88,.3);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .owner-badge-card svg { width: 10px; height: 10px; }
+
+    /* Card Header — tracking number */
+    .card-header {
+      padding: 18px 22px 0 22px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .challenge-card[data-status] .card-header {
+      padding-right: 120px;  /* clear the abs-positioned status chip */
+    }
+    .challenge-number {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+    .challenge-number .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .card-header .edit-icon {
+      width: 30px; height: 30px; border-radius: 6px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--text-muted);
+      transition: all .2s;
+    }
+    .card-header .edit-icon:hover {
+      border-color: var(--accent-teal); color: var(--accent-teal);
+    }
+
+    /* Card Title */
+    .card-title {
+      padding: 14px 22px 0 22px;
+      font-size: 18px; font-weight: 700; line-height: 1.35;
+      /* max 2 lines */
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* Problem Description */
+    .card-problem {
+      padding: 12px 22px 0 22px;
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.65;
+      /* max ~3 lines */
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* Divider */
+    .card-divider {
+      margin: 18px 22px 0 22px;
+      border: none; border-top: 1px solid var(--border);
+    }
+
+    /* Impact Meter */
+    .card-impact {
+      padding: 16px 22px 0 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card-impact .impact-label {
+      font-size: 12px; font-weight: 600; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 6px;
+      min-width: 62px;
+    }
+    .impact-meter {
+      display: flex; gap: 4px; flex: 1;
+    }
+    .impact-meter .bar {
+      height: 14px; flex: 1; border-radius: 3px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      transition: all .3s;
+    }
+    .impact-meter .bar.filled { border-color: transparent; }
+    .impact-level-text {
+      font-size: 11px; font-weight: 700; padding: 2px 10px;
+      border-radius: 10px; letter-spacing: .5px;
+    }
+
+    /* Meta Info */
+    .card-meta-info {
+      padding: 14px 22px 0 22px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .meta-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-secondary);
+    }
+    .meta-row .meta-icon {
+      width: 18px; text-align: center; font-size: 13px;
+    }
+    .meta-row .meta-value { font-weight: 500; }
+    .meta-row .meta-value.highlight { color: var(--text-primary); font-weight: 600; }
+
+    /* QR Section */
+    .card-qr-section {
+      padding: 16px 22px 20px 22px;
+      display: flex; align-items: center; gap: 14px;
+      margin-top: auto;
+    }
+    .qr-box {
+      width: 56px; height: 56px; border-radius: 8px;
+      background: #ffffff;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .qr-box svg { width: 44px; height: 44px; }
+    .qr-text {
+      font-size: 11px; color: var(--text-muted); line-height: 1.5;
+    }
+    .qr-text a {
+      color: var(--accent-teal); text-decoration: none; font-weight: 600;
+    }
+    .qr-text a:hover { text-decoration: underline; }
+
+    /* ── Impact-level specific colors ────── */
+    .impact-critical .impact-meter .bar.filled { background: var(--accent-red); }
+    .impact-critical .impact-level-text { background: rgba(239,83,80,.12); color: var(--accent-red); }
+
+    .impact-high .impact-meter .bar.filled { background: var(--accent-orange); }
+    .impact-high .impact-level-text { background: rgba(255,167,38,.12); color: var(--accent-orange); }
+
+    .impact-medium .impact-meter .bar.filled { background: var(--accent-yellow); }
+    .impact-medium .impact-level-text { background: rgba(255,238,88,.12); color: var(--accent-yellow); }
+
+    .impact-low .impact-meter .bar.filled { background: var(--accent-green); }
+    .impact-low .impact-level-text { background: rgba(102,187,106,.12); color: var(--accent-green); }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      text-align: center; padding: 18px;
+      font-size: 11px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    .footer a { color: var(--accent-teal); text-decoration: none; }
+
+    /* ── Modal Dialog ────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-dialog {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(232,167,88,0.05), rgba(240,184,112,0.05));
+    }
+    .modal-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .modal-close {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 20px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+      background: rgba(239,83,80,.08);
+    }
+    .modal-body {
+      padding: 32px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .modal-body::-webkit-scrollbar { width: 8px; }
+    .modal-body::-webkit-scrollbar-track { background: var(--bg-card); }
+    .modal-body::-webkit-scrollbar-thumb { background: var(--accent-teal); border-radius: 4px; }
+    
+    /* Form Styles for Modal */
+    .form-section { margin-bottom: 28px; }
+    .form-section:last-child { margin-bottom: 0; }
+    .section-title {
+      font-size: 15px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--accent-teal);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-title .icon { font-size: 18px; }
+    .section-divider {
+      height: 1px; background: linear-gradient(90deg, var(--accent-teal), transparent);
+      margin-bottom: 20px;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 13px; font-weight: 600; color: var(--text-primary);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .form-label .required { color: var(--accent-red); font-size: 14px; }
+    .form-label .hint { font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 14px; font-size: 13px;
+      color: var(--text-primary); font-family: inherit; transition: all .2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none; border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+    .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .form-select { cursor: pointer; }
+    .char-counter {
+      font-size: 11px; color: var(--text-muted); text-align: right; margin-top: -4px;
+    }
+    .char-counter.warning { color: var(--accent-orange); }
+    .char-counter.limit { color: var(--accent-red); }
+    .tags-input-wrapper {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px; display: flex;
+      flex-wrap: wrap; gap: 8px; min-height: 44px;
+      align-items: center; transition: all .2s;
+    }
+    .tags-input-wrapper:focus-within {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px rgba(232,167,88,.1);
+    }
+    .tag-item {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; background: rgba(232,167,88,.15);
+      color: var(--accent-teal); border-radius: 16px;
+      font-size: 12px; font-weight: 600;
+    }
+    .tag-item .remove-tag {
+      cursor: pointer; font-weight: 700; opacity: 0.7; transition: opacity .2s;
+    }
+    .tag-item .remove-tag:hover { opacity: 1; }
+    .tags-input {
+      flex: 1; min-width: 120px; border: none;
+      background: transparent; color: var(--text-primary);
+      font-size: 13px; padding: 4px 0; outline: none; font-family: inherit;
+    }
+    .tags-input::placeholder { color: var(--text-muted); }
+    .impact-selector {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    }
+    .impact-option { position: relative; }
+    .impact-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .impact-option label {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 14px 10px; background: var(--bg-card);
+      border: 2px solid var(--border); border-radius: 8px;
+      cursor: pointer; transition: all .2s; text-align: center;
+    }
+    .impact-option label:hover {
+      border-color: var(--accent-teal); transform: translateY(-2px);
+    }
+    .impact-option input:checked + label {
+      border-color: var(--accent-teal); background: rgba(232,167,88,.08);
+    }
+    .impact-icon { font-size: 22px; }
+    .impact-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .form-actions {
+      display: flex; gap: 12px; justify-content: flex-end;
+      margin-top: 28px; padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      padding: 10px 28px; border-radius: 8px; font-size: 13px;
+      font-weight: 600; cursor: pointer; border: none;
+      transition: all .2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      color: #0d0f1a;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232,167,88,.4);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: var(--bg-card); color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-teal); color: var(--accent-teal);
+    }
+    .help-text {
+      font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-top: 4px;
+    }
+    .success-message {
+      display: none; background: rgba(102,187,106,.15);
+      border: 2px solid var(--accent-green); border-radius: var(--radius);
+      padding: 16px 20px; margin-bottom: 20px;
+      align-items: center; gap: 12px;
+    }
+    .success-message.show { display: flex; }
+    .success-message .icon { font-size: 28px; }
+    .success-message .content { flex: 1; }
+    .success-message .title {
+      font-size: 15px; font-weight: 700; color: var(--accent-green); margin-bottom: 4px;
+    }
+    .success-message .text { font-size: 12px; color: var(--text-secondary); }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 768px) {
+      .cards-grid { grid-template-columns: 1fr; padding: 20px 16px; }
+      .toolbar { flex-direction: column; gap: 14px; align-items: flex-start; }
+      .modal-dialog { width: 95%; max-width: 100%; }
+      .modal-body { padding: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .impact-selector { grid-template-columns: repeat(2, 1fr); }
+    }
+  
+    /* ── Lucide outlined icons ── */
+    .lucide {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+      display: inline-block;
+      stroke-width: 1.75;
+    }
+  </style>
+</head>
+<body>
+<script src="auth-guard.js"></script>
+
+<!-- ═══ HEADER ════════════════════════════════ -->
+<header class="header-band">
+  <div class="header-left">
+    <div class="header-logo">∞</div>
+    <div class="header-titles">
+      <h1>Ananta</h1>
+      <p>Manthan. Nirmaan. Drishti.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" class="nav-link">Home</a>
+    <a href="swim-lane.html" class="nav-link">Swim Lane</a>
+    <a href="challenge-cards.html" class="nav-link active">Challenges</a>
+    <a href="detail-dashboard.html" class="nav-link">Metrics</a>
+    <a href="whats-next.html" class="nav-link whats-next-link">What's Next</a>
+    <div class="notification-wrapper">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge" id="notifBadge">5</span>
+      </div>
+      <div class="notification-panel" id="notifPanel">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <span class="mark-all-read" onclick="markAllRead()">Mark all read</span>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread" data-id="1" onclick="handleNotificationClick(1, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Challenge Submitted</div>
+              <div class="notification-text">"Reduce Customer Churn" by R. Patel needs review</div>
+              <div class="notification-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="2" onclick="handleNotificationClick(2, 'idea-detail.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Idea Proposed</div>
+              <div class="notification-text">"AI-Powered Retention Model" linked to CH-01</div>
+              <div class="notification-time">23 minutes ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="3" onclick="handleNotificationClick(3, 'challenge-detail.html')">
+            <div class="notification-icon comment"><i data-lucide="message-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">New Comment</div>
+              <div class="notification-text">S. Kumar commented on "Automate Invoice Reconciliation"</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="4" onclick="handleNotificationClick(4, 'idea-detail.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Status Update</div>
+              <div class="notification-text">"Predictive Inventory" moved to Evaluation stage</div>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item unread" data-id="5" onclick="handleNotificationClick(5, 'challenge-detail.html')">
+            <div class="notification-icon challenge"><i data-lucide="flag"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Challenge Updated</div>
+              <div class="notification-text">Impact level changed for "Optimize Warehouse Layout"</div>
+              <div class="notification-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="6" onclick="handleNotificationClick(6, 'detail-dashboard.html')">
+            <div class="notification-icon status"><i data-lucide="trending-up"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Milestone Achieved</div>
+              <div class="notification-text">Team reached 50 ideas submitted this quarter</div>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notification-item" data-id="7" onclick="handleNotificationClick(7, 'profile.html')">
+            <div class="notification-icon idea"><i data-lucide="lightbulb"></i></div>
+            <div class="notification-content">
+              <div class="notification-title">Idea Approved</div>
+              <div class="notification-text">Your idea "Voice-Based Order Entry" approved for pilot</div>
+              <div class="notification-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-link">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+    <a href="profile.html" class="avatar" title="Profile">A</a>
+  </div>
+</header>
+
+<!-- ═══ TOOLBAR ═══════════════════════════════ -->
+<div class="toolbar">
+  <div class="toolbar-top">
+    <div class="toolbar-left">
+      <h2><i data-lucide="circle"></i> Challenge Cards</h2>
+      <span class="total-badge" id="totalBadge">8 Active</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn-new" onclick="openChallengeModal()">＋ New Challenge</button>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-group-label">Status</span>
+      <button class="status-tab active" data-status="all">
+        <span class="status-dot"></span> All <span class="status-count" id="countAll">8</span>
+      </button>
+      <button class="status-tab" data-status="active">
+        <span class="status-dot"></span> Active <span class="status-count" id="countActive">8</span>
+      </button>
+      <button class="status-tab" data-status="pending">
+        <span class="status-dot"></span> Pending <span class="status-count" id="countPending">0</span>
+      </button>
+      <button class="status-tab" data-status="declined">
+        <span class="status-dot"></span> Declined <span class="status-count" id="countDeclined">0</span>
+      </button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-group">
+      <span class="filter-group-label">Impact</span>
+      <button class="filter-btn active" data-impact="all">All</button>
+      <button class="filter-btn" data-impact="critical">Critical</button>
+      <button class="filter-btn" data-impact="high">High</button>
+      <button class="filter-btn" data-impact="medium">Medium</button>
+      <button class="filter-btn" data-impact="low">Low</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CARDS GRID ════════════════════════════ -->
+<div class="cards-grid">
+
+  <!-- Card 1 — Critical -->
+  <div class="challenge-card impact-critical" data-status="active">
+    <a href="challenge-detail.html" class="card-link">
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:var(--accent-red)"></span>
+          Challenge #C-047
+        </div>
+        <div class="edit-icon"><i data-lucide="pencil"></i></div>
+      </div>
+      <div class="card-title">Reduce Customer Churn Rate by 15% Within Q2</div>
+      <div class="card-problem">High-value enterprise segment losing 8% of accounts quarter-over-quarter due to poor digital onboarding experience and delayed support resolution times.</div>
+      <hr class="card-divider" />
+      <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+      </div>
+      <span class="impact-level-text">(Critical)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Customer Experience</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Priya K.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">15-Jan-2026</span></div>
+    </div>
+      <div class="card-qr-section">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" fill="#0d0f1a">
+            <rect x="5" y="5" width="28" height="28" rx="3"/>
+            <rect x="67" y="5" width="28" height="28" rx="3"/>
+            <rect x="5" y="67" width="28" height="28" rx="3"/>
+            <rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/>
+            <rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/>
+            <rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/>
+            <rect x="15" y="15" width="8" height="8" rx="1"/>
+            <rect x="77" y="15" width="8" height="8" rx="1"/>
+            <rect x="15" y="77" width="8" height="8" rx="1"/>
+            <rect x="40" y="5" width="7" height="7" rx="1"/>
+            <rect x="52" y="5" width="7" height="7" rx="1"/>
+            <rect x="40" y="18" width="7" height="7" rx="1"/>
+            <rect x="40" y="40" width="7" height="7" rx="1"/>
+            <rect x="52" y="40" width="7" height="7" rx="1"/>
+            <rect x="67" y="40" width="7" height="7" rx="1"/>
+            <rect x="80" y="40" width="7" height="7" rx="1"/>
+            <rect x="67" y="67" width="26" height="26" rx="3"/>
+            <rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/>
+            <rect x="77" y="77" width="6" height="6" rx="1"/>
+            <rect x="40" y="55" width="7" height="7" rx="1"/>
+            <rect x="52" y="67" width="7" height="7" rx="1"/>
+          </svg>
+        </div>
+        <div class="qr-text">
+          Scan for full brief →<br/>
+          <span>pipeline.tcs.com/C-047</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Card 2 — High -->
+  <div class="challenge-card impact-high" data-status="active">
+    <a href="challenge-detail.html" class="card-link">
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:var(--accent-orange)"></span>
+          Challenge #C-048
+        </div>
+        <div class="edit-icon"><i data-lucide="pencil"></i></div>
+      </div>
+      <div class="card-title">Automate Invoice Reconciliation Across 3 ERPs</div>
+      <div class="card-problem">Manual invoice matching consuming 200+ person-hours per month across the finance team with a 6% error rate leading to vendor payment disputes.</div>
+      <hr class="card-divider" />
+      <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar"></div>
+      </div>
+      <span class="impact-level-text">(High)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Finance & Ops</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Rajeev M.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">22-Jan-2026</span></div>
+    </div>
+      <div class="card-qr-section">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="40" y="10" width="7" height="7" rx="1"/><rect x="52" y="18" width="7" height="7" rx="1"/><rect x="40" y="40" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+        </div>
+        <div class="qr-text">
+          Scan for full brief →<br/>
+          <span>pipeline.tcs.com/C-048</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Card 3 — Critical -->
+  <div class="challenge-card impact-critical" data-status="active">
+    <a href="challenge-detail.html" class="card-link">
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:var(--accent-red)"></span>
+          Challenge #C-049
+        </div>
+        <div class="edit-icon"><i data-lucide="pencil"></i></div>
+      </div>
+    <div class="card-title">Improve Warehouse Peak-Season Throughput</div>
+    <div class="card-problem">Current warehouse operations create a 2-day shipping delay during peak season, resulting in a 12% order cancellation rate and €1.8M revenue leakage annually.</div>
+    <hr class="card-divider" />
+    <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+      </div>
+      <span class="impact-level-text">(Critical)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Supply Chain</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Ankit B.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">28-Jan-2026</span></div>
+    </div>
+      <div class="card-qr-section">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="42" y="5" width="7" height="7" rx="1"/><rect x="42" y="42" width="7" height="7" rx="1"/><rect x="55" y="55" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+        </div>
+        <div class="qr-text">
+          Scan for full brief →<br/>
+          <span>pipeline.tcs.com/C-049</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Card 4 — Medium -->
+  <div class="challenge-card impact-medium" data-status="active">
+    <a href="challenge-detail.html" class="card-link">
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:var(--accent-yellow)"></span>
+          Challenge #C-050
+        </div>
+        <div class="edit-icon"><i data-lucide="pencil"></i></div>
+      </div>
+    <div class="card-title">Unify Product Data Across 5 Regional Catalogues</div>
+    <div class="card-problem">Inconsistent product attributes across regional systems causing search relevance issues, mis-shipments, and a fragmented customer experience online.</div>
+    <hr class="card-divider" />
+    <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <span class="impact-level-text">(Medium)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Product & Data</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Suman D.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">01-Feb-2026</span></div>
+    </div>
+      <div class="card-qr-section">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="40" y="10" width="7" height="7" rx="1"/><rect x="40" y="52" width="7" height="7" rx="1"/><rect x="52" y="40" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+        </div>
+        <div class="qr-text">
+          Scan for full brief →<br/>
+          <span>pipeline.tcs.com/C-050</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Card 5 — High -->
+  <div class="challenge-card impact-high" data-status="active">
+    <a href="challenge-detail.html" class="card-link">
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:var(--accent-orange)"></span>
+          Challenge #C-051
+        </div>
+        <div class="edit-icon"><i data-lucide="pencil"></i></div>
+      </div>
+    <div class="card-title">Eliminate Unplanned Downtime on Packaging Lines</div>
+    <div class="card-problem">Unexpected equipment failures on 4 packaging lines causing 120+ hours per year of unplanned downtime per plant, costing €2.3M in lost output.</div>
+    <hr class="card-divider" />
+    <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar"></div>
+      </div>
+      <span class="impact-level-text">(High)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Manufacturing</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Meena S.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">03-Feb-2026</span></div>
+    </div>
+      <div class="card-qr-section">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="52" y="5" width="7" height="7" rx="1"/><rect x="40" y="40" width="7" height="7" rx="1"/><rect x="52" y="52" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+        </div>
+        <div class="qr-text">
+          Scan for full brief →<br/>
+          <span>pipeline.tcs.com/C-051</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Card 6 — Low -->
+  <div class="challenge-card impact-low" data-status="active">
+    <a href="challenge-detail.html" class="card-link">
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:var(--accent-green)"></span>
+          Challenge #C-052
+        </div>
+        <div class="edit-icon"><i data-lucide="pencil"></i></div>
+      </div>
+    <div class="card-title">Centralise Sustainability Reporting</div>
+    <div class="card-problem">Carbon footprint data scattered across 12 spreadsheets per region, making quarterly ESG reporting a 3-week manual effort with limited accuracy.</div>
+    <hr class="card-divider" />
+    <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <span class="impact-level-text">(Low)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Sustainability</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Arun T.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">05-Feb-2026</span></div>
+    </div>
+      <div class="card-qr-section">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="40" y="15" width="7" height="7" rx="1"/><rect x="52" y="42" width="7" height="7" rx="1"/><rect x="42" y="55" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+        </div>
+        <div class="qr-text">
+          Scan for full brief →<br/>
+          <span>pipeline.tcs.com/C-052</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Card 7 — High -->
+  <div class="challenge-card impact-high" data-status="active">
+    <div class="card-header">
+      <div class="challenge-number">
+        <span class="dot" style="background:var(--accent-orange)"></span>
+        Challenge #C-053
+      </div>
+      <div class="edit-icon"><i data-lucide="pencil"></i></div>
+    </div>
+    <div class="card-title">Real-Time Visibility Into Last-Mile Delivery</div>
+    <div class="card-problem">No live tracking beyond dispatch; 30% of customer "Where is my order?" calls are unanswerable, driving NPS down and support costs up by €400K/year.</div>
+    <hr class="card-divider" />
+    <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar"></div>
+      </div>
+      <span class="impact-level-text">(High)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Logistics</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Kavita R.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">07-Feb-2026</span></div>
+    </div>
+    <div class="card-qr-section">
+      <div class="qr-box">
+        <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="40" y="5" width="7" height="7" rx="1"/><rect x="52" y="15" width="7" height="7" rx="1"/><rect x="40" y="42" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+      </div>
+      <div class="qr-text">
+        Scan for full brief →<br/>
+        <a href="#">pipeline.tcs.com/C-053</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 8 — Medium -->
+  <div class="challenge-card impact-medium" data-status="active">
+    <div class="card-header">
+      <div class="challenge-number">
+        <span class="dot" style="background:var(--accent-yellow)"></span>
+        Challenge #C-054
+      </div>
+      <div class="edit-icon"><i data-lucide="pencil"></i></div>
+    </div>
+    <div class="card-title">Reduce Time-to-Insight for Store Planograms</div>
+    <div class="card-problem">Planogram compliance checks are done manually via store visits every 6 weeks. Delayed insights mean lost shelf-revenue opportunities averaging €800K per quarter.</div>
+    <hr class="card-divider" />
+    <div class="card-impact">
+      <div class="impact-label"><i data-lucide="bar-chart-2"></i> Impact:</div>
+      <div class="impact-meter">
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar filled"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <span class="impact-level-text">(Medium)</span>
+    </div>
+    <div class="card-meta-info">
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="tag"></i></span> Domain: <span class="meta-value highlight">Retail Ops</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">Deepak N.</span></div>
+      <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">10-Feb-2026</span></div>
+    </div>
+    <div class="card-qr-section">
+      <div class="qr-box">
+        <svg viewBox="0 0 100 100" fill="#0d0f1a"><rect x="5" y="5" width="28" height="28" rx="3"/><rect x="67" y="5" width="28" height="28" rx="3"/><rect x="5" y="67" width="28" height="28" rx="3"/><rect x="11" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="73" y="11" width="16" height="16" rx="2" fill="#fff"/><rect x="11" y="73" width="16" height="16" rx="2" fill="#fff"/><rect x="15" y="15" width="8" height="8" rx="1"/><rect x="77" y="15" width="8" height="8" rx="1"/><rect x="15" y="77" width="8" height="8" rx="1"/><rect x="52" y="10" width="7" height="7" rx="1"/><rect x="42" y="42" width="7" height="7" rx="1"/><rect x="55" y="55" width="7" height="7" rx="1"/><rect x="67" y="67" width="26" height="26" rx="3"/><rect x="73" y="73" width="14" height="14" rx="2" fill="#fff"/><rect x="77" y="77" width="6" height="6" rx="1"/></svg>
+      </div>
+      <div class="qr-text">
+        Scan for full brief →<br/>
+        <a href="#">pipeline.tcs.com/C-054</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  Copyright © 2026, <a href="#">www.tcs.com</a> · Developed with human brain, artificial neurons, love, passion, and GPUs at
+  <strong>The TCS-Ahold Delhaize engineering LABS</strong>, Kolkata ODC (Gitanjali Park – L14).
+</footer>
+
+<!-- ═══ SUBMIT CHALLENGE MODAL ════════════════ -->
+<div class="modal-overlay" id="challengeModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h2><i data-lucide="flag"></i> Submit New Challenge</h2>
+      <button class="modal-close" onclick="closeChallengeModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <!-- Success Message -->
+      <div class="success-message" id="successMessage">
+        <span class="icon"><i data-lucide="clock"></i></span>
+        <div class="content">
+          <div class="title">Challenge Submitted — Pending Admin Approval</div>
+          <div class="text">Your challenge is awaiting admin review. Once approved it will be visible to all users.</div>
+        </div>
+      </div>
+
+      <form id="challengeForm">
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="icon"><i data-lucide="file-pen"></i></span>
+            Basic Information
+          </h2>
+          <div class="section-divider"></div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">
+                Challenge Title <span class="required">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="e.g., Reduce Customer Churn by 15%" 
+                maxlength="100" id="challengeTitle" required />
+              <div class="char-counter" id="titleCounter">0 / 100</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Business Unit <span class="required">*</span></label>
+              <select class="form-select" id="businessUnit" required>
+                <option value="">Select business unit</option>
+                <option value="customer-experience">Customer Experience</option>
+                <option value="finance-ops">Finance & Operations</option>
+                <option value="supply-chain">Supply Chain</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="product-data">Product & Data</option>
+                <option value="it-infrastructure">IT & Infrastructure</option>
+                <option value="hr-people">HR & People</option>
+                <option value="sustainability">Sustainability</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Department <span class="required">*</span></label>
+              <input type="text" class="form-input" placeholder="e.g., Customer Success" 
+                id="department" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- Problem Statement -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="icon"><i data-lucide="circle-alert"></i></span>
+            Problem Statement
+          </h2>
+          <div class="section-divider"></div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">
+                Describe the Problem <span class="required">*</span>
+                <span class="hint">(Be specific about pain points, metrics, and impact)</span>
+              </label>
+              <textarea class="form-textarea" 
+                placeholder="Describe the business problem in detail. Include current metrics, pain points, and why this needs to be solved now..."
+                maxlength="1000" id="problemDesc" required></textarea>
+              <div class="char-counter" id="problemCounter">0 / 1000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expected Outcome -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="icon"><i data-lucide="flag"></i></span>
+            Expected Outcome
+          </h2>
+          <div class="section-divider"></div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">
+                What Success Looks Like <span class="required">*</span>
+                <span class="hint">(Define measurable outcomes and KPIs)</span>
+              </label>
+              <textarea class="form-textarea" 
+                placeholder="Describe the desired outcome, success metrics, and expected benefits..."
+                maxlength="800" id="outcomeDesc" required></textarea>
+              <div class="char-counter" id="outcomeCounter">0 / 800</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expected Timeline</label>
+              <select class="form-select" id="timeline">
+                <option value="">Select timeline</option>
+                <option value="1-3-months">1-3 months</option>
+                <option value="3-6-months">3-6 months</option>
+                <option value="6-12-months">6-12 months</option>
+                <option value="12-months-plus">12+ months</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Estimated Budget Range</label>
+              <select class="form-select" id="budget">
+                <option value="">Select budget range</option>
+                <option value="under-50k">Under €50K</option>
+                <option value="50k-100k">€50K - €100K</option>
+                <option value="100k-250k">€100K - €250K</option>
+                <option value="250k-500k">€250K - €500K</option>
+                <option value="500k-plus">€500K+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Impact & Priority -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="icon"><i data-lucide="bar-chart-2"></i></span>
+            Impact & Priority
+          </h2>
+          <div class="section-divider"></div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Business Impact Level <span class="required">*</span></label>
+              <div class="impact-selector">
+                <div class="impact-option">
+                  <input type="radio" name="impact" value="critical" id="impact-critical" required>
+                  <label for="impact-critical">
+                    <div class="impact-icon"><i data-lucide="circle"></i></div>
+                    <div class="impact-label">Critical</div>
+                  </label>
+                </div>
+                <div class="impact-option">
+                  <input type="radio" name="impact" value="high" id="impact-high">
+                  <label for="impact-high">
+                    <div class="impact-icon"><i data-lucide="circle"></i></div>
+                    <div class="impact-label">High</div>
+                  </label>
+                </div>
+                <div class="impact-option">
+                  <input type="radio" name="impact" value="medium" id="impact-medium">
+                  <label for="impact-medium">
+                    <div class="impact-icon"><i data-lucide="circle"></i></div>
+                    <div class="impact-label">Medium</div>
+                  </label>
+                </div>
+                <div class="impact-option">
+                  <input type="radio" name="impact" value="low" id="impact-low">
+                  <label for="impact-low">
+                    <div class="impact-icon"><i data-lucide="circle"></i></div>
+                    <div class="impact-label">Low</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Annual Revenue Impact</label>
+              <input type="text" class="form-input" placeholder="e.g., €2M revenue retention" id="revenueImpact" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cost Savings Potential</label>
+              <input type="text" class="form-input" placeholder="e.g., €500K annual savings" id="costSavings" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Context -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="icon"><i data-lucide="paperclip"></i></span>
+            Additional Context
+          </h2>
+          <div class="section-divider"></div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">
+                Tags
+                <span class="hint">(Press Enter or comma to add tags)</span>
+              </label>
+              <div class="tags-input-wrapper" id="tagsWrapper">
+                <input type="text" class="tags-input" placeholder="Add tags..." id="tagsInput" />
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Current Workarounds or Constraints</label>
+              <textarea class="form-textarea" 
+                placeholder="Describe any current workarounds, constraints, or previous attempts to solve this problem..."
+                style="min-height: 70px;" id="constraints"></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Stakeholders or Teams Involved</label>
+              <input type="text" class="form-input" 
+                placeholder="e.g., Customer Success team, Product team, IT Infrastructure" id="stakeholders" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeChallengeModal()"><i data-lucide="x"></i> Cancel</button>
+          <button type="button" class="btn btn-secondary" onclick="saveDraft()"><i data-lucide="save"></i> Save Draft</button>
+          <button type="submit" class="btn btn-primary"><i data-lucide="rocket"></i> Submit Challenge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// Modal functions
+function openChallengeModal() {
+  document.getElementById('challengeModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeChallengeModal() {
+  document.getElementById('challengeModal').classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('successMessage').classList.remove('show');
+}
+
+// Close on overlay click
+document.getElementById('challengeModal').addEventListener('click', (e) => {
+  if (e.target.id === 'challengeModal') {
+    closeChallengeModal();
+  }
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('challengeModal').classList.contains('active')) {
+    closeChallengeModal();
+  }
+});
+
+// Character counters
+const counters = {
+  challengeTitle: { max: 100, element: 'titleCounter' },
+  problemDesc: { max: 1000, element: 'problemCounter' },
+  outcomeDesc: { max: 800, element: 'outcomeCounter' }
+};
+
+Object.keys(counters).forEach(fieldId => {
+  const field = document.getElementById(fieldId);
+  const counter = counters[fieldId];
+  
+  field.addEventListener('input', () => {
+    const length = field.value.length;
+    const counterEl = document.getElementById(counter.element);
+    counterEl.textContent = `${length} / ${counter.max}`;
+    counterEl.classList.remove('warning', 'limit');
+    if (length > counter.max * 0.9) counterEl.classList.add('warning');
+    if (length === counter.max) counterEl.classList.add('limit');
+  });
+});
+
+// Tags functionality
+const tagsInput = document.getElementById('tagsInput');
+const tagsWrapper = document.getElementById('tagsWrapper');
+const tags = [];
+
+function addTag(tagText) {
+  const trimmedTag = tagText.trim();
+  if (trimmedTag && !tags.includes(trimmedTag)) {
+    tags.push(trimmedTag);
+    renderTags();
+    tagsInput.value = '';
+  }
+}
+
+function removeTag(tagText) {
+  const index = tags.indexOf(tagText);
+  if (index > -1) {
+    tags.splice(index, 1);
+    renderTags();
+  }
+}
+
+function renderTags() {
+  const existingTags = tagsWrapper.querySelectorAll('.tag-item');
+  existingTags.forEach(tag => tag.remove());
+  tags.forEach(tag => {
+    const tagEl = document.createElement('span');
+    tagEl.className = 'tag-item';
+    tagEl.innerHTML = `${tag} <span class="remove-tag" onclick="removeTag('${tag}')">×</span>`;
+    tagsWrapper.insertBefore(tagEl, tagsInput);
+  });
+}
+
+tagsInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    addTag(tagsInput.value);
+  }
+});
+
+tagsInput.addEventListener('blur', () => {
+  if (tagsInput.value.trim()) addTag(tagsInput.value);
+});
+
+// Form submission
+document.getElementById('challengeForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  const title = document.getElementById('challengeTitle').value.trim();
+  const businessUnit = document.getElementById('businessUnit').value;
+  const department = document.getElementById('department').value.trim();
+  const problemDesc = document.getElementById('problemDesc').value.trim();
+  const outcomeDesc = document.getElementById('outcomeDesc').value.trim();
+  const impact = document.querySelector('input[name="impact"]:checked');
+  
+  if (!title || !businessUnit || !department || !problemDesc || !outcomeDesc || !impact) {
+    alert('Please fill in all required fields (marked with *)');
+    return;
+  }
+  
+  const formData = {
+    title,
+    businessUnit,
+    department,
+    problemDesc,
+    outcomeDesc,
+    timeline: document.getElementById('timeline').value,
+    budget: document.getElementById('budget').value,
+    impact: impact.value,
+    revenueImpact: document.getElementById('revenueImpact').value,
+    costSavings: document.getElementById('costSavings').value,
+    tags,
+    constraints: document.getElementById('constraints').value,
+    stakeholders: document.getElementById('stakeholders').value,
+    submittedAt: new Date().toISOString()
+  };
+  
+  // Add author info and status
+  const user = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  formData.authorEmail = (user.email || '').toLowerCase();
+  formData.authorName = user.name || 'Unknown';
+  formData.id = 'CH-' + String(Date.now()).slice(-4);
+
+  const isAdmin = localStorage.getItem('ananta-admin') === '1';
+  if (isAdmin) {
+    // Admin-submitted challenges are auto-approved
+    formData.status = 'approved';
+    const approved = JSON.parse(localStorage.getItem('ip_approved_challenges') || '[]');
+    approved.push(formData);
+    localStorage.setItem('ip_approved_challenges', JSON.stringify(approved));
+  } else {
+    formData.status = 'pending';
+    const pendingCh = JSON.parse(localStorage.getItem('ip_pending_challenges') || '[]');
+    pendingCh.push(formData);
+    localStorage.setItem('ip_pending_challenges', JSON.stringify(pendingCh));
+  }
+
+  console.log('Challenge submitted:', formData);
+
+  // Toast notification
+  if (isAdmin) {
+    showToast({ type: 'success', title: 'Challenge Auto-Approved', message: 'As an admin, your challenge is now live and visible to all users.' });
+  } else {
+    showToast({ type: 'pending', title: 'Awaiting Admin Approval', message: 'Your challenge has been submitted and is pending admin review. You will be notified once approved.' });
+  }
+  
+  // Show success message (dynamic text for admin)
+  const successEl = document.getElementById('successMessage');
+  if (isAdmin) {
+    successEl.querySelector('.icon').innerHTML = '<i data-lucide="check-circle"></i>';
+    successEl.querySelector('.title').textContent = 'Challenge Submitted — Auto-Approved';
+    successEl.querySelector('.text').textContent = 'As an admin, your challenge has been auto-approved and is now visible to all users.';
+  }
+  successEl.classList.add('show');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  document.querySelector('.modal-body').scrollTop = 0;
+  
+  // Reset form
+  setTimeout(() => {
+    document.getElementById('challengeForm').reset();
+    tags.length = 0;
+    renderTags();
+    Object.keys(counters).forEach(fieldId => {
+      document.getElementById(counters[fieldId].element).textContent = `0 / ${counters[fieldId].max}`;
+      document.getElementById(counters[fieldId].element).classList.remove('warning', 'limit');
+    });
+    setTimeout(() => {
+      closeChallengeModal();
+      location.reload();
+    }, 2000);
+  }, 100);
+});
+
+function saveDraft() {
+  const formData = {
+    title: document.getElementById('challengeTitle').value,
+    businessUnit: document.getElementById('businessUnit').value,
+    department: document.getElementById('department').value,
+    problemDesc: document.getElementById('problemDesc').value,
+    outcomeDesc: document.getElementById('outcomeDesc').value,
+    timeline: document.getElementById('timeline').value,
+    budget: document.getElementById('budget').value,
+    impact: document.querySelector('input[name="impact"]:checked')?.value,
+    revenueImpact: document.getElementById('revenueImpact').value,
+    costSavings: document.getElementById('costSavings').value,
+    tags,
+    constraints: document.getElementById('constraints').value,
+    stakeholders: document.getElementById('stakeholders').value,
+    savedAt: new Date().toISOString()
+  };
+  localStorage.setItem('challenge_draft', JSON.stringify(formData));
+  alert('Draft saved successfully! You can continue editing later.');
+}
+
+// Load draft on modal open
+function loadDraft() {
+  const draft = localStorage.getItem('challenge_draft');
+  if (draft) {
+    const data = JSON.parse(draft);
+    document.getElementById('challengeTitle').value = data.title || '';
+    document.getElementById('businessUnit').value = data.businessUnit || '';
+    document.getElementById('department').value = data.department || '';
+    document.getElementById('problemDesc').value = data.problemDesc || '';
+    document.getElementById('outcomeDesc').value = data.outcomeDesc || '';
+    document.getElementById('timeline').value = data.timeline || '';
+    document.getElementById('budget').value = data.budget || '';
+    if (data.impact) document.getElementById(`impact-${data.impact}`).checked = true;
+    document.getElementById('revenueImpact').value = data.revenueImpact || '';
+    document.getElementById('costSavings').value = data.costSavings || '';
+    document.getElementById('constraints').value = data.constraints || '';
+    document.getElementById('stakeholders').value = data.stakeholders || '';
+    if (data.tags) {
+      tags.push(...data.tags);
+      renderTags();
+    }
+    ['challengeTitle', 'problemDesc', 'outcomeDesc'].forEach(id => {
+      document.getElementById(id).dispatchEvent(new Event('input'));
+    });
+  }
+}
+
+// ═══ COMBINED STATUS + IMPACT FILTER LOGIC ═══ //
+let activeStatusFilter = 'all';
+let activeImpactFilter = 'all';
+
+function applyFilters() {
+  const cards = document.querySelectorAll('.cards-grid .challenge-card');
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const cardStatus = card.dataset.status || 'active';
+    const matchesStatus = activeStatusFilter === 'all' || cardStatus === activeStatusFilter;
+
+    let matchesImpact = activeImpactFilter === 'all';
+    if (!matchesImpact) {
+      matchesImpact = card.classList.contains('impact-' + activeImpactFilter);
+    }
+
+    if (matchesStatus && matchesImpact) {
+      card.classList.remove('hidden');
+      visibleCount++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  // Update total badge
+  const badge = document.getElementById('totalBadge');
+  if (badge) {
+    badge.style.transform = 'scale(1.15)';
+    const statusLabel = activeStatusFilter === 'all' ? 'Total' :
+      activeStatusFilter.charAt(0).toUpperCase() + activeStatusFilter.slice(1);
+    setTimeout(() => {
+      badge.textContent = visibleCount + ' ' + statusLabel;
+      badge.style.transform = 'scale(1)';
+    }, 120);
+  }
+
+  // Show/hide no-results message
+  const grid = document.querySelector('.cards-grid');
+  let noRes = grid.querySelector('.no-results');
+  if (visibleCount === 0) {
+    if (!noRes) {
+      noRes = document.createElement('div');
+      noRes.className = 'no-results';
+      noRes.innerHTML = `
+        <div class="no-results-icon"><i data-lucide="search-x"></i></div>
+        <h3>No challenges found</h3>
+        <p>Try changing your filters to see more results.</p>
+      `;
+      grid.appendChild(noRes);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+    noRes.style.display = '';
+  } else if (noRes) {
+    noRes.style.display = 'none';
+  }
+}
+
+function updateStatusCounts() {
+  const cards = document.querySelectorAll('.cards-grid .challenge-card');
+  let all = 0, active = 0, pending = 0, declined = 0;
+  cards.forEach(card => {
+    const s = card.dataset.status || 'active';
+    all++;
+    if (s === 'active') active++;
+    else if (s === 'pending') pending++;
+    else if (s === 'declined') declined++;
+  });
+  const el = id => document.getElementById(id);
+  if (el('countAll'))      el('countAll').textContent = all;
+  if (el('countActive'))   el('countActive').textContent = active;
+  if (el('countPending'))  el('countPending').textContent = pending;
+  if (el('countDeclined')) el('countDeclined').textContent = declined;
+}
+
+// Status tab clicks
+document.querySelectorAll('.status-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeStatusFilter = tab.dataset.status;
+    applyFilters();
+  });
+});
+
+// Impact filter clicks
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeImpactFilter = btn.dataset.impact || 'all';
+    applyFilters();
+  });
+});
+
+// Initial status counts for static cards
+updateStatusCounts();
+
+// ═══ NOTIFICATION FUNCTIONS ═══ //
+function toggleNotifications() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('active');
+}
+
+function markAllRead() {
+  const items = document.querySelectorAll('.notification-item.unread');
+  items.forEach(item => item.classList.remove('unread'));
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
+
+function handleNotificationClick(id, url) {
+  // Mark as read
+  const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+  if (item && item.classList.contains('unread')) {
+    item.classList.remove('unread');
+    const badge = document.getElementById('notifBadge');
+    let count = parseInt(badge.textContent) - 1;
+    badge.textContent = count;
+    if (count === 0) badge.style.display = 'none';
+  }
+  // Navigate
+  if (url) window.location.href = url;
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const bell = document.querySelector('.notification-bell');
+  if (panel && bell && !panel.contains(e.target) && !bell.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+
+// ═══ PENDING CHALLENGE CARDS (author + admin view) ═══ //
+(function renderPendingChallenges() {
+  const currentUser = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  const currentEmail = (currentUser.email || '').toLowerCase();
+  const isAdmin = localStorage.getItem('ananta-admin') === '1';
+  const pending = JSON.parse(localStorage.getItem('ip_pending_challenges') || '[]');
+
+  // Pending: only author's own OR admin sees all
+  const myPending = pending.filter(ch => isAdmin || ch.authorEmail === currentEmail);
+  if (myPending.length === 0) return;
+
+  const grid = document.querySelector('.cards-grid');
+  if (!grid) return;
+
+  myPending.forEach(ch => {
+    const isMine = ch.authorEmail === currentEmail;
+    const impactClass = ch.impact ? 'impact-' + ch.impact : 'impact-medium';
+    const impactColors = {
+      critical: 'var(--accent-red)', high: 'var(--accent-orange)',
+      medium: 'var(--accent-yellow)', low: 'var(--accent-green)'
+    };
+    const dotColor = impactColors[ch.impact] || 'var(--accent-yellow)';
+    const card = document.createElement('div');
+    card.className = 'challenge-card ' + impactClass + (isMine ? ' is-mine' : '');
+    card.dataset.status = 'pending';
+    card.style.position = 'relative';
+    card.style.cursor = 'pointer';
+    card.onclick = () => window.location.href = 'challenge-detail.html?id=' + ch.id;
+    const ownerTag = isMine ? '<span class="owner-badge-card"><i data-lucide="user" style="width:10px;height:10px"></i> You</span>' : '';
+    card.innerHTML = `
+      <div style="position:absolute;top:12px;right:12px;z-index:2;
+        background:rgba(255,167,38,.15);border:1px solid rgba(255,167,38,.35);
+        color:var(--accent-orange);font-size:10px;font-weight:700;
+        padding:3px 10px;border-radius:12px;text-transform:uppercase;
+        letter-spacing:.5px;display:flex;align-items:center;gap:4px;">
+        <i data-lucide="clock" style="width:12px;height:12px"></i> Pending
+      </div>
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:${dotColor}"></span>
+          Challenge #${ch.id}${ownerTag}
+        </div>
+      </div>
+      <div class="card-title">${ch.title}</div>
+      <div class="card-problem">${ch.problemDesc ? ch.problemDesc.substring(0, 150) + (ch.problemDesc.length > 150 ? '...' : '') : ''}</div>
+      <hr class="card-divider" />
+      <div class="card-meta-info">
+        <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">${ch.authorName}</span></div>
+        <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">${new Date(ch.submittedAt).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})}</span></div>
+      </div>
+    `;
+    // Insert at the BEGINNING of the grid
+    grid.insertBefore(card, grid.firstChild);
+  });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  updateStatusCounts(); applyFilters();
+})();
+
+// ═══ APPROVED CHALLENGE CARDS (visible to everyone) ═══ //
+(function renderApprovedChallenges() {
+  const currentUser = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  const currentEmail = (currentUser.email || '').toLowerCase();
+  const approved = JSON.parse(localStorage.getItem('ip_approved_challenges') || '[]');
+  if (approved.length === 0) return;
+
+  const grid = document.querySelector('.cards-grid');
+  if (!grid) return;
+
+  approved.forEach(ch => {
+    const isMine = ch.authorEmail === currentEmail;
+    const impactClass = ch.impact ? 'impact-' + ch.impact : 'impact-medium';
+    const impactColors = {
+      critical: 'var(--accent-red)', high: 'var(--accent-orange)',
+      medium: 'var(--accent-yellow)', low: 'var(--accent-green)'
+    };
+    const dotColor = impactColors[ch.impact] || 'var(--accent-yellow)';
+    const card = document.createElement('div');
+    card.className = 'challenge-card ' + impactClass + (isMine ? ' is-mine' : '');
+    card.dataset.status = 'active';
+    card.style.cursor = 'pointer';
+    card.onclick = () => window.location.href = 'challenge-detail.html';
+    const ownerTag = isMine ? '<span class="owner-badge-card"><i data-lucide="user" style="width:10px;height:10px"></i> You</span>' : '';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:${dotColor}"></span>
+          Challenge #${ch.id}${ownerTag}
+        </div>
+      </div>
+      <div class="card-title">${ch.title}</div>
+      <div class="card-problem">${ch.problemDesc ? ch.problemDesc.substring(0, 150) + (ch.problemDesc.length > 150 ? '...' : '') : ''}</div>
+      <hr class="card-divider" />
+      <div class="card-meta-info">
+        <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">${ch.authorName}</span></div>
+        <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Date: <span class="meta-value">${new Date(ch.submittedAt).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})}</span></div>
+      </div>
+    `;
+    grid.insertBefore(card, grid.firstChild);
+  });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  updateStatusCounts(); applyFilters();
+})();
+
+// ═══ REJECTED CHALLENGE CARDS (visible to ALL users) ═══ //
+(function renderRejectedChallenges() {
+  const currentUser = JSON.parse(localStorage.getItem('ip_user') || '{}');
+  const currentEmail = (currentUser.email || '').toLowerCase();
+  const rejected = JSON.parse(localStorage.getItem('ip_rejected_challenges') || '[]');
+  if (rejected.length === 0) return;
+
+  const grid = document.querySelector('.cards-grid');
+  if (!grid) return;
+
+  rejected.forEach(ch => {
+    const isMine = ch.authorEmail === currentEmail;
+    const impactClass = ch.impact ? 'impact-' + ch.impact : 'impact-low';
+    const card = document.createElement('div');
+    card.className = 'challenge-card ' + impactClass + (isMine ? ' is-mine' : '');
+    card.dataset.status = 'declined';
+    card.style.position = 'relative';
+    card.style.opacity = '0.6';
+    card.style.cursor = 'pointer';
+    card.onclick = () => window.location.href = 'challenge-detail.html?id=' + ch.id;
+    if (!isMine) card.style.borderLeft = '3px solid var(--accent-red, #ef5350)';
+    const ownerTag = isMine ? '<span class="owner-badge-card"><i data-lucide="user" style="width:10px;height:10px"></i> You</span>' : '';
+    card.innerHTML = `
+      <div style="position:absolute;top:12px;right:12px;z-index:2;
+        background:rgba(239,83,80,.12);border:1px solid rgba(239,83,80,.35);
+        color:#ef5350;font-size:10px;font-weight:700;
+        padding:3px 10px;border-radius:12px;text-transform:uppercase;
+        letter-spacing:.5px;display:flex;align-items:center;gap:4px;">
+        <i data-lucide="x-circle" style="width:12px;height:12px"></i> Declined
+      </div>
+      <div class="card-header">
+        <div class="challenge-number">
+          <span class="dot" style="background:#ef5350"></span>
+          Challenge #${ch.id}${ownerTag}
+        </div>
+      </div>
+      <div class="card-title">${ch.title}</div>
+      <div class="card-problem">${ch.problemDesc ? ch.problemDesc.substring(0, 150) + (ch.problemDesc.length > 150 ? '...' : '') : ''}</div>
+      <hr class="card-divider" />
+      <div class="card-meta-info">
+        <div class="meta-row"><span class="meta-icon"><i data-lucide="user"></i></span> Submitted by: <span class="meta-value highlight">${ch.authorName}</span></div>
+        <div class="meta-row"><span class="meta-icon"><i data-lucide="calendar"></i></span> Rejected: <span class="meta-value" style="color:#ef5350">${ch.rejectedAt ? new Date(ch.rejectedAt).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}) : '—'}</span></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  updateStatusCounts(); applyFilters();
+})();
+</script>
+
+<script src="toast.js"></script>
+<script src="dynamic-notifications.js"></script>
+<script src="admin-toggle.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>
