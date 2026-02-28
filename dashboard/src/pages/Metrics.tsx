@@ -306,7 +306,7 @@ export const Metrics: React.FC = () => {
                             <ResponsiveContainer width="100%" height={160}>
                                 <ScatterChart margin={{ top: 20, right: 20, bottom: 0, left: -20 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                                    <XAxis type="category" dataKey="name" name="Portfolio" axisLine={false} tickLine={false} tick={false} />
+                                    <XAxis type="number" dataKey="ideas" name="Ideas" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} domain={[0, 'auto']} />
                                     <YAxis type="number" dataKey="challenges" name="Challenges" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} domain={[0, 25]} />
                                     <ZAxis type="number" dataKey="challenges" range={[200, 800]} name="Volume" />
                                     <RechartsTooltip
