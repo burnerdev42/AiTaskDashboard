@@ -366,7 +366,7 @@ export const Metrics: React.FC = () => {
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
                             <div style={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <svg viewBox="0 0 200 200" className="radar-svg" style={{ width: '100%', height: '100%' }}>
+                                <svg viewBox="120 120 150 150" className="radar-svg" style={{ width: '100%', height: '100%' }}>
                                     <defs>
                                         <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                                             <stop offset="30%" stopColor="var(--accent-gold)" stopOpacity="0.6" />
@@ -378,12 +378,12 @@ export const Metrics: React.FC = () => {
                                         </filter>
                                     </defs>
 
-                                    {/* Circular Grid Lines (Beautified Radar) */}
+                                    {/* Circular Grid Lines (Maximized Zoom) */}
                                     {[0.2, 0.4, 0.6, 0.8, 1.0].map(scale => (
                                         <circle
                                             key={scale}
-                                            cx="100" cy="100"
-                                            r={88 * scale}
+                                            cx="200" cy="200"
+                                            r={135 * scale}
                                             fill="none"
                                             stroke="var(--border)"
                                             strokeWidth="0.5"
@@ -398,9 +398,9 @@ export const Metrics: React.FC = () => {
                                         return (
                                             <line
                                                 key={i}
-                                                x1="100" y1="100"
-                                                x2={100 + Math.cos(angle) * 88}
-                                                y2={100 + Math.sin(angle) * 88}
+                                                x1="200" y1="200"
+                                                x2={200 + Math.cos(angle) * 135}
+                                                y2={200 + Math.sin(angle) * 135}
                                                 stroke="var(--border)"
                                                 strokeWidth="0.8"
                                                 opacity={0.6}
@@ -412,8 +412,8 @@ export const Metrics: React.FC = () => {
                                     <polygon
                                         points={RADAR_DATA.map((v, i) => {
                                             const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                            const r = (v / 100) * 88;
-                                            return `${100 + Math.cos(angle) * r},${100 + Math.sin(angle) * r}`;
+                                            const r = (v / 100) * 135;
+                                            return `${200 + Math.cos(angle) * r},${200 + Math.sin(angle) * r}`;
                                         }).join(' ')}
                                         fill="url(#radarGrad)"
                                         stroke="var(--accent-gold)"
@@ -423,16 +423,16 @@ export const Metrics: React.FC = () => {
                                     />
 
                                     {/* Center Point */}
-                                    <circle cx="100" cy="100" r="2.5" fill="var(--accent-gold)" />
+                                    <circle cx="200" cy="200" r="2.5" fill="var(--accent-gold)" />
 
                                     {/* Data Points & Labels */}
                                     {RADAR_DATA.map((v, i) => {
                                         const angle = (Math.PI * 2 * i) / RADAR_AXIS.length - Math.PI / 2;
-                                        const r = (v / 100) * 88;
-                                        const x = 100 + Math.cos(angle) * r;
-                                        const y = 100 + Math.sin(angle) * r;
-                                        const lx = 100 + Math.cos(angle) * 102;
-                                        const ly = 100 + Math.sin(angle) * 102;
+                                        const r = (v / 100) * 135;
+                                        const x = 200 + Math.cos(angle) * r;
+                                        const y = 200 + Math.sin(angle) * r;
+                                        const lx = 200 + Math.cos(angle) * 145;
+                                        const ly = 200 + Math.sin(angle) * 145;
 
                                         const isHovered = hoveredOpCo === i;
 
@@ -444,10 +444,10 @@ export const Metrics: React.FC = () => {
                                                 style={{ cursor: 'pointer' }}
                                             >
                                                 {/* Hidden larger circle for easier hovering */}
-                                                <circle cx={x} cy={y} r="15" fill="transparent" />
+                                                <circle cx={x} cy={y} r="25" fill="transparent" />
 
                                                 <circle
-                                                    cx={x} cy={y} r={isHovered ? 6 : 3.5}
+                                                    cx={x} cy={y} r={isHovered ? 10 : 5}
                                                     fill={isHovered ? "var(--accent-gold)" : "var(--bg-card)"}
                                                     stroke="var(--accent-gold)"
                                                     strokeWidth="2"
@@ -455,7 +455,7 @@ export const Metrics: React.FC = () => {
                                                 />
                                                 <text
                                                     x={lx} y={ly}
-                                                    fontSize={isHovered ? "11" : "10"}
+                                                    fontSize={isHovered ? "18" : "15"}
                                                     fill={isHovered ? "var(--accent-gold)" : "var(--text-primary)"}
                                                     textAnchor="middle"
                                                     alignmentBaseline="middle"
