@@ -1,5 +1,9 @@
 import React from 'react';
 import { Flag, Lightbulb, TrendingUp, Clock, Users, UserCheck } from 'lucide-react';
+import {
+    AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, CartesianGrid,
+    ScatterChart, Scatter, ZAxis, Legend
+} from 'recharts';
 
 /* ── Static Data for Panels 1-3 ──────────────── */
 const FUNNEL_STAGES = [
@@ -31,18 +35,24 @@ const LEADERBOARD = [
 
 
 
-/* ── Static Data for New Charts ──────────────── */
-// Scatter Plot Data: Value (Y) vs Effort (X) vs ROI (Size)
 // Scatter Plot Data: Portfolio Balance (Strategic Alignment)
-const SCATTER_DATA = [
-    { id: 1, name: 'Customer Value Driver', x: 25, y: 80, size: 28, color: '#66bb6a' },
-    { id: 2, name: 'Tech Enabler', x: 75, y: 70, size: 22, color: '#42a5f5' },
-    { id: 3, name: 'Non Strategic Product Management', x: 50, y: 45, size: 18, color: '#ffa726' },
-    { id: 4, name: 'Maintenance', x: 20, y: 30, size: 14, color: '#ef5350' },
+// Y = Total Challenges, Z = Bubble Size (also Total Challenges usually, or overall volume)
+const PORTFOLIO_DATA = [
+    { id: 1, name: 'Customer Value Driver', challenges: 18, ideas: 42, contributors: 28, comments: 156, color: '#66bb6a' },
+    { id: 2, name: 'Tech Enabler', challenges: 14, ideas: 31, contributors: 22, comments: 94, color: '#42a5f5' },
+    { id: 3, name: 'Non Strategic Product Mgt', challenges: 9, ideas: 14, contributors: 12, comments: 41, color: '#ffa726' },
+    { id: 4, name: 'Maintenance', challenges: 6, ideas: 8, contributors: 8, comments: 22, color: '#ef5350' },
 ];
 
 // Gradient Line Data: Monthly Trends
-const LINE_DATA = [1.8, 2.2, 3.5, 2.8, 4.2, 3.9];
+const LINE_DATA = [
+    { month: 'Sep', ratio: 1.8 },
+    { month: 'Oct', ratio: 2.2 },
+    { month: 'Nov', ratio: 3.5 },
+    { month: 'Dec', ratio: 2.8 },
+    { month: 'Jan', ratio: 4.2 },
+    { month: 'Feb', ratio: 3.9 }
+];
 
 // Radar Data: OpCo Engagement
 const RADAR_AXIS = ['Albert Heijn', 'GSO', 'GET', 'BecSee'];
@@ -261,50 +271,24 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <>
-                                <svg viewBox="0 0 400 150" className="line-chart-svg">
+                            <ResponsiveContainer width="100%" height={150}>
+                                <AreaChart data={LINE_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                     <defs>
-                                        <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="var(--accent-gold)" stopOpacity="0.4" />
-                                            <stop offset="100%" stopColor="var(--accent-gold)" stopOpacity="0" />
+                                        <linearGradient id="colorRatio" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="var(--accent-gold)" stopOpacity={0.8} />
+                                            <stop offset="95%" stopColor="var(--accent-gold)" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    {/* Grid Lines */}
-                                    <line x1="0" y1="25" x2="400" y2="25" stroke="var(--border)" strokeDasharray="4" />
-                                    <line x1="0" y1="75" x2="400" y2="75" stroke="var(--border)" strokeDasharray="4" />
-                                    <line x1="0" y1="125" x2="400" y2="125" stroke="var(--border)" strokeDasharray="4" />
-
-                                    {/* Area Path */}
-                                    <path
-                                        d={`M0,150 ${LINE_DATA.map((v, i) => `L${(i / (LINE_DATA.length - 1)) * 400},${150 - (v * 25)}`).join(' ')} L400,150 Z`}
-                                        fill="url(#lineGrad)"
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                                    <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} />
+                                    <RechartsTooltip
+                                        contentStyle={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '4px', fontSize: '12px' }}
+                                        itemStyle={{ color: 'var(--accent-gold)' }}
                                     />
-                                    {/* Line Path */}
-                                    <path
-                                        d={`M0,${150 - (LINE_DATA[0] * 25)} ${LINE_DATA.map((v, i) => `L${(i / (LINE_DATA.length - 1)) * 400},${150 - (v * 25)}`).join(' ')}`}
-                                        fill="none"
-                                        stroke="var(--accent-gold)"
-                                        strokeWidth="3"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    {/* Points */}
-                                    {LINE_DATA.map((v, i) => (
-                                        <circle
-                                            key={i}
-                                            cx={(i / (LINE_DATA.length - 1)) * 400}
-                                            cy={150 - (v * 25)}
-                                            r="3"
-                                            fill="#fff"
-                                            stroke="var(--accent-gold)"
-                                            strokeWidth="2"
-                                        />
-                                    ))}
-                                </svg>
-                                <div className="line-chart-labels">
-                                    <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
-                                </div>
-                            </>
+                                    <Area type="monotone" dataKey="ratio" stroke="var(--accent-gold)" strokeWidth={3} fillOpacity={1} fill="url(#colorRatio)" />
+                                </AreaChart>
+                            </ResponsiveContainer>
                         )}
                     </div>
                 </div>
@@ -313,46 +297,45 @@ export const Metrics: React.FC = () => {
                 <div className="m-chart-panel scatter-graph">
                     <div className="m-chart-header">
                         <h3>Portfolio Balance</h3>
-                        <p>Value (Y) vs. Effort (X)</p>
+                        <p>Total Challenges per Portfolio</p>
                     </div>
                     <div className="m-chart-body">
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <svg viewBox="0 0 300 200" className="scatter-svg">
-                                {/* Axes */}
-                                <line x1="40" y1="170" x2="280" y2="170" stroke="var(--border)" strokeWidth="1" />
-                                <line x1="40" y1="20" x2="40" y2="170" stroke="var(--border)" strokeWidth="1" />
-
-                                {/* Labels */}
-                                <text x="280" y="185" fontSize="9" fill="var(--text-muted)" textAnchor="end">High Effort →</text>
-                                <text x="30" y="20" fontSize="9" fill="var(--text-muted)" transform="rotate(-90 30,20)" textAnchor="end">High Value →</text>
-
-                                {/* Bubbles */}
-                                {SCATTER_DATA.map(item => (
-                                    <g key={item.id} className="scatter-bubble-group">
-                                        <circle
-                                            cx={40 + (item.x / 100) * 240}
-                                            cy={170 - (item.y / 100) * 150}
-                                            r={item.size / 2}
-                                            fill={item.color}
-                                            opacity="0.8"
-                                            stroke="#fff"
-                                            strokeWidth="1"
-                                        />
-                                        <text
-                                            x={40 + (item.x / 100) * 240}
-                                            y={170 - (item.y / 100) * 150 - (item.size / 2) - 4}
-                                            fontSize="7"
-                                            fill="var(--text-primary)"
-                                            textAnchor="middle"
-                                            fontWeight="600"
-                                        >
-                                            {item.name}
-                                        </text>
-                                    </g>
-                                ))}
-                            </svg>
+                            <ResponsiveContainer width="100%" height={160}>
+                                <ScatterChart margin={{ top: 20, right: 20, bottom: 0, left: -20 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                                    <XAxis type="category" dataKey="name" name="Portfolio" axisLine={false} tickLine={false} tick={false} />
+                                    <YAxis type="number" dataKey="challenges" name="Challenges" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} domain={[0, 25]} />
+                                    <ZAxis type="number" dataKey="challenges" range={[200, 800]} name="Volume" />
+                                    <RechartsTooltip
+                                        cursor={{ strokeDasharray: '3 3' }}
+                                        content={({ active, payload }) => {
+                                            if (active && payload && payload.length) {
+                                                const data = payload[0].payload;
+                                                return (
+                                                    <div style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '6px', padding: '10px', color: '#fff', fontSize: '12px', minWidth: '180px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+                                                        <div style={{ fontWeight: 'bold', marginBottom: '8px', borderBottom: '1px solid var(--border)', paddingBottom: '4px', color: data.color }}>{data.name}</div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}><span>Challenges:</span> <strong>{data.challenges}</strong></div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}><span>Ideas:</span> <strong>{data.ideas}</strong></div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}><span>Contributors:</span> <strong>{data.contributors}</strong></div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Comments:</span> <strong>{data.comments}</strong></div>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        }}
+                                    />
+                                    <Legend
+                                        wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }}
+                                        iconType="circle"
+                                    />
+                                    {PORTFOLIO_DATA.map((entry, index) => (
+                                        <Scatter key={`scatter-${index}`} name={entry.name} data={[entry]} fill={entry.color} />
+                                    ))}
+                                </ScatterChart>
+                            </ResponsiveContainer>
                         )}
                     </div>
                 </div>
