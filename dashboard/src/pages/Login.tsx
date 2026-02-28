@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Clock } from 'lucide-react';
 import { storage } from '../services/storage';
 
@@ -13,11 +13,8 @@ export const Login: React.FC = () => {
     const { login, isAuthenticated } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
-    const location = useLocation();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const from = location.state?.from?.pathname || '/';
+    const from = '/';
 
     if (isAuthenticated) {
         return <Navigate to={from} replace />;

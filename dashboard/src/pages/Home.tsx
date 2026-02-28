@@ -85,12 +85,14 @@ export const Home: React.FC = () => {
     };
 
     useEffect(() => {
+        if (!isAuthenticated) return;
+        setIsLoading(true);
         const timer = setTimeout(() => {
             setChallenges(storage.getChallenges().slice(0, 5));
             setIsLoading(false);
         }, 800); // Small delay for smooth entry
         return () => clearTimeout(timer);
-    }, []);
+    }, [isAuthenticated, user]);
 
     const nextSlide = () => {
         if (challenges.length === 0 || isLoading) return;
