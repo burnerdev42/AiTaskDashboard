@@ -94,7 +94,7 @@ export const Login: React.FC = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="priya.sharma@tcs.com"
+                            placeholder="name@company.com"
                             required
                             autoFocus
                         />
@@ -178,11 +178,6 @@ export const Login: React.FC = () => {
                         Don't have an account? <Link to="/register">Register now</Link>
                     </div>
 
-                    <div className="role-hint">
-                        <strong>Mockup Sign-In</strong> — use any valid password<br />
-                        <strong>priya.sharma@tcs.com</strong> <span className="role-tag user-tag">User</span> — standard innovator view<br />
-                        <strong>admin@ananta.tcs.com</strong> <span className="role-tag admin-tag">Admin</span> — admin panel & Control Center
-                    </div>
                 </form>
             </div>
         </div>

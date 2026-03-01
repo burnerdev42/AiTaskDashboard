@@ -459,8 +459,8 @@ export const Metrics: React.FC = () => {
                         {isLoading ? (
                             <div className="skeleton" style={{ width: '100%', height: '120px', borderRadius: '8px' }}></div>
                         ) : (
-                            <div style={{ width: '100%', height: '280px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <svg viewBox="40 40 320 320" className="radar-svg" style={{ width: '100%', height: '100%' }}>
+                            <div style={{ width: '100%', height: '280px', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '15px 0' }}>
+                                <svg viewBox="0 0 400 400" className="radar-svg" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
                                     <defs>
                                         <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                                             <stop offset="30%" stopColor="var(--accent-gold)" stopOpacity="0.6" />
@@ -477,7 +477,7 @@ export const Metrics: React.FC = () => {
                                         <circle
                                             key={scale}
                                             cx="200" cy="200"
-                                            r={135 * scale}
+                                            r={115 * scale}
                                             fill="none"
                                             stroke="var(--border)"
                                             strokeWidth="0.5"
@@ -493,8 +493,8 @@ export const Metrics: React.FC = () => {
                                             <line
                                                 key={i}
                                                 x1="200" y1="200"
-                                                x2={200 + Math.cos(angle) * 135}
-                                                y2={200 + Math.sin(angle) * 135}
+                                                x2={200 + Math.cos(angle) * 115}
+                                                y2={200 + Math.sin(angle) * 115}
                                                 stroke="var(--border)"
                                                 strokeWidth="0.8"
                                                 opacity={0.6}
@@ -506,7 +506,7 @@ export const Metrics: React.FC = () => {
                                     <polygon
                                         points={radarData.map((v, i) => {
                                             const angle = (Math.PI * 2 * i) / radarAxis.length - Math.PI / 2;
-                                            const r = (v / 100) * 135;
+                                            const r = (v / 100) * 115;
                                             return `${200 + Math.cos(angle) * r},${200 + Math.sin(angle) * r}`;
                                         }).join(' ')}
                                         fill="url(#radarGrad)"
@@ -522,13 +522,23 @@ export const Metrics: React.FC = () => {
                                     {/* Data Points & Labels */}
                                     {radarData.map((v, i) => {
                                         const angle = (Math.PI * 2 * i) / radarAxis.length - Math.PI / 2;
-                                        const r = (v / 100) * 135;
+                                        const r = (v / 100) * 115;
                                         const x = 200 + Math.cos(angle) * r;
                                         const y = 200 + Math.sin(angle) * r;
-                                        const lx = 200 + Math.cos(angle) * 160;
-                                        const ly = 200 + Math.sin(angle) * 160;
+
+                                        // Push labels further out depending on their angle to avoid overlap
+                                        // The points at the top/bottom (sin = ±1) need extra padding so they don't hit the glowing polygon points
+                                        const textRadius = 140 + Math.abs(Math.sin(angle) * 20);
+                                        const lx = 200 + Math.cos(angle) * textRadius;
+                                        const ly = 200 + Math.sin(angle) * textRadius;
 
                                         const isHovered = hoveredOpCo === i;
+
+                                        let anchor = "middle";
+                                        const cosVal = Math.cos(angle);
+                                        // Use a small epsilon to catch near-horizontal values as start/end
+                                        if (cosVal > 0.05) anchor = "start";
+                                        else if (cosVal < -0.05) anchor = "end";
 
                                         return (
                                             <g
@@ -551,7 +561,7 @@ export const Metrics: React.FC = () => {
                                                     x={lx} y={ly}
                                                     fontSize={isHovered ? "18" : "15"}
                                                     fill={isHovered ? "var(--accent-gold)" : "var(--text-primary)"}
-                                                    textAnchor="middle"
+                                                    textAnchor={anchor as any}
                                                     alignmentBaseline="middle"
                                                     fontWeight={isHovered ? "800" : "600"}
                                                     style={{

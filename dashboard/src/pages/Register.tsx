@@ -131,7 +131,7 @@ export const Register: React.FC = () => {
                         <label>Full Name <span className="req">*</span></label>
                         <input
                             type="text"
-                            placeholder="e.g. Priya Sharma"
+                            placeholder="e.g. Jane Doe"
                             required
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -176,7 +176,7 @@ export const Register: React.FC = () => {
                         <label>Contact Email <span className="req">*</span></label>
                         <input
                             type="email"
-                            placeholder="priya.sharma@tcs.com"
+                            placeholder="name@company.com"
                             required
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}

@@ -154,8 +154,15 @@ export const Home: React.FC = () => {
         setIsLoading(true);
         const timer = setTimeout(() => {
             const allChall = storage.getChallenges();
-            // Sort by views or something similar; mock data uses ID for now
-            setChallenges(allChall.slice(0, 5));
+
+            // Sort by a combined popularity score: views + (votes * 10) + (comments * 5)
+            const sortedChallenges = [...allChall].sort((a, b) => {
+                const scoreA = (a.stats?.views || 0) + ((a.stats?.votes || 0) * 10) + ((a.stats?.comments || 0) * 5);
+                const scoreB = (b.stats?.views || 0) + ((b.stats?.votes || 0) * 10) + ((b.stats?.comments || 0) * 5);
+                return scoreB - scoreA;
+            });
+
+            setChallenges(sortedChallenges.slice(0, 5));
             calculateMetrics();
             setIsLoading(false);
         }, 800); // Small delay for smooth entry

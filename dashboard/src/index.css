@@ -6057,7 +6057,8 @@ body {
 .lb-row .lb-name {
   font-size: 13px;
   font-weight: 600;
-  min-width: 90px;
+  min-width: 140px;
+  word-break: break-word;
 }
 
 .lb-row .lb-bar-wrap {
@@ -6857,8 +6858,9 @@ svg.icon,
   color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  width: 90px;
+  width: 140px;
   flex-shrink: 0;
+  word-break: break-word;
 }
 
 

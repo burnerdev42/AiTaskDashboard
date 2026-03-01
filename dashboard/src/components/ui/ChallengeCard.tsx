@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { type Challenge } from '../../types';
 import { useNavigate } from 'react-router-dom';
+import { storage } from '../../services/storage';
 
 interface ChallengeCardProps {
     challenge: Challenge;
@@ -89,9 +90,35 @@ const REQUIRED_STATS = ['ideas', 'votes', 'views', 'members', 'comments'];
 export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
     const navigate = useNavigate();
 
+    // Calculate actual metrics from storage
+    const actualStats = useMemo(() => {
+        const details = storage.getChallengeDetails().find(d => d.id === challenge.id);
+        const ideas = details?.ideas || [];
+
+        // Members count: Unique authors who submitted an idea + the challenge owner
+        const uniqueMembers = new Set<string>();
+        uniqueMembers.add(challenge.owner.name);
+        ideas.forEach((i: any) => {
+            if (i.author) uniqueMembers.add(i.author);
+        });
+
+        // Sum up other metrics across all ideas
+        const totalVotes = ideas.reduce((sum: number, idea: any) => sum + Number(idea.appreciations || 0), 0);
+        const totalComments = ideas.reduce((sum: number, idea: any) => sum + Number(idea.comments || 0), 0);
+        const totalViews = ideas.reduce((sum: number, idea: any) => sum + Number(idea.views || 0), 0) + Number(challenge.stats?.views || 0);
+
+        return {
+            ideas: ideas.length,
+            votes: totalVotes,
+            views: totalViews,
+            members: uniqueMembers.size,
+            comments: totalComments
+        };
+    }, [challenge.id, challenge.owner.name, challenge.stats?.views]);
+
     const displayStats = REQUIRED_STATS.map(key => {
         const config = STAT_CONFIG[key];
-        const value = challenge.stats[key] ?? 0;
+        const value = actualStats[key as keyof typeof actualStats] ?? 0;
         return { key, value, ...config };
     });
 
