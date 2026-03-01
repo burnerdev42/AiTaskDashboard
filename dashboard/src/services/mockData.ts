@@ -250,7 +250,7 @@ export const MOCK_USERS: User[] = [
         "email": "chandan.kumar@example.com",
         "role": "MEMBER",
         "avatar": "CK"
-    }
+    },
 ];
 
 export const MOCK_CHALLENGES: Challenge[] = [
@@ -260,6 +260,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Due to varied and constantly evolving reporting needs from the Ad Tech team, relying on manual SQL querying and static dashboards is no longer viable. There is a strong need to create an AI-backed dynamic SQL query generator and a set of runtime dashboards to support ad-hoc analytics without enginee...",
         "stage": "POC & Pilot",
         "owner": {
+            "userId": "u-asmit",
             "name": "Asmit Basu",
             "avatar": "AB",
             "avatarColor": "var(--accent-teal)"
@@ -277,6 +278,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-asmit",
                 "name": "Asmit Basu",
                 "avatar": "AB",
                 "avatarColor": "var(--accent-teal)"
@@ -291,6 +293,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Planning a party involves complex logistics, and miscalculating attendee consumption often results in a significant amount of food waste the next day. There is currently no intelligent mechanism to optimize food and drink orders beforehand or to repurpose leftovers effectively after the event.",
         "stage": "Parking Lot",
         "owner": {
+            "userId": "u-asmit",
             "name": "Asmit Basu",
             "avatar": "AB",
             "avatarColor": "var(--accent-blue)"
@@ -308,6 +311,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-asmit",
                 "name": "Asmit Basu",
                 "avatar": "AB",
                 "avatarColor": "var(--accent-blue)"
@@ -322,6 +326,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "The current data fulfillment process is heavily manual, leading to delays and inefficiencies. Requests depend entirely on the IT team, causing multiple back-and-forth iterations before completion. Access to data and its related attributes is limited, restricting insights and slowing decision-making....",
         "stage": "POC & Pilot",
         "owner": {
+            "userId": "u-pritam",
             "name": "Pritam Ghatak",
             "avatar": "PG",
             "avatarColor": "var(--accent-green)"
@@ -339,6 +344,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-pritam",
                 "name": "Pritam Ghatak",
                 "avatar": "PG",
                 "avatarColor": "var(--accent-green)"
@@ -353,6 +359,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Our IT support and engineering teams lose significant time on repetitive troubleshooting tasks and navigating scattered knowledge sources. This leads to inconsistent issue resolutions, high dependency on subject matter experts, and an elevated L3 Mean Time To Resolve (MTTR) of 1.3 days, ultimately d...",
         "stage": "POC & Pilot",
         "owner": {
+            "userId": "u-indrani",
             "name": "Indrani Ghosh",
             "avatar": "IG",
             "avatarColor": "var(--accent-orange)"
@@ -370,6 +377,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-indrani",
                 "name": "Indrani Ghosh",
                 "avatar": "IG",
                 "avatarColor": "var(--accent-orange)"
@@ -384,6 +392,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Sponsored Product Campaign management is currently performed entirely via complex UIs, making it a lengthy and error-prone process for advertisers. Setting up, modifying, and tracking campaigns requires multiple manual steps that deter advertisers from scaling their efforts.",
         "stage": "POC & Pilot",
         "owner": {
+            "userId": "u-asmit",
             "name": "Asmit Basu",
             "avatar": "AB",
             "avatarColor": "var(--accent-purple)"
@@ -401,6 +410,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-asmit",
                 "name": "Asmit Basu",
                 "avatar": "AB",
                 "avatarColor": "var(--accent-purple)"
@@ -415,6 +425,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Distribution Centre operations lack a unified, real-time view that connects business processes with their underlying technology services and applications. Without clear observability into how technical components support operational workflows, it becomes difficult to quickly identify root causes, as...",
         "stage": "POC & Pilot",
         "owner": {
+            "userId": "u-pragya",
             "name": "Pragya Bharati",
             "avatar": "PB",
             "avatarColor": "var(--accent-pink)"
@@ -432,6 +443,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-pragya",
                 "name": "Pragya Bharati",
                 "avatar": "PB",
                 "avatarColor": "var(--accent-pink)"
@@ -446,8 +458,9 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "The organization faces severe knowledge management challenges that limit scalability. Critical expertise is concentrated among a few Subject Matter Experts (SMEs), creating bottlenecks and single points of failure. Onboarding new developers is inefficient as information is scattered across Confluenc...",
         "stage": "POC & Pilot",
         "owner": {
-            "name": "Dibyendu Das",
-            "avatar": "DD",
+            "userId": "u-rohan",
+            "name": "Rohan Mondal",
+            "avatar": "RM",
             "avatarColor": "var(--accent-teal)"
         },
         "accentColor": "teal",
@@ -463,8 +476,9 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
-                "name": "Dibyendu Das",
-                "avatar": "DD",
+                "userId": "u-rohan",
+                "name": "Rohan Mondal",
+                "avatar": "RM",
                 "avatarColor": "var(--accent-teal)"
             }
         ],
@@ -477,8 +491,9 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Promotion item inclusion and exclusion lists are heavily maintained through manual spreadsheet processes and outdated legacy rules. This leads to frequent errors, financial losses from incorrect discounts, missed eligible items, and inconsistent execution that heavily impacts overall profitability a...",
         "stage": "Ideation & Evaluation",
         "owner": {
-            "name": "Smriti Kumar",
-            "avatar": "SK",
+            "userId": "u-pritam",
+            "name": "Pritam Ghatak",
+            "avatar": "PG",
             "avatarColor": "var(--accent-blue)"
         },
         "accentColor": "blue",
@@ -494,6 +509,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-smriti",
                 "name": "Smriti Kumar",
                 "avatar": "SK",
                 "avatarColor": "var(--accent-blue)"
@@ -508,6 +524,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Traditional Robotic Process Automation (RPA) development within our ecosystem is time-consuming, requires specialized engineering skills, and lacks the agility needed for rapid automation of simple web-based tasks. This slows down our modernization efforts and leaves many manual tasks unautomated.",
         "stage": "Scaled & Deployed",
         "owner": {
+            "userId": "u-smriti",
             "name": "Smriti Kumar",
             "avatar": "SK",
             "avatarColor": "var(--accent-green)"
@@ -525,6 +542,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-smriti",
                 "name": "Smriti Kumar",
                 "avatar": "SK",
                 "avatarColor": "var(--accent-green)"
@@ -539,6 +557,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Ahold Delhaize manages over 8,000 Terraform repositories across various OpCos, creating massive governance, standardization, and cost-control challenges. Without a structured migration to Azure Verified Modules (AVM), we suffer from tech debt, security inconsistencies, and operational bloat.",
         "stage": "Scaled & Deployed",
         "owner": {
+            "userId": "u-dibyendu",
             "name": "Dibyendu Das",
             "avatar": "DD",
             "avatarColor": "var(--accent-orange)"
@@ -556,6 +575,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-dibyendu",
                 "name": "Dibyendu Das",
                 "avatar": "DD",
                 "avatarColor": "var(--accent-orange)"
@@ -570,6 +590,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "The lack of a unified observability platform limits our ability to proactively monitor technical, operational, and business KPIs. This reduces our situational awareness, increasing the risk of major undetected outages and negatively impacting both internal operations and the end-customer experience.",
         "stage": "Scaled & Deployed",
         "owner": {
+            "userId": "u-dibyendu",
             "name": "Dibyendu Das",
             "avatar": "DD",
             "avatarColor": "var(--accent-purple)"
@@ -587,6 +608,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-dibyendu",
                 "name": "Dibyendu Das",
                 "avatar": "DD",
                 "avatarColor": "var(--accent-purple)"
@@ -601,6 +623,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Service request handling in the identity and access provisioning area remains highly manual and time-intensive. Engineers frequently execute repetitive bash and PowerShell scripts, leading to a higher MTTR, human errors, and a frustrating, inconsistent onboarding experience for new employees.",
         "stage": "Scaled & Deployed",
         "owner": {
+            "userId": "u-dibyendu",
             "name": "Dibyendu Das",
             "avatar": "DD",
             "avatarColor": "var(--accent-pink)"
@@ -618,6 +641,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-dibyendu",
                 "name": "Dibyendu Das",
                 "avatar": "DD",
                 "avatarColor": "var(--accent-pink)"
@@ -632,6 +656,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Test case creation is largely manual, time-consuming, and heavily dependent on individual QA expertise. This results in inconsistent test coverage and delayed software delivery cycles. There is limited alignment between Jira user stories, Figma UX designs, and the resulting QA artifacts.",
         "stage": "Scaled & Deployed",
         "owner": {
+            "userId": "u-chandan",
             "name": "Chandan Kumar",
             "avatar": "CK",
             "avatarColor": "var(--accent-teal)"
@@ -649,6 +674,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-chandan",
                 "name": "Chandan Kumar",
                 "avatar": "CK",
                 "avatarColor": "var(--accent-teal)"
@@ -663,6 +689,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         "description": "Agile Sprint planning is currently repetitive and manual, requiring Scrum Masters to constantly coordinate prioritized epics, user stories, dependencies, and team availability. Matching the correct team members' skills to complicated user story requirements is particularly challenging and often lead...",
         "stage": "Challenge Submitted",
         "owner": {
+            "userId": "u-chandan",
             "name": "Chandan Kumar",
             "avatar": "CK",
             "avatarColor": "var(--accent-blue)"
@@ -680,6 +707,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
         ],
         "team": [
             {
+                "userId": "u-chandan",
                 "name": "Chandan Kumar",
                 "avatar": "CK",
                 "avatarColor": "var(--accent-blue)"

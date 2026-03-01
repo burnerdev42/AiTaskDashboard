@@ -15,6 +15,7 @@ export const Home: React.FC = () => {
     const [pipelineData, setPipelineData] = useState<any[]>([]);
     const [kpiData, setKpiData] = useState<any[]>([]);
     const [throughputData, setThroughputData] = useState<any[]>([]);
+    const [successStories, setSuccessStories] = useState<any[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const [subscribeSuccess, setSubscribeSuccess] = useState(false);
@@ -157,12 +158,42 @@ export const Home: React.FC = () => {
 
             // Sort by a combined popularity score: views + (votes * 10) + (comments * 5)
             const sortedChallenges = [...allChall].sort((a, b) => {
-                const scoreA = (a.stats?.views || 0) + ((a.stats?.votes || 0) * 10) + ((a.stats?.comments || 0) * 5);
-                const scoreB = (b.stats?.views || 0) + ((b.stats?.votes || 0) * 10) + ((b.stats?.comments || 0) * 5);
+                const scoreA = Number(a.stats?.views || 0) + (Number(a.stats?.votes || 0) * 10) + (Number(a.stats?.comments || 0) * 5);
+                const scoreB = Number(b.stats?.views || 0) + (Number(b.stats?.votes || 0) * 10) + (Number(b.stats?.comments || 0) * 5);
                 return scoreB - scoreA;
             });
 
             setChallenges(sortedChallenges.slice(0, 5));
+
+            // Fetch Success Stories - filter for Scaled & Deployed
+            const allDetails = storage.getChallengeDetails();
+            let completedChallenges = allDetails.filter(d => d.stage === 'Scaled & Deployed');
+
+            // If we don't have enough Scaled & Deployed, include POC & Pilot
+            if (completedChallenges.length < 3) {
+                const pilots = allDetails.filter(d => d.stage === 'POC & Pilot');
+                completedChallenges = [...completedChallenges, ...pilots].slice(0, 6);
+            } else {
+                completedChallenges = completedChallenges.slice(0, 6);
+            }
+
+            const stories = completedChallenges.map((ch, index) => {
+                const totalViews = ch.ideas?.reduce((sum, idea) => sum + (idea.views || 0), 0) || (index + 1) * 150 + 450;
+                return {
+                    id: ch.id,
+                    num: `Story ${index + 1}`,
+                    title: ch.title,
+                    problem: ch.problemStatement.length > 120 ? ch.problemStatement.substring(0, 117) + '...' : ch.problemStatement,
+                    solution: ch.expectedOutcome.length > 120 ? ch.expectedOutcome.substring(0, 117) + '...' : ch.expectedOutcome,
+                    stats: {
+                        views: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}K` : totalViews.toString(),
+                        appreciations: ch.stats.appreciations || 0,
+                        comments: ch.stats.comments || 0
+                    }
+                };
+            });
+            setSuccessStories(stories);
+
             calculateMetrics();
             setIsLoading(false);
         }, 800); // Small delay for smooth entry
@@ -438,126 +469,36 @@ export const Home: React.FC = () => {
                         ))
                     ) : (
                         <>
-                            <div className="story-card">
-                                <div className="story-num">Story 1</div>
-                                <h4>Unified Customer 360 Platform</h4>
-                                <div className="story-section">
-                                    <div className="label problem"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> Problem</div>
-                                    <p>Fragmented customer data across 5 systems; agents spent 8 min/call looking up history.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 11.5c.76.76 1.23 1.52 1.41 2.5Z"></path></svg></span> Solution</div>
-                                    <p>Built a real-time data fabric unifying CRM, billing, support, and IoT telemetry into a single view.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>1.2K</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>89</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>34</strong> Comments</span>
+                            {successStories.length > 0 ? (
+                                successStories.map((story) => (
+                                    <div className="story-card" key={story.id}>
+                                        <div className="story-num">{story.num}</div>
+                                        <Link to={`/challenges/${story.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <h4>{story.title}</h4>
+                                        </Link>
+                                        <div className="story-section">
+                                            <div className="label problem"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> Problem</div>
+                                            <p>{story.problem}</p>
+                                        </div>
+                                        <div className="story-section">
+                                            <div className="label solution"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 11.5c.76.76 1.23 1.52 1.41 2.5Z"></path></svg></span> Solution</div>
+                                            <p>{story.solution}</p>
+                                        </div>
+                                        <div className="story-section">
+                                            <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
+                                            <div className="engagement-stats">
+                                                <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>{story.stats.views}</strong> Views</span>
+                                                <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>{story.stats.appreciations}</strong> Appreciations</span>
+                                                <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>{story.stats.comments}</strong> Comments</span>
+                                            </div>
+                                        </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="no-stories-message" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+                                    <p>No success stories to display yet. More innovation impact coming soon!</p>
                                 </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 2</div>
-                                <h4>Smart Warehouse Routing</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Manual forklift routing led to 35% idle travel time and frequent aisle congestion.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>IoT sensors + reinforcement learning for dynamic path optimization in real-time.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>987</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>72</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>28</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 3</div>
-                                <h4>Predictive Maintenance Engine</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Unexpected equipment failures causing 120+ hrs/year of unplanned downtime per plant.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>Streaming anomaly detection on 10K+ sensor signals, predicting failures 72 hrs ahead.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>1.5K</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>104</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>41</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 4</div>
-                                <h4>AI-Powered Demand Forecasting</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Static forecasting models caused 18% overstock and 12% stockouts across 200+ SKUs.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>Ensemble ML model combining weather, social signals, and POS data for real-time demand prediction.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>856</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>63</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>19</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 5</div>
-                                <h4>Intelligent Document Processing</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>Legal team manually reviewed 5,000+ contracts/quarter, averaging 45 min per document.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>LLM-powered extraction pipeline identifying clauses, obligations, and risk flags automatically.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>1.1K</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>91</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>37</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="story-card">
-                                <div className="story-num">Story 6</div>
-                                <h4>Carbon Footprint Optimizer</h4>
-                                <div className="story-section">
-                                    <div className="label problem">⚠ Problem</div>
-                                    <p>No visibility into Scope 3 emissions across 400+ suppliers, risking ESG compliance.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label solution">💡 Solution</div>
-                                    <p>Supply chain carbon tracking platform with automated reporting and reduction recommendations.</p>
-                                </div>
-                                <div className="story-section">
-                                    <div className="label engagement"><span className="icon" style={{ marginRight: '6px', display: 'inline-flex' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span> Engagement</div>
-                                    <div className="engagement-stats">
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg> <strong>743</strong> Views</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" /><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg> <strong>58</strong> Appreciations</span>
-                                        <span className="eng-stat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg> <strong>22</strong> Comments</span>
-                                    </div>
-                                </div>
-                            </div>
+                            )}
                         </>
                     )}
                 </div>

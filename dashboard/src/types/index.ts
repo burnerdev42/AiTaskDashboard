@@ -19,6 +19,7 @@ export interface Challenge {
     description: string;
     stage: ChallengeStage;
     owner: {
+        userId?: string; // References User.id
         name: string;
         avatar: string; // Initials
         avatarColor: string; // Hex code
@@ -38,7 +39,7 @@ export interface Challenge {
     };
     summary: string;
     tags?: string[]; // e.g., ["Highlighted", "Most Appreciated"]
-    team?: { name: string; avatar: string; avatarColor: string }[];
+    team?: { userId?: string; name: string; avatar: string; avatarColor: string }[];
     impact?: 'Critical' | 'High' | 'Medium' | 'Low';
     approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
     rejectionReason?: string;
@@ -84,6 +85,7 @@ export interface Idea {
     description: string;
     status: 'Accepted' | 'Declined' | 'In Review' | 'Pending';
     owner: {
+        userId?: string; // References User.id
         name: string;
         avatar: string;
         avatarColor: string;
@@ -151,7 +153,7 @@ export interface ChallengeDetailData extends Challenge {
     constraints: string;
     stakeholders: string;
     ideas: { id: string; title: string; author: string; status: string; appreciations: number; comments: number; views: number }[];
-    team: { name: string; avatar: string; avatarColor: string; role: string }[];
+    team: { userId?: string; name: string; avatar: string; avatarColor: string; role: string }[];
     activity: ActivityItem[];
     createdDate: string;
     updatedDate: string;
